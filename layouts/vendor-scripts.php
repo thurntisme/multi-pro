@@ -8,3 +8,9 @@
 <script src="<?= home_url("assets/libs/node-waves/waves.min.js") ?>"></script>
 <script src="<?= home_url("assets/libs/feather-icons/feather.min.js") ?>"></script>
 <script src="<?= home_url("assets/js/plugins.js") ?>"></script>
+
+<?php
+if (!empty($additionJs)) {
+  echo $additionJs;
+}
+?>
