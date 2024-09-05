@@ -175,10 +175,10 @@ function renderStatusBadge($status)
   return "<span class='badge $badgeClass'>" . ucfirst($status) . "</span>";
 }
 
-function activeClassName($url)
+function activeClassName($url, $className = 'active')
 {
   $currentUrl = isset($_GET['url']) ? $_GET['url'] : '';
   $urlParts = explode('/', trim($currentUrl, '/'));
   $parentPath = count($urlParts) > 0 ? $urlParts[0] : '';
-  return $parentPath === $url ? 'active' : '';
+  return $parentPath === $url ? $className : '';
 }

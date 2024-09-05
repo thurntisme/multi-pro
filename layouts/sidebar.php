@@ -41,15 +41,15 @@
                     <a class="nav-link menu-link <?= activeClassName("projects") ?>" href="#sidebarProjects" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarProjects">
                         <i class="ri-folder-5-line"></i> <span data-key="t-projects">Projects</span>
                     </a>
-                    <div class="collapse menu-dropdown" id="sidebarProjects">
+                    <div class="collapse menu-dropdown <?= activeClassName("projects", "show") ?>" id="sidebarProjects">
                         <ul class="nav nav-sm flex-column">
-                            <li class="nav-item">
+                            <li class="nav-item <?= activeClassName("projects/overview") ?>">
                                 <a href="<?= home_url("projects/overview") ?>" class="nav-link" data-key="t-overview"> Overview </a>
                             </li>
-                            <li class="nav-item">
+                            <li class="nav-item <?= activeClassName("projects/list") ?>">
                                 <a href="<?= home_url("projects/list") ?>" class="nav-link" data-key="t-list"> List </a>
                             </li>
-                            <li class="nav-item">
+                            <li class="nav-item <?= activeClassName("projects/new") ?>">
                                 <a href="<?= home_url("projects/new") ?>" class="nav-link" data-key="t-create-project"> Create Project </a>
                             </li>
                         </ul>
