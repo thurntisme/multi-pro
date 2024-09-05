@@ -174,3 +174,11 @@ function renderStatusBadge($status)
   // Return the badge HTML
   return "<span class='badge $badgeClass'>" . ucfirst($status) . "</span>";
 }
+
+function activeClassName($url)
+{
+  $currentUrl = isset($_GET['url']) ? $_GET['url'] : '';
+  $urlParts = explode('/', trim($currentUrl, '/'));
+  $parentPath = count($urlParts) > 0 ? $urlParts[0] : '';
+  return $parentPath === $url ? 'active' : '';
+}

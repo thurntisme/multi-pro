@@ -1,47 +1,49 @@
-<?php
-include 'template-parts/header.php';
-include 'template-parts/sidebar.php';
-?>
+<?php include 'layouts/main.php'; ?>
 
-<!-- Content Wrapper -->
-<div id="content-wrapper" class="d-flex flex-column">
+<head>
 
-    <!-- Main Content -->
-    <div id="content">
+    <?php includeFileWithVariables('layouts/title-meta.php', array('title' => $pageTitle ?? "")); ?>
 
-        <?php include 'template-parts/topbar.php'; ?>
+    <?php include 'layouts/head-css.php'; ?>
 
-        <!-- Begin Page Content -->
-        <div class="container-fluid">
+</head>
 
-            <!-- Page Heading -->
-            <div class="d-sm-flex align-items-center mb-4">
-                <h1 class="h3 mb-0 text-gray-800"><?= generateBreadcrumbs($pageTitle ?? '') ?></h1>
-                <?= $btnAction ?? "" ?>
+<body>
+
+    <!-- Begin page -->
+    <div id="layout-wrapper">
+
+        <?php include 'layouts/menu.php'; ?>
+
+        <!-- ============================================================== -->
+        <!-- Start right Content here -->
+        <!-- ============================================================== -->
+        <div class="main-content">
+
+            <div class="page-content">
+                <div class="container-fluid">
+
+                    <?php includeFileWithVariables('layouts/page-title.php', array('pagetitle' => 'Pages', 'title' => $pageTitle ?? "")); ?>
+                    <?php echo $pageContent ?? '<p>Welcome to the main content area.</p>'; ?>
+
+                </div>
+                <!-- container-fluid -->
             </div>
+            <!-- End Page-content -->
 
-            <div class="content-wrapper">
-                <?php echo $pageContent ?? '<p>Welcome to the main content area.</p>'; ?>
-            </div>
-
+            <?php include 'layouts/footer.php'; ?>
         </div>
-        <!-- /.container-fluid -->
+        <!-- end main content-->
 
     </div>
-    <!-- End of Main Content -->
+    <!-- END layout-wrapper -->
 
-    <!-- Footer -->
-    <footer class="sticky-footer bg-white">
-        <div class="container my-auto">
-            <div class="copyright text-center my-auto">
-                <span>Copyright &copy; <?= $commonController->getSiteName() ?> <?= date('Y') ?></span>
-            </div>
-        </div>
-    </footer>
-    <!-- End of Footer -->
+    <?php include 'layouts/customizer.php'; ?>
 
-</div>
-<!-- End of Content Wrapper -->
+    <?php include 'layouts/vendor-scripts.php'; ?>
 
+    <!-- App js -->
+    <script src="<?= home_url("assets/js/app.js") ?>"></script>
+</body>
 
-<?php include 'template-parts/footer.php'; ?>
+</html>
