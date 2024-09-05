@@ -33,7 +33,7 @@
             <ul class="navbar-nav" id="navbar-nav">
                 <li class="menu-title"><span data-key="t-menu">Menu</span></li>
                 <li class="nav-item">
-                    <a class="nav-link menu-link <?= activeClassName("") ?>" href="<?= home_url("projects/") ?>">
+                    <a class="nav-link menu-link <?= activeClassName("") ?>" href="<?= home_url("") ?>">
                         <i class="ri-dashboard-2-line"></i> <span data-key="t-dashboard">Dashboard</span>
                     </a>
                 </li>
