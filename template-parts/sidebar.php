@@ -38,21 +38,10 @@ function activeClassName($url)
   </div>
 
   <!-- Nav Item - Pages Collapse Menu -->
-  <li class="nav-item <?= activeClassName("finance") ?>">
-    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseFinance"
-      aria-expanded="true" aria-controls="collapseFinance">
-      <i class="fas fa-hand-holding-usd"></i>
-      <span>Finance</span>
-    </a>
-    <div id="collapseFinance" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-      <div class="bg-white py-2 collapse-inner rounded">
-        <h6 class="collapse-header">Finance:</h6>
-        <a class="collapse-item" href="<?= home_url('finance') ?>">Dashboard</a>
-        <a class="collapse-item" href="<?= home_url('finance/budget') ?>">Budget</a>
-        <a class="collapse-item" href="<?= home_url('finance/income') ?>">Income</a>
-        <a class="collapse-item" href="<?= home_url('finance/expenses') ?>">Expenses</a>
-      </div>
-    </div>
+  <li class="nav-item <?= activeClassName("projects") ?>">
+    <a class="nav-link" href="<?= home_url('projects') ?>">
+      <i class="fas fa-project-diagram"></i>
+      <span>Projects</span></a>
   </li>
 
   <!-- Divider -->

@@ -2,16 +2,16 @@
 
 return function (PDO $pdo) {
   // Define the table name and attributes
-  $table_name = 'income';
+  $table_name = 'projects';
   $attributes = [
     'id INTEGER PRIMARY KEY AUTOINCREMENT',
-    'amount REAL NOT NULL',
+    'title TEXT NOT NULL',
     'description TEXT',
-    'date DATE NOT NULL',
+    'start_date DATE',
+    'end_date DATE',
+    'status TEXT CHECK(status IN ("not_started", "in_progress", "completed", "on_hold", "cancelled")) DEFAULT "not_started"',
     'created_at DATETIME DEFAULT CURRENT_TIMESTAMP',
     'updated_at DATETIME DEFAULT CURRENT_TIMESTAMP',
-    'user_id INTEGER NOT NULL',
-    'FOREIGN KEY(user_id) REFERENCES users(id)'
   ];
 
   // Convert the attributes array into a string

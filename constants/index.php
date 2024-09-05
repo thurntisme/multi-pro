@@ -1,8 +1,8 @@
 <?php
 
-define('DEFAULT_HOME_PATH', 'householdNT');
+define('DEFAULT_HOME_PATH', 'multi-pro');
 define('DEFAULT_TIMEZONE', 'Asia/Ho_Chi_Minh');
-define('DEFAULT_SITE_NAME', 'householdNT');
+define('DEFAULT_SITE_NAME', 'MultiPro');
 
 $months = [
   '01' => 'January',
