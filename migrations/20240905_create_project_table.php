@@ -9,9 +9,11 @@ return function (PDO $pdo) {
     'description TEXT',
     'start_date DATE',
     'end_date DATE',
+    'user_id INTEGER',
     'status TEXT CHECK(status IN ("not_started", "in_progress", "completed", "on_hold", "cancelled")) DEFAULT "not_started"',
     'created_at DATETIME DEFAULT CURRENT_TIMESTAMP',
     'updated_at DATETIME DEFAULT CURRENT_TIMESTAMP',
+    'FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE'
   ];
 
   // Convert the attributes array into a string
@@ -27,6 +29,6 @@ return function (PDO $pdo) {
     $pdo->exec($sql);
     echo "Migrated: create_" . $table_name . "_table\n";
   } catch (PDOException $e) {
-    echo "Error: The table '$table_name': " . $e->getMessage();
+    echo "Error: The table '$table_name': " . $e->getMessage() . " \n";
   }
 };

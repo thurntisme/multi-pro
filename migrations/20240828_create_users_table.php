@@ -27,6 +27,6 @@ return function (PDO $pdo) {
     $pdo->exec($sql);
     echo "Migrated: create_" . $table_name . "_table\n";
   } catch (PDOException $e) {
-    echo "Error: The table '$table_name': " . $e->getMessage();
+    echo "Error: The table '$table_name': " . $e->getMessage() . " \n";
   }
 };
