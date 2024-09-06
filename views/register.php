@@ -11,78 +11,141 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 ob_start();
 
-echo '<div class="row">
-        <div class="col-lg-5 d-none d-lg-block bg-register-image"></div>
-        <div class="col-lg-7">
-            <div class="p-5">
-                <div class="text-center">
-                    <h1 class="h4 text-gray-900 mb-4">Create an Account!</h1>
-                </div>';
+$alert = '';
+$email = $username =  $password = $confirm_password  = "";
+$email_err = $username_err = $password_err = $confirm_password_err = "";
 
 if (isset($_SESSION['message'])) {
-    $messageType = $_SESSION['message_type'] ?? 'info';
-    echo '<div class="alert alert-' . htmlspecialchars($messageType) . ' alert-dismissible fade show mb-4" role="alert">'
-        . $_SESSION['message'] .
-        '<button type="button" class="close" data-dismiss="alert" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>';
+    if ($_SESSION['message_type'] === 'validate') {
+        $email_err = $_SESSION['message']['email'] ?? "";
+        $username_err = $_SESSION['message']['username'] ?? "";
+        $password_err = $_SESSION['message']['password'] ?? "";
+        $confirm_password_err = $_SESSION['message']['confirmPassword'] ?? "";
+        $email = $_SESSION['fields']['email'];
+        $password = $_SESSION['fields']['password'];
+        $username = $_SESSION['fields']['username'];
+    }
+    if ($_SESSION['message_type'] === 'success' || $_SESSION['message_type'] === 'danger') {
+        $alert = '<div class="alert alert-' . $_SESSION['message_type'] . ' alert-top-border alert-dismissible fade show" role="alert">
+                <i class="ri-' . ($_SESSION['message_type'] === "success" ? "check-double" : "error-warning") . '-line me-3 align-middle fs-16 text-' . $_SESSION['message_type'] . '"></i><strong>' . $_SESSION['message'] . '</strong>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>';
 
-    unset($_SESSION['message']);
-
-    if ($_SESSION['message_type'] === "success") {
-        echo '<script type="text/javascript">
-            setTimeout(function(){
-                window.location = "' . home_url("login") . '";
-            }, 1000);
-        </script>';
+        if ($_SESSION['message_type'] === "success") {
+            echo '<script type="text/javascript">
+                    setTimeout(function(){
+                        window.location = "' . home_url("login") . '";
+                    }, 1000);
+                </script>';
+        }
     }
 
+    unset($_SESSION['message']);
     unset($_SESSION['message_type']);
+    unset($_SESSION['fields']);
 }
 
-echo '<form class="user" method="POST" action="' . home_url("register") . '">
-                    <div class="form-group row">
-                        <div class="col-sm-6 mb-3 mb-sm-0">
-                            <input type="text" class="form-control form-control-user" name="firstName"
-                                placeholder="First Name">
-                        </div>
-                        <div class="col-sm-6">
-                            <input type="text" class="form-control form-control-user" name="lastName"
-                                placeholder="Last Name">
-                        </div>
+echo '<div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6 col-xl-5">
+            ' . $alert . '
+            <div class="card mt-4">
+                <div class="card-body p-4">
+                    <div class="text-center mt-2">
+                        <h5 class="text-primary">Create New Account</h5>
+                        <p class="text-muted">Get your free ' . $commonController->getSiteName() . ' account now</p>
                     </div>
-                    <div class="form-group">
-                        <input type="text" class="form-control form-control-user" name="username"
-                            placeholder="Username">
+                    <div class="p-2 mt-4">
+                        <form class="needs-validation" novalidate action="' . home_url("register") . '" method="POST">
+
+                            <div class="mb-3 ' . (!empty($email_err) ? 'has-error' : '') . '">
+                                <label for="email" class="form-label">Email <span class="text-danger">*</span></label>
+                                <input type="email" class="form-control" name="email" id="email" placeholder="Enter email address" value="' . $email . '" required>
+                                <span class="text-danger">' . $email_err . '</span>
+                                <div class="invalid-feedback">
+                                    Please enter email
+                                </div>
+                            </div>
+
+                            <div class="mb-3 ' . (!empty($username_err) ? 'has-error' : '') . '">
+                                <label for="username" class="form-label">Username <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" name="username" id="username" placeholder="Enter username" value="' . $username . '" required>
+                                <span class="text-danger">' . $username_err . '</span>
+                                <div class="invalid-feedback">
+                                    Please enter username
+                                </div>
+                            </div>
+
+                            <div class="mb-3 ' . (!empty($password_err) ? 'has-error' : '') . '">
+                                <label class="form-label" for="password-input">Password</label>
+                                <div class="position-relative auth-pass-inputgroup">
+                                    <input type="password" class="form-control pe-5 password-input" name="password" onpaste="return false" placeholder="Enter password" value="' . $password . '" id="password-input" aria-describedby="passwordInput" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" required>
+                                    <button class="btn btn-link position-absolute end-0 top-0 text-decoration-none text-muted password-addon" type="button" id="password-addon"><i class="ri-eye-fill align-middle"></i></button>
+                                    <span class="text-danger">' . $password_err . '</span>
+                                    <div class="invalid-feedback">
+                                        Please enter password
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="mb-3 ' . (!empty($confirm_password_err) ? 'has-error' : '') . '">
+                                <label class="form-label" for="password-input">Confirm Password</label>
+                                <div class="position-relative auth-pass-inputgroup">
+                                    <input type="password" class="form-control pe-5 password-input" name="confirmPassword" onpaste="return false" placeholder="Enter Confirm password" value="' . $confirm_password . '" id="confirm-password-input" required>
+                                    <span class="text-danger">' . $confirm_password_err . '</span>
+                                    <div class="invalid-feedback">
+                                        Please enter confirm password
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="mb-4">
+                                <p class="mb-0 fs-12 text-muted fst-italic">By registering you agree to the ' . $commonController->getSiteName() . ' <a href="#" class="text-primary text-decoration-underline fst-normal fw-medium">Terms of Use</a></p>
+                            </div>
+
+                            <div id="password-contain" class="p-3 bg-light mb-2 rounded">
+                                <h5 class="fs-13">Password must contain:</h5>
+                                <p id="pass-length" class="invalid fs-12 mb-2">Minimum <b>8 characters</b></p>
+                                <p id="pass-lower" class="invalid fs-12 mb-2">At <b>lowercase</b> letter (a-z)</p>
+                                <p id="pass-upper" class="invalid fs-12 mb-2">At least <b>uppercase</b> letter (A-Z)</p>
+                                <p id="pass-number" class="invalid fs-12 mb-0">A least <b>number</b> (0-9)</p>
+                            </div>
+
+                            <div class="mt-4">
+                                <button class="btn btn-success w-100" type="submit">Sign Up</button>
+                            </div>
+
+                            <div class="mt-4 text-center">
+                                <div class="signin-other-title">
+                                    <h5 class="fs-13 mb-4 title text-muted">Create account with</h5>
+                                </div>
+
+                                <div>
+                                    <button type="button" class="btn btn-primary btn-icon waves-effect waves-light"><i class="ri-facebook-fill fs-16"></i></button>
+                                    <button type="button" class="btn btn-danger btn-icon waves-effect waves-light"><i class="ri-google-fill fs-16"></i></button>
+                                    <button type="button" class="btn btn-dark btn-icon waves-effect waves-light"><i class="ri-github-fill fs-16"></i></button>
+                                    <button type="button" class="btn btn-info btn-icon waves-effect waves-light"><i class="ri-twitter-fill fs-16"></i></button>
+                                </div>
+                            </div>
+                        </form>
+
                     </div>
-                    <div class="form-group">
-                        <input type="email" class="form-control form-control-user" name="email"
-                            placeholder="Email Address">
-                    </div>
-                    <div class="form-group row">
-                        <div class="col-sm-6 mb-3 mb-sm-0">
-                            <input type="password" class="form-control form-control-user" name="password" placeholder="Password">
-                        </div>
-                        <div class="col-sm-6">
-                            <input type="password" class="form-control form-control-user" name="confirmPassword" placeholder="Repeat Password">
-                        </div>
-                    </div>
-                    <button type="submit" class="btn btn-primary btn-user btn-block">
-                        Register Account
-                    </button>
-                </form>
-                <hr>
-                <div class="text-center">
-                    <a class="small" href="' . home_url("forgot-password") . '">Forgot Password?</a>
                 </div>
-                <div class="text-center">
-                    <a class="small" href="' . home_url("login") . '">Already have an account? Login!</a>
-                </div>
+                <!-- end card body -->
             </div>
+            <!-- end card -->
+
+            <div class="mt-4 text-center">
+                <p class="mb-0">Already have an account ? <a href="' . home_url("login") . '" class="fw-semibold text-primary text-decoration-underline"> Signin </a> </p>
+            </div>
+
         </div>
     </div>';
 
 $pageContent = ob_get_clean();
 
-include "layouts/layout-blank.php";
+ob_start();
+echo '<!-- password create init -->
+    <script src="' . home_url("assets/js/pages/password-create.init.js") . '"></script>';
+$additionJs = ob_get_clean();
+
+include "auth-layout.php";

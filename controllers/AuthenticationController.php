@@ -22,50 +22,50 @@ class AuthenticationController
     // Validate username
     if (isset($username)) {
       if (empty($username)) {
-        $errors[] = "Username is required.";
+        $errors['username'] = "Username is required.";
       } elseif (!preg_match('/^[a-zA-Z0-9_]{5,20}$/', $username)) {
         // Username must be alphanumeric, between 5 and 20 characters
-        $errors[] = "Username must be 5-20 characters long and can only contain letters, numbers, and underscores.";
+        $errors['username'] = "Username must be 5-20 characters long and can only contain letters, numbers, and underscores.";
       }
     }
 
     // Validate email
     if (empty($email)) {
-      $errors[] = "Email is required.";
+      $errors['email'] = "Email is required.";
     } else {
       if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
         // Check if the email format is valid
-        $errors[] = "Invalid email format.";
+        $errors['email'] = "Invalid email format.";
       }
       if ($isRegister === true && $this->userController->getUserByEmail($email)) {
-        $errors[] = "This email is already in use.";
+        $errors['email'] = "This email is already in use.";
       }
     }
 
     // Validate password
     if (empty($password)) {
-      $errors[] = "Password is required.";
+      $errors['password'] = "Password is required.";
     } elseif (strlen($password) < 8) {
       // Password must be at least 8 characters
-      $errors[] = "Password must be at least 8 characters long.";
+      $errors['password'] = "Password must be at least 8 characters long.";
     } elseif (!preg_match('/[A-Z]/', $password)) {
       // Password must contain at least one uppercase letter
-      $errors[] = "Password must contain at least one uppercase letter.";
+      $errors['password'] = "Password must contain at least one uppercase letter.";
     } elseif (!preg_match('/[a-z]/', $password)) {
       // Password must contain at least one lowercase letter
-      $errors[] = "Password must contain at least one lowercase letter.";
+      $errors['password'] = "Password must contain at least one lowercase letter.";
     } elseif (!preg_match('/[0-9]/', $password)) {
       // Password must contain at least one number
-      $errors[] = "Password must contain at least one number.";
+      $errors['password'] = "Password must contain at least one number.";
     } elseif (!preg_match('/[\W_]/', $password)) {
       // Password must contain at least one special character
-      $errors[] = "Password must contain at least one special character.";
+      $errors['password'] = "Password must contain at least one special character.";
     }
 
     // Confirm password match
     if (isset($confirmPassword)) {
       if ($password !== $confirmPassword) {
-        $errors[] = "Passwords do not match.";
+        $errors['confirmPassword'] = "Passwords do not match.";
       }
     }
 
@@ -84,9 +84,12 @@ class AuthenticationController
     $errors = $this->validateUserData($email, $password, $username, $confirmPassword, true);
 
     if (count($errors) > 0) {
-      $errorString = implode("\n", $errors);
-      $_SESSION['message_type'] = 'danger';
-      $_SESSION['message'] = nl2br($errorString);
+      $_SESSION['message_type'] = 'validate';
+      $_SESSION['message'] = $errors;
+      $_SESSION['fields'] = array();
+      $_SESSION['fields']['email'] = $email;
+      $_SESSION['fields']['password'] = $password;
+      $_SESSION['fields']['username'] = $username;
     } else {
       $this->authenticationService->createUser($firstName, $lastName, $username, $email, $password);
       $_SESSION['message_type'] = 'success';
@@ -102,13 +105,11 @@ class AuthenticationController
     $email = $_POST['email'] ?? '';
     $password = $_POST['password'] ?? '';
 
-
     $errors = $this->validateUserData($email, $password);
 
     if (count($errors) > 0) {
-      $errorString = implode("\n", $errors);
-      $_SESSION['message_type'] = 'danger';
-      $_SESSION['message'] = nl2br($errorString);
+      $_SESSION['message_type'] = 'validate';
+      $_SESSION['message'] = $errors;
     } else {
       $token = $this->authenticationService->loginUser($email, $password);
       if (!empty($token)) {
