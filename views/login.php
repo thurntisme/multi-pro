@@ -12,15 +12,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 ob_start();
 
 $alert = '';
-$email_err = '';
-$password_err = '';
+$email = $password = '';
+$email_err = $password_err = '';
 
 if (isset($_SESSION['message'])) {
     if ($_SESSION['message_type'] === 'validate') {
         $email_err = $_SESSION['message']['email'] ?? "";
         $password_err = $_SESSION['message']['password'] ?? "";
+        $email = $_SESSION['fields']['email'];
+        $password = $_SESSION['fields']['password'];
     }
-    if ($_SESSION['message_type'] === 'success' || $_SESSION['message_type'] === 'danger') {
+    if ($_SESSION['message_type'] === 'danger') {
         $alert = '<div class="alert alert-' . $_SESSION['message_type'] . ' alert-top-border alert-dismissible fade show" role="alert">
                 <i class="ri-' . ($_SESSION['message_type'] === "success" ? "check-double" : "error-warning") . '-line me-3 align-middle fs-16 text-' . $_SESSION['message_type'] . '"></i><strong>' . $_SESSION['message'] . '</strong>
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
@@ -29,6 +31,7 @@ if (isset($_SESSION['message'])) {
 
     unset($_SESSION['message']);
     unset($_SESSION['message_type']);
+    unset($_SESSION['fields']);
 }
 if (isset($_SESSION['token'])) {
     echo '<script type="text/javascript">
@@ -53,7 +56,7 @@ echo '<div class="row justify-content-center">
 
                             <div class="mb-3 ' . ((!empty($email_err)) ? 'has-error' : '') . '">
                                 <label for="email" class="form-label">Email</label>
-                                <input type="text" class="form-control" name="email" id="email" placeholder="Enter email">
+                                <input type="text" class="form-control" name="email" id="email" placeholder="Enter email" value="' . $email . '">
                                 <span class="text-danger">' . $email_err . '</span>
                             </div>
 

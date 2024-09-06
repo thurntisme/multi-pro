@@ -20,7 +20,7 @@ Array.from(document.querySelectorAll("form .auth-pass-inputgroup")).forEach(func
         });
     });
 
-// passowrd match
+// password match
 var password = document.getElementById("password-input"),
     confirm_password = document.getElementById("confirm-password-input");
 
@@ -33,7 +33,7 @@ function validatePassword() {
 }
 
 //Password validation
-password.onchange = validatePassword;
+confirm_password.onchange = validatePassword;
 
 var myInput = document.getElementById("password-input");
 var letter = document.getElementById("pass-lower");

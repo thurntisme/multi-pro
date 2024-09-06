@@ -30,10 +30,4 @@ echo '<link
     />';
 $additionCss = ob_get_clean();
 
-ob_start();
-echo '<script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.10.1/main.min.js"></script>
-<script src="js/pages/dashboard.js"></script>';
-
-$additionJs = ob_get_clean();
-
 include 'layout.php';

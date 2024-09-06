@@ -30,4 +30,9 @@ echo '<div class="row justify-content-center">
     </div>';
 $pageContent = ob_get_clean();
 
+ob_start();
+echo '<script type="text/javascript">localStorage.removeItem("authToken");</script>';
+
+$additionJs = ob_get_clean();
+
 include "auth-layout.php";

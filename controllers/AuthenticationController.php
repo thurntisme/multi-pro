@@ -110,17 +110,21 @@ class AuthenticationController
     if (count($errors) > 0) {
       $_SESSION['message_type'] = 'validate';
       $_SESSION['message'] = $errors;
+      $_SESSION['fields'] = array();
+      $_SESSION['fields']['email'] = $email;
+      $_SESSION['fields']['password'] = $password;
     } else {
       $token = $this->authenticationService->loginUser($email, $password);
       if (!empty($token)) {
-        $_SESSION['message_type'] = 'success';
         $_SESSION['token'] = $token;
-        $_SESSION['message'] = "Login successfully";
       } else {
         $_SESSION['message_type'] = 'danger';
         $_SESSION['message'] = 'Invalid username or password.';
       }
     }
+
+    header("Location: " . home_url("login"));
+    exit;
   }
 
   public function logout()
