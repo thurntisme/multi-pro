@@ -156,23 +156,34 @@ function generateBreadcrumbs($pageTitle, $separator = ' > ')
   }
 }
 
+// Define the badge classes based on the status
+$badgeClasses = [
+  'not_started' => 'light text-body',
+  'todo'     => 'light text-body',
+  'backlog'  => 'dark',
+  'complete' => 'success',
+  'in_progress' => 'primary',
+  'blocked'  => 'danger',
+  'on_hold'  => 'warning',
+];
 function renderStatusBadge($status)
 {
-  // Define the badge classes based on the status
-  $badgeClasses = [
-    'todo'     => 'badge-light',
-    'backlog'  => 'badge-dark',
-    'complete' => 'badge-success',
-    'in-progress' => 'badge-primary',
-    'blocked'  => 'badge-danger',
-    'on-hold'  => 'badge-warning',
-  ];
-
+  global $badgeClasses;
   // Default badge class if status is not found
-  $badgeClass = isset($badgeClasses[$status]) ? $badgeClasses[$status] : 'badge-secondary';
+  $badgeClass = isset($badgeClasses[$status]) ? $badgeClasses[$status] : 'secondary';
 
   // Return the badge HTML
-  return "<span class='badge $badgeClass'>" . ucfirst($status) . "</span>";
+  return "<span class='badge bg-$badgeClass'>" . ucfirst(str_replace("_", " ", $status)) . "</span>";
+}
+function getStatusBadge($status)
+{
+  global $badgeClasses;
+  // Default badge class if status is not found
+  $badgeClassName = isset($badgeClasses[$status]) ? $badgeClasses[$status] : 'secondary';
+  $badgeLabel = ucfirst(str_replace("_", " ", $status));
+
+  // Return the badge HTML
+  return ["className" => $badgeClassName, "label" => $badgeLabel];
 }
 
 function activeClassName($url, $className = 'active')

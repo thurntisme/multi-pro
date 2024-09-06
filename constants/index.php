@@ -35,3 +35,12 @@ foreach ($settings as $key => $value) {
   ];
 }
 define("DEFAULT_SETTINGS", $default_settings);
+
+$projectStatus = array(
+  array('not_started', 'Not Started'),
+  array('in_progress', 'Inprogress'),
+  array('completed', 'Completed'),
+  array('on_hold', 'On Hold'),
+  array('cancelled', 'Cancelled'),
+);
+define('DEFAULT_PROJECT_STATUS', $projectStatus);
