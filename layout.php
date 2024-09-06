@@ -38,7 +38,8 @@
     </div>
     <!-- END layout-wrapper -->
 
-    <?php include 'layouts/customizer.php'; ?>
+    <?php //include 'layouts/customizer.php'; 
+    ?>
 
     <?php include 'layouts/vendor-scripts.php'; ?>
 
