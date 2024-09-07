@@ -3,6 +3,8 @@ $pageTitle = "Project List";
 
 require_once 'controllers/ProjectController.php';
 $projectController = new ProjectController();
+
+$type = $_GET['type'] ?? "";
 $projectLists = $projectController->listProjects();
 
 ob_start();
@@ -32,7 +34,7 @@ foreach ($projectLists as $project) {
                                     </button>
 
                                     <div class="dropdown-menu dropdown-menu-end">
-                                        <a class="dropdown-item" href="' . home_url("projects/detail?post_id") . $project['id'] . '"><i class="ri-eye-fill align-bottom me-2 text-muted"></i> View</a>
+                                        <a class="dropdown-item" href="' . home_url("projects/detail?post_id=") . $project['id'] . '"><i class="ri-eye-fill align-bottom me-2 text-muted"></i> View</a>
                                         <a class="dropdown-item" href="' . home_url("projects/edit?post_id=") . $project['id'] . '"><i class="ri-pencil-fill align-bottom me-2 text-muted"></i> Edit</a>
                                         <div class="dropdown-divider"></div>
                                         <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#removeProjectModal"><i class="ri-delete-bin-fill align-bottom me-2 text-muted"></i> Remove</a>
@@ -119,10 +121,28 @@ echo '<div class="row g-4 mb-3">
         </div>
         <div class="col-sm">
             <div class="d-flex justify-content-sm-end gap-2">
-                <div class="search-box ms-2">
-                    <input type="text" class="form-control" placeholder="Search...">
+                <ul class="nav nav-pills card-header-pills" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link ' . (empty($type) ? "active" : "") . '" href="' . home_url("projects/list") . '" role="tab">
+                            All
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link ' . ($type == "owner" ? "active" : "") . '" href="' . home_url("projects/list?type=owner") . '" role="tab">
+                            Owner
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link ' . ($type == "freelancer" ? "active" : "") . '" href="' . home_url("projects/list?type=freelancer") . '" role="tab">
+                            Freelancer
+                        </a>
+                    </li>
+                </ul>
+
+                <form class="search-box ms-2" method="GET" action="' . home_url("projects/list") . '">
+                    <input type="text" class="form-control" name="s" placeholder="Search...">
                     <i class="ri-search-line search-icon"></i>
-                </div>
+                </form>
 
                 <select class="form-control w-md" data-choices data-choices-search-false>
                     <option value="All">All</option>

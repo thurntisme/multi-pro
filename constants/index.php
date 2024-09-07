@@ -44,3 +44,9 @@ $projectStatus = array(
   array('cancelled', 'Cancelled'),
 );
 define('DEFAULT_PROJECT_STATUS', $projectStatus);
+
+$projectTypes = array(
+  array('owner', 'Owner'),
+  array('freelancer', 'Freelancer'),
+);
+define('DEFAULT_PROJECT_TYPES', $projectTypes);

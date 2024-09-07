@@ -19,9 +19,10 @@ class ProjectController
     $description = $_POST['description'] ?? '';
     $start_date = $_POST['start_date'] ?? '';
     $end_date = $_POST['end_date'] ?? '';
+    $type = $_POST['type'] ?? '';
 
     if ($title) {
-      $this->projectService->createProject($title, $description, $start_date, $end_date);
+      $this->projectService->createProject($title, $description, $start_date, $end_date, $type);
       $_SESSION['message_type'] = 'success';
       $_SESSION['message'] = "Project created successfully";
 
@@ -41,10 +42,11 @@ class ProjectController
     $description = $_POST['description'] ?? '';
     $start_date = $_POST['start_date'] ?? '';
     $end_date = $_POST['end_date'] ?? '';
+    $type = $_POST['type'] ?? '';
     $status = $_POST['status'] ?? '';
 
     if ($id && $title) {
-      $rowsAffected = $this->projectService->updateProject($id, $title, $description, $start_date, $end_date, $status);
+      $rowsAffected = $this->projectService->updateProject($id, $title, $description, $start_date, $end_date, $status, $type);
       if ($rowsAffected) {
         $_SESSION['message_type'] = 'success';
         $_SESSION['message'] = "Project updated successfully.";
@@ -80,12 +82,6 @@ class ProjectController
 
     header("Location: " . $_SERVER['REQUEST_URI']);
     exit;
-  }
-
-  // Retrieve all projects for dashboard
-  public function getLatestTasks()
-  {
-    return $this->projectService->getAllProjects(4);
   }
 
   // Handle listing all projects

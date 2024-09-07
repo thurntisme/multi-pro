@@ -62,35 +62,53 @@ echo '<form method="post" action="' . home_url("projects/" . $action) . '">
                         </div>
 
                         <div class="row">
-                            <div class="col-lg-4">';
+                            <div class="col-lg-3">';
+$typeOptions = '';
+foreach (DEFAULT_PROJECT_TYPES as $type) {
+    $selected = 'owner' === $type[0] ? 'selected' : '';
+    if (isset($projectData['type'])) {
+        $selected = $projectData['type'] === $type[0] ? 'selected' : '';
+    }
+    $typeOptions .= '<option value="' . htmlspecialchars($type[0]) . '" ' . $selected . '>' .
+        htmlspecialchars($type[1]) .
+        '</option>';
+}
+echo '<div class="mb-3 mb-lg-0">
+                                        <label for="choices-types-input" class="form-label">Type</label>
+                                        <select class="form-select" name="type" data-choices data-choices-search-false id="choices-types-input">
+                                            ' . $typeOptions . '
+                                        </select>
+                                    </div>';
+echo '</div>';
+echo '<div class="col-lg-3">';
 if ($modify_type == 'edit') {
     echo '<input type="hidden" name="project_id" value="' . $_GET['post_id'] . '" />';
 
-    $options = '';
+    $statusOptions = '';
     foreach (DEFAULT_PROJECT_STATUS as $status) {
         $selected = 'not_started' === $status[0] ? 'selected' : '';
         if (isset($projectData['status'])) {
             $selected = $projectData['status'] === $status[0] ? 'selected' : '';
         }
-        $options .= '<option value="' . htmlspecialchars($status[0]) . '" ' . $selected . '>' .
+        $statusOptions .= '<option value="' . htmlspecialchars($status[0]) . '" ' . $selected . '>' .
             htmlspecialchars($status[1]) .
             '</option>';
     }
     echo '<div class="mb-3 mb-lg-0">
                                         <label for="choices-status-input" class="form-label">Status</label>
                                         <select class="form-select" name="status" data-choices data-choices-search-false id="choices-status-input">
-                                            ' . $options . '
+                                            ' . $statusOptions . '
                                         </select>
                                     </div>';
 }
 echo '</div>
-                            <div class="col-lg-4">
+                            <div class="col-lg-3">
                                 <div>
                                     <label for="datepicker-start-date-input" class="form-label">Start Date</label>
                                     <input type="text" name="start_date" class="form-control" id="datepicker-start-date-input" placeholder="Enter Start Date" data-provider="flatpickr" value="' . ($projectData['start_date'] ?? "") . '">
                                 </div>
                             </div>
-                            <div class="col-lg-4">
+                            <div class="col-lg-3">
                                 <div>
                                     <label for="datepicker-end-date-input" class="form-label">End Date</label>
                                     <input type="text" name="end_date" class="form-control" id="datepicker-end-date-input" placeholder="Enter End Date" data-provider="flatpickr" value="' . ($projectData['end_date'] ?? "") . '">
