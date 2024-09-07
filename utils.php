@@ -262,18 +262,36 @@ function getCurrentUrl()
 
 $dateRanges = [
   "" => [null, null], // All (no filtering)
-  "today" => [date('Y-m-d'), date('Y-m-d')],
-  "yesterday" => [date('Y-m-d', strtotime('-1 day')), date('Y-m-d', strtotime('-1 day'))],
-  "this_week" => [date('Y-m-d', strtotime('monday this week')), date('Y-m-d', strtotime('sunday this week'))],
-  "this_month" => [date('Y-m-01'), date('Y-m-t')],
-  "this_year" => [date('Y-01-01'), date('Y-12-31')],
-  "last_7days" => [date('Y-m-d', strtotime('-7 days')), date('Y-m-d')],
-  "last_week" => [date('Y-m-d', strtotime('monday last week')), date('Y-m-d', strtotime('sunday last week'))],
-  "last_month" => [date('Y-m-01', strtotime('-1 month')), date('Y-m-t', strtotime('-1 month'))],
-  "last_year" => [date('Y-01-01', strtotime('-1 year')), date('Y-12-31', strtotime('-1 year'))],
+  "today" => [date('Y-m-d 00:00:00'), date('Y-m-d 23:59:59')],
+  "yesterday" => [date('Y-m-d 00:00:00', strtotime('-1 day')), date('Y-m-d 23:59:59', strtotime('-1 day'))],
+  "this_week" => [date('Y-m-d 00:00:00', strtotime('monday this week')), date('Y-m-d 23:59:59', strtotime('sunday this week'))],
+  "this_month" => [date('Y-m-01 00:00:00'), date('Y-m-t 23:59:59')],
+  "this_year" => [date('Y-01-01 00:00:00'), date('Y-12-31 23:59:59')],
+  "last_7days" => [date('Y-m-d 00:00:00', strtotime('-7 days')), date('Y-m-d 23:59:59')],
+  "last_week" => [date('Y-m-d 00:00:00', strtotime('monday last week')), date('Y-m-d 23:59:59', strtotime('sunday last week'))],
+  "last_month" => [date('Y-m-01 00:00:00', strtotime('-1 month')), date('Y-m-t 23:59:59', strtotime('-1 month'))],
+  "last_year" => [date('Y-01-01 00:00:00', strtotime('-1 year')), date('Y-12-31 23:59:59', strtotime('-1 year'))],
 ];
 function getDateRange($range)
 {
   global $dateRanges;
   return isset($dateRanges[$range]) ? $dateRanges[$range] : [null, null];
+}
+
+function getTimezoneOffset()
+{
+  $localTimezone = date_default_timezone_get();
+
+  // Create DateTime objects for UTC and local timezones
+  $utc = new DateTime('now', new DateTimeZone('UTC'));
+  $local = new DateTime('now', new DateTimeZone($localTimezone));
+
+  // Calculate the difference between the two timezones
+  $offset = $local->getOffset() - $utc->getOffset();
+
+  // Convert offset to hours and format it
+  $hours = $offset / 3600;
+  $formattedOffset = ($hours >= 0 ? '+' : '-') . str_pad(abs($hours), 2, '0', STR_PAD_LEFT) . ' hours';
+
+  return $formattedOffset;
 }

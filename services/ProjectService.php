@@ -83,7 +83,7 @@ class ProjectService
 
     list($startDate, $endDate) = getDateRange($lastUpdated);
     if ($lastUpdated !== '') {
-      $sql .= " AND updated_at BETWEEN :start_date AND :end_date";
+      $sql .= " AND datetime(updated_at, '" . getTimezoneOffset() . "') BETWEEN :start_date AND :end_date";
     }
 
     // Sorting parameters (optional)

@@ -23,7 +23,7 @@ foreach ($list as $project) {
                 <div class="d-flex flex-column h-100">
                     <div class="d-flex">
                         <div class="flex-grow-1">
-                            <p class="text-muted mb-1">Updated ' . timeAgo($project['updated_at']) . '</p>
+                            <p class="text-muted mb-1">Updated ' . timeAgo($commonController->convertDateTime($project['updated_at'])) . '</p>
                         </div>
                         <div class="flex-shrink-0">
                             <div class="d-flex gap-1 align-items-center">

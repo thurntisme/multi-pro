@@ -42,7 +42,7 @@ if (!empty($projectData)) {
                                                             <div class="vr"></div>
                                                             <div>Created : <span class="fw-medium">' . $commonController->convertDate($projectData['created_at']) . '</span></div>
                                                             <div class="vr"></div>
-                                                            <div>Updated : <span class="fw-medium">' . timeAgo($projectData['updated_at']) . '</span></div>
+                                                            <div>Updated : <span class="fw-medium">' . timeAgo($commonController->convertDateTime($projectData['updated_at'])) . '</span></div>
                                                             <div class="vr"></div>
                                                             <!--<div class="badge rounded-pill bg-info fs-12">New</div>
                                                             <div class="badge rounded-pill bg-danger fs-12">High</div>-->
@@ -317,8 +317,8 @@ if (!empty($projectData)) {
                                             <div class="card-body">
                                                 <h5 class="card-title mb-4">Action</h5>
                                                 <div class="d-flex flex-wrap gap-2 fs-16">
-                                                    <a href="' . home_url("projects/edit?post_id=") . $_GET['post_id'] . '" class="btn btn-info">Edit</a>
-                                                    <button data_id="'  . $_GET['post_id'] . '" class="btn btn-danger">Delete</button>
+                                                    <a href="' . home_url("projects/edit?post_id=") . $_GET['post_id'] . '" class="btn btn-info">Edit <i class="ri-pencil-line ms-1"></i></a>
+                                                    <button data_id="'  . $_GET['post_id'] . '" class="btn btn-danger">Delete <i class="ri-delete-bin-5-line ms-1"></i></button>
                                                 </div>
                                             </div>
                                             <!-- end card body -->
