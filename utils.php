@@ -193,3 +193,87 @@ function activeClassName($url, $className = 'active')
   $parentPath = count($urlParts) > 0 ? $urlParts[0] : '';
   return $parentPath === $url ? $className : '';
 }
+function includeFileWithVariables($filePath, $variables = array(), $print = true)
+{
+  global $commonController;
+  $output = NULL;
+  if (file_exists($filePath)) {
+    // Extract the variables to a local namespace
+    extract($variables);
+
+    // Start output buffering
+    ob_start();
+
+    // Include the template file
+    include $filePath;
+
+    // End buffering and return its contents
+    $output = ob_get_clean();
+  }
+  if ($print) {
+    print $output;
+  }
+  return $output;
+}
+
+function generatePageUrl($params = [])
+{
+  // Get the current URL
+  $currentUrl = "http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+
+  // Parse the URL to get its components
+  $urlParts = parse_url($currentUrl);
+
+  // Parse the query string into an associative array
+  $queryParams = [];
+  if (isset($urlParts['query'])) {
+    parse_str($urlParts['query'], $queryParams);
+  }
+
+  // Replace or add the new parameters
+  foreach ($params as $key => $value) {
+    $queryParams[$key] = $value;
+  }
+
+  // Build the new query string
+  $newQuery = http_build_query($queryParams);
+
+  // Build the new URL with the updated query string
+  $newUrl = $urlParts['scheme'] . '://' . $urlParts['host'] . $urlParts['path'] . '?' . $newQuery;
+
+  return $newUrl;
+}
+
+function getCurrentUrl()
+{
+  // Determine the protocol (http or https)
+  $protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' || $_SERVER['SERVER_PORT'] == 443) ? "https://" : "http://";
+
+  // Get the host
+  $host = $_SERVER['HTTP_HOST'];
+
+  // Get the URI path without query parameters
+  $uri = $_SERVER['REQUEST_URI'];
+  $uriWithoutParams = parse_url($uri, PHP_URL_PATH);
+
+  // Return the full URL without query parameters
+  return $protocol . $host . $uriWithoutParams;
+}
+
+$dateRanges = [
+  "" => [null, null], // All (no filtering)
+  "today" => [date('Y-m-d'), date('Y-m-d')],
+  "yesterday" => [date('Y-m-d', strtotime('-1 day')), date('Y-m-d', strtotime('-1 day'))],
+  "this_week" => [date('Y-m-d', strtotime('monday this week')), date('Y-m-d', strtotime('sunday this week'))],
+  "this_month" => [date('Y-m-01'), date('Y-m-t')],
+  "this_year" => [date('Y-01-01'), date('Y-12-31')],
+  "last_7days" => [date('Y-m-d', strtotime('-7 days')), date('Y-m-d')],
+  "last_week" => [date('Y-m-d', strtotime('monday last week')), date('Y-m-d', strtotime('sunday last week'))],
+  "last_month" => [date('Y-m-01', strtotime('-1 month')), date('Y-m-t', strtotime('-1 month'))],
+  "last_year" => [date('Y-01-01', strtotime('-1 year')), date('Y-12-31', strtotime('-1 year'))],
+];
+function getDateRange($range)
+{
+  global $dateRanges;
+  return isset($dateRanges[$range]) ? $dateRanges[$range] : [null, null];
+}

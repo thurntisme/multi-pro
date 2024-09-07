@@ -85,9 +85,9 @@ class ProjectController
   }
 
   // Handle listing all projects
-  public function listProjects()
+  public function listProjectData()
   {
-    return $this->projectService->getAllProjects();
+    return $this->projectService->getProjectListData();
   }
 
   // Handle viewing a single project

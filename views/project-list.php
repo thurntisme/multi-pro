@@ -5,13 +5,17 @@ require_once 'controllers/ProjectController.php';
 $projectController = new ProjectController();
 
 $type = $_GET['type'] ?? "";
-$projectLists = $projectController->listProjects();
+$keyword = $_GET['s'] ?? "";
+$lastUpdated = $_GET['last_updated'] ?? "";
+$projectData = $projectController->listProjectData();
+$list = $projectData['list'];
+$count = $projectData['count'];
 
 ob_start();
 
 $projectItems = '';
 
-foreach ($projectLists as $project) {
+foreach ($list as $project) {
     $projectItems .= '
     <div class="col-xxl-3 col-sm-6 project-card">
         <div class="card card-height-100">
@@ -44,7 +48,7 @@ foreach ($projectLists as $project) {
                         </div>
                     </div>
                     <div class="mt-3">
-                        <h5 class="mb-3 fs-14"><a href="' . home_url("projects/detail?post_id=") . $project['id'] . '" class="text-body">' . $project['title'] . '</a></h5>
+                        <h5 class="mb-3 fs-14"><a href="' . home_url("projects/detail?post_id=") . $project['id'] . '" class="text-body text-truncate-two-lines">' . $project['title'] . '</a></h5>
                         <div class="row gy-3">
                             <div class="col-6">
                                 <div>
@@ -113,6 +117,13 @@ foreach ($projectLists as $project) {
     <!-- end col -->';
 }
 
+$filterDate = '';
+$filterDateSelected = DEFAULT_FILTER_DATE_OPTIONS[$lastUpdated];
+foreach (DEFAULT_FILTER_DATE_OPTIONS as $key => $value) {
+    $activeClass = $lastUpdated == $key ? ' active' : '';
+    $filterDate .= '<a class="dropdown-item ' . $activeClass . '" href="' . generatePageUrl(["last_updated" => $key, "page" => "1"]) . '">' . $value . '</a>';
+}
+
 echo '<div class="row g-4 mb-3">
         <div class="col-sm-auto">
             <div>
@@ -123,36 +134,37 @@ echo '<div class="row g-4 mb-3">
             <div class="d-flex justify-content-sm-end gap-2">
                 <ul class="nav nav-pills card-header-pills" role="tablist">
                     <li class="nav-item">
-                        <a class="nav-link ' . (empty($type) ? "active" : "") . '" href="' . home_url("projects/list") . '" role="tab">
+                        <a class="nav-link ' . (empty($type) ? "bg-white border border-dark-subtle" : "") . '" href="' . generatePageUrl(["type" => "", "page" => "1"]) . '" role="tab">
                             All
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link ' . ($type == "owner" ? "active" : "") . '" href="' . home_url("projects/list?type=owner") . '" role="tab">
+                        <a class="nav-link ' . ($type == "owner" ? "bg-white border border-dark-subtle" : "") . '" href="' . generatePageUrl(["type" => "owner", "page" => "1"]) . '" role="tab">
                             Owner
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link ' . ($type == "freelancer" ? "active" : "") . '" href="' . home_url("projects/list?type=freelancer") . '" role="tab">
+                        <a class="nav-link ' . ($type == "freelancer" ? "bg-white border border-dark-subtle" : "") . '" href="' . generatePageUrl(["type" => "freelancer", "page" => "1"]) . '" role="tab">
                             Freelancer
                         </a>
                     </li>
                 </ul>
 
                 <form class="search-box ms-2" method="GET" action="' . home_url("projects/list") . '">
-                    <input type="text" class="form-control" name="s" placeholder="Search...">
+                    <input type="text" class="form-control border-dark-subtle" name="s" placeholder="Search..." value="' . $keyword . '">
                     <i class="ri-search-line search-icon"></i>
                 </form>
 
-                <select class="form-control w-md" data-choices data-choices-search-false>
-                    <option value="All">All</option>
-                    <option value="Today">Today</option>
-                    <option value="Yesterday" selected>Yesterday</option>
-                    <option value="Last 7 Days">Last 7 Days</option>
-                    <option value="Last 30 Days">Last 30 Days</option>
-                    <option value="This Month">This Month</option>
-                    <option value="Last Year">Last Year</option>
-                </select>
+                <div class="btn-group">
+                    <button type="button" class="btn btn-light border-1 border-dark-subtle bg-white dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Last Updated: ' . $filterDateSelected . '
+                    </button>
+                    <div class="dropdown-menu">
+                        ' . $filterDate . '
+                    </div>
+                </div>
+
+                <a href="' . home_url("projects/list") . '" class="btn btn-primary">Reset <i class="ri-delete-bin-7-line ms-1"></i></a>
             </div>
         </div>
     </div>
@@ -160,41 +172,9 @@ echo '<div class="row g-4 mb-3">
     <div class="row">        
         ' . $projectItems . '
     </div>
-    <!-- end row -->
+    <!-- end row -->';
 
-    <div class="row g-0 text-center text-sm-start align-items-center mb-4">
-        <div class="col-sm-6">
-            <div>
-                <p class="mb-sm-0 text-muted">Showing <span class="fw-semibold">1</span> to <span class="fw-semibold">10</span> of <span class="fw-semibold text-decoration-underline">12</span> entries</p>
-            </div>
-        </div>
-        <!-- end col -->
-        <div class="col-sm-6">
-            <ul class="pagination pagination-separated justify-content-center justify-content-sm-end mb-sm-0">
-                <li class="page-item disabled">
-                    <a href="#" class="page-link">Previous</a>
-                </li>
-                <li class="page-item active">
-                    <a href="#" class="page-link">1</a>
-                </li>
-                <li class="page-item ">
-                    <a href="#" class="page-link">2</a>
-                </li>
-                <li class="page-item">
-                    <a href="#" class="page-link">3</a>
-                </li>
-                <li class="page-item">
-                    <a href="#" class="page-link">4</a>
-                </li>
-                <li class="page-item">
-                    <a href="#" class="page-link">5</a>
-                </li>
-                <li class="page-item">
-                    <a href="#" class="page-link">Next</a>
-                </li>
-            </ul>
-        </div><!-- end col -->
-</div><!-- end row -->';
+includeFileWithVariables('components/pagination.php', array("count" => $count));
 
 echo '<!-- removeProjectModal -->
     <div id="removeProjectModal" class="modal fade zoomIn" tabindex="-1" aria-hidden="true">

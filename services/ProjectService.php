@@ -53,7 +53,7 @@ class ProjectService
   }
 
   // Get all projects
-  public function getAllProjects()
+  public function getProjectsSQL($queryType = "result")
   {
     // Pagination parameters
     $itemsPerPage = 12; // Number of results per page
@@ -64,10 +64,14 @@ class ProjectService
     $keyword = isset($_GET['s']) ? $_GET['s'] : '';
     $keyword = '%' . $keyword . '%'; // Prepare for LIKE search
 
+    // Filter last updated
+    $lastUpdated = isset($_GET['last_updated']) ? $_GET['last_updated'] : '';
+
     // Filter by role (optional)
     $type = isset($_GET['type']) ? $_GET['type'] : '';
 
-    $sql = "SELECT * FROM projects WHERE user_id = $this->user_id ";
+    $selectSql = $queryType === "result" ? "SELECT * FROM projects" : "SELECT COUNT(*) FROM projects";
+    $sql = $selectSql . " WHERE user_id = $this->user_id ";
 
     if ($keyword !== '') {
       $sql .= " AND title LIKE :keyword";
@@ -77,6 +81,11 @@ class ProjectService
       $sql .= " AND type = :type";
     }
 
+    list($startDate, $endDate) = getDateRange($lastUpdated);
+    if ($lastUpdated !== '') {
+      $sql .= " AND updated_at BETWEEN :start_date AND :end_date";
+    }
+
     // Sorting parameters (optional)
     $sortColumn = isset($_GET['sort']) ? $_GET['sort'] : 'updated_at'; // Default sort by updated_at
     $sortOrder = isset($_GET['order']) && in_array(strtoupper($_GET['order']), ['ASC', 'DESC']) ? strtoupper($_GET['order']) : 'DESC'; // Default to DESC
@@ -84,8 +93,10 @@ class ProjectService
     // Add the ORDER BY clause dynamically
     $sql .= " ORDER BY $sortColumn $sortOrder";
 
-    // Add pagination (LIMIT and OFFSET)
-    $sql .= " LIMIT $itemsPerPage OFFSET $offset";
+    if ($queryType === "result") {
+      // Add pagination (LIMIT and OFFSET)
+      $sql .= " LIMIT $itemsPerPage OFFSET $offset";
+    }
 
     // Prepare the query
     $stmt = $this->pdo->prepare($sql);
@@ -97,9 +108,22 @@ class ProjectService
     if ($type !== '') {
       $stmt->bindParam(':type', $type, PDO::PARAM_STR);
     }
+    if ($startDate && $endDate) {
+      $stmt->bindParam(':start_date', $startDate,);
+      $stmt->bindParam(':end_date', $endDate);
+    }
 
     // Execute the query
     $stmt->execute();
-    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    return $queryType === "result" ? $stmt->fetchAll(PDO::FETCH_ASSOC) : $stmt->fetchColumn();
+  }
+
+  // Get all projects
+  public function getProjectListData()
+  {
+    return [
+      'list' => $this->getProjectsSQL("result"),
+      'count' => $this->getProjectsSQL("count"),
+    ];
   }
 }

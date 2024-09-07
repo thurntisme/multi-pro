@@ -50,3 +50,16 @@ $projectTypes = array(
   array('freelancer', 'Freelancer'),
 );
 define('DEFAULT_PROJECT_TYPES', $projectTypes);
+
+define('DEFAULT_FILTER_DATE_OPTIONS', [
+  "" => "All",
+  "today" => "Today",
+  "yesterday" => "Yesterday",
+  "this_week" => "This Week",
+  "this_month" => "This Month",
+  "this_year" => "This Year",
+  "last_7days" => "Last 7 Days",
+  "last_week" => "Last Week",
+  "last_month" => "Last Month",
+  "last_year" => "Last Year",
+]);
