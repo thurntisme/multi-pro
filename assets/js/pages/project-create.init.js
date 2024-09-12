@@ -7,29 +7,33 @@ File: Project create init js
 */
 
 // ckeditor
-var ckeditorClassic = document.querySelector('#ckeditor-classic');
+var ckeditorClassic = document.querySelector("#ckeditor-classic");
 if (ckeditorClassic) {
-    ClassicEditor
-        .create(document.querySelector('#ckeditor-classic'))
-        .then(function (editor) {
-            editor.ui.view.editable.element.style.height = '200px';
-        })
-        .catch(function (error) {
-            console.error(error);
-        });
+  ClassicEditor.create(document.querySelector("#ckeditor-classic"))
+    .then(function (editor) {
+      editor.ui.view.editable.element.style.height = "200px";
+    })
+    .catch(function (error) {
+      console.error(error);
+    });
 }
 
 // Dropzone
 var dropzonePreviewNode = document.querySelector("#dropzone-preview-list");
 if (dropzonePreviewNode) {
-    dropzonePreviewNode.id = "";
-    var previewTemplate = dropzonePreviewNode.parentNode.innerHTML;
-    dropzonePreviewNode.parentNode.removeChild(dropzonePreviewNode);
-    var dropzone = new Dropzone(".dropzone", {
-        url: 'https://httpbin.org/post',
-        method: "post",
-        previewTemplate: previewTemplate,
-        previewsContainer: "#dropzone-preview",
-    });
+  dropzonePreviewNode.id = "";
+  var previewTemplate = dropzonePreviewNode.parentNode.innerHTML;
+  dropzonePreviewNode.parentNode.removeChild(dropzonePreviewNode);
+  var dropzone = new Dropzone(".dropzone", {
+    url: "https://httpbin.org/post",
+    method: "post",
+    previewTemplate: previewTemplate,
+    previewsContainer: "#dropzone-preview",
+  });
+}
 
+// Remove product from cart
+var removeProduct = document.getElementById("removeProjectModal");
+if (removeProduct) {
+  removeProduct.addEventListener("show.bs.modal", function (e) {});
 }

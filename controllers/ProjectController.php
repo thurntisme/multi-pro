@@ -49,7 +49,6 @@ class ProjectController
       $rowsAffected = $this->projectService->updateProject($id, $title, $description, $start_date, $end_date, $status, $type);
       if ($rowsAffected) {
         $_SESSION['message_type'] = 'success';
-        $_SESSION['message'] = "Project updated successfully.";
       } else {
         $_SESSION['message_type'] = 'danger';
         $_SESSION['message'] = "Failed to update project.";
@@ -71,6 +70,8 @@ class ProjectController
       if ($rowsAffected) {
         $_SESSION['message_type'] = 'success';
         $_SESSION['message'] = "Project deleted successfully.";
+        header("Location: " . home_url("projects/list"));
+        exit;
       } else {
         $_SESSION['message_type'] = 'danger';
         $_SESSION['message'] = "Failed to delete project.";

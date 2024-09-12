@@ -80,8 +80,8 @@ echo '<div class="mb-3 mb-lg-0">
                                         </select>
                                     </div>';
 echo '</div>';
-echo '<div class="col-lg-3">';
 if ($modify_type == 'edit') {
+    echo '<div class="col-lg-3">';
     echo '<input type="hidden" name="project_id" value="' . $_GET['post_id'] . '" />';
 
     $statusOptions = '';
@@ -100,9 +100,9 @@ if ($modify_type == 'edit') {
                                             ' . $statusOptions . '
                                         </select>
                                     </div>';
+    echo '</div>';
 }
-echo '</div>
-                            <div class="col-lg-3">
+echo '<div class="col-lg-3">
                                 <div>
                                     <label for="datepicker-start-date-input" class="form-label">Start Date</label>
                                     <input type="text" name="start_date" class="form-control" id="datepicker-start-date-input" placeholder="Enter Start Date" data-provider="flatpickr" value="' . ($projectData['start_date'] ?? "") . '">
@@ -158,9 +158,6 @@ echo '</div>
                                                     <strong class="error text-danger" data-dz-errormessage></strong>
                                                 </div>
                                             </div>
-                                            <div class="flex-shrink-0 ms-3">
-                                                <button data-dz-remove class="btn btn-sm btn-danger">Delete</button>
-                                            </div>
                                         </div>
                                     </div>
                                 </li>
@@ -171,7 +168,7 @@ echo '</div>
                 </div>
                 <!-- end card -->
                 <div class="text-center mb-4">
-                    <button type="submit" class="btn btn-danger w-sm">Delete</button>
+                    <a href="' . home_url("projects/detail?post_id=") . $_GET['post_id'] . '" class="btn btn-light w-sm">Back</a>
                     <!--<button type="submit" class="btn btn-secondary w-sm">Draft</button>-->
                     <button type="submit" class="btn btn-success w-sm">' . ($modify_type === "create" ? "Create" : "Save") . '</button>
                 </div>

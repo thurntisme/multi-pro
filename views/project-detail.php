@@ -13,6 +13,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         echo "No post ID found in the URL.";
     }
 }
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    if (!empty($_POST['action'])) {
+        if ($_POST['action'] == "delete_project") {
+            $projectController->deleteProject($_POST['project_id']);
+        }
+    }
+}
 
 ob_start();
 
@@ -165,7 +172,7 @@ if (!empty($projectData)) {
                                                                                     </button>
                                                                                     <ul class="dropdown-menu">
                                                                                         <li><a class="dropdown-item" href="#"><i class="ri-pencil-fill align-bottom me-2 text-muted"></i> Rename</a></li>
-                                                                                        <li><a class="dropdown-item" href="#"><i class="ri-delete-bin-fill align-bottom me-2 text-muted"></i> Delete</a></li>
+                                                                                        <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#removeProjectModal"><i class="ri-delete-bin-fill align-bottom me-2 text-muted" ></i> Delete</a></li>
                                                                                     </ul>
                                                                                 </div>
                                                                             </div>
@@ -197,7 +204,7 @@ if (!empty($projectData)) {
                                                                                     </button>
                                                                                     <ul class="dropdown-menu">
                                                                                         <li><a class="dropdown-item" href="#"><i class="ri-pencil-fill align-bottom me-2 text-muted"></i> Rename</a></li>
-                                                                                        <li><a class="dropdown-item" href="#"><i class="ri-delete-bin-fill align-bottom me-2 text-muted"></i> Delete</a></li>
+                                                                                        <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#removeProjectModal"><i class="ri-delete-bin-fill align-bottom me-2 text-muted"></i> Delete</a></li>
                                                                                     </ul>
                                                                                 </div>
                                                                             </div>
@@ -318,7 +325,7 @@ if (!empty($projectData)) {
                                                 <h5 class="card-title mb-4">Action</h5>
                                                 <div class="d-flex flex-wrap gap-2 fs-16">
                                                     <a href="' . home_url("projects/edit?post_id=") . $_GET['post_id'] . '" class="btn btn-info">Edit <i class="ri-pencil-line ms-1"></i></a>
-                                                    <button data_id="'  . $_GET['post_id'] . '" class="btn btn-danger">Delete <i class="ri-delete-bin-5-line ms-1"></i></button>
+                                                    <button data_id="'  . $_GET['post_id'] . '" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#removeProjectModal">Delete <i class="ri-delete-bin-5-line ms-1"></i></button>
                                                 </div>
                                             </div>
                                             <!-- end card body -->
@@ -1779,6 +1786,35 @@ if (!empty($projectData)) {
             <!-- modal-dialog -->
         </div>
         <!-- end modal -->';
+
+    echo '<!-- removeProjectModal -->
+<div id="removeProjectModal" class="modal fade zoomIn" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="close-modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mt-2 text-center">
+                    <lord-icon src="https://cdn.lordicon.com/gsqxdxog.json" trigger="loop" colors="primary:#f7b84b,secondary:#f06548" style="width:100px;height:100px"></lord-icon>
+                    <div class="mt-4 pt-2 fs-15 mx-4 mx-sm-5">
+                        <h4>Are you Sure ?</h4>
+                        <p class="text-muted mx-4 mb-0">Are you Sure You want to Remove this Project ?</p>
+                    </div>
+                </div>
+                <div class="d-flex gap-2 justify-content-center mt-4 mb-2">
+                    <button type="button" class="btn w-sm btn-light" data-bs-dismiss="modal">Close</button>
+                    <form action="' . home_url("projects/detail?post_id=") . $_GET['post_id'] . '" method="post" >
+                        <input type="hidden" name="action" value="delete_project" />
+                        <input type="hidden" name="project_id" value="' . $_GET['post_id'] . '" />
+                        <button type="submit" class="btn w-sm btn-danger" id="remove-project">Yes, Delete It!</button>
+                    </form>
+                </div>
+            </div>
+
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->';
 } else {
     echo '<div class="page-content pt-4">No Project Found</div>';
 }

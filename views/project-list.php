@@ -11,9 +11,26 @@ $projectData = $projectController->listProjectData();
 $list = $projectData['list'];
 $count = $projectData['count'];
 
+if (!empty($_POST['action'])) {
+    if ($_POST['action'] == "delete_project") {
+        var_dump($_POST);
+    }
+}
+
 ob_start();
 
 $projectItems = '';
+
+if (isset($_SESSION['message'])) {
+    $messageType = $_SESSION['message_type'] ?? 'info';
+    echo '<div class="alert alert-' . $_SESSION['message_type'] . ' alert-dismissible fade show" role="alert">
+                <i class="ri-' . ($_SESSION['message_type'] === "success" ? "check-double" : "error-warning") . '-line me-3 align-middle fs-16 text-' . $_SESSION['message_type'] . '"></i><strong>' . $_SESSION['message'] . '</strong>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>';
+
+    unset($_SESSION['message']);
+    unset($_SESSION['message_type']);
+}
 
 foreach ($list as $project) {
     $projectItems .= '
@@ -41,6 +58,10 @@ foreach ($list as $project) {
                                         <a class="dropdown-item" href="' . home_url("projects/detail?post_id=") . $project['id'] . '"><i class="ri-eye-fill align-bottom me-2 text-muted"></i> View</a>
                                         <a class="dropdown-item" href="' . home_url("projects/edit?post_id=") . $project['id'] . '"><i class="ri-pencil-fill align-bottom me-2 text-muted"></i> Edit</a>
                                         <div class="dropdown-divider"></div>
+                                        <form action="' . home_url("projects/list") . '" method="post" >
+                                            <input type="hidden" name="action" value="delete_project" />
+                                            <input type="hidden" name="project_id" value="' . $project['id'] . '" />
+                                        </form>
                                         <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#removeProjectModal"><i class="ri-delete-bin-fill align-bottom me-2 text-muted"></i> Remove</a>
                                     </div>
                                 </div>
@@ -169,7 +190,7 @@ echo '<div class="row g-4 mb-3">
         </div>
     </div>
 
-    <div class="row">        
+    <div class="row" id="project-list">        
         ' . $projectItems . '
     </div>
     <!-- end row -->';
@@ -205,10 +226,7 @@ $pageContent = ob_get_clean();
 
 ob_start();
 echo '<!-- project list init -->
-    <script src="' . home_url('assets/js/pages/project-list.init.js') . '"></script>
-
-    <!-- App js -->
-    <script src="' . home_url('assets/js/app.js') . '"></script>';
+    <script src="' . home_url('assets/js/pages/project-list.init.js') . '"></script>';
 
 $additionJs = ob_get_clean();
 

@@ -9,20 +9,34 @@ File: Project list init js
 // favourite btn
 var favouriteBtn = document.querySelectorAll(".favourite-btn");
 if (favouriteBtn) {
-    Array.from(document.querySelectorAll(".favourite-btn")).forEach(function (item) {
-        item.addEventListener("click", function (event) {
-            this.classList.toggle("active");
-        });
+  Array.from(document.querySelectorAll(".favourite-btn")).forEach(function (
+    item
+  ) {
+    item.addEventListener("click", function (event) {
+      this.classList.toggle("active");
     });
+  });
 }
 
 // Remove product from cart
-var removeProduct = document.getElementById('removeProjectModal')
+var removeProduct = document.getElementById("removeProjectModal");
 if (removeProduct) {
-    removeProduct.addEventListener('show.bs.modal', function (e) {
-        document.getElementById('remove-project').addEventListener('click', function (event) {
-            e.relatedTarget.closest('.project-card').remove();
-            document.getElementById("close-modal").click();
-        });
-    });
+  removeProduct.addEventListener("show.bs.modal", function (e) {
+    document
+      .getElementById("remove-project")
+      .addEventListener("click", function (event) {
+        e.relatedTarget.closest(".project-card").remove();
+        document.getElementById("close-modal").click();
+      });
+  });
+}
+$("#project-list .btn-delete-project").each(function () {
+  $(this).on("click", function (e) {
+    e.preventDefault();
+    console.log("click");
+  });
+});
+
+function createConfirmButtons() {
+  console.log("confirm");
 }
