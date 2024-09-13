@@ -80,6 +80,11 @@ if (!empty($projectData)) {
                                             </a>
                                         </li>
                                         <li class="nav-item">
+                                            <a class="nav-link fw-semibold" data-bs-toggle="tab" href="#project-links" role="tab">
+                                                Links
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
                                             <a class="nav-link fw-semibold" data-bs-toggle="tab" href="#project-documents" role="tab">
                                                 Documents
                                             </a>
@@ -659,6 +664,36 @@ if (!empty($projectData)) {
                                     <!-- end col -->
                                 </div>
                                 <!-- end row -->
+                            </div>
+                            <!-- end tab pane -->
+                            <div class="tab-pane fade" id="project-links" role="tabpanel">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="d-flex align-items-center mb-4">
+                                            <h5 class="card-title flex-grow-1">Links</h5>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-lg-12">
+                                                <div>
+                                                    <label>Dev Url:</label>
+                                                    <a href="' . ($projectData['dev_url'] ?? '#') . '" target="_blank">' . ($projectData['dev_url'] ?? '') . '</a>
+                                                </div>
+                                                <div>
+                                                    <label>Staging Url:</label>
+                                                    <a href="' . ($projectData['staging_url'] ?? '#') . '" target="_blank">' . ($projectData['staging_url'] ?? '') . '</a>
+                                                </div>
+                                                <div>
+                                                    <label>Production Url:</label>
+                                                    <a href="' . ($projectData['production_url'] ?? '#') . '" target="_blank">' . ($projectData['production_url'] ?? '') . '</a>
+                                                </div>
+                                                <div>
+                                                    <label>Source Url:</label>
+                                                    <a href="' . ($projectData['source_url'] ?? '#') . '" target="_blank">' . ($projectData['source_url'] ?? '') . '</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                             <!-- end tab pane -->
                             <div class="tab-pane fade" id="project-documents" role="tabpanel">

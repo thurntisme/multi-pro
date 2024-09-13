@@ -20,9 +20,13 @@ class ProjectController
     $start_date = $_POST['start_date'] ?? '';
     $end_date = $_POST['end_date'] ?? '';
     $type = $_POST['type'] ?? '';
+    $dev_url = $_POST['dev_url'] ?? '';
+    $staging_url = $_POST['staging_url'] ?? '';
+    $production_url = $_POST['production_url'] ?? '';
+    $source_url = $_POST['source_url'] ?? '';
 
     if ($title) {
-      $this->projectService->createProject($title, $description, $start_date, $end_date, $type);
+      $this->projectService->createProject($title, $description, $start_date, $end_date, $type, $dev_url, $staging_url, $production_url, $source_url);
       $_SESSION['message_type'] = 'success';
       $_SESSION['message'] = "Project created successfully";
 
@@ -44,9 +48,13 @@ class ProjectController
     $end_date = $_POST['end_date'] ?? '';
     $type = $_POST['type'] ?? '';
     $status = $_POST['status'] ?? '';
+    $dev_url = $_POST['dev_url'] ?? '';
+    $staging_url = $_POST['staging_url'] ?? '';
+    $production_url = $_POST['production_url'] ?? '';
+    $source_url = $_POST['source_url'] ?? '';
 
     if ($id && $title) {
-      $rowsAffected = $this->projectService->updateProject($id, $title, $description, $start_date, $end_date, $status, $type);
+      $rowsAffected = $this->projectService->updateProject($id, $title, $description, $start_date, $end_date, $status, $type, $dev_url, $staging_url, $production_url, $source_url);
       if ($rowsAffected) {
         $_SESSION['message_type'] = 'success';
       } else {

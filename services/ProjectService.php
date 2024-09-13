@@ -13,11 +13,11 @@ class ProjectService
   }
 
   // Create a new project
-  public function createProject($title, $description, $start_date, $end_date, $type)
+  public function createProject($title, $description, $start_date, $end_date, $type, $dev_url, $staging_url, $production_url, $source_url)
   {
-    $sql = "INSERT INTO projects (title, description, start_date, end_date, type, user_id) VALUES (:title, :description, :start_date, :end_date, :type, :user_id)";
+    $sql = "INSERT INTO projects (title, description, start_date, end_date, type, dev_url, staging_url, production_url, source_url, user_id) VALUES (:title, :description, :start_date, :end_date, :type, :dev_url, :staging_url, :production_url, :source_url,  :user_id)";
     $stmt = $this->pdo->prepare($sql);
-    $stmt->execute([':title' => $title, ':description' => $description, ':start_date' => $start_date, ':end_date' => $end_date, ':type' => $type, ':user_id' => $this->user_id]);
+    $stmt->execute([':title' => $title, ':description' => $description, ':start_date' => $start_date, ':end_date' => $end_date, ':type' => $type, ':user_id' => $this->user_id, ':dev_url' => $dev_url, ':staging_url' => $staging_url, ':production_url' => $production_url, ':source_url' => $source_url]);
 
     return $this->pdo->lastInsertId();
   }
@@ -33,11 +33,11 @@ class ProjectService
   }
 
   // Update a project
-  public function updateProject($id, $title, $description, $start_date, $end_date, $status, $type)
+  public function updateProject($id, $title, $description, $start_date, $end_date, $status, $type, $dev_url, $staging_url, $production_url, $source_url)
   {
-    $sql = "UPDATE projects SET title = :title, description = :description, start_date = :start_date, end_date = :end_date, status = :status, type = :type, updated_at = CURRENT_TIMESTAMP WHERE id = :id";
+    $sql = "UPDATE projects SET title = :title, description = :description, start_date = :start_date, end_date = :end_date, status = :status, type = :type, dev_url = :dev_url, staging_url = :staging_url, production_url = :production_url, source_url = :source_url, updated_at = CURRENT_TIMESTAMP WHERE id = :id";
     $stmt = $this->pdo->prepare($sql);
-    $stmt->execute([':id' => $id, ':title' => $title, ':description' => $description, ':start_date' => $start_date, ':end_date' => $end_date, ':status' => $status, ':type' => $type]);
+    $stmt->execute([':id' => $id, ':title' => $title, ':description' => $description, ':start_date' => $start_date, ':end_date' => $end_date, ':status' => $status, ':type' => $type, ':dev_url' => $dev_url, ':staging_url' => $staging_url, ':production_url' => $production_url, ':source_url' => $source_url]);
 
     return $stmt->rowCount();
   }
@@ -57,7 +57,7 @@ class ProjectService
   {
     // Pagination parameters
     $itemsPerPage = 12; // Number of results per page
-    $page = isset($_GET['page']) ? (int)$_GET['page'] : 1; // Current page number
+    $page = isset($_GET['page']) ? (int) $_GET['page'] : 1; // Current page number
     $offset = ($page - 1) * $itemsPerPage; // Offset for LIMIT clause
 
     // Search keyword

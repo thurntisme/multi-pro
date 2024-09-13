@@ -119,6 +119,30 @@ echo '<div class="col-lg-3">
                     <!-- end card body -->
                 </div>
                 <!-- end card -->
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-title mb-0">Links</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <label class="form-label" for="project-title-input">Dev Url</label>
+                            <input type="text" class="form-control" name="dev_url" placeholder="Enter development url" value="' . ($projectData['dev_url'] ?? "") . '">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label" for="project-title-input">Staging Url</label>
+                            <input type="text" class="form-control" name="staging_url" placeholder="Enter staging url" value="' . ($projectData['staging_url'] ?? "") . '">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label" for="project-title-input">Production Url</label>
+                            <input type="text" class="form-control" name="production_url" placeholder="Enter production url" value="' . ($projectData['production_url'] ?? "") . '">
+                        </div>
+                        <hr/>
+                        <div class="mb-3">
+                            <label class="form-label" for="project-title-input">Source Url</label>
+                            <input type="text" class="form-control" name="source_url" placeholder="Enter source url" value="' . ($projectData['source_url'] ?? "") . '">
+                        </div>
+                    </div>
+                </div>
 
                 <div class="card">
                     <div class="card-header">
