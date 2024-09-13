@@ -57,12 +57,6 @@ foreach ($list as $project) {
                                     <div class="dropdown-menu dropdown-menu-end">
                                         <a class="dropdown-item" href="' . home_url("projects/detail?post_id=") . $project['id'] . '"><i class="ri-eye-fill align-bottom me-2 text-muted"></i> View</a>
                                         <a class="dropdown-item" href="' . home_url("projects/edit?post_id=") . $project['id'] . '"><i class="ri-pencil-fill align-bottom me-2 text-muted"></i> Edit</a>
-                                        <div class="dropdown-divider"></div>
-                                        <form action="' . home_url("projects/list") . '" method="post" >
-                                            <input type="hidden" name="action" value="delete_project" />
-                                            <input type="hidden" name="project_id" value="' . $project['id'] . '" />
-                                        </form>
-                                        <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#removeProjectModal"><i class="ri-delete-bin-fill align-bottom me-2 text-muted"></i> Remove</a>
                                     </div>
                                 </div>
                             </div>
@@ -196,31 +190,6 @@ echo '<div class="row g-4 mb-3">
     <!-- end row -->';
 
 includeFileWithVariables('components/pagination.php', array("count" => $count));
-
-echo '<!-- removeProjectModal -->
-    <div id="removeProjectModal" class="modal fade zoomIn" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="close-modal"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="mt-2 text-center">
-                        <lord-icon src="https://cdn.lordicon.com/gsqxdxog.json" trigger="loop" colors="primary:#f7b84b,secondary:#f06548" style="width:100px;height:100px"></lord-icon>
-                        <div class="mt-4 pt-2 fs-15 mx-4 mx-sm-5">
-                            <h4>Are you Sure ?</h4>
-                            <p class="text-muted mx-4 mb-0">Are you Sure You want to Remove this Project ?</p>
-                        </div>
-                    </div>
-                    <div class="d-flex gap-2 justify-content-center mt-4 mb-2">
-                        <button type="button" class="btn w-sm btn-light" data-bs-dismiss="modal">Close</button>
-                        <button type="button" class="btn w-sm btn-danger" id="remove-project">Yes, Delete It!</button>
-                    </div>
-                </div>
-
-            </div><!-- /.modal-content -->
-        </div><!-- /.modal-dialog -->
-    </div><!-- /.modal -->';
 
 $pageContent = ob_get_clean();
 

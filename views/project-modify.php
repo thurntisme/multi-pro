@@ -168,7 +168,7 @@ echo '<div class="col-lg-3">
                 </div>
                 <!-- end card -->
                 <div class="text-center mb-4">
-                    <a href="' . home_url("projects/detail?post_id=") . $_GET['post_id'] . '" class="btn btn-light w-sm">Back</a>
+                    <a href="' . home_url("projects/list") . '" class="btn btn-light w-sm">Back</a>
                     <!--<button type="submit" class="btn btn-secondary w-sm">Draft</button>-->
                     <button type="submit" class="btn btn-success w-sm">' . ($modify_type === "create" ? "Create" : "Save") . '</button>
                 </div>
