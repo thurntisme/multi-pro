@@ -62,7 +62,7 @@ echo '<div class="row justify-content-center">
 
                             <div class="mb-3 ' . ((!empty($password_err)) ? 'has-error' : '') . '">
                                 <div class="float-end">
-                                    <a href="auth-pass-reset-basic.php" class="text-muted">Forgot password?</a>
+                                    <a href="auth-pass-reset-basic.php" tabindex="-1" class="text-muted">Forgot password?</a>
                                 </div>
                                 <label class="form-label" for="password-input">Password</label>
                                 <div class="position-relative auth-pass-inputgroup mb-3">
