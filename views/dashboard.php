@@ -17,8 +17,9 @@ if (isset($_SESSION['message'])) {
 }
 
 echo '<div class="row">';
-echo '<div class="col-xl-4 col-md-6 mb-4">Hello</div>';
-echo '</div>';
+echo '<div class="col-xl-4 col-md-6 mb-4">Hello <br/>';
+echo '<a type="button" class="btn btn-secondary mt-4" href="' . home_url("projects/list") . '">Go to Project List</a>';
+echo '</div></div>';
 
 $pageContent = ob_get_clean();
 
