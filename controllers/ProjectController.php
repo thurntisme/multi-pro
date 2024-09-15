@@ -57,6 +57,7 @@ class ProjectController
       $rowsAffected = $this->projectService->updateProject($id, $title, $description, $start_date, $end_date, $status, $type, $dev_url, $staging_url, $production_url, $source_url);
       if ($rowsAffected) {
         $_SESSION['message_type'] = 'success';
+        $_SESSION['message'] = "Project updated successfully.";
       } else {
         $_SESSION['message_type'] = 'danger';
         $_SESSION['message'] = "Failed to update project.";
