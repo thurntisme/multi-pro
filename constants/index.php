@@ -1,6 +1,6 @@
 <?php
 
-define('DEFAULT_HOME_PATH', 'multi-pro');
+define('DEFAULT_HOME_PATH', '');
 define('DEFAULT_TIMEZONE', 'Asia/Ho_Chi_Minh');
 define('DEFAULT_SITE_NAME', 'MultiPro');
 
