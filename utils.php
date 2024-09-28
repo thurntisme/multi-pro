@@ -219,7 +219,7 @@ function includeFileWithVariables($filePath, $variables = array(), $print = true
 function generatePageUrl($params = [])
 {
   // Get the current URL
-  $currentUrl = "http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+  $currentUrl = getCurrentUrl();
 
   // Parse the URL to get its components
   $urlParts = parse_url($currentUrl);
@@ -239,7 +239,7 @@ function generatePageUrl($params = [])
   $newQuery = http_build_query($queryParams);
 
   // Build the new URL with the updated query string
-  $newUrl = $urlParts['scheme'] . '://' . $urlParts['host'] . $urlParts['path'] . '?' . $newQuery;
+  $newUrl = home_url($urlParts['path'] . (($newQuery != "") ? ('?' . $newQuery) : ''));
 
   return $newUrl;
 }
@@ -294,4 +294,33 @@ function getTimezoneOffset()
   $formattedOffset = ($hours >= 0 ? '+' : '-') . str_pad(abs($hours), 2, '0', STR_PAD_LEFT) . ' hours';
 
   return $formattedOffset;
+}
+
+function getFirstParamInUrl()
+{
+  // Get the full request URI
+  $uri = $_SERVER['REQUEST_URI'];
+
+  // Remove any query parameters if present
+  $cleanUri = strtok($uri, '?');
+
+  // Split the URI by "/"
+  $uriParts = explode('/', trim($cleanUri, '/'));
+
+  // Get specific parts of the URI
+  $firstPart = $uriParts[0] ?? null;
+  return $firstPart;
+}
+
+function extractPathFromCurrentUrl()
+{
+  // Build the current URL from the server variables
+  $currentUrl = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") .
+    "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+
+  // Parse the URL to get the path
+  $parsedUrl = parse_url($currentUrl, PHP_URL_PATH);
+
+  // Remove the leading slash
+  return ltrim($parsedUrl, '/');
 }

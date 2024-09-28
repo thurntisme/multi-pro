@@ -149,7 +149,7 @@ echo '<div class="row g-4 mb-3">
             <div class="d-flex justify-content-sm-end gap-2">
                 <ul class="nav nav-pills card-header-pills" role="tablist">
                     <li class="nav-item">
-                        <a class="nav-link ' . (empty($type) ? "bg-white border border-dark-subtle" : "") . '" href="' . generatePageUrl(["type" => "", "page" => "1"]) . '" role="tab">
+                        <a class="nav-link ' . (empty($type) ? "bg-white border border-dark-subtle" : "") . '" href="' . generatePageUrl([]) . '" role="tab">
                             All
                         </a>
                     </li>
@@ -179,7 +179,7 @@ echo '<div class="row g-4 mb-3">
                     </div>
                 </div>
 
-                <a href="' . home_url("projects/list") . '" class="btn btn-primary">Reset <i class="ri-delete-bin-7-line ms-1"></i></a>
+                <a href="' . home_url("projects/list") . '" class="btn btn-primary">Reset <i class="ri-refresh-line ms-1"></i></a>
             </div>
         </div>
     </div>

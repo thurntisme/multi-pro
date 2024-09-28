@@ -4,8 +4,8 @@
 // Define the layout file
 $layout = DIR . '/layout.php';
 
-// Determine the content file based on the request URI
-$url = isset($_GET['url']) ? $_GET['url'] : '';
+$url = extractPathFromCurrentUrl();
+
 $pageUrl = '';
 
 $token = $commonController->getToken();
