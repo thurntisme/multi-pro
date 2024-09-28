@@ -43,6 +43,18 @@ if (!empty($token)) {
       case 'projects/detail':
         $pageUrl = DIR . '/views/project-detail.php';
         break;
+      case 'finance':
+        $pageUrl = DIR . '/views/finance.php';
+        break;
+      case 'finance/budget':
+        $pageUrl = DIR . '/views/budget.php';
+        break;
+      case 'finance/income':
+        $pageUrl = DIR . '/views/income.php';
+        break;
+      case 'finance/expenses':
+        $pageUrl = DIR . '/views/expenses.php';
+        break;
       case 'dashboard':
       case 'login':
       case 'register':

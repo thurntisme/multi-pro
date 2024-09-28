@@ -186,13 +186,15 @@ function getStatusBadge($status)
   return ["className" => $badgeClassName, "label" => $badgeLabel];
 }
 
-function activeClassName($url, $className = 'active')
+function activeClassName($url, $className = 'active', $isParent = false)
 {
-  $currentUrl = isset($_GET['url']) ? $_GET['url'] : '';
-  $urlParts = explode('/', trim($currentUrl, '/'));
-  $parentPath = count($urlParts) > 0 ? $urlParts[0] : '';
-  return $parentPath === $url ? $className : '';
+  $currentUrl = extractPathFromCurrentUrl();
+  if ($isParent === true) {
+    $currentUrl = getFirstParamInUrl();
+  }
+  return $currentUrl === $url ? $className : '';
 }
+
 function includeFileWithVariables($filePath, $variables = array(), $print = true)
 {
   global $commonController;

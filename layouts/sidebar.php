@@ -41,16 +41,37 @@
                     <a class="nav-link menu-link <?= activeClassName("projects") ?>" href="#sidebarProjects" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarProjects">
                         <i class="ri-folder-5-line"></i> <span data-key="t-projects">Projects</span>
                     </a>
-                    <div class="collapse menu-dropdown <?= activeClassName("projects", "show") ?>" id="sidebarProjects">
+                    <div class="collapse menu-dropdown <?= activeClassName("projects", "show", true) ?>" id="sidebarProjects">
                         <ul class="nav nav-sm flex-column">
-                            <li class="nav-item <?= activeClassName("projects/overview") ?>">
-                                <a href="<?= home_url("projects/overview") ?>" class="nav-link" data-key="t-overview"> Overview </a>
+                            <li class="nav-item">
+                                <a href="<?= home_url("projects/overview") ?>" class="nav-link <?= activeClassName("projects/overview") ?>" data-key="t-overview"> Overview </a>
                             </li>
-                            <li class="nav-item <?= activeClassName("projects/list") ?>">
-                                <a href="<?= home_url("projects/list") ?>" class="nav-link" data-key="t-list"> List </a>
+                            <li class="nav-item">
+                                <a href="<?= home_url("projects/list") ?>" class="nav-link <?= activeClassName("projects/list") ?>" data-key="t-list"> List </a>
                             </li>
-                            <li class="nav-item <?= activeClassName("projects/new") ?>">
-                                <a href="<?= home_url("projects/new") ?>" class="nav-link" data-key="t-create-project"> Create Project </a>
+                            <li class="nav-item">
+                                <a href="<?= home_url("projects/create") ?>" class="nav-link <?= activeClassName("projects/create") ?>" data-key="t-create-project"> Create Project </a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link menu-link <?= activeClassName("finance") ?>" href="#sidebarFinance" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarFinance">
+                        <i class="ri-wallet-3-line"></i> <span data-key="t-finance">Finance</span>
+                    </a>
+                    <div class="collapse menu-dropdown <?= activeClassName("finance", "show", true) ?>" id="sidebarFinance">
+                        <ul class="nav nav-sm flex-column">
+                            <li class="nav-item">
+                                <a href="<?= home_url("finance/overview") ?>" class="nav-link <?= activeClassName("finance") ?>" data-key="t-overview"> Overview </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="<?= home_url("finance/budget") ?>" class="nav-link <?= activeClassName("finance/budget") ?>" data-key="t-budget"> Budget </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="<?= home_url("finance/income") ?>" class="nav-link <?= activeClassName("finance/income") ?>" data-key="t-income"> Income </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="<?= home_url("finance/expenses") ?>" class="nav-link <?= activeClassName("finance/expenses") ?>" data-key="t-expense"> Expense </a>
                             </li>
                         </ul>
                     </div>

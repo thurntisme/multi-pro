@@ -63,3 +63,12 @@ define('DEFAULT_FILTER_DATE_OPTIONS', [
   "last_month" => "Last Month",
   "last_year" => "Last Year",
 ]);
+
+$expense_categories = [
+  ["id" => 1, "name" => "Groceries"],
+  ["id" => 2, "name" => "Bills"],
+  ["id" => 3, "name" => "Entertainment"],
+  ["id" => 4, "name" => "Transportation"],
+  ["id" => 5, "name" => "Other"]
+];
+define("DEFAULT_EXPENSE_CATEGORIES", $expense_categories);
