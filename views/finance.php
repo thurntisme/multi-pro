@@ -92,7 +92,40 @@ echo '<div class="mt-5">
           </div>
         </div>
         <div class="col-md-9">
-          <canvas id="financialChart"></canvas>
+          <div class="card card-height-100">
+              <div class="card-header align-items-center d-flex">
+                  <h4 class="card-title mb-0 flex-grow-1">Balance Overview</h4>
+                  <div class="flex-shrink-0">
+                      <div class="dropdown card-header-dropdown">
+                          <a class="text-reset dropdown-btn" href="#" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                              <span class="fw-semibold text-uppercase fs-12">Sort by: </span><span class="text-muted">Current Year<i class="mdi mdi-chevron-down ms-1"></i></span>
+                          </a>
+                          <div class="dropdown-menu dropdown-menu-end">
+                              <a class="dropdown-item" href="#">Today</a>
+                              <a class="dropdown-item" href="#">Last Week</a>
+                              <a class="dropdown-item" href="#">Last Month</a>
+                              <a class="dropdown-item" href="#">Current Year</a>
+                          </div>
+                      </div>
+                  </div>
+              </div><!-- end card header -->
+              <div class="card-body px-0">
+                  <ul class="list-inline main-chart text-center mb-0">
+                      <li class="list-inline-item chart-border-left me-0 border-0">
+                          <h4 class="text-primary">$584k <span class="text-muted d-inline-block fs-13 align-middle ms-2">Revenue</span></h4>
+                      </li>
+                      <li class="list-inline-item chart-border-left me-0">
+                          <h4>$497k<span class="text-muted d-inline-block fs-13 align-middle ms-2">Expenses</span>
+                          </h4>
+                      </li>
+                      <li class="list-inline-item chart-border-left me-0">
+                          <h4><span data-plugin="counterup">3.6</span>%<span class="text-muted d-inline-block fs-13 align-middle ms-2">Profit Ratio</span></h4>
+                      </li>
+                  </ul>
+
+                  <div id="revenue-expenses-charts" class="apex-charts" dir="ltr"></div>
+              </div>
+          </div><!-- end card -->
         </div>
     </div>
 </div>';
@@ -105,7 +138,11 @@ echo '<!-- Chart.js Library -->
 $additionCss = ob_get_clean();
 
 ob_start();
-echo '<script type="text/javascript">
+echo '
+    <!-- apexcharts -->
+    <script src="' . home_url("/assets/libs/apexcharts/apexcharts.min.js") . '"></script>
+
+<script type="text/javascript">
       // Data for the chart
     const labels = ' . json_encode($labels) . ';
     const incomeData = ' . json_encode($incomeData) . ';
@@ -136,7 +173,9 @@ echo '<script type="text/javascript">
         ]
     };
   </script>
-  <script src="' . home_url("js/pages/finance.js") . '" type="text/javascript"></script>
+
+    <!-- Dashboard init -->
+  <script src="' . home_url("/assets/js/pages/finance.js") . '" type="text/javascript"></script>
   ';
 $additionJs = ob_get_clean();
 

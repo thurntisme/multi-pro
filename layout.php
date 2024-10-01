@@ -40,6 +40,7 @@
 
     <?php //include 'layouts/customizer.php'; 
     ?>
+    <script src="<?= home_url("assets/libs/bootstrap/js/bootstrap.bundle.min.js") ?>"></script>
 
     <?php include 'layouts/vendor-scripts.php'; ?>
 

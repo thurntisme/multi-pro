@@ -326,3 +326,8 @@ function extractPathFromCurrentUrl()
   // Remove the leading slash
   return ltrim($parsedUrl, '/');
 }
+
+function convertAmount($amount)
+{
+  return number_format((int)$amount);
+}

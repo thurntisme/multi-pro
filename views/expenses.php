@@ -21,170 +21,227 @@ ob_start();
 include_once DIR . "/components/finance-top.php";
 
 echo '<div class="row mt-4">
-    <div class="col-4">
+    <div class="col-3">
     <div class="card">
         <div class="card-header d-flex align-items-center justify-content-between">
             <div class="card-title mb-0">
                 Overview
             </div>
-            <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#staticBackdrop">Add New</button>
         </div>
         <div class="card-body">
-            <canvas id="myDoughnutChart" class="mx-auto"></canvas>
-            <ul class="list-group list-group-flush mt-4">
-                <li class="list-group-item d-flex align-items-center px-0">An item <span class="ml-auto mr-2 pr-2 border-right border-dark">12 vnd</span> <b>20%</b></li>
-                <li class="list-group-item">A second item</li>
-                <li class="list-group-item">A third item</li>
-                <li class="list-group-item">A fourth item</li>
-                <li class="list-group-item">And a fifth one</li>
-            </ul>
+            <div id="store-visits-source" class="apex-charts" dir="ltr"></div>
         </div>
     </div>
     ';
 
 $categoryMap = [];
-$cate_dropdown = '
-<div class="form-group">
-                    <label for="category">Category</label>
-                    <select class="form-control" name="category_id" name="category" required>';
+$cate_dropdown = '<select class="form-control" name="category_id" name="category" data-choices data-choices-search-false>';
+$cate_dropdown .= '<option value=" ">All</option>';
+$categoryMap[""] = "All";
 foreach (DEFAULT_EXPENSE_CATEGORIES as $category) {
     $categoryMap[$category['id']] = $category['name'];
     $cate_dropdown .= '<option value="' . $category["id"] . '">' . $category["name"] . '</option>';
 }
-$cate_dropdown .= '</select>
-                </div>';
+$cate_dropdown .= '</select>';
 
-echo '
-<div class="modal fade" id="staticBackdrop" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="staticBackdropLabel">Add new expense</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-<form action="' . home_url("finance/expenses") . '" method="POST">
-        <input type="hidden" name="action" value="add_expense" />
-      <!-- Title Input -->
-      <div class="form-group">
-          <label for="title">Title</label>
-          <input type="text" class="form-control" name="title" placeholder="Enter title">
-      </div>
-      
-      <!-- Category Dropdown -->
-      ' . $cate_dropdown . '
 
-      <!-- Amount Input -->
-      <div class="form-group">
-          <label for="amount">Amount</label>
-          <input type="number" class="form-control" name="amount" placeholder="Enter amount">
-      </div>
+echo '<!-- Static Backdrop -->
+    <!-- staticBackdrop Modal -->
+    <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-body p-5">
+                    <h4 class="mb-3">Add new expense</h4>
+                    <form action="' . home_url("finance/expenses") . '" method="POST">
+                        <input type="hidden" name="action" value="add_expense" />
+                        <!-- Title Input -->
+                        <div class="form-group mb-3">
+                            <label for="title">Title</label>
+                            <input type="text" class="form-control" name="title" placeholder="Enter title">
+                        </div>
+                        
+                        <!-- Category Dropdown -->
+                        <div class="form-group mb-3">
+                            <label for="category">Category</label>
+                            ' . $cate_dropdown . '
+                        </div>
 
-      <!-- Description Input -->
-      <div class="form-group">
-          <label for="description">Description</label>
-          <textarea class="form-control" name="description" rows="3" placeholder="Enter description"></textarea>
-      </div>
+                        <!-- Amount Input -->
+                        <div class="form-group mb-3">
+                            <label for="amount">Amount</label>
+                            <input type="number" class="form-control" name="amount" placeholder="Enter amount">
+                        </div>
 
-      <!-- Submit Button -->
-      <button type="submit" class="btn btn-primary">Submit</button>
-  </form>
+                        <!-- Description Input -->
+                        <div class="form-group mb-3">
+                            <label for="description">Description</label>
+                            <textarea class="form-control" name="description" rows="3" placeholder="Enter description"></textarea>
+                        </div>
+
+                            <div class="hstack gap-2 justify-content-center mt-2">
+                            <button type="button" class="btn btn-link link-success fw-medium" data-bs-dismiss="modal"><i class="ri-close-line me-1 align-middle"></i> Close</button>
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
   </div>
-    </div>
   </div>
-</div>
-  </div>
-  <div class="col-8">';
+  <div class="col-9">';
 
 if (isset($_SESSION['message'])) {
     $messageType = $_SESSION['message_type'] ?? 'info';
     echo '<div class="alert alert-' . htmlspecialchars($messageType) . ' alert-dismissible fade show mb-4" role="alert">'
         . htmlspecialchars($_SESSION['message']) .
-        '<button type="button" class="close" data-dismiss="alert" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
+        '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
       </div>';
 
     unset($_SESSION['message']);
     unset($_SESSION['message_type']);
 }
 
-echo '<ul class="list-group">';
+echo '<div class="row">
+        <div class="col-lg-12">
+            <div class="card" id="expenseList">
+                <div class="card-header border-0">
+                    <div class="d-flex align-items-center">
+                        <h5 class="card-title mb-0 flex-grow-1">Expenses</h5>
+                        <div class="flex-shrink-0">
+                            <div class="d-flex gap-2 flex-wrap">
+                                <button class="btn btn-primary" id="remove-actions" onClick="deleteMultiple()"><i class="ri-delete-bin-2-line"></i></button>
+                                <a href="#" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#staticBackdrop"><i class="ri-add-line align-bottom me-1"></i> Create Expense</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body bg-light-subtle border border-dashed border-start-0 border-end-0">
+                    <form action="' . home_url("finance/expenses") . '">
+                        <div class="row g-3">
+                            <div class="col-xxl-4 col-sm-12">
+                                <div class="search-box">
+                                    <input type="text" class="form-control search bg-light border-light" placeholder="Search for customer, email, country, status or something...">
+                                    <i class="ri-search-line search-icon"></i>
+                                </div>
+                            </div>
+                            <!--end col-->
+                            <div class="col-xxl-3 col-sm-4">
+                                <input type="text" class="form-control bg-light border-light" id="datepicker-range" placeholder="Select date">
+                            </div>
+                            <div class="col-xxl-3 col-sm-4">
+                                <div class="input-light">
+                                    ' . $cate_dropdown . '
+                                </div>
+                            </div>
 
-echo '<ul class="list-group">';
-
+                            <div class="col-xxl-2 col-sm-4">
+                                <button type="submit" class="btn btn-primary w-100">
+                                    <i class="ri-equalizer-fill me-1 align-bottom"></i> Filters
+                                </button>
+                            </div>
+                            <!--end col-->
+                        </div>
+                        <!--end row-->
+                    </form>
+                </div>
+                <div class="card-body">
+                    <div>
+                        <div class="table-responsive table-card">
+                            <table class="table align-middle table-nowrap" id="expenseTable">
+                                <thead class="text-muted">
+                                    <tr>
+                                        <th class="sort text-uppercase" data-sort="expense_id">Title</th>
+                                        <th class="sort text-uppercase" data-sort="customer_name">Description</th>
+                                        <th class="sort text-uppercase" data-sort="email">Category</th>
+                                        <th class="sort text-uppercase" data-sort="date">Date</th>
+                                        <th class="sort text-uppercase" data-sort="expense_amount">Amount</th>
+                                        <th class="text-uppercase" data-sort="action">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="list form-check-all" id="expense-list-data">';
 if (count($list) > 0) {
     foreach ($list as $item) {
-        echo '
-          <li class="list-group-item d-flex justify-content-between align-items-center">
-              <div>
-                <strong>' . $item['title'] . '</strong> - $' . $item['amount'] . ' <br>
-                <small>Category: ' . $categoryMap[$item['category_id']] . '</small> <br>
-                <small>' . $item['description'] . '</small> <br>
-                <small class="text-muted">Added on: ' . $commonController->convertDateTime($item['created_at']) . '</small>
-              </div>
-              <form action="' . home_url("finance/expenses") . '" method="POST">
-                <input type="hidden" name="expense_id" value="' . $item['id'] . '" />
-                <input type="hidden" name="action" value="delete_expense" />
-                <button type="submit" class="btn btn-danger btn-sm">Delete</button>
-              </form>
-          </li>';
+        echo '<tr>
+                <td class="id">' . $item['title'] . '</td>
+                <td class="customer_name">' . $item['description'] . '</td>
+                <td class="email">' . $categoryMap[$item['category_id']] . '</td>
+                <td class="date">' . $commonController->convertDateTime($item['created_at']) . '</td>
+                <td class="invoice_amount">' . convertAmount($item['amount']) . ' vnd</td>
+                <td>
+                    <form action="' . home_url("finance/expenses") . '" method="POST">
+                        <input type="hidden" name="expense_id" value="' . $item['id'] . '" />
+                        <input type="hidden" name="action" value="delete_expense" />
+                        <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                    </form>
+                </td>
+            </tr>';
     }
 }
+echo '</tbody>
+                            </table>
+                            <div class="noresult" style="display: none">
+                                <div class="text-center">
+                                    <lord-icon src="https://cdn.lordicon.com/msoeawqm.json" trigger="loop" colors="primary:#121331,secondary:#08a88a" style="width:75px;height:75px"></lord-icon>
+                                    <h5 class="mt-2">Sorry! No Result Found</h5>
+                                    <p class="text-muted mb-0">We ve searched more than 150+ expenses We did not find any expenses for you search.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="d-flex justify-content-end mt-3">
+                            <div class="pagination-wrap hstack gap-2">
+                                <a class="page-item pagination-prev disabled" href="#">
+                                    Previous
+                                </a>
+                                <ul class="pagination listjs-pagination mb-0"></ul>
+                                <a class="page-item pagination-next" href="#">
+                                    Next
+                                </a>
+                            </div>
+                        </div>
+                    </div>
 
-echo '</ul></div></div>';
+                    <!-- Modal -->
+                    <div class="modal fade flip" id="deleteOrder" tabindex="-1" aria-labelledby="deleteOrderLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content">
+                                <div class="modal-body p-5 text-center">
+                                    <lord-icon src="https://cdn.lordicon.com/gsqxdxog.json" trigger="loop" colors="primary:#405189,secondary:#f06548" style="width:90px;height:90px"></lord-icon>
+                                    <div class="mt-4 text-center">
+                                        <h4>You are about to delete a order ?</h4>
+                                        <p class="text-muted fs-15 mb-4">Deleting your order will remove all of your information from our database.</p>
+                                        <div class="hstack gap-2 justify-content-center remove">
+                                            <button class="btn btn-link link-success fw-medium text-decoration-none" id="deleteRecord-close" data-bs-dismiss="modal"><i class="ri-close-line me-1 align-middle"></i> Close</button>
+                                            <button class="btn btn-danger" id="delete-record">Yes, Delete It</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--end modal -->
+                </div>
+            </div>
+
+        </div>
+        <!--end col-->
+    </div>';
 
 $pageContent = ob_get_clean();
 
 ob_start();
 echo '<!-- Chart.js Library -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>';
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    ';
 $additionCss = ob_get_clean();
 
 ob_start();
-echo "<script type='text/javascript'>
-    // Get the context of the canvas element to render the chart
-        const ctx = document.getElementById('myDoughnutChart').getContext('2d');
-
-        // Data and configuration for the doughnut chart
-        const myDoughnutChart = new Chart(ctx, {
-            type: 'doughnut',  // Specify chart type as doughnut
-            data: {
-                labels: ['Category A', 'Category B', 'Category C', 'Category D'],  // Labels for each segment
-                datasets: [{
-                    label: 'Dataset Example',
-                    data: [30, 50, 70, 20],  // Data values for each category
-                    backgroundColor: [
-                        'rgba(255, 99, 132, 0.6)',   // Color for Category A
-                        'rgba(54, 162, 235, 0.6)',   // Color for Category B
-                        'rgba(255, 206, 86, 0.6)',   // Color for Category C
-                        'rgba(75, 192, 192, 0.6)'    // Color for Category D
-                    ],
-                    borderColor: [
-                        'rgba(255, 99, 132, 1)',
-                        'rgba(54, 162, 235, 1)',
-                        'rgba(255, 206, 86, 1)',
-                        'rgba(75, 192, 192, 1)'
-                    ],
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                responsive: true,  // Make the chart responsive
-                plugins: {
-                    legend: {
-                        position: 'top',  // Show legend at the top
-                    },
-                    tooltip: {
-                        enabled: true,  // Enable tooltips
-                    }
-                },
-                cutout: '70%',  // Cutout percentage for the doughnut hole
-            }
-        });
-</script>";
+echo "
+<!-- apexcharts -->
+<script src='" . home_url("/assets/libs/apexcharts/apexcharts.min.js") . "'></script>
+<script src='" . home_url("/assets/js/pages/finance.js") . "'></script>
+<script src='" . home_url("/assets/js/pages/modal.init.js") . "'></script>
+<script src='" . home_url("/assets/libs/flatpickr/flatpickr.min.js") . "'></script>
+";
 $additionJs = ob_get_clean();
 
 include 'layout.php';
