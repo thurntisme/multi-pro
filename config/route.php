@@ -55,6 +55,9 @@ if (!empty($token)) {
       case 'finance/expenses':
         $pageUrl = DIR . '/views/expenses.php';
         break;
+      case 'version':
+        $pageUrl = DIR . '/views/version.php';
+        break;
       case 'dashboard':
       case 'login':
       case 'register':

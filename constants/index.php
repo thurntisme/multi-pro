@@ -4,6 +4,8 @@ define('DEFAULT_HOME_PATH', '');
 define('DEFAULT_TIMEZONE', 'Asia/Ho_Chi_Minh');
 define('DEFAULT_SITE_NAME', 'MultiPro');
 
+include "version.php";
+
 $months = [
   '01' => 'January',
   '02' => 'February',
