@@ -38,6 +38,16 @@
                     </a>
                 </li>
                 <li class="nav-item">
+                    <a class="nav-link menu-link <?= activeClassName("todo") ?>" href="<?= home_url("todo") ?>">
+                        <i class="ri-task-line"></i> <span data-key="t-todo">To Do</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link menu-link <?= activeClassName("daily-checklist") ?>" href="<?= home_url("daily-checklist") ?>">
+                        <i class="ri-calendar-check-line"></i> <span data-key="t-daily-checklist">Daily Checklist</span>
+                    </a>
+                </li>
+                <li class="nav-item">
                     <a class="nav-link menu-link <?= activeClassName("projects") ?>" href="#sidebarProjects" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarProjects">
                         <i class="ri-folder-5-line"></i> <span data-key="t-projects">Projects</span>
                     </a>

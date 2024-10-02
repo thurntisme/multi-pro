@@ -58,6 +58,12 @@ if (!empty($token)) {
       case 'version':
         $pageUrl = DIR . '/views/version.php';
         break;
+      case 'todo':
+        $pageUrl = DIR . '/views/todo.php';
+        break;
+      case 'daily-checklist':
+        $pageUrl = DIR . '/views/daily-checklist.php';
+        break;
       case 'dashboard':
       case 'login':
       case 'register':

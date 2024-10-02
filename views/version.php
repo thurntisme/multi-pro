@@ -11,7 +11,7 @@ ob_start();
             <div class="timeline">
                 <?php
                 $index = 0;
-                foreach (DEFAULT_VERSION_TIMELINE as $key => $value) { ?>
+                foreach (array_reverse(DEFAULT_VERSION_TIMELINE) as $key => $value) { ?>
                     <div class="timeline-item <?= $index % 2 == 0 ? 'left' : 'right' ?>">
                         <i class="icon ri-<?= DEFAULT_VERSION_ICONS[$index % count(DEFAULT_VERSION_ICONS)] ?>"></i>
                         <div class="date"><?= $commonController->convertDate($value['release_date']) ?></div>

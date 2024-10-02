@@ -20,5 +20,12 @@ $projectVersions = [
             'Initial Version Timeline',
         ]
     ],
+    '1.0.2' => [
+        'release_date' => '2024-10-02',
+        'features' => [
+            'Initial UI To Do page',
+            'Initial UI Daily Checklist page',
+        ]
+    ],
 ];
 define("DEFAULT_VERSION_TIMELINE", $projectVersions);
