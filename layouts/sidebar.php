@@ -62,6 +62,9 @@
                             <li class="nav-item">
                                 <a href="<?= home_url("projects/create") ?>" class="nav-link <?= activeClassName("projects/create") ?>" data-key="t-create-project"> Create Project </a>
                             </li>
+                            <li class="nav-item">
+                                <a href="<?= home_url("projects/report") ?>" class="nav-link <?= activeClassName("projects/report") ?>" data-key="t-report-working"> Report Working </a>
+                            </li>
                         </ul>
                     </div>
                 </li>
