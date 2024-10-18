@@ -62,9 +62,6 @@
                             <li class="nav-item">
                                 <a href="<?= home_url("projects/create") ?>" class="nav-link <?= activeClassName("projects/create") ?>" data-key="t-create-project"> Create Project </a>
                             </li>
-                            <li class="nav-item">
-                                <a href="<?= home_url("projects/report") ?>" class="nav-link <?= activeClassName("projects/report") ?>" data-key="t-report-working"> Report Working </a>
-                            </li>
                         </ul>
                     </div>
                 </li>
@@ -90,6 +87,32 @@
                     </div>
                 </li>
 
+                <li class="menu-title"><span data-key="t-work">Work</span></li>
+                <li class="nav-item">
+                    <a class="nav-link menu-link <?= activeClassName("report-working") ?>" href="<?= home_url("report-working") ?>">
+                        <i class="ri-clipboard-line"></i> <span data-key="t-report-working">Report Working</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link menu-link <?= activeClassName("maintain-web") ?>" href="<?= home_url("maintain-web") ?>">
+                        <i class="ri-global-line"></i> <span data-key="t-maintain-web">Maintain Web</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link menu-link <?= activeClassName("seo-checklist") ?>" href="<?= home_url("seo-checklist") ?>">
+                        <i class="ri-search-line"></i> <span data-key="t-seo-checklist">SEO Checklist</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link menu-link <?= activeClassName("web-dev-checklist") ?>" href="<?= home_url("web-dev-checklist") ?>">
+                        <i class="ri-tools-line"></i> <span data-key="t-web-dev-checklist">Web Dev Checklist</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link menu-link <?= activeClassName("web-secure-checklist") ?>" href="<?= home_url("web-secure-checklist") ?>">
+                        <i class="ri-shield-line"></i> <span data-key="t-web-secure-checklist">Web Secure Checklist</span>
+                    </a>
+                </li>
             </ul>
         </div>
         <!-- Sidebar -->
