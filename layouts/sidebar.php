@@ -43,6 +43,11 @@
                     </a>
                 </li>
                 <li class="nav-item">
+                    <a class="nav-link menu-link <?= activeClassName("note") ?>" href="<?= home_url("note") ?>">
+                        <i class="ri-sticky-note-line"></i> <span data-key="t-note">Note</span>
+                    </a>
+                </li>
+                <li class="nav-item">
                     <a class="nav-link menu-link <?= activeClassName("daily-checklist") ?>" href="<?= home_url("daily-checklist") ?>">
                         <i class="ri-calendar-check-line"></i> <span data-key="t-daily-checklist">Daily Checklist</span>
                     </a>

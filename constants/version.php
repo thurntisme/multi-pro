@@ -27,5 +27,16 @@ $projectVersions = [
             'Initial UI Daily Checklist page',
         ]
     ],
+    '1.0.3' => [
+        'release_date' => '2024-10-19',
+        'features' => [
+            'Add menu Note',
+            'Add menu Report Working',
+            'Add menu Maintain Web',
+            'Add menu SEO Checklist',
+            'Add menu Web Dev Checklist',
+            'Add menu Web Secure Checklist',
+        ]
+    ],
 ];
 define("DEFAULT_VERSION_TIMELINE", $projectVersions);
