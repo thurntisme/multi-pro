@@ -31,7 +31,7 @@
             <div id="two-column-menu">
             </div>
             <ul class="navbar-nav" id="navbar-nav">
-                <li class="menu-title"><span data-key="t-menu">Menu</span></li>
+                <li class="menu-title"><span data-key="t-personal">Personal</span></li>
                 <li class="nav-item">
                     <a class="nav-link menu-link <?= activeClassName("") ?>" href="<?= home_url("") ?>">
                         <i class="ri-dashboard-2-line"></i> <span data-key="t-dashboard">Dashboard</span>
@@ -53,46 +53,37 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link menu-link <?= activeClassName("projects") ?>" href="#sidebarProjects" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarProjects">
-                        <i class="ri-folder-5-line"></i> <span data-key="t-projects">Projects</span>
-                    </a>
-                    <div class="collapse menu-dropdown <?= activeClassName("projects", "show", true) ?>" id="sidebarProjects">
-                        <ul class="nav nav-sm flex-column">
-                            <li class="nav-item">
-                                <a href="<?= home_url("projects/overview") ?>" class="nav-link <?= activeClassName("projects/overview") ?>" data-key="t-overview"> Overview </a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="<?= home_url("projects/list") ?>" class="nav-link <?= activeClassName("projects/list") ?>" data-key="t-list"> List </a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="<?= home_url("projects/create") ?>" class="nav-link <?= activeClassName("projects/create") ?>" data-key="t-create-project"> Create Project </a>
-                            </li>
-                        </ul>
-                    </div>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link menu-link <?= activeClassName("finance") ?>" href="#sidebarFinance" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarFinance">
+                    <a class="nav-link menu-link <?= activeClassName("finance") ?>" href="<?= home_url("finance") ?>">
                         <i class="ri-wallet-3-line"></i> <span data-key="t-finance">Finance</span>
                     </a>
-                    <div class="collapse menu-dropdown <?= activeClassName("finance", "show", true) ?>" id="sidebarFinance">
-                        <ul class="nav nav-sm flex-column">
-                            <li class="nav-item">
-                                <a href="<?= home_url("finance/overview") ?>" class="nav-link <?= activeClassName("finance") ?>" data-key="t-overview"> Overview </a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="<?= home_url("finance/budget") ?>" class="nav-link <?= activeClassName("finance/budget") ?>" data-key="t-budget"> Budget </a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="<?= home_url("finance/income") ?>" class="nav-link <?= activeClassName("finance/income") ?>" data-key="t-income"> Income </a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="<?= home_url("finance/expenses") ?>" class="nav-link <?= activeClassName("finance/expenses") ?>" data-key="t-expense"> Expense </a>
-                            </li>
-                        </ul>
-                    </div>
                 </li>
-
+                <li class="nav-item">
+                    <a class="nav-link menu-link <?= activeClassName("subscription") ?>" href="<?= home_url("subscription") ?>">
+                        <i class="ri-calendar-check-line"></i> <span data-key="t-subscription">Subscription</span>
+                    </a>
+                </li>
+                <li class="menu-title"><span data-key="t-app">App</span></li>
+                <li class="nav-item">
+                    <a class="nav-link menu-link <?= activeClassName("bookmark") ?>" href="<?= home_url("bookmark") ?>">
+                        <i class="ri-bookmark-line"></i> <span data-key="t-bookmark">Bookmark</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link menu-link <?= activeClassName("short-link") ?>" href="<?= home_url("short-link") ?>">
+                        <i class="ri-link-m"></i> <span data-key="t-short-link">Short Link</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link menu-link <?= activeClassName("generate-qr") ?>" href="<?= home_url("generate-qr") ?>">
+                        <i class="ri-qr-code-line"></i> <span data-key="t-generate-qr">Generate QR</span>
+                    </a>
+                </li>
                 <li class="menu-title"><span data-key="t-work">Work</span></li>
+                <li class="nav-item">
+                    <a class="nav-link menu-link <?= activeClassName("projects") ?>" href="<?= home_url("projects") ?>">
+                        <i class="ri-folder-5-line"></i> <span data-key="t-projects">Projects</span>
+                    </a>
+                </li>
                 <li class="nav-item">
                     <a class="nav-link menu-link <?= activeClassName("report-working") ?>" href="<?= home_url("report-working") ?>">
                         <i class="ri-clipboard-line"></i> <span data-key="t-report-working">Report Working</span>
@@ -116,6 +107,37 @@
                 <li class="nav-item">
                     <a class="nav-link menu-link <?= activeClassName("web-secure-checklist") ?>" href="<?= home_url("web-secure-checklist") ?>">
                         <i class="ri-shield-line"></i> <span data-key="t-web-secure-checklist">Web Secure Checklist</span>
+                    </a>
+                </li>
+                <li class="menu-title"><span data-key="t-development">Development</span></li>
+                <li class="nav-item">
+                    <a class="nav-link menu-link <?= activeClassName("code") ?>" href="<?= home_url("code") ?>">
+                        <i class="ri-code-line"></i> <span data-key="t-code">Code</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link menu-link <?= activeClassName("tip") ?>" href="<?= home_url("tip") ?>">
+                        <i class="ri-lightbulb-line"></i> <span data-key="t-tip">Tip</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link menu-link <?= activeClassName("book") ?>" href="<?= home_url("book") ?>">
+                        <i class="ri-book-open-line"></i> <span data-key="t-book">Book</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link menu-link <?= activeClassName("git") ?>" href="<?= home_url("git") ?>">
+                        <i class="ri-git-merge-line"></i> <span data-key="t-git">Git</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link menu-link <?= activeClassName("course") ?>" href="<?= home_url("course") ?>">
+                        <i class="ri-graduation-cap-line"></i> <span data-key="t-course">Course</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link menu-link <?= activeClassName("blog") ?>" href="<?= home_url("blog") ?>">
+                        <i class="ri-article-line"></i> <span data-key="t-blog">Blog</span>
                     </a>
                 </li>
             </ul>

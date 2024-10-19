@@ -38,5 +38,12 @@ $projectVersions = [
             'Add menu Web Secure Checklist',
         ]
     ],
+    '1.0.4' => [
+        'release_date' => '2024-10-19',
+        'features' => [
+            'Add menu App',
+            'Add menu Development',
+        ]
+    ],
 ];
 define("DEFAULT_VERSION_TIMELINE", $projectVersions);
