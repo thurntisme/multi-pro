@@ -45,5 +45,11 @@ $projectVersions = [
             'Add menu Development',
         ]
     ],
+    '1.0.5' => [
+        'release_date' => '2024-10-23',
+        'features' => [
+            'Bookmark Page',
+        ]
+    ],
 ];
 define("DEFAULT_VERSION_TIMELINE", $projectVersions);

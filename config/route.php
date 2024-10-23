@@ -67,6 +67,9 @@ if (!empty($token)) {
       case 'daily-checklist':
         $pageUrl = DIR . '/views/daily-checklist.php';
         break;
+      case 'bookmark':
+        $pageUrl = DIR . '/views/bookmark.php';
+        break;
       case 'dashboard':
       case 'login':
       case 'register':
