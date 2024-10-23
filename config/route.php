@@ -84,7 +84,12 @@ if (!empty($token)) {
     $commonController->removeToken();
     $pageUrl = DIR . '/functions/redirectUser.php';
   }
-  include_once $pageUrl;
+  try {
+    include_once $pageUrl;
+  } catch (\Throwable $th) {
+    $error_msg = $th->getMessage();
+    include_once DIR . '/views/500.php';
+  }
 } else {
   switch ($url) {
     case 'login':
