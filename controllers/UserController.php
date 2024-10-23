@@ -56,4 +56,10 @@ class UserController
       exit();
     }
   }
+
+  public function getUserFullName($id)
+  {
+    $currentUser = $this->userService->getUser('id', $id);
+    return $currentUser['first_name'] . ' ' . $currentUser['last_name'];
+  }
 }

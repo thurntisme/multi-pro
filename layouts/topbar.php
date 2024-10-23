@@ -1,3 +1,8 @@
+<?php
+$user = new UserController();
+$user_fullName = $user->getUserFullName($user_id);
+?>
+
 <header id="page-topbar">
 
     <div class="layout-width">
@@ -683,7 +688,7 @@
                         <span class="d-flex align-items-center">
                             <img class="rounded-circle header-profile-user" src="<?= home_url("assets/images/users/avatar-1.jpg") ?>" alt="Header Avatar">
                             <span class="text-start ms-xl-2">
-                                <span class="d-none d-xl-inline-block ms-1 fw-medium user-name-text">Anna Adame</span>
+                                <span class="d-none d-xl-inline-block ms-1 fw-medium user-name-text"><?= $user_fullName ?></span>
                                 <span class="d-none d-xl-block ms-1 fs-12 user-name-sub-text">Founder</span>
                             </span>
                         </span>
