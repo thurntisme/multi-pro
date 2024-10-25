@@ -22,11 +22,11 @@ ob_start();
         </div>
     </div>
     <div class="card-body border border-dashed border-end-0 border-start-0">
-        <form>
+        <form method="get" action="<?= home_url('subscription') ?>">
             <div class="row g-3">
                 <div class="col-xxl-5 col-sm-12">
                     <div class="search-box">
-                        <input type="text" class="form-control search bg-light border-light"
+                        <input type="text" name="s" class="form-control search bg-light border-light"
                             placeholder="Search for subscriptions or something...">
                         <i class="ri-search-line search-icon"></i>
                     </div>
@@ -52,7 +52,7 @@ ob_start();
                 </div>
                 <!--end col-->
                 <div class="col-xxl-1 col-sm-4">
-                    <button type="button" class="btn btn-primary w-100" onclick="SearchData();"> <i
+                    <button type="submit" class="btn btn-primary w-100"> <i
                             class="ri-equalizer-fill me-1 align-bottom"></i>
                         Filters
                     </button>
@@ -78,8 +78,8 @@ ob_start();
                     </tr>
                 </thead>
                 <tbody class="list form-check-all">
-                    <?php if (count($list) > 0) {
-                        foreach ($list as $item) { ?>
+                    <?php if (count($list['list']) > 0) {
+                        foreach ($list['list'] as $item) { ?>
                     <tr>
                         <td>
                             <div class="d-flex">
@@ -123,17 +123,9 @@ ob_start();
                 </div>
             </div>
         </div>
-        <div class="d-flex justify-content-end mt-2">
-            <div class="pagination-wrap hstack gap-2">
-                <a class="page-item pagination-prev disabled" href="#">
-                    Previous
-                </a>
-                <ul class="pagination listjs-pagination mb-0"></ul>
-                <a class="page-item pagination-next" href="#">
-                    Next
-                </a>
-            </div>
-        </div>
+        <?php
+        includeFileWithVariables('components/pagination.php', array("count" => $list['count']));
+        ?>
     </div>
     <!--end card-body-->
 </div>
