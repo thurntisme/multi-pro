@@ -19,12 +19,10 @@ class SubscriptionController
     $amount = $_POST['amount'] ?? '#';
     $currency = $_POST['currency'] ?? '';
     $payment_date = $_POST['payment_date'] ?? '';
-    $payment_month = $_POST['payment_month'] ?? '';
-    $payment_year = $_POST['payment_year'] ?? '';
     $payment_type = $_POST['payment_type'] ?? '';
 
     if ($service_name && $amount && $currency && $payment_date && $payment_type) {
-      $this->subscriptionService->createSubscription($service_name, $amount, $currency, $payment_date, $payment_month, $payment_year, $payment_type);
+      $this->subscriptionService->createSubscription($service_name, $amount, $currency, $payment_date, $payment_type);
       $_SESSION['message_type'] = 'success';
       $_SESSION['message'] = "Subscription created successfully";
     } else {

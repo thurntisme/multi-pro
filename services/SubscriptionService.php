@@ -13,11 +13,11 @@ class SubscriptionService
   }
 
   // Create a new subscription
-  public function createSubscription($service_name, $amount, $currency, $payment_date, $payment_month, $payment_year, $payment_type)
+  public function createSubscription($service_name, $amount, $currency, $payment_date, $payment_type)
   {
-    $sql = "INSERT INTO subscriptions (service_name, amount, currency, payment_date, payment_type, payment_month, payment_year, user_id) VALUES (:service_name, :amount, :currency, :payment_date, :payment_type, :payment_month, :payment_year, :user_id)";
+    $sql = "INSERT INTO subscriptions (service_name, amount, currency, payment_date, payment_type, user_id) VALUES (:service_name, :amount, :currency, :payment_date, :payment_type, :user_id)";
     $stmt = $this->pdo->prepare($sql);
-    $stmt->execute([':service_name' => $service_name, ':amount' => $amount, ':currency' => $currency, ':payment_date' => $payment_date, ':payment_month' => $payment_month, ':payment_year' => $payment_year, ':payment_type' => $payment_type, ':user_id' => $this->user_id]);
+    $stmt->execute([':service_name' => $service_name, ':amount' => $amount, ':currency' => $currency, ':payment_date' => $payment_date, ':payment_type' => $payment_type, ':user_id' => $this->user_id]);
 
     return $this->pdo->lastInsertId();
   }

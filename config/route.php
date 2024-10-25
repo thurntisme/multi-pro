@@ -70,6 +70,9 @@ if (!empty($token)) {
       case 'bookmark':
         $pageUrl = DIR . '/views/bookmark.php';
         break;
+      case 'subscription':
+        $pageUrl = DIR . '/views/subscription.php';
+        break;
       case 'dashboard':
       case 'login':
       case 'register':
