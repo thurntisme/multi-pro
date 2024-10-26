@@ -23,7 +23,7 @@
             <div class="page-content">
                 <div class="container-fluid">
 
-                    <?php includeFileWithVariables('layouts/page-title.php', array('pagetitle' => 'Pages', 'title' => $pageTitle ?? "")); ?>
+                    <?php includeFileWithVariables('layouts/page-title.php', array('title' => $pageTitle ?? "")); ?>
                     <?php echo $pageContent ?? '<p>Welcome to the main content area.</p>'; ?>
 
                 </div>

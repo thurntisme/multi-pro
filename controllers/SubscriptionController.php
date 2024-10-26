@@ -21,13 +21,14 @@ class SubscriptionController
   public function createSubscription()
   {
     $service_name = $_POST['service_name'] ?? '';
-    $amount = $_POST['amount'] ?? '#';
+    $amount = $_POST['amount'] ?? '0';
     $currency = $_POST['currency'] ?? '';
     $payment_date = $_POST['payment_date'] ?? '';
     $payment_type = $_POST['payment_type'] ?? '';
+    $description = $_POST['description'] ?? '';
 
     if ($service_name && $amount && $currency && $payment_date && $payment_type) {
-      $this->subscriptionService->createSubscription($service_name, $amount, $currency, $payment_date, $payment_type);
+      $this->subscriptionService->createSubscription($service_name, $amount, $currency, $payment_date, $payment_type, $description);
       $_SESSION['message_type'] = 'success';
       $_SESSION['message'] = "Subscription created successfully";
     } else {
@@ -35,7 +36,36 @@ class SubscriptionController
       $_SESSION['message'] = "Failed to create subscription";
     }
 
-    header("Location: " . home_url("subscriptions"));
+    header("Location: " . home_url("subscription"));
+    exit;
+  }
+
+  // Handle updating a subscription
+  public function updateSubscription()
+  {
+    $id = $_POST['subscription_id'] ?? null;
+    $service_name = $_POST['service_name'] ?? '';
+    $amount = $_POST['amount'] ?? '0';
+    $currency = $_POST['currency'] ?? '';
+    $payment_date = $_POST['payment_date'] ?? '';
+    $payment_type = $_POST['payment_type'] ?? '';
+    $description = $_POST['description'] ?? '';
+
+    if ($id && $service_name) {
+      $rowsAffected = $this->subscriptionService->updateSubscription($id, $service_name, $amount, $currency, $payment_date, $payment_type, $description);
+      if ($rowsAffected) {
+        $_SESSION['message_type'] = 'success';
+        $_SESSION['message'] = "Subscription updated successfully.";
+      } else {
+        $_SESSION['message_type'] = 'danger';
+        $_SESSION['message'] = "Failed to update subscription.";
+      }
+    } else {
+      $_SESSION['message_type'] = 'danger';
+      $_SESSION['message'] = "Subscription ID and service name are required.";
+    }
+
+    header("Location: " . home_url("subscription/edit") . '?id=' . $id);
     exit;
   }
 
@@ -135,5 +165,18 @@ class SubscriptionController
       'list' => $this->getSubscriptionsSQL("result"),
       'count' => $this->getSubscriptionsSQL("count"),
     ];
+  }
+
+  // Handle viewing a single subscription
+  public function viewSubscription($id)
+  {
+    if ($id) {
+      return $this->subscriptionService->getSubscriptionById($id);
+    }
+
+    $_SESSION['message_type'] = 'danger';
+    $_SESSION['message'] = "Subscription ID is required.";
+    header("Location: " . $_SERVER['REQUEST_URI']);
+    exit;
   }
 }

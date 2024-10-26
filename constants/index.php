@@ -3,6 +3,9 @@
 define('DEFAULT_HOME_PATH', '');
 define('DEFAULT_TIMEZONE', 'Asia/Ho_Chi_Minh');
 define('DEFAULT_SITE_NAME', 'MultiPro');
+define('DEFAULT_DATE_FORMAT', 'Y-m-d');
+define('DEFAULT_TIME_FORMAT', 'H:i:s');
+define('DEFAULT_DATETIME_FORMAT', 'Y-m-d H:i:s');
 
 include "version.php";
 include "bookmarks.php";
@@ -120,3 +123,19 @@ $dailyChecklist = [
   ['id' => 41, 'name' => 'Track your spending for the day'],
 ];
 define("DEFAULT_DAILY_CHECKLISTS", $dailyChecklist);
+
+$Currency_symbols = [
+  'USD' => '$',
+  'EUR' => '€',
+  'GBP' => '£',
+  'JPY' => '¥',
+  'CAD' => '$',
+  'AUD' => '$',
+  'CHF' => 'CHF',
+  'CNY' => '¥',
+  'INR' => '₹',
+  'KRW' => '₩',
+  'BRL' => 'R$',
+  'RUB' => '₽'
+];
+define("DEFAULT_CURRENCY", $Currency_symbols);

@@ -73,6 +73,13 @@ if (!empty($token)) {
       case 'subscription':
         $pageUrl = DIR . '/views/subscription.php';
         break;
+      case 'subscription/new':
+      case 'subscription/edit':
+        $pageUrl = DIR . '/views/subscription-adjust.php';
+        break;
+      case 'subscription/detail':
+        $pageUrl = DIR . '/views/subscription-detail.php';
+        break;
       case 'dashboard':
       case 'login':
       case 'register':

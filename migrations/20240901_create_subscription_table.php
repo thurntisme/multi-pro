@@ -6,6 +6,7 @@ return function (PDO $pdo) {
   $attributes = [
     'id' => 'INTEGER PRIMARY KEY AUTOINCREMENT',
     'service_name' => 'TEXT NOT NULL',
+    'description' => 'TEXT',
     'amount' => 'REAL NOT NULL',
     'currency' => 'TEXT NOT NULL',
     'payment_date' => 'TEXT NOT NULL',

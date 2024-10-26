@@ -2480,6 +2480,21 @@
     }
   }
 
+  function initCkeditorClassic() {
+    var ckClassicEditor = $(".ckeditor-classic");
+    if (ckClassicEditor.length) {
+      ckClassicEditor.each(function () {
+        ClassicEditor.create(this)
+          .then(function (editor) {
+            editor.ui.view.editable.element.style.height = "200px";
+          })
+          .catch(function (error) {
+            console.error(error);
+          });
+      });
+    }
+  }
+
   function init() {
     setDefaultAttribute();
     twoColumnMenuGenerate();
@@ -2497,6 +2512,7 @@
     initLanguage();
     isCollapseMenu();
     initMenuItemScroll();
+    initCkeditorClassic();
   }
   init();
 

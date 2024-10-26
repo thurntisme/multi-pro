@@ -9,13 +9,17 @@ $list = $subscriptionController->listSubscriptions();
 ob_start();
 ?>
 
+<?php
+include_once DIR . '/components/alert.php';
+?>
+
 <div class="card" id="tasksList">
     <div class="card-header border-0">
         <div class="d-flex align-items-center">
             <h5 class="card-title mb-0 flex-grow-1">All Subscriptions</h5>
             <div class="flex-shrink-0">
                 <div class="d-flex flex-wrap gap-2">
-                    <a class="btn btn-danger add-btn" href="' . home_url('subscription/new') . '"><i
+                    <a class="btn btn-danger add-btn" href="<?= home_url('subscription/new') ?>"><i
                             class="ri-add-line align-bottom me-1"></i> Create Subscription</a>
                 </div>
             </div>
@@ -86,10 +90,11 @@ ob_start();
                                 <div class="flex-grow-1 subscriptions_name"><?= $item['service_name'] ?></div>
                                 <div class="flex-shrink-0 ms-4">
                                     <ul class="list-inline tasks-list-menu mb-0">
-                                        <li class="list-inline-item"><a href="apps-subscriptions-details.php"><i
+                                        <li class="list-inline-item"><a
+                                                href="<?= home_url('subscription/detail?id=' . $item['id']) ?>"><i
                                                     class="ri-eye-fill align-bottom me-2 text-muted"></i></a></li>
-                                        <li class="list-inline-item"><a class="edit-item-btn" href="#showModal"
-                                                data-bs-toggle="modal"><i
+                                        <li class="list-inline-item"><a class="edit-item-btn"
+                                                href="<?= home_url('subscription/edit?id=' . $item['id']) ?>"><i
                                                     class="ri-pencil-fill align-bottom me-2 text-muted"></i></a></li>
                                         <li class="list-inline-item">
                                             <a class="remove-item-btn" data-bs-toggle="modal" href="#deleteOrder">

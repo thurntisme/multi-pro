@@ -13,13 +13,23 @@ class SubscriptionService
   }
 
   // Create a new subscription
-  public function createSubscription($service_name, $amount, $currency, $payment_date, $payment_type)
+  public function createSubscription($service_name, $amount, $currency, $payment_date, $payment_type, $description)
   {
-    $sql = "INSERT INTO subscriptions (service_name, amount, currency, payment_date, payment_type, user_id) VALUES (:service_name, :amount, :currency, :payment_date, :payment_type, :user_id)";
+    $sql = "INSERT INTO subscriptions (service_name, amount, currency, payment_date, payment_type, description, user_id) VALUES (:service_name, :amount, :currency, :payment_date, :payment_type,:description, :user_id)";
     $stmt = $this->pdo->prepare($sql);
-    $stmt->execute([':service_name' => $service_name, ':amount' => $amount, ':currency' => $currency, ':payment_date' => $payment_date, ':payment_type' => $payment_type, ':user_id' => $this->user_id]);
+    $stmt->execute([':service_name' => $service_name, ':amount' => $amount, ':currency' => $currency, ':payment_date' => $payment_date, ':payment_type' => $payment_type, ':description' => $description, ':user_id' => $this->user_id]);
 
     return $this->pdo->lastInsertId();
+  }
+
+  // Update a subscription
+  public function updateSubscription($id, $service_name, $amount, $currency, $payment_date, $payment_type, $description)
+  {
+    $sql = "UPDATE subscriptions SET service_name = :service_name, amount = :amount, currency = :currency, payment_date = :payment_date, payment_type = :payment_type, description = :description, updated_at = CURRENT_TIMESTAMP WHERE user_id = :user_id AND id = :id";
+    $stmt = $this->pdo->prepare($sql);
+    $stmt->execute([':service_name' => $service_name, ':amount' => $amount, ':currency' => $currency, ':payment_date' => $payment_date, ':payment_type' => $payment_type, ':description' => $description, ':id' => $id, ':user_id' => $this->user_id]);
+
+    return $stmt->rowCount();
   }
 
   // Delete a subscription
@@ -40,5 +50,15 @@ class SubscriptionService
     $stmt->execute([':user_id' => $this->user_id]);
 
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
+  }
+
+  // Read a subscription by ID
+  public function getSubscriptionById($id)
+  {
+    $sql = "SELECT * FROM subscriptions WHERE user_id = :user_id AND id = :id";
+    $stmt = $this->pdo->prepare($sql);
+    $stmt->execute([':user_id' => $this->user_id, ':id' => $id]);
+
+    return $stmt->fetch(PDO::FETCH_ASSOC);
   }
 }

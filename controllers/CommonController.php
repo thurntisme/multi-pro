@@ -106,21 +106,6 @@ class CommonController
 
   function getCurrencySymbol($currencyCode)
   {
-    $symbols = [
-      'USD' => '$',
-      'EUR' => '€',
-      'GBP' => '£',
-      'JPY' => '¥',
-      'CAD' => '$',
-      'AUD' => '$',
-      'CHF' => 'CHF',
-      'CNY' => '¥',
-      'INR' => '₹',
-      'KRW' => '₩',
-      'BRL' => 'R$',
-      'RUB' => '₽'
-    ];
-
-    return $symbols[$currencyCode] ?? $currencyCode;
+    return DEFAULT_CURRENCY[$currencyCode] ?? $currencyCode;
   }
 }
