@@ -72,11 +72,10 @@ include_once DIR . '/components/alert.php';
             <table class="table align-middle table-nowrap mb-0" id="subscriptionsTable">
                 <thead class="table-light text-muted">
                     <tr>
-                        <th class="sort">Service Name</th>
+                        <th>Service Name</th>
                         <th class="sort text-end pe-5">Amount</th>
                         <th class="sort text-end pe-5">Payment Date</th>
                         <th class="sort text-center">Payment Type</th>
-                        <th class="sort">Next Payment Date</th>
                         <th class="sort text-end pe-5">Created Date</th>
                         <th class="sort text-end pe-5">Updated Date</th>
                     </tr>
@@ -109,7 +108,6 @@ include_once DIR . '/components/alert.php';
                             <?= $commonController->getCurrencySymbol($item['currency']) . ' ' . $item['amount'] ?></td>
                         <td class="text-end pe-5"><?= $commonController->convertDate($item['payment_date']) ?></td>
                         <td class="text-center text-capitalize"><?= $item['payment_type'] ?></td>
-                        <td></td>
                         <td class="text-end pe-5"><?= $commonController->convertDate($item['created_at']) ?></td>
                         <td class="text-end pe-5"><?= $commonController->convertDate($item['updated_at']) ?></td>
                     </tr>

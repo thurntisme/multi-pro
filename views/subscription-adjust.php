@@ -29,7 +29,7 @@ if (!empty($modify_type)) {
 
 ob_start();
 ?>
-<form method="POST" action="<?= $_SERVER['REQUEST_URI'] ?>">
+<form method="POST" action="<?= $_SERVER['REQUEST_URI'] ?>" id="subscription">
     <div class="row">
         <div class="col-lg-8">
 
@@ -94,9 +94,9 @@ ob_start();
 
                     <div class="mb-3">
                         <label class="form-label">Description</label>
-                        <div class="ckeditor-classic">
+                        <textarea name="description" class="ckeditor-classic">
                             <?= $postData['description'] ?? '' ?>
-                        </div>
+                        </textarea>
                     </div>
 
                     <div class="row">
