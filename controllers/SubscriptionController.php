@@ -72,7 +72,7 @@ class SubscriptionController
   // Handle deleting a subscription
   public function deleteSubscription()
   {
-    $id = $_POST['subscription_id'] ?? null;
+    $id = $_POST['post_id'] ?? null;
     if ($id) {
       $rowsAffected = $this->subscriptionService->deleteSubscription($id);
       if ($rowsAffected) {
@@ -87,7 +87,7 @@ class SubscriptionController
       $_SESSION['message'] = "Failed to delete subscription.";
     }
 
-    header("Location: " . home_url("subscriptions"));
+    header("Location: " . home_url("subscription"));
     exit;
   }
 

@@ -1816,7 +1816,7 @@ ob_start();
         </div>
     </div>
     <!-- end col -->
-</div>';
+</div>
 
 <?php
 $pageContent = ob_get_clean();

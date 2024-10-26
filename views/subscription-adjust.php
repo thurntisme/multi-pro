@@ -18,11 +18,17 @@ if (!empty($modify_type)) {
         $back_url = home_url("plans/view") . '?post_id=' . $post_id;
     }
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        if ($modify_type === "new") {
-            $subscriptionController->createSubscription();
-        }
-        if ($modify_type === "edit") {
-            $subscriptionController->updateSubscription();
+        if (isset($_POST['action_name'])) {
+            if ($_POST['action_name'] === 'delete_subscription' && isset($_GET['id'])) {
+                $subscriptionController->deleteSubscription();
+            }
+        } else {
+            if ($modify_type === "new") {
+                $subscriptionController->createSubscription();
+            }
+            if ($modify_type === "edit") {
+                $subscriptionController->updateSubscription();
+            }
         }
     };
 }
@@ -151,7 +157,10 @@ ob_start();
                     <a href="<?= home_url('subscription') ?>" class="btn btn-light w-sm">Back</a>
                     <a href="<?= home_url('subscription/detail?id=' . $postData['id']) ?>"
                         class="btn btn-info w-sm mx-2">View</a>
-                    <button type="submit" class="btn btn-danger w-sm">Delete</button>
+                    <?php if (!empty($post_id)) { ?>
+                    <button type="button" class="btn btn-danger w-sm" data-bs-toggle="modal"
+                        data-bs-target="#deleteRecordModal">Delete</button>
+                    <?php } ?>
                 </div>
                 <!-- end card body -->
             </div>
@@ -262,6 +271,8 @@ ob_start();
 </form>
 
 <?php
+include_once DIR . '/components/modal-delete.php';
+
 $pageContent = ob_get_clean();
 
 ob_start();

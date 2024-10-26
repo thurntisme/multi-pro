@@ -95,11 +95,6 @@ include_once DIR . '/components/alert.php';
                                         <li class="list-inline-item"><a class="edit-item-btn"
                                                 href="<?= home_url('subscription/edit?id=' . $item['id']) ?>"><i
                                                     class="ri-pencil-fill align-bottom me-2 text-muted"></i></a></li>
-                                        <li class="list-inline-item">
-                                            <a class="remove-item-btn" data-bs-toggle="modal" href="#deleteOrder">
-                                                <i class="ri-delete-bin-fill align-bottom me-2 text-muted"></i>
-                                            </a>
-                                        </li>
                                     </ul>
                                 </div>
                             </div>
