@@ -194,6 +194,7 @@ function activeClassName($url, $className = 'active', $isParent = false)
 
 function includeFileWithVariables($filePath, $variables = array(), $print = true)
 {
+  global $commonController;
   $output = NULL;
   if (file_exists($filePath)) {
     // Extract the variables to a local namespace
