@@ -31,6 +31,10 @@ function getPageData($slug)
         'blog/new' => ['url' => DIR . '/views/blog-adjust.php', 'title' => 'New Blog'],
         'blog/edit' => ['url' => DIR . '/views/blog-adjust.php', 'title' => 'Edit Blog'],
         'blog/detail' => ['url' => DIR . '/views/blog-detail.php', 'title' => 'Blog Detail'],
+        'course' => ['url' => DIR . '/views/course.php', 'title' => 'Course'],
+        'course/new' => ['url' => DIR . '/views/course-adjust.php', 'title' => 'New Course'],
+        'course/edit' => ['url' => DIR . '/views/course-adjust.php', 'title' => 'Edit Course'],
+        'course/detail' => ['url' => DIR . '/views/course-detail.php', 'title' => 'Course Detail'],
         // redirectUser
         'dashboard' => ['url' => DIR . '/functions/redirectUser.php', 'title' => 'Redirect'],
         'login' => ['url' => DIR . '/functions/redirectUser.php', 'title' => 'Redirect'],
