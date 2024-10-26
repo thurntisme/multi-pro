@@ -17,7 +17,7 @@
                 <div class="d-flex gap-2 justify-content-center mt-4 mb-2">
                     <button type="button" class="btn w-sm btn-light" data-bs-dismiss="modal">Close</button>
                     <form method="POST" action="<?= $_SERVER['REQUEST_URI'] ?>">
-                        <input type="hidden" name="action_name" value="delete_subscription">
+                        <input type="hidden" name="action_name" value="delete_record">
                         <?php if (!empty($post_id)) { ?>
                         <input type="hidden" name="post_id" value="<?= $post_id ?>">
                         <?php } ?>

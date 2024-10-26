@@ -27,6 +27,11 @@ function getPageData($slug)
         'subscription/new' => ['url' => DIR . '/views/subscription-adjust.php', 'title' => 'New Subscription'],
         'subscription/edit' => ['url' => DIR . '/views/subscription-adjust.php', 'title' => 'Edit Subscription'],
         'subscription/detail' => ['url' => DIR . '/views/subscription-detail.php', 'title' => 'Subscription Detail'],
+        'blog' => ['url' => DIR . '/views/blog.php', 'title' => 'Blog'],
+        'blog/new' => ['url' => DIR . '/views/blog-adjust.php', 'title' => 'New Blog'],
+        'blog/edit' => ['url' => DIR . '/views/blog-adjust.php', 'title' => 'Edit Blog'],
+        'blog/detail' => ['url' => DIR . '/views/blog-detail.php', 'title' => 'Blog Detail'],
+        // redirectUser
         'dashboard' => ['url' => DIR . '/functions/redirectUser.php', 'title' => 'Redirect'],
         'login' => ['url' => DIR . '/functions/redirectUser.php', 'title' => 'Redirect'],
         'register' => ['url' => DIR . '/functions/redirectUser.php', 'title' => 'Redirect'],

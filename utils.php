@@ -328,3 +328,13 @@ function convertAmount($amount)
 {
   return number_format((int)$amount);
 }
+
+function truncateString($string, $maxLength = 30)
+{
+  // Check if the string length exceeds the maximum length
+  if (strlen($string) > $maxLength) {
+    // Truncate the string to the maximum length and add ellipsis
+    return substr($string, 0, $maxLength) . '...';
+  }
+  return $string; // Return original string if it's within the limit
+}

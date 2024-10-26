@@ -1,8 +1,8 @@
 <?php
-$pageTitle = "Subscription";
+$pageTitle = "Blog";
 
-require_once 'controllers/SubscriptionController.php';
-$subscriptionController = new SubscriptionController();
+require_once 'controllers/BlogController.php';
+$blogController = new BlogController();
 
 $modify_type = getLastSegmentFromUrl();
 
@@ -13,21 +13,21 @@ if (!empty($modify_type)) {
     } else if ($modify_type == 'edit') {
         if (isset($_GET['id'])) {
             $post_id = $_GET['id'];
-            $postData = $subscriptionController->viewSubscription($post_id);
+            $postData = $blogController->viewBlog($post_id);
         }
         $back_url = home_url("plans/view") . '?post_id=' . $post_id;
     }
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (isset($_POST['action_name'])) {
             if ($_POST['action_name'] === 'delete_record' && isset($_GET['id'])) {
-                $subscriptionController->deleteSubscription();
+                $blogController->deleteBlog();
             }
         } else {
             if ($modify_type === "new") {
-                $subscriptionController->createSubscription();
+                $blogController->createBlog();
             }
             if ($modify_type === "edit") {
-                $subscriptionController->updateSubscription();
+                $blogController->updateBlog();
             }
         }
     };
@@ -35,7 +35,7 @@ if (!empty($modify_type)) {
 
 ob_start();
 ?>
-<form method="POST" action="<?= $_SERVER['REQUEST_URI'] ?>" id="subscription">
+<form method="POST" action="<?= $_SERVER['REQUEST_URI'] ?>" id="blog">
     <div class="row">
         <div class="col-lg-8">
 
@@ -46,62 +46,18 @@ ob_start();
             <div class="card">
                 <div class="card-body">
                     <div class="mb-3">
-                        <label class="form-label" for="project-title-input">Service name</label>
-                        <input type="text" class="form-control" id="project-title-input" name="service_name"
-                            placeholder="Enter service name" value="<?= $postData['service_name'] ?? '' ?>">
+                        <label class="form-label" for="project-title-input">Title</label>
+                        <input type="text" class="form-control" id="project-title-input" name="title"
+                            placeholder="Enter title" value="<?= $postData['title'] ?? '' ?>">
                         <?php if (!empty($post_id)) { ?>
-                        <input type="hidden" name="subscription_id" value="<?= $post_id ?>">
+                        <input type="hidden" name="blog_id" value="<?= $post_id ?>">
                         <?php } ?>
                     </div>
 
                     <div class="mb-3">
-                        <label class="form-label" for="project-thumbnail-img">Amount</label>
-                        <div class="input-group">
-                            <select class="form-select" style="max-width: 25%;" name="currency">
-                                <option value="">Select</option>
-                                <?php
-                                foreach (DEFAULT_CURRENCY as $key => $value) { ?>
-                                <option value="<?= $key ?>"
-                                    <?= !empty($postData['currency']) && $key === $postData['currency'] ? 'selected' : '' ?>>
-                                    <?= $key . ' (' . $value . ')' ?></option>
-                                <?php } ?>
-                            </select>
-                            <input type="number" class="form-control" aria-label="Amount (to the nearest dollar)"
-                                name="amount" value="<?= $postData['amount'] ?? '' ?>">
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-lg-6">
-                            <div class="mb-3">
-                                <label for="payment_date" class="form-label">Payment Date</label>
-                                <input type="text" id="payment_date" class="form-control" data-provider="flatpickr"
-                                    name="payment_date" data-date-format="<?= DEFAULT_DATE_FORMAT ?>"
-                                    placeholder="Select payment date"
-                                    data-deafult-date="<?= isset($postData['payment_date']) ? $postData['payment_date'] : '' ?>">
-                            </div>
-                        </div>
-                        <div class="col-lg-6">
-                            <div class="mb-3">
-                                <label for="payment_type" class="form-label">Payment Type</label>
-                                <select class="form-select" id="payment_type" name="payment_type">
-                                    <option value="">Select</option>
-                                    <option value="monthly"
-                                        <?= !empty($postData['payment_type']) && 'monthly' === $postData['payment_type'] ? 'selected' : '' ?>>
-                                        Monthly
-                                    </option>
-                                    <option value="yearly"
-                                        <?= !empty($postData['payment_type']) && 'yearly' === $postData['payment_type'] ? 'selected' : '' ?>>
-                                        Yearly</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="mb-3">
-                        <label class="form-label">Description</label>
-                        <textarea name="description" class="ckeditor-classic">
-                            <?= $postData['description'] ?? '' ?>
+                        <label class="form-label">Content</label>
+                        <textarea name="content" class="ckeditor-classic">
+                            <?= $postData['content'] ?? '' ?>
                         </textarea>
                     </div>
 
@@ -142,7 +98,7 @@ ob_start();
 
             <!-- end card -->
             <div class="text-center mb-4">
-                <a href="<?= home_url('subscription') ?>" class="btn btn-light w-sm">Back</a>
+                <a href="<?= home_url('blog') ?>" class="btn btn-light w-sm">Back</a>
                 <button type="submit"
                     class="btn btn-success w-sm"><?= $modify_type === "new" ? "Create" : "Save" ?></button>
             </div>
@@ -154,8 +110,8 @@ ob_start();
                     <h5 class="card-title mb-0">Action</h5>
                 </div>
                 <div class="card-body">
-                    <a href="<?= home_url('subscription') ?>" class="btn btn-light w-sm">Back</a>
-                    <a href="<?= home_url('subscription/detail?id=' . $postData['id']) ?>"
+                    <a href="<?= home_url('blog') ?>" class="btn btn-light w-sm">Back</a>
+                    <a href="<?= home_url('blog/detail?id=' . $postData['id']) ?>"
                         class="btn btn-info w-sm mx-2">View</a>
                     <?php if (!empty($post_id)) { ?>
                     <button type="button" class="btn btn-danger w-sm" data-bs-toggle="modal"
@@ -200,10 +156,10 @@ ob_start();
                     </div>
 
                     <div>
-                        <label for="choices-text-input" class="form-label">Skills</label>
+                        <label for="choices-text-input" class="form-label">Tags</label>
                         <input class="form-control" id="choices-text-input" data-choices
-                            data-choices-limit="Required Limit" placeholder="Enter Skills" type="text"
-                            value="UI/UX, Figma, HTML, CSS, Javascript, C#, Nodejs" />
+                            data-choices-limit="Required Limit" placeholder="Enter Skills" type="text" name="tags"
+                            value="<?= $postData['tags'] ?? '' ?>" />
                     </div>
                 </div>
                 <!-- end card body -->
