@@ -2,3 +2,4 @@ node_modules
 # database.sqlite
 vendor
 error_log
+database.sqlite
