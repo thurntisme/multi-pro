@@ -188,16 +188,12 @@ function getStatusBadge($status)
 
 function activeClassName($url, $className = 'active', $isParent = false)
 {
-  $currentUrl = extractPathFromCurrentUrl();
-  if ($isParent === true) {
-    $currentUrl = getFirstParamInUrl();
-  }
+  $currentUrl = getFirstParamInUrl();
   return $currentUrl === $url ? $className : '';
 }
 
 function includeFileWithVariables($filePath, $variables = array(), $print = true)
 {
-  global $commonController;
   $output = NULL;
   if (file_exists($filePath)) {
     // Extract the variables to a local namespace
