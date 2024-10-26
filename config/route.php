@@ -4,6 +4,8 @@
 // Define the layout file
 $layout = DIR . '/layout.php';
 
+include_once 'auth-route.php';
+
 $url = extractPathFromCurrentUrl();
 
 $pageUrl = '';
@@ -13,83 +15,7 @@ $user_id = '';
 if (!empty($token)) {
   $user_id = $authenticationController->getCurrentUserId();
   if (!empty($user_id)) {
-    switch ($url) {
-      case '':
-        $pageUrl = DIR . '/views/dashboard.php';
-        break;
-      case 'profile':
-        $pageUrl = DIR . '/views/profile.php';
-        break;
-      case 'settings':
-        $pageUrl = DIR . '/views/settings.php';
-        break;
-      case 'devices':
-        $pageUrl = DIR . '/views/devices.php';
-        break;
-      case 'logout':
-        $pageUrl = DIR . '/views/logout.php';
-        break;
-      case 'projects':
-      case 'projects/overview':
-        $pageUrl = DIR . '/views/project-overview.php';
-        break;
-      case 'projects/list':
-        $pageUrl = DIR . '/views/project-list.php';
-        break;
-      case 'projects/create':
-      case 'projects/edit':
-        $pageUrl = DIR . '/views/project-modify.php';
-        break;
-      case 'projects/detail':
-        $pageUrl = DIR . '/views/project-detail.php';
-        break;
-      case 'projects/report':
-        $pageUrl = DIR . '/views/report-working.php';
-        break;
-      case 'finance':
-        $pageUrl = DIR . '/views/finance.php';
-        break;
-      case 'finance/budget':
-        $pageUrl = DIR . '/views/budget.php';
-        break;
-      case 'finance/income':
-        $pageUrl = DIR . '/views/income.php';
-        break;
-      case 'finance/expenses':
-        $pageUrl = DIR . '/views/expenses.php';
-        break;
-      case 'version':
-        $pageUrl = DIR . '/views/version.php';
-        break;
-      case 'todo':
-        $pageUrl = DIR . '/views/todo.php';
-        break;
-      case 'daily-checklist':
-        $pageUrl = DIR . '/views/daily-checklist.php';
-        break;
-      case 'bookmark':
-        $pageUrl = DIR . '/views/bookmark.php';
-        break;
-      case 'subscription':
-        $pageUrl = DIR . '/views/subscription.php';
-        break;
-      case 'subscription/new':
-      case 'subscription/edit':
-        $pageUrl = DIR . '/views/subscription-adjust.php';
-        break;
-      case 'subscription/detail':
-        $pageUrl = DIR . '/views/subscription-detail.php';
-        break;
-      case 'dashboard':
-      case 'login':
-      case 'register':
-      case 'forgot-password':
-        $pageUrl = DIR . '/functions/redirectUser.php';
-        break;
-      default:
-        $pageUrl = DIR . '/views/404.php';
-        break;
-    }
+    $pageUrl = getPageData($url)['url'];
   } else {
     $commonController->removeToken();
     $pageUrl = DIR . '/functions/redirectUser.php';

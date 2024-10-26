@@ -1,0 +1,38 @@
+<?php
+
+function getPageData($slug)
+{
+    $routes = [
+        '' => ['url' => DIR . '/views/dashboard.php', 'title' => 'Dashboard'],
+        'profile' => ['url' => DIR . '/views/profile.php', 'title' => 'Profile'],
+        'settings' => ['url' => DIR . '/views/settings.php', 'title' => 'Settings'],
+        'devices' => ['url' => DIR . '/views/devices.php', 'title' => 'Devices'],
+        'logout' => ['url' => DIR . '/views/logout.php', 'title' => 'Logout'],
+        'projects' => ['url' => DIR . '/views/project-overview.php', 'title' => 'Project Overview'],
+        'projects/overview' => ['url' => DIR . '/views/project-overview.php', 'title' => 'Project Overview'],
+        'projects/list' => ['url' => DIR . '/views/project-list.php', 'title' => 'Project List'],
+        'projects/create' => ['url' => DIR . '/views/project-modify.php', 'title' => 'Create Project'],
+        'projects/edit' => ['url' => DIR . '/views/project-modify.php', 'title' => 'Edit Project'],
+        'projects/detail' => ['url' => DIR . '/views/project-detail.php', 'title' => 'Project Detail'],
+        'projects/report' => ['url' => DIR . '/views/report-working.php', 'title' => 'Project Report'],
+        'finance' => ['url' => DIR . '/views/finance.php', 'title' => 'Finance'],
+        'finance/budget' => ['url' => DIR . '/views/budget.php', 'title' => 'Budget'],
+        'finance/income' => ['url' => DIR . '/views/income.php', 'title' => 'Income'],
+        'finance/expenses' => ['url' => DIR . '/views/expenses.php', 'title' => 'Expenses'],
+        'version' => ['url' => DIR . '/views/version.php', 'title' => 'Version'],
+        'todo' => ['url' => DIR . '/views/todo.php', 'title' => 'To-Do'],
+        'daily-checklist' => ['url' => DIR . '/views/daily-checklist.php', 'title' => 'Daily Checklist'],
+        'bookmark' => ['url' => DIR . '/views/bookmark.php', 'title' => 'Bookmark'],
+        'subscription' => ['url' => DIR . '/views/subscription.php', 'title' => 'Subscription'],
+        'subscription/new' => ['url' => DIR . '/views/subscription-adjust.php', 'title' => 'New Subscription'],
+        'subscription/edit' => ['url' => DIR . '/views/subscription-adjust.php', 'title' => 'Edit Subscription'],
+        'subscription/detail' => ['url' => DIR . '/views/subscription-detail.php', 'title' => 'Subscription Detail'],
+        'dashboard' => ['url' => DIR . '/functions/redirectUser.php', 'title' => 'Redirect'],
+        'login' => ['url' => DIR . '/functions/redirectUser.php', 'title' => 'Redirect'],
+        'register' => ['url' => DIR . '/functions/redirectUser.php', 'title' => 'Redirect'],
+        'forgot-password' => ['url' => DIR . '/functions/redirectUser.php', 'title' => 'Redirect']
+    ];
+
+    // If the slug exists as a key in the routes array, return the corresponding page data
+    return $routes[$slug] ?? ['url' => DIR . '/views/404.php', 'title' => 'Page Not Found'];
+}
