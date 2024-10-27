@@ -39,6 +39,10 @@ function getPageData($slug)
         'git/new' => ['url' => DIR . '/views/git-adjust.php', 'title' => 'New Git'],
         'git/edit' => ['url' => DIR . '/views/git-adjust.php', 'title' => 'Edit Git'],
         'git/detail' => ['url' => DIR . '/views/git-detail.php', 'title' => 'Git Detail'],
+        'book' => ['url' => DIR . '/views/book.php', 'title' => 'Book'],
+        'book/new' => ['url' => DIR . '/views/book-adjust.php', 'title' => 'New Book'],
+        'book/edit' => ['url' => DIR . '/views/book-adjust.php', 'title' => 'Edit Book'],
+        'book/detail' => ['url' => DIR . '/views/book-detail.php', 'title' => 'Book Detail'],
         // redirectUser
         'dashboard' => ['url' => DIR . '/functions/redirectUser.php', 'title' => 'Redirect'],
         'login' => ['url' => DIR . '/functions/redirectUser.php', 'title' => 'Redirect'],
