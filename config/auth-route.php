@@ -35,6 +35,10 @@ function getPageData($slug)
         'course/new' => ['url' => DIR . '/views/course-adjust.php', 'title' => 'New Course'],
         'course/edit' => ['url' => DIR . '/views/course-adjust.php', 'title' => 'Edit Course'],
         'course/detail' => ['url' => DIR . '/views/course-detail.php', 'title' => 'Course Detail'],
+        'git' => ['url' => DIR . '/views/git.php', 'title' => 'Git'],
+        'git/new' => ['url' => DIR . '/views/git-adjust.php', 'title' => 'New Git'],
+        'git/edit' => ['url' => DIR . '/views/git-adjust.php', 'title' => 'Edit Git'],
+        'git/detail' => ['url' => DIR . '/views/git-detail.php', 'title' => 'Git Detail'],
         // redirectUser
         'dashboard' => ['url' => DIR . '/functions/redirectUser.php', 'title' => 'Redirect'],
         'login' => ['url' => DIR . '/functions/redirectUser.php', 'title' => 'Redirect'],
