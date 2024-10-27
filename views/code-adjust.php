@@ -34,6 +34,10 @@ if (!empty($modify_type)) {
 }
 
 ob_start();
+echo '<link rel="stylesheet" href="https://cdn.ckeditor.com/ckeditor5/43.2.0/ckeditor5.css" />';
+$additionCss = ob_get_clean();
+
+ob_start();
 ?>
 <form method="POST" action="<?= $_SERVER['REQUEST_URI'] ?>" id="code">
     <div class="row">
@@ -56,7 +60,7 @@ ob_start();
 
                     <div class="mb-3">
                         <label class="form-label">Content</label>
-                        <textarea name="content" class="ckeditor-classic">
+                        <textarea name="content" class="ckeditor-advanced">
                             <?= $postData['content'] ?? '' ?>
                         </textarea>
                     </div>
@@ -240,7 +244,7 @@ $pageContent = ob_get_clean();
 
 ob_start();
 echo "
-<script src='" . home_url("/assets/libs/@ckeditor/ckeditor5-build-classic/build/ckeditor.js") . "'></script>
+<script src='" . home_url("/assets/libs/@ckeditor/ckeditor5.umd.js") . "'></script>
 ";
 $additionJs = ob_get_clean();
 
