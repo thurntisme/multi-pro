@@ -43,6 +43,10 @@ function getPageData($slug)
         'book/new' => ['url' => DIR . '/views/book-adjust.php', 'title' => 'New Book'],
         'book/edit' => ['url' => DIR . '/views/book-adjust.php', 'title' => 'Edit Book'],
         'book/detail' => ['url' => DIR . '/views/book-detail.php', 'title' => 'Book Detail'],
+        'tip' => ['url' => DIR . '/views/tip.php', 'title' => 'TIp'],
+        'tip/new' => ['url' => DIR . '/views/tip-adjust.php', 'title' => 'New Tip'],
+        'tip/edit' => ['url' => DIR . '/views/tip-adjust.php', 'title' => 'Edit Tip'],
+        'tip/detail' => ['url' => DIR . '/views/tip-detail.php', 'title' => 'Tip Detail'],
         // redirectUser
         'dashboard' => ['url' => DIR . '/functions/redirectUser.php', 'title' => 'Redirect'],
         'login' => ['url' => DIR . '/functions/redirectUser.php', 'title' => 'Redirect'],
