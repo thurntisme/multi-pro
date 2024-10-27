@@ -20,7 +20,6 @@ function getPageData($slug)
         'finance/income' => ['url' => DIR . '/views/income.php', 'title' => 'Income'],
         'finance/expenses' => ['url' => DIR . '/views/expenses.php', 'title' => 'Expenses'],
         'version' => ['url' => DIR . '/views/version.php', 'title' => 'Version'],
-        'todo' => ['url' => DIR . '/views/todo.php', 'title' => 'To-Do'],
         'daily-checklist' => ['url' => DIR . '/views/daily-checklist.php', 'title' => 'Daily Checklist'],
         'bookmark' => ['url' => DIR . '/views/bookmark.php', 'title' => 'Bookmark'],
         'subscription' => ['url' => DIR . '/views/subscription.php', 'title' => 'Subscription'],
@@ -55,6 +54,10 @@ function getPageData($slug)
         'note/new' => ['url' => DIR . '/views/note-adjust.php', 'title' => 'New Note'],
         'note/edit' => ['url' => DIR . '/views/note-adjust.php', 'title' => 'Edit Note'],
         'note/detail' => ['url' => DIR . '/views/note-detail.php', 'title' => 'Note Detail'],
+        'todo' => ['url' => DIR . '/views/todo.php', 'title' => 'Todo'],
+        'todo/new' => ['url' => DIR . '/views/todo-adjust.php', 'title' => 'New Todo'],
+        'todo/edit' => ['url' => DIR . '/views/todo-adjust.php', 'title' => 'Edit Todo'],
+        'todo/detail' => ['url' => DIR . '/views/todo-detail.php', 'title' => 'Todo Detail'],
         // redirectUser
         'dashboard' => ['url' => DIR . '/functions/redirectUser.php', 'title' => 'Redirect'],
         'login' => ['url' => DIR . '/functions/redirectUser.php', 'title' => 'Redirect'],

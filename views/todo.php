@@ -1,159 +1,129 @@
 <?php
-$pageTitle = "To Do";
+require_once 'controllers/TodoController.php';
+
+$pageTitle = "Todos";
+
+$todoController = new TodoController();
+$list = $todoController->listTodos();
 
 ob_start();
 ?>
 
-<div class="card card-height-100">
+<?php
+include_once DIR . '/components/alert.php';
+?>
 
-    <div class="card-body p-0">
-        <div class="p-3 bg-light rounded mb-4">
-            <div class="row g-2">
-                <div class="col-lg-auto">
-                    <select class="form-control" data-choices data-choices-search-false name="choices-select-sortlist" id="choices-select-sortlist">
-                        <option value="">Sort</option>
-                        <option value="By ID">By ID</option>
-                        <option value="By Name">By Name</option>
-                    </select>
+<div class="card" id="tasksList">
+    <div class="card-header border-0">
+        <div class="d-flex align-items-center">
+            <h5 class="card-title mb-0 flex-grow-1">All Todos</h5>
+            <div class="flex-shrink-0">
+                <div class="d-flex flex-wrap gap-2">
+                    <a class="btn btn-danger add-btn" href="<?= home_url('todo/new') ?>"><i
+                            class="ri-add-line align-bottom me-1"></i> Create Todo</a>
                 </div>
-                <div class="col-lg-auto">
-                    <select class="form-control" data-choices data-choices-search-false name="choices-select-status" id="choices-select-status">
-                        <option value="">All Tasks</option>
-                        <option value="Completed">Completed</option>
-                        <option value="Inprogress">Inprogress</option>
-                        <option value="Pending">Pending</option>
-                        <option value="New">New</option>
-                    </select>
-                </div>
-                <div class="col-lg">
+            </div>
+        </div>
+    </div>
+    <div class="card-body border border-dashed border-end-0 border-start-0">
+        <form method="get" action="<?= home_url('todo') ?>">
+            <div class="row g-3">
+                <div class="col-xxl-5 col-sm-12">
                     <div class="search-box">
-                        <input type="text" id="searchTaskList" class="form-control search" placeholder="Search task name">
+                        <input type="text" name="s" class="form-control search bg-light border-light"
+                            placeholder="Search for todos or something...">
                         <i class="ri-search-line search-icon"></i>
                     </div>
                 </div>
-                <div class="col-lg-auto">
-                    <button class="btn btn-primary createTask" type="button" data-bs-toggle="modal" data-bs-target="#createTask">
-                        <i class="ri-add-fill align-bottom"></i> Add Tasks
+                <!--end col-->
+
+                <div class="col-xxl-3 col-sm-4">
+                    <input type="text" class="form-control bg-light border-light" id="demo-datepicker"
+                        data-provider="flatpickr" data-date-format="d M, Y" data-range-date="true"
+                        placeholder="Select date range">
+                </div>
+                <!--end col-->
+
+                <div class="col-xxl-3 col-sm-4">
+                    <div class="input-light">
+                        <select class="form-control" data-choices data-choices-search-false
+                            name="choices-single-default" id="idStatus">
+                            <option value="" selected>All</option>
+                            <option value="monthly">Monthly</option>
+                            <option value="yearly">Yearly</option>
+                        </select>
+                    </div>
+                </div>
+                <!--end col-->
+                <div class="col-xxl-1 col-sm-4">
+                    <button type="submit" class="btn btn-primary w-100"> <i
+                            class="ri-equalizer-fill me-1 align-bottom"></i>
+                        Filters
                     </button>
                 </div>
+                <!--end col-->
             </div>
-        </div>
-
-        <div class="todo-content position-relative px-4 mx-n4" id="todo-content">
-            <div class="todo-task" id="todo-task">
-                <div class="table-responsive">
-                    <table class="table align-middle position-relative table-nowrap">
-                        <thead class="table-active">
-                            <tr>
-                                <th scope="col">Task Name</th>
-                                <th scope="col">Due Date</th>
-                                <th scope="col text-center">Status</th>
-                                <th scope="col text-center">Priority</th>
-                                <th scope="col text-center">Action</th>
-                            </tr>
-                        </thead>
-                        <tbody id="task-list">
-                            <tr>
-                                <td class="font-bold">Added Select2</td>
-                                <td>23 Apr, 2022</td>
-                                <td><span class="badge bg-warning-subtle text-warning text-uppercase text-center">Pending</span></td>
-                                <td><span class="badge bg-danger text-uppercase text-center">High</span></td>
-                                <td>
-                                    <div class="hstack gap-2"> <button class="btn btn-sm btn-soft-danger remove-list" data-bs-toggle="modal" data-bs-target="#removeTaskItemModal" data-remove-id="15" fdprocessedid="i36bi"><i class="ri-delete-bin-5-fill align-bottom"></i></button> <button class="btn btn-sm btn-soft-info edit-list" data-bs-toggle="modal" data-bs-target="#createTask" data-edit-id="15" fdprocessedid="a8ota"><i class="ri-pencil-fill align-bottom"></i></button> </div>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-            <div class="py-4 mt-4 text-center" id="noresult" style="display: none;">
-                <lord-icon src="https://cdn.lordicon.com/msoeawqm.json" trigger="loop" colors="primary:#405189,secondary:#0ab39c" style="width:72px;height:72px"></lord-icon>
-                <h5 class="mt-4">Sorry! No Result Found</h5>
-            </div>
-        </div>
-
+            <!--end row-->
+        </form>
     </div>
-</div>
-
-<!-- Modal -->
-<div class="modal fade" id="createTask" tabindex="-1" aria-labelledby="createTaskLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content border-0">
-            <div class="modal-header p-3 bg-success-subtle">
-                <h5 class="modal-title" id="createTaskLabel">Create Task</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" id="createTaskBtn-close" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <div id="task-error-msg" class="alert alert-danger py-2"></div>
-                <form autocomplete="off" action="" id="creattask-form">
-                    <input type="hidden" id="taskid-input" class="form-control">
-                    <div class="mb-3">
-                        <label for="task-title-input" class="form-label">Task Title</label>
-                        <input type="text" id="task-title-input" class="form-control" placeholder="Enter task title">
-                    </div>
-                    <div class="row g-4 mb-3">
-                        <div class="col-lg-6">
-                            <label for="task-status" class="form-label">Status</label>
-                            <select class="form-control" data-choices data-choices-search-false id="task-status-input">
-                                <option value="">Status</option>
-                                <option value="New" selected>New</option>
-                                <option value="Inprogress">Inprogress</option>
-                                <option value="Pending">Pending</option>
-                                <option value="Completed">Completed</option>
-                            </select>
-                        </div>
-                        <!--end col-->
-                        <div class="col-lg-6">
-                            <label for="priority-field" class="form-label">Priority</label>
-                            <select class="form-control" data-choices data-choices-search-false id="priority-field">
-                                <option value="">Priority</option>
-                                <option value="High">High</option>
-                                <option value="Medium">Medium</option>
-                                <option value="Low">Low</option>
-                            </select>
-                        </div>
-                        <!--end col-->
-                    </div>
-                    <div class="mb-4">
-                        <label for="task-duedate-input" class="form-label">Due Date:</label>
-                        <input type="date" id="task-duedate-input" class="form-control" placeholder="Due date">
-                    </div>
-
-                    <div class="hstack gap-2 justify-content-end">
-                        <button type="button" class="btn btn-ghost-success" data-bs-dismiss="modal"><i class="ri-close-fill align-bottom"></i> Close</button>
-                        <button type="submit" class="btn btn-primary" id="addNewTodo">Add Task</button>
-                    </div>
-                </form>
+    <!--end card-body-->
+    <div class="card-body">
+        <div class="table-responsive table-card mb-4">
+            <table class="table align-middle table-nowrap mb-0" id="todosTable">
+                <thead class="table-light text-muted">
+                    <tr>
+                        <th>Title</th>
+                        <th>Tags</th>
+                        <th>Status</th>
+                        <th class="sort text-end pe-5">Created Date</th>
+                        <th class="sort text-end pe-5">Updated Date</th>
+                    </tr>
+                </thead>
+                <tbody class="list form-check-all">
+                    <?php if (count($list['list']) > 0) {
+                        foreach ($list['list'] as $item) { ?>
+                    <tr>
+                        <td>
+                            <div class="d-flex">
+                                <div class="flex-grow-1"><?= truncateString($item['title'], 50) ?></div>
+                                <div class="flex-shrink-0 ms-4">
+                                    <ul class="list-inline tasks-list-menu mb-0">
+                                        <li class="list-inline-item"><a
+                                                href="<?= home_url('todo/detail?id=' . $item['id']) ?>"><i
+                                                    class="ri-eye-fill align-bottom me-2 text-muted"></i></a></li>
+                                        <li class="list-inline-item"><a class="edit-item-btn"
+                                                href="<?= home_url('todo/edit?id=' . $item['id']) ?>"><i
+                                                    class="ri-pencil-fill align-bottom me-2 text-muted"></i></a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </td>
+                        <td><?= $item['tags'] ?></td>
+                        <td><?= $item['status'] ?></td>
+                        <td class="text-end pe-5"><?= $commonController->convertDate($item['created_at']) ?></td>
+                        <td class="text-end pe-5"><?= $commonController->convertDate($item['updated_at']) ?></td>
+                    </tr>
+                    <?php }
+                    } ?>
+                </tbody>
+            </table>
+            <!--end table-->
+            <div class="noresult" style="display: none">
+                <div class="text-center">
+                    <lord-icon src="https://cdn.lordicon.com/msoeawqm.json" trigger="loop"
+                        colors="primary:#121331,secondary:#08a88a" style="width:75px;height:75px"></lord-icon>
+                    <h5 class="mt-2">Sorry! No Result Found</h5>
+                    <p class="text-muted mb-0">Weve searched more than 200k+ todos We did not find any
+                        todos for you search.</p>
+                </div>
             </div>
         </div>
+        <?php
+        includeFileWithVariables('components/pagination.php', array("count" => $list['count']));
+        ?>
     </div>
+    <!--end card-body-->
 </div>
-<!--end create taks-->
-
-<!-- removeFileItemModal -->
-<div id="removeTaskItemModal" class="modal fade zoomIn" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="close-removetodomodal"></button>
-            </div>
-            <div class="modal-body">
-                <div class="mt-2 text-center">
-                    <lord-icon src="https://cdn.lordicon.com/gsqxdxog.json" trigger="loop" colors="primary:#f7b84b,secondary:#f06548" style="width:100px;height:100px"></lord-icon>
-                    <div class="mt-4 pt-2 fs-15 mx-4 mx-sm-5">
-                        <h4>Are you sure ?</h4>
-                        <p class="text-muted mx-4 mb-0">Are you sure you want to remove this task ?</p>
-                    </div>
-                </div>
-                <div class="d-flex gap-2 justify-content-center mt-4 mb-2">
-                    <button type="button" class="btn w-sm btn-light" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn w-sm btn-danger" id="remove-todoitem">Yes, Delete It!</button>
-                </div>
-            </div>
-        </div><!-- /.modal-content -->
-    </div><!-- /.modal-dialog -->
-</div><!-- /.modal -->
-<!--end delete modal -->
 
 <?php
 $pageContent = ob_get_clean();
