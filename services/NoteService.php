@@ -13,31 +13,21 @@ class NoteService
   }
 
   // Create a new note
-  public function createNote($title, $content)
+  public function createNote($title, $content, $tags)
   {
-    $sql = "INSERT INTO notes (title, content, user_id) VALUES (:title, :content, :user_id)";
+    $sql = "INSERT INTO notes (title, content, tags, user_id) VALUES (:title, :content, :tags, :user_id)";
     $stmt = $this->pdo->prepare($sql);
-    $stmt->execute([':title' => $title, ':content' => $content, ':user_id' => $this->user_id]);
+    $stmt->execute([':title' => $title, ':content' => $content, ':tags' => $tags, ':user_id' => $this->user_id]);
 
     return $this->pdo->lastInsertId();
   }
 
-  // Read a note by ID
-  public function getNoteById($id)
-  {
-    $sql = "SELECT * FROM notes WHERE id = :id";
-    $stmt = $this->pdo->prepare($sql);
-    $stmt->execute([':id' => $id]);
-
-    return $stmt->fetch(PDO::FETCH_ASSOC);
-  }
-
   // Update a note
-  public function updateNote($id, $title, $content)
+  public function updateNote($id, $title, $content, $tags)
   {
-    $sql = "UPDATE notes SET title = :title, content = :content, updated_at = CURRENT_TIMESTAMP WHERE id = :id";
+    $sql = "UPDATE notes SET title = :title, content = :content, tags = :tags, updated_at = CURRENT_TIMESTAMP WHERE user_id = :user_id AND id = :id";
     $stmt = $this->pdo->prepare($sql);
-    $stmt->execute([':id' => $id, ':title' => $title, ':content' => $content]);
+    $stmt->execute([':title' => $title, ':content' => $content, ':tags' => $tags, ':id' => $id, ':user_id' => $this->user_id]);
 
     return $stmt->rowCount();
   }
@@ -45,9 +35,9 @@ class NoteService
   // Delete a note
   public function deleteNote($id)
   {
-    $sql = "DELETE FROM notes WHERE id = :id";
+    $sql = "DELETE FROM notes WHERE id = :id AND user_id = :user_id";
     $stmt = $this->pdo->prepare($sql);
-    $stmt->execute([':id' => $id]);
+    $stmt->execute([':id' => $id, ':user_id' => $this->user_id]);
 
     return $stmt->rowCount();
   }
@@ -60,5 +50,15 @@ class NoteService
     $stmt->execute([':user_id' => $this->user_id]);
 
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
+  }
+
+  // Read a note by ID
+  public function getNoteById($id)
+  {
+    $sql = "SELECT * FROM notes WHERE user_id = :user_id AND id = :id";
+    $stmt = $this->pdo->prepare($sql);
+    $stmt->execute([':user_id' => $this->user_id, ':id' => $id]);
+
+    return $stmt->fetch(PDO::FETCH_ASSOC);
   }
 }

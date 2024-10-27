@@ -6,7 +6,8 @@ return function (PDO $pdo) {
   $attributes = [
     'id' => 'INTEGER PRIMARY KEY AUTOINCREMENT',
     'title' => 'TEXT NOT NULL',
-    'content ' => 'TEXT',
+    'content' => 'TEXT',
+    'tags' => 'TEXT',
     'created_at' => 'TIMESTAMP DEFAULT CURRENT_TIMESTAMP',
     'updated_at' => 'TIMESTAMP DEFAULT CURRENT_TIMESTAMP',
     'user_id' => 'INTEGER NOT NULL',

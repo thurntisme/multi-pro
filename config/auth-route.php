@@ -51,6 +51,10 @@ function getPageData($slug)
         'code/new' => ['url' => DIR . '/views/code-adjust.php', 'title' => 'New Code'],
         'code/edit' => ['url' => DIR . '/views/code-adjust.php', 'title' => 'Edit Code'],
         'code/detail' => ['url' => DIR . '/views/code-detail.php', 'title' => 'Code Detail'],
+        'note' => ['url' => DIR . '/views/note.php', 'title' => 'Note'],
+        'note/new' => ['url' => DIR . '/views/note-adjust.php', 'title' => 'New Note'],
+        'note/edit' => ['url' => DIR . '/views/note-adjust.php', 'title' => 'Edit Note'],
+        'note/detail' => ['url' => DIR . '/views/note-detail.php', 'title' => 'Note Detail'],
         // redirectUser
         'dashboard' => ['url' => DIR . '/functions/redirectUser.php', 'title' => 'Redirect'],
         'login' => ['url' => DIR . '/functions/redirectUser.php', 'title' => 'Redirect'],
