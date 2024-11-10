@@ -70,11 +70,11 @@ function inputTasksValues($this) {
   if ($tasksEl.val()) {
     tasksArr = JSON.parse($tasksEl.val());
     if (!tasksArr[taskId]) {
-      tasksArr.push({});
+      tasksArr.push({ task_status: "todo" });
     }
     tasksArr[taskId][fieldName] = fieldValue;
   } else {
-    const obj = {};
+    const obj = { task_status: "todo" };
     obj[fieldName] = fieldValue;
     tasksArr.push(obj);
   }
@@ -124,7 +124,6 @@ function resetRow() {
     var incid = index + 1;
     $(el).attr("id", incid);
   });
-  console.log($tasksEl.val());
 }
 
 /* Recalculate cart */
@@ -173,3 +172,26 @@ function updateQuantity(amount, itemQuntity, priceselection) {
 
   // recalculateCart();
 }
+
+$(".btn-copy-template").click(function () {
+  $btn = $(this);
+  const content = $btn.parent().find(".content").html();
+  // var textContent = content.replace(/<br\s*\/?>/gi, "\n");
+  var textContent = content
+    .replace(/^\s+/gm, "")
+    .replace(/\s+$/gm, "")
+    .replace(/<br\s*\/?>/gi, "\n")
+    .trim();
+  navigator.clipboard
+    .writeText(textContent)
+    .then(function () {
+      console.log(textContent);
+      $btn.text("Copied");
+      setTimeout(function () {
+        $btn.text("Copy");
+      }, 3000);
+    })
+    .catch(function (err) {
+      console.log("Failed to copy content: " + err);
+    });
+});

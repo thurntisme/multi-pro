@@ -112,9 +112,9 @@ ob_start();
                                                 <td>
                                                     <select class="form-select" data-choices data-choices-search-false
                                                         name="task_status">
-                                                        <option value="todo" selected>Todo</option>
-                                                        <option value="processing">Processing</option>
-                                                        <option value="done">Done</option>
+                                                        <option value="todo" <?php echo ($task['task_status'] == 'todo') ? 'selected' : ''; ?>>Todo</option>
+                                                        <option value="processing" <?php echo ($task['task_status'] == 'processing') ? 'selected' : ''; ?>>Processing</option>
+                                                        <option value="done" <?php echo ($task['task_status'] == 'done') ? 'selected' : ''; ?>>Done</option>
                                                     </select>
                                                 </td>
                                                 <td>
@@ -180,52 +180,6 @@ ob_start();
                                         <a href="javascript:new_link()" id="add-item"
                                             class="btn btn-soft-secondary fw-medium"><i
                                                 class="ri-add-fill me-1 align-bottom"></i> Add Item</a>
-                                    </td>
-                                </tr>
-                                <tr class="border-top border-top-dashed mt-2">
-                                    <td colspan="3"></td>
-                                    <td colspan="2" class="pb-0">
-                                        <table class="table table-borderless table-sm table-nowrap align-middle mb-0">
-                                            <tbody>
-                                                <tr>
-                                                    <th scope="row">Sub Total</th>
-                                                    <td style="width:150px;">
-                                                        <input type="text" class="form-control bg-light border-0"
-                                                            id="cart-subtotal" placeholder="$0.00" readonly />
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <th scope="row">Estimated Tax (12.5%)</th>
-                                                    <td>
-                                                        <input type="text" class="form-control bg-light border-0"
-                                                            id="cart-tax" placeholder="$0.00" readonly />
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <th scope="row">Discount <small
-                                                            class="text-muted">(VELZON15)</small></th>
-                                                    <td>
-                                                        <input type="text" class="form-control bg-light border-0"
-                                                            id="cart-discount" placeholder="$0.00" readonly />
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <th scope="row">Shipping Charge</th>
-                                                    <td>
-                                                        <input type="text" class="form-control bg-light border-0"
-                                                            id="cart-shipping" placeholder="$0.00" readonly />
-                                                    </td>
-                                                </tr>
-                                                <tr class="border-top border-top-dashed">
-                                                    <th scope="row">Total Amount</th>
-                                                    <td>
-                                                        <input type="text" class="form-control bg-light border-0"
-                                                            id="cart-total" placeholder="$0.00" readonly />
-                                                    </td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                        <!--end table-->
                                     </td>
                                 </tr>
                             </tbody>
