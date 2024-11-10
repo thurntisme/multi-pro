@@ -3,3 +3,4 @@ node_modules
 vendor
 error_log
 database.sqlite
+.env
