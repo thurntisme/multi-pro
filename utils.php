@@ -159,12 +159,13 @@ function generateBreadcrumbs($pageTitle, $separator = ' > ')
 // Define the badge classes based on the status
 $badgeClasses = [
   'not_started' => 'light text-body',
-  'todo'     => 'light text-body',
-  'backlog'  => 'dark',
+  'todo' => 'light text-body',
+  'backlog' => 'dark',
   'complete' => 'success',
   'in_progress' => 'primary',
-  'blocked'  => 'danger',
-  'on_hold'  => 'warning',
+  'processing' => 'primary',
+  'blocked' => 'danger',
+  'on_hold' => 'warning',
 ];
 function renderStatusBadge($status)
 {
@@ -326,7 +327,7 @@ function extractPathFromCurrentUrl()
 
 function convertAmount($amount)
 {
-  return number_format((int)$amount);
+  return number_format((int) $amount);
 }
 
 function truncateString($string, $maxLength = 30)

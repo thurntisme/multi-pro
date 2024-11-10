@@ -58,6 +58,10 @@ function getPageData($slug)
         'todo/new' => ['url' => DIR . '/views/todo-adjust.php', 'title' => 'New Todo'],
         'todo/edit' => ['url' => DIR . '/views/todo-adjust.php', 'title' => 'Edit Todo'],
         'todo/detail' => ['url' => DIR . '/views/todo-detail.php', 'title' => 'Todo Detail'],
+        'report-working' => ['url' => DIR . '/views/report-working.php', 'title' => 'Report Working'],
+        'report-working/new' => ['url' => DIR . '/views/report-working-adjust.php', 'title' => 'New Report Working'],
+        'report-working/edit' => ['url' => DIR . '/views/report-working-adjust.php', 'title' => 'Edit Report Working'],
+        'report-working/detail' => ['url' => DIR . '/views/report-working-detail.php', 'title' => 'Report Working Detail'],
         // redirectUser
         'dashboard' => ['url' => DIR . '/functions/redirectUser.php', 'title' => 'Redirect'],
         'login' => ['url' => DIR . '/functions/redirectUser.php', 'title' => 'Redirect'],
