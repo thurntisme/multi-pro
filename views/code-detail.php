@@ -10,7 +10,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     if (isset($_GET['id'])) {
         $post_id = $_GET['id'];
         $postData = $codeController->viewCode($post_id);
-        $tags  = explode(',', $postData['tags']);
+        $tags = !empty($postData['tags']) ? explode(',', $postData['tags']) : [];
     }
 }
 
@@ -220,8 +220,8 @@ ob_start();
                                 <h5 class="card-title mb-4">Tags</h5>
                                 <div class="d-flex flex-wrap gap-2 fs-16">
                                     <?php foreach ($tags as $key => $value) { ?>
-                                    <div class="badge fw-medium bg-secondary-subtle text-secondary"><?= $value ?>
-                                    </div>
+                                        <div class="badge fw-medium bg-secondary-subtle text-secondary"><?= $value ?>
+                                        </div>
                                     <?php } ?>
                                 </div>
                             </div>

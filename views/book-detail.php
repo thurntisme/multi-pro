@@ -10,7 +10,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     if (isset($_GET['id'])) {
         $post_id = $_GET['id'];
         $postData = $bookController->viewBook($post_id);
-        $tags  = explode(',', $postData['tags']);
+        $tags = !empty($postData['tags']) ? explode(',', $postData['tags']) : [];
     }
 }
 
@@ -60,7 +60,8 @@ ob_start();
                                                 <div>
                                                     <p class="mb-2 text-uppercase fw-medium">Status :</p>
                                                     <div class="badge bg-light fs-12 text-black">
-                                                        <?= $postData['status'] ?? '' ?></div>
+                                                        <?= $postData['status'] ?? '' ?>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -227,8 +228,8 @@ ob_start();
                                 <h5 class="card-title mb-4">Tags</h5>
                                 <div class="d-flex flex-wrap gap-2 fs-16">
                                     <?php foreach ($tags as $key => $value) { ?>
-                                    <div class="badge fw-medium bg-secondary-subtle text-secondary"><?= $value ?>
-                                    </div>
+                                        <div class="badge fw-medium bg-secondary-subtle text-secondary"><?= $value ?>
+                                        </div>
                                     <?php } ?>
                                 </div>
                             </div>
