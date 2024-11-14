@@ -54,7 +54,7 @@ ob_start();
                         <input type="text" class="form-control" id="project-title-input" name="title"
                             placeholder="Enter title" value="<?= $postData['title'] ?? '' ?>">
                         <?php if (!empty($post_id)) { ?>
-                        <input type="hidden" name="blog_id" value="<?= $post_id ?>">
+                            <input type="hidden" name="blog_id" value="<?= $post_id ?>">
                         <?php } ?>
                     </div>
 
@@ -118,8 +118,8 @@ ob_start();
                     <a href="<?= home_url('blog/detail?id=' . $postData['id']) ?>"
                         class="btn btn-info w-sm mx-2">View</a>
                     <?php if (!empty($post_id)) { ?>
-                    <button type="button" class="btn btn-danger w-sm" data-bs-toggle="modal"
-                        data-bs-target="#deleteRecordModal">Delete</button>
+                        <button type="button" class="btn btn-danger w-sm" data-bs-toggle="modal"
+                            data-bs-target="#deleteRecordModal">Delete</button>
                     <?php } ?>
                 </div>
                 <!-- end card body -->
@@ -150,14 +150,9 @@ ob_start();
                     <h5 class="card-title mb-0">Tags</h5>
                 </div>
                 <div class="card-body">
-                    <div class="mb-3">
-                        <label for="choices-categories-input" class="form-label">Categories</label>
-                        <select class="form-select" data-choices data-choices-search-false
-                            id="choices-categories-input">
-                            <option value="Designing" selected>Designing</option>
-                            <option value="Development">Development</option>
-                        </select>
-                    </div>
+                    <?php
+                    includeFileWithVariables('components/form-control.php', array("type" => "select", "id" => "category", "name" => "category", "label" => "Category", "options" => DEFAULT_BLOG_CATEGORIES, "value" => $postData['category'] ?? ''));
+                    ?>
 
                     <div>
                         <label for="choices-text-input" class="form-label">Tags</label>

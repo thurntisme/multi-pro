@@ -139,3 +139,8 @@ $Currency_symbols = [
   'RUB' => '₽'
 ];
 define("DEFAULT_CURRENCY", $Currency_symbols);
+
+define("DEFAULT_BLOG_CATEGORIES", [
+  'develop' => 'Develop',
+  'design' => 'Design',
+]);
