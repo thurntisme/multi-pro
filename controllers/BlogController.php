@@ -23,9 +23,10 @@ class BlogController
     $title = $_POST['title'] ?? '';
     $content = $_POST['content'] ?? '';
     $tags = $_POST['tags'] ?? '';
+    $category = $_POST['category'] ?? '';
 
     if ($title) {
-      $this->blogService->createBlog($title, $content, $tags);
+      $this->blogService->createBlog($title, $content, $tags, $category);
       $_SESSION['message_type'] = 'success';
       $_SESSION['message'] = "Blog created successfully";
     } else {
@@ -44,9 +45,10 @@ class BlogController
     $title = $_POST['title'] ?? '';
     $content = $_POST['content'] ?? '';
     $tags = $_POST['tags'] ?? '';
+    $category = $_POST['category'] ?? '';
 
     if ($id && $title) {
-      $rowsAffected = $this->blogService->updateBlog($id, $title, $content, $tags);
+      $rowsAffected = $this->blogService->updateBlog($id, $title, $content, $tags, $category);
       if ($rowsAffected) {
         $_SESSION['message_type'] = 'success';
         $_SESSION['message'] = "Blog updated successfully.";

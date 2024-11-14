@@ -13,21 +13,21 @@ class BlogService
   }
 
   // Create a new blog
-  public function createBlog($title, $content, $tags)
+  public function createBlog($title, $content, $tags, $category)
   {
-    $sql = "INSERT INTO blogs (title, content, tags, user_id) VALUES (:title, :content, :tags, :user_id)";
+    $sql = "INSERT INTO blogs (title, content, tags, category, user_id) VALUES (:title, :content, :tags, :category, :user_id)";
     $stmt = $this->pdo->prepare($sql);
-    $stmt->execute([':title' => $title, ':content' => $content, ':tags' => $tags, ':user_id' => $this->user_id]);
+    $stmt->execute([':title' => $title, ':content' => $content, ':tags' => $tags, ':category' => $category, ':user_id' => $this->user_id]);
 
     return $this->pdo->lastInsertId();
   }
 
   // Update a blog
-  public function updateBlog($id, $title, $content, $tags)
+  public function updateBlog($id, $title, $content, $tags, $category)
   {
-    $sql = "UPDATE blogs SET title = :title, content = :content, tags = :tags, updated_at = CURRENT_TIMESTAMP WHERE user_id = :user_id AND id = :id";
+    $sql = "UPDATE blogs SET title = :title, content = :content, tags = :tags, category = :category, updated_at = CURRENT_TIMESTAMP WHERE user_id = :user_id AND id = :id";
     $stmt = $this->pdo->prepare($sql);
-    $stmt->execute([':title' => $title, ':content' => $content, ':tags' => $tags, ':id' => $id, ':user_id' => $this->user_id]);
+    $stmt->execute([':title' => $title, ':content' => $content, ':tags' => $tags, ':category' => $category, ':id' => $id, ':user_id' => $this->user_id]);
 
     return $stmt->rowCount();
   }
