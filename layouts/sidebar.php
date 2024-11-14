@@ -78,6 +78,11 @@
                         <i class="ri-qr-code-line"></i> <span data-key="t-generate-qr">Generate QR</span>
                     </a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link menu-link <?= activeClassName("ai-chat") ?>" href="<?= home_url("ai-chat") ?>">
+                        <i class="ri-chat-3-line"></i> <span data-key="t-ai-chat">AI Chat</span>
+                    </a>
+                </li>
                 <li class="menu-title"><span data-key="t-work">Work</span></li>
                 <li class="nav-item">
                     <a class="nav-link menu-link <?= activeClassName("projects") ?>" href="<?= home_url("projects") ?>">
