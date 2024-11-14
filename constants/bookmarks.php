@@ -133,6 +133,7 @@ $bookmarks = [
         ["url" => "https://www.you.com/", "name" => "YouChat", "logo" => "https://upload.wikimedia.org/wikipedia/commons/1/10/You.com_logo.svg", "tags" => ["AI", "chat"]],
         ["url" => "https://www.poe.com/", "name" => "Poe by Quora", "logo" => "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a0/Poe_by_Quora_logo.svg/1920px-Poe_by_Quora_logo.svg.png", "tags" => ["AI", "chat"]],
         ["url" => "https://free.ayaivn.me/", "name" => "Open WebUI", "logo" => "/assets/images/brands/splash.png", "tags" => ["AI", "chat"]],
+        ["url" => "https://www.usnap.ai/", "name" => "USnap.ai", "logo" => "", "tags" => ["AI", "chat"]],
     ],
     "Miscellaneous" => [
         ["url" => "https://www.wikipedia.org/", "name" => "Wikipedia", "logo" => "https://upload.wikimedia.org/wikipedia/commons/thumb/6/63/Wikipedia-logo.png/480px-Wikipedia-logo.png", "tags" => ["encyclopedia", "knowledge"]],
