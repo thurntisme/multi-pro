@@ -42,7 +42,6 @@
 
   //User current Id
   var currentChatId = "users-chat";
-  var currentSelectedChat = "users";
   var url = "assets/json/";
   var usersList = "";
   var userChatId = 1;
@@ -72,6 +71,7 @@
     } else {
       // set users message list
       var users = data[0].users;
+      usersList = data[0].users;
       users.forEach(function (userData, index) {
         var isUserProfile = userData.profile
           ? '<img src="' +
@@ -81,20 +81,12 @@
             userData.nickname +
             '</div><span class="user-status"></span>';
 
-        var isMessageCount = userData.messagecount
-          ? '<div class="ms-auto"><span class="badge bg-dark-subtle text-body rounded p-1">' +
-            userData.messagecount +
-            "</span></div>"
-          : "";
-
-        var messageCount = userData.messagecount
-          ? '<a href="javascript: void(0);" class="unread-msg-user">'
-          : '<a href="javascript: void(0);">';
+        var messageCount = '<a href="javascript: void(0);">';
         var activeClass = userData.id === 1 ? "active" : "";
         document.getElementById("userList").innerHTML +=
           '<li id="contact-id-' +
           userData.id +
-          '" data-name="direct-message" class="' +
+          '" data-name="character" class="' +
           activeClass +
           '">\
                 ' +
@@ -115,9 +107,6 @@
           userData.name +
           "</p>\
                     </div>\
-                    " +
-          isMessageCount +
-          "\
                 </div>\
             </a>\
         </li>";
@@ -126,19 +115,7 @@
       // set channels list
       var channelsData = data[0].channels;
       channelsData.forEach(function (isChannel, index) {
-        var isMessage = isChannel.messagecount
-          ? '<div class="flex-shrink-0 ms-2"><span class="badge bg-dark-subtle text-body rounded p-1">' +
-            isChannel.messagecount +
-            "</span></div>"
-          : "";
-        var isMessageCount = isChannel.messagecount
-          ? '<div class="ms-auto"><span class="badge bg-dark-subtle text-body rounded p-1">' +
-            isChannel.messagecount +
-            "</span></div>"
-          : "";
-        var messageCount = isChannel.messagecount
-          ? '<a href="javascript: void(0);" class="unread-msg-user">'
-          : '<a href="javascript: void(0);">';
+        var messageCount = '<a href="javascript: void(0);">';
         document.getElementById("channelList").innerHTML +=
           '<li id="contact-id-' +
           isChannel.id +
@@ -157,9 +134,8 @@
           isChannel.name +
           "</p>\
                     </div>\
-                    <div>" +
-          isMessage +
-          "</div>\
+                    <div>\
+                    </div>\
                     </div>\
             </a>\
         </li>";
@@ -168,189 +144,6 @@
     toggleSelected();
     chatSwap();
   });
-
-  // get contacts list
-  getJSON("chat-contacts-list.json", function (err, data) {
-    if (err !== null) {
-      console.log("Something went wrong: " + err);
-    } else {
-      usersList = data;
-      data.sort(function (a, b) {
-        return a.name.localeCompare(b.name);
-      });
-      // set favourite users list
-      var msgHTML = "";
-      var userNameCharAt = "";
-
-      usersList.forEach(function (user, index) {
-        var profile = user.profile
-          ? '<img src="' +
-            user.profile +
-            '" class="img-fluid rounded-circle" alt="">'
-          : '<span class="avatar-title rounded-circle bg-primary fs-10">' +
-            user.nickname +
-            "</span>";
-
-        msgHTML =
-          '<li>\
-              <div class="d-flex align-items-center">\
-                  <div class="flex-shrink-0 me-2">\
-                      <div class="avatar-xxs">\
-                          ' +
-          profile +
-          '\
-                      </div>\
-                  </div>\
-                  <div class="flex-grow-1">\
-                  <p class="text-truncate contactlist-name mb-0">' +
-          user.name +
-          '</p>\
-                  </div>\
-                  <div class="flex-shrink-0">\
-                      <div class="dropdown">\
-                          <a href="#" class="text-muted" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">\
-                              <i class="ri-more-2-fill"></i>\
-                          </a>\
-                          <div class="dropdown-menu dropdown-menu-end">\
-                              <a class="dropdown-item" href="#"><i class="ri-pencil-line text-muted me-2 align-bottom"></i>Edit</a>\
-                              <a class="dropdown-item" href="#"><i class="ri-forbid-2-line text-muted me-2 align-bottom"></i>Block</a>\
-                              <a class="dropdown-item" href="#"><i class="ri-delete-bin-6-line text-muted me-2 align-bottom"></i>Remove</a>\
-                          </div>\
-                      </div>\
-                  </div>\
-              </div>\
-          </li>';
-        var isSortContact =
-          '<div class="mt-3" >\
-              <div class="contact-list-title">' +
-          user.name.charAt(0).toUpperCase() +
-          '\
-                </div>\
-          <ul id="contact-sort-' +
-          user.name.charAt(0) +
-          '" class="list-unstyled contact-list" >';
-
-        if (userNameCharAt != user.name.charAt(0)) {
-          document.getElementsByClassName("sort-contact")[0].innerHTML +=
-            isSortContact;
-        }
-        document.getElementById(
-          "contact-sort-" + user.name.charAt(0)
-        ).innerHTML =
-          document.getElementById("contact-sort-" + user.name.charAt(0))
-            .innerHTML + msgHTML;
-        userNameCharAt = user.name.charAt(0);
-        +"</ul>" + "</div>";
-      });
-    }
-    contactList();
-    toggleSelected();
-  });
-
-  function contactList() {
-    document.querySelectorAll(".sort-contact ul li").forEach(function (item) {
-      item.addEventListener("click", function (event) {
-        currentSelectedChat = "users";
-        updateSelectedChat();
-        var contactName = item.querySelector("li .contactlist-name").innerHTML;
-        document.querySelector(
-          ".user-chat-topbar .text-truncate .username"
-        ).innerHTML = contactName;
-        document.querySelector(".profile-offcanvas .username").innerHTML =
-          contactName;
-
-        if (isreplyMessage == true) {
-          isreplyMessage = false;
-          document.querySelector(".replyCard").classList.remove("show");
-        }
-
-        if (
-          item
-            .querySelector(".align-items-center")
-            .querySelector(".avatar-xxs img")
-        ) {
-          var contactImg = item
-            .querySelector(".align-items-center")
-            .querySelector(".avatar-xxs .rounded-circle")
-            .getAttribute("src");
-          document
-            .querySelector(".user-own-img .avatar-xs")
-            .setAttribute("src", contactImg);
-          document
-            .querySelector(".profile-offcanvas .profile-img")
-            .setAttribute("src", contactImg);
-        } else {
-          document
-            .querySelector(".user-own-img .avatar-xs")
-            .setAttribute("src", dummyUserImage);
-          document
-            .querySelector(".profile-offcanvas .profile-img")
-            .setAttribute("src", dummyUserImage);
-        }
-        var conversationImg = document.getElementById("users-conversation");
-        conversationImg
-          .querySelectorAll(".left .chat-avatar")
-          .forEach(function (item3) {
-            if (contactImg) {
-              item3.querySelector("img").setAttribute("src", contactImg);
-            } else {
-              item3.querySelector("img").setAttribute("src", dummyUserImage);
-            }
-          });
-        window.stop();
-      });
-    });
-  }
-
-  //user list by json
-  function getJSONFile(jsonurl, callback) {
-    var xhr = new XMLHttpRequest();
-    xhr.open("GET", jsonurl, true);
-    xhr.responseType = "json";
-    xhr.onload = function () {
-      var status = xhr.status;
-      if (status === 200) {
-        document.getElementById("elmLoader").innerHTML = "";
-        callback(null, xhr.response);
-      } else {
-        callback(status, xhr.response);
-      }
-    };
-    xhr.send();
-  }
-  // getNextMsgCounts
-  function getNextMsgCounts(chatsData, i, from_id) {
-    var counts = 0;
-    while (chatsData[i]) {
-      if (chatsData[i + 1] && chatsData[i + 1]["from_id"] == from_id) {
-        counts++;
-        i++;
-      } else {
-        break;
-      }
-    }
-    return counts;
-  }
-
-  //getNextMsgs
-  function getNextMsgs(chatsData, i, from_id, isContinue) {
-    var msgs = 0;
-    while (chatsData[i]) {
-      if (chatsData[i + 1] && chatsData[i + 1]["from_id"] == from_id) {
-        msgs = getMsg(
-          chatsData[i + 1].id,
-          chatsData[i + 1].msg,
-          chatsData[i + 1].has_images,
-          chatsData[i + 1].has_files,
-          chatsData[i + 1].has_dropDown
-        );
-        i++;
-      } else {
-        break;
-      }
-    }
-    return msgs;
-  }
 
   // getMeg
   function getMsg(id, msg, has_images, has_files, has_dropDown) {
@@ -446,104 +239,19 @@
   }
 
   function updateSelectedChat() {
-    if (currentSelectedChat == "users") {
-      document.getElementById("channel-chat").style.display = "none";
-      document.getElementById("users-chat").style.display = "block";
-      getChatMessages(url + "chats.json");
-    } else {
-      document.getElementById("channel-chat").style.display = "block";
-      document.getElementById("users-chat").style.display = "none";
-      getChatMessages(url + "chats.json");
-    }
+    var msgHTML =
+      '<li class="chat-list left" id=1>                        <div class="conversation-list"><div class="user-chat-content"><div class="ctext-wrap"><div class="ctext-wrap-content" id=1><p class="mb-0 ctext-content">Good morning 😊</p></div><div class="dropdown align-self-start message-box-drop">                <a class="dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">                    <i class="ri-more-2-fill"></i>                </a>                <div class="dropdown-menu">                    <a class="dropdown-item reply-message" href="#"><i class="ri-reply-line me-2 text-muted align-bottom"></i>Reply</a>                    <a class="dropdown-item" href="#"><i class="ri-share-line me-2 text-muted align-bottom"></i>Forward</a>                    <a class="dropdown-item copy-message" href="#"><i class="ri-file-copy-line me-2 text-muted align-bottom"></i>Copy</a>                    <a class="dropdown-item" href="#"><i class="ri-bookmark-line me-2 text-muted align-bottom"></i>Bookmark</a>                    <a class="dropdown-item delete-item" href="#"><i class="ri-delete-bin-5-line me-2 text-muted align-bottom"></i>Delete</a>                </div>            </div></div><div class="conversation-name"><span class="d-none name">Lisa Parker</span><small class="text-muted time">09:07 am</small> <span class="text-success check-message-icon"><i class="bx bx-check-double"></i></span></div></div>                </div>            </li>';
+    document.getElementById("users-conversation").innerHTML = msgHTML;
+    deleteMessage();
+    deleteImage();
+    replyMessage();
+    copyMessage();
+    copyClipboard();
+    scrollToBottom("users-chat");
+    updateLightbox();
+    document.getElementById("elmLoader").style.display = "none";
   }
   updateSelectedChat();
-
-  //Chat Message
-  function getChatMessages(jsonFileUrl) {
-    getJSONFile(jsonFileUrl, function (err, data) {
-      if (err !== null) {
-        console.log("Something went wrong: " + err);
-      } else {
-        var chatsData =
-          currentSelectedChat == "users" ? data[0].chats : data[0].channel_chat;
-
-        document.getElementById(
-          currentSelectedChat + "-conversation"
-        ).innerHTML = "";
-        var isContinue = 0;
-        chatsData.forEach(function (isChat, index) {
-          if (isContinue > 0) {
-            isContinue = isContinue - 1;
-            return;
-          }
-          var isAlighn = isChat.from_id == userChatId ? " right" : " left";
-
-          var user = usersList.find(function (list) {
-            return list.id == isChat.to_id;
-          });
-
-          var msgHTML =
-            '<li class="chat-list' +
-            isAlighn +
-            '" id=' +
-            isChat.id +
-            '>\
-                        <div class="conversation-list">';
-          if (userChatId != isChat.from_id)
-            msgHTML +=
-              '<div class="chat-avatar"><img src="' +
-              user.profile +
-              '" alt=""></div>';
-
-          msgHTML += '<div class="user-chat-content">';
-          msgHTML += getMsg(
-            isChat.id,
-            isChat.msg,
-            isChat.has_images,
-            isChat.has_files,
-            isChat.has_dropDown
-          );
-          if (
-            chatsData[index + 1] &&
-            isChat.from_id == chatsData[index + 1]["from_id"]
-          ) {
-            isContinue = getNextMsgCounts(chatsData, index, isChat.from_id);
-            msgHTML += getNextMsgs(
-              chatsData,
-              index,
-              isChat.from_id,
-              isContinue
-            );
-          }
-
-          msgHTML +=
-            '<div class="conversation-name"><span class="d-none name">' +
-            user.name +
-            '</span><small class="text-muted time">' +
-            isChat.datetime +
-            '</small> <span class="text-success check-message-icon"><i class="bx bx-check-double"></i></span></div>';
-          msgHTML +=
-            "</div>\
-                </div>\
-            </li>";
-
-          document.getElementById(
-            currentSelectedChat + "-conversation"
-          ).innerHTML += msgHTML;
-        });
-      }
-      deleteMessage();
-      deleteChannelMessage();
-      deleteImage();
-      replyMessage();
-      replyChannelMessage();
-      copyMessage();
-      copyChannelMessage();
-      copyClipboard();
-      scrollToBottom("users-chat");
-      updateLightbox();
-    });
-  }
 
   // GLightbox Popup
   function updateLightbox() {
@@ -611,8 +319,12 @@
     chatForm.addEventListener("submit", function (e) {
       e.preventDefault();
 
+      var currMsgId = `m-${new Date().getTime()}`;
       var chatId = currentChatId;
       var chatReplyId = currentChatId;
+      var contactId = document.querySelector(
+        ".user-chat-topbar #contact_id"
+      ).value;
 
       var chatInputValue = chatInput.value;
 
@@ -626,8 +338,9 @@
           getReplyChatList(chatReplyId, chatInputValue);
           isreplyMessage = false;
         } else {
-          getChatList(chatId, chatInputValue);
+          appendMyChatMsg(currMsgId, chatInputValue);
         }
+        getMsgResponse(contactId, currMsgId, chatInputValue);
         scrollToBottom(chatId || chatReplyId);
       }
       chatInput.value = "";
@@ -639,104 +352,47 @@
 
   //user Name and user Profile change on click
   function chatSwap() {
-    document.querySelectorAll("#userList li").forEach(function (item) {
-      item.addEventListener("click", function () {
-        currentSelectedChat = "users";
-        updateSelectedChat();
-        currentChatId = "users-chat";
-        var contactId = item.getAttribute("id");
-        var username = item.querySelector(".text-truncate").innerHTML;
-
-        document.querySelector(
-          ".user-chat-topbar .text-truncate .username"
-        ).innerHTML = username;
-        document.querySelector(".profile-offcanvas .username").innerHTML =
-          username;
-
-        if (isreplyMessage == true) {
-          isreplyMessage = false;
-          document.querySelector(".replyCard").classList.remove("show");
-        }
-
-        if (document.getElementById(contactId).querySelector(".userprofile")) {
-          var userProfile = document
-            .getElementById(contactId)
-            .querySelector(".userprofile")
-            .getAttribute("src");
-          document
-            .querySelector(".user-chat-topbar .avatar-xs")
-            .setAttribute("src", userProfile);
-          document
-            .querySelector(".profile-offcanvas .avatar-lg")
-            .setAttribute("src", userProfile);
-        } else {
-          document
-            .querySelector(".user-chat-topbar .avatar-xs")
-            .setAttribute("src", dummyUserImage);
-          document
-            .querySelector(".profile-offcanvas .avatar-lg")
-            .setAttribute("src", dummyUserImage);
-        }
-
-        var conversationImg = document.getElementById("users-conversation");
-        conversationImg
-          .querySelectorAll(".left .chat-avatar")
-          .forEach(function (item) {
-            if (userProfile) {
-              item.querySelector("img").setAttribute("src", userProfile);
-            } else {
-              item.querySelector("img").setAttribute("src", dummyUserImage);
-            }
-          });
-        window.stop();
+    document
+      .querySelectorAll("#userList li, #channelList li")
+      .forEach(function (item) {
+        item.addEventListener("click", function () {
+          document.getElementById("elmLoader").style.display = "flex";
+          var modelType = item.getAttribute("data-name");
+          var username = item.querySelector(".text-truncate").innerHTML;
+          document.querySelector(
+            ".user-chat-topbar .text-truncate .username"
+          ).innerHTML = username;
+          var modelAvatar = document.querySelector(
+            ".user-chat-topbar .avatar-xs"
+          );
+          var contactId = item.getAttribute("id");
+          document.querySelector(".user-chat-topbar #contact_id").value =
+            contactId;
+          if (modelType === "character") {
+            var userProfile =
+              document
+                .getElementById(contactId)
+                .querySelector(".userprofile")
+                ?.getAttribute("src") ?? "";
+            modelAvatar.setAttribute("src", userProfile);
+          } else {
+            modelAvatar.setAttribute(
+              "src",
+              "assets/images/users/multi-user.jpg"
+            );
+          }
+          document.getElementById("users-conversation").innerHTML = "";
+          setTimeout(function () {
+            updateSelectedChat();
+          }, 200);
+        });
       });
-    });
-
-    //channel Name and channel Profile change on click
-    document.querySelectorAll("#channelList li").forEach(function (item) {
-      item.addEventListener("click", function () {
-        currentChatId = "channel-chat";
-        currentSelectedChat = "channel";
-        updateSelectedChat();
-        var channelname = item.querySelector(".text-truncate").innerHTML;
-        var changeChannelName = document.getElementById("channel-chat");
-        changeChannelName.querySelector(
-          ".user-chat-topbar .text-truncate .username"
-        ).innerHTML = channelname;
-        document.querySelector(".profile-offcanvas .username").innerHTML =
-          channelname;
-
-        changeChannelName
-          .querySelector(".user-chat-topbar .avatar-xs")
-          .setAttribute("src", dummyMultiUserImage);
-        document
-          .querySelector(".profile-offcanvas .avatar-lg")
-          .setAttribute("src", dummyMultiUserImage);
-        if (isreplyMessage == true) {
-          isreplyMessage = false;
-          document.querySelector(".replyCard").classList.remove("show");
-        }
-      });
-    });
   }
 
   //Copy Message to clipboard
-  var itemList = document.querySelector(".chat-conversation-list");
   function copyMessage() {
-    var copyMessage = itemList.querySelectorAll(".copy-message");
+    var copyMessage = document.querySelectorAll(".copy-message");
     copyMessage.forEach(function (item) {
-      item.addEventListener("click", function () {
-        var isText = item.closest(".ctext-wrap").children[0]
-          ? item.closest(".ctext-wrap").children[0].children[0].innerText
-          : "";
-        navigator.clipboard.writeText(isText);
-      });
-    });
-  }
-
-  function copyChannelMessage() {
-    var copyChannelMessage = channelItemList.querySelectorAll(".copy-message");
-    copyChannelMessage.forEach(function (item) {
       item.addEventListener("click", function () {
         var isText = item.closest(".ctext-wrap").children[0]
           ? item.closest(".ctext-wrap").children[0].children[0].innerText
@@ -765,7 +421,7 @@
 
   //Delete Message
   function deleteMessage() {
-    var deleteItems = itemList.querySelectorAll(".delete-item");
+    var deleteItems = document.querySelectorAll(".delete-item");
     deleteItems.forEach(function (item) {
       item.addEventListener("click", function () {
         item.closest(".user-chat-content").childElementCount == 2
@@ -777,7 +433,7 @@
 
   //Delete Image
   function deleteImage() {
-    var deleteImage = itemList.querySelectorAll(
+    var deleteImage = document.querySelectorAll(
       ".chat-conversation-list .chat-list"
     );
     deleteImage.forEach(function (item) {
@@ -792,23 +448,9 @@
   }
   deleteImage();
 
-  //Delete Channel Message
-  var channelItemList = document.querySelector("#channel-conversation");
-  function deleteChannelMessage() {
-    channelChatList = channelItemList.querySelectorAll(".delete-item");
-    channelChatList.forEach(function (item) {
-      item.addEventListener("click", function () {
-        item.closest(".user-chat-content").childElementCount == 2
-          ? item.closest(".chat-list").remove()
-          : item.closest(".ctext-wrap").remove();
-      });
-    });
-  }
-  deleteChannelMessage();
-
   //Reply Message
   function replyMessage() {
-    var replyMessage = itemList.querySelectorAll(".reply-message");
+    var replyMessage = document.querySelectorAll(".reply-message");
     var replyToggleOpen = document.querySelector(".replyCard");
     var replyToggleClose = document.querySelector("#close_toggle");
 
@@ -840,51 +482,15 @@
     });
   }
 
-  //reply Channelmessage
-  function replyChannelMessage() {
-    var replyChannelMessage =
-      channelItemList.querySelectorAll(".reply-message");
-    var replyChannelToggleOpen = document.querySelector(".replyCard");
-    var replyChannelToggleClose = document.querySelector("#close_toggle");
-
-    replyChannelMessage.forEach(function (item) {
-      item.addEventListener("click", function () {
-        isreplyMessage = true;
-        replyChannelToggleOpen.classList.add("show");
-        replyChannelToggleClose.addEventListener("click", function () {
-          replyChannelToggleOpen.classList.remove("show");
-        });
-        var replyChannelMsg =
-          item.closest(".ctext-wrap").children[0].children[0].innerText;
-        document.querySelector(
-          ".replyCard .replymessage-block .flex-grow-1 .mb-0"
-        ).innerText = replyChannelMsg;
-        var replyChanneluser = item
-          .closest(".user-chat-content")
-          .querySelector(".conversation-name .name").innerText;
-        var msgOwnerName = item.closest(".chat-list")
-          ? item.closest(".chat-list").classList.contains("left")
-            ? replyChanneluser
-            : "You"
-          : replyChanneluser;
-        document.querySelector(
-          ".replyCard .replymessage-block .flex-grow-1 .conversation-name"
-        ).innerText = msgOwnerName;
-      });
-    });
-  }
-
   //Append New Message
-  var getChatList = function (chatid, chatItems) {
-    messageIds++;
-    var chatConList = document.getElementById(chatid);
-    var itemList = chatConList.querySelector(".chat-conversation-list");
+  var appendMyChatMsg = function (currMsgId, chatItems) {
+    var itemList = document.querySelector(".chat-conversation-list");
 
     if (chatItems != null) {
       itemList.insertAdjacentHTML(
         "beforeend",
-        '<li class="chat-list right" id="chat-list-' +
-          messageIds +
+        '<li class="chat-list right" id="' +
+          currMsgId +
           '" >\
                 <div class="conversation-list">\
                     <div class="user-chat-content">\
@@ -922,7 +528,7 @@
     }
 
     // remove chat list
-    var newChatList = document.getElementById("chat-list-" + messageIds);
+    var newChatList = document.getElementById(currMsgId);
     newChatList.querySelectorAll(".delete-item").forEach(function (subitem) {
       subitem.addEventListener("click", function () {
         itemList.removeChild(newChatList);
@@ -980,6 +586,78 @@
       });
     });
   };
+
+  //Append Response Message
+  function getMsgResponse(contactId, currMsgId, keyword) {
+    console.log(contactId);
+    var lastMsg = document.getElementById(currMsgId);
+    $.ajax({
+      url: "ai-model/response.php",
+      type: "POST",
+      data: { contactId, keyword },
+      beforeSend: function () {
+        lastMsg
+          .querySelector(".check-message-icon i")
+          .classList.remove("bx-check");
+        lastMsg
+          .querySelector(".check-message-icon i")
+          .classList.add("bx-check-double");
+      },
+      success: function (response) {
+        var itemList = document.querySelector(".chat-conversation-list");
+
+        if (response.status === "success") {
+          itemList.insertAdjacentHTML(
+            "beforeend",
+            '<li class="chat-list left" id="chat-list-' +
+              messageIds +
+              '" >\
+                    <div class="conversation-list">\
+                        <div class="user-chat-content">\
+                            <div class="ctext-wrap">\
+                                <div class="ctext-wrap-content">\
+                                    <p class="mb-0 ctext-content">\
+                                        ' +
+              response.message +
+              '\
+                                    </p>\
+                                </div>\
+                                <div class="dropdown align-self-start message-box-drop">\
+                                    <a class="dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">\
+                                        <i class="ri-more-2-fill"></i>\
+                                    </a>\
+                                    <div class="dropdown-menu">\
+                                        <a class="dropdown-item reply-message" href="#"><i class="ri-reply-line me-2 text-muted align-bottom"></i>Reply</a>\
+                                        <a class="dropdown-item" href="#"><i class="ri-share-line me-2 text-muted align-bottom"></i>Forward</a>\
+                                        <a class="dropdown-item copy-message" href="#""><i class="ri-file-copy-line me-2 text-muted align-bottom"></i>Copy</a>\
+                                        <a class="dropdown-item" href="#"><i class="ri-bookmark-line me-2 text-muted align-bottom"></i>Bookmark</a>\
+                                        <a class="dropdown-item delete-item" href="#"><i class="ri-delete-bin-5-line me-2 text-muted align-bottom"></i>Delete</a>\
+                                    </div>\
+                                </div>\
+                            </div>\
+                            <div class="conversation-name">\
+                                <small class="text-muted time">' +
+              currentTime() +
+              '</small>\
+                            <span class="text-success check-message-icon"><i class="bx bx-check"></i></span>\
+                        </div>\
+                    </div>\
+                </div>\
+            </li>'
+          );
+        }
+      },
+      error: function (xhr, status, error) {
+        console.log("An error occurred: " + error);
+        lastMsg
+          .querySelector(".check-message-icon i")
+          .classList.remove("bx-check-double");
+        lastMsg
+          .querySelector(".check-message-icon i")
+          .classList.add("bx-check");
+      },
+    });
+  }
 
   var messageboxcollapse = 0;
 
