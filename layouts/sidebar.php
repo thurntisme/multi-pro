@@ -172,6 +172,12 @@
                         <i class="ri-links-line"></i> <span data-key="t-website">Website</span>
                     </a>
                 </li>
+                <li class="menu-title"><span data-key="t-network">English</span></li>
+                <li class="nav-item">
+                    <a class="nav-link menu-link <?= activeClassName("grammar") ?>" href="<?= home_url("grammar") ?>">
+                        <i class="ri-booklet-line"></i> <span data-key="t-grammar">Grammar</span>
+                    </a>
+                </li>
             </ul>
         </div>
         <!-- Sidebar -->
