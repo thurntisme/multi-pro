@@ -20,7 +20,8 @@
                 <img src="<?= home_url("assets/images/logo-light.png") ?>" alt="" height="17">
             </span>
         </a>
-        <button type="button" class="btn btn-sm p-0 fs-20 header-item float-end btn-vertical-sm-hover" id="vertical-hover">
+        <button type="button" class="btn btn-sm p-0 fs-20 header-item float-end btn-vertical-sm-hover"
+            id="vertical-hover">
             <i class="ri-record-circle-line"></i>
         </button>
     </div>
@@ -48,7 +49,8 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link menu-link <?= activeClassName("daily-checklist") ?>" href="<?= home_url("daily-checklist") ?>">
+                    <a class="nav-link menu-link <?= activeClassName("daily-checklist") ?>"
+                        href="<?= home_url("daily-checklist") ?>">
                         <i class="ri-calendar-check-line"></i> <span data-key="t-daily-checklist">Daily Checklist</span>
                     </a>
                 </li>
@@ -58,7 +60,8 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link menu-link <?= activeClassName("subscription") ?>" href="<?= home_url("subscription") ?>">
+                    <a class="nav-link menu-link <?= activeClassName("subscription") ?>"
+                        href="<?= home_url("subscription") ?>">
                         <i class="ri-calendar-check-line"></i> <span data-key="t-subscription">Subscription</span>
                     </a>
                 </li>
@@ -69,12 +72,14 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link menu-link <?= activeClassName("short-link") ?>" href="<?= home_url("short-link") ?>">
+                    <a class="nav-link menu-link <?= activeClassName("short-link") ?>"
+                        href="<?= home_url("short-link") ?>">
                         <i class="ri-link-m"></i> <span data-key="t-short-link">Short Link</span>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link menu-link <?= activeClassName("generate-qr") ?>" href="<?= home_url("generate-qr") ?>">
+                    <a class="nav-link menu-link <?= activeClassName("generate-qr") ?>"
+                        href="<?= home_url("generate-qr") ?>">
                         <i class="ri-qr-code-line"></i> <span data-key="t-generate-qr">Generate QR</span>
                     </a>
                 </li>
@@ -90,28 +95,34 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link menu-link <?= activeClassName("report-working") ?>" href="<?= home_url("report-working") ?>">
+                    <a class="nav-link menu-link <?= activeClassName("report-working") ?>"
+                        href="<?= home_url("report-working") ?>">
                         <i class="ri-clipboard-line"></i> <span data-key="t-report-working">Report Working</span>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link menu-link <?= activeClassName("maintain-web") ?>" href="<?= home_url("maintain-web") ?>">
+                    <a class="nav-link menu-link <?= activeClassName("maintain-web") ?>"
+                        href="<?= home_url("maintain-web") ?>">
                         <i class="ri-global-line"></i> <span data-key="t-maintain-web">Maintain Web</span>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link menu-link <?= activeClassName("seo-checklist") ?>" href="<?= home_url("seo-checklist") ?>">
+                    <a class="nav-link menu-link <?= activeClassName("seo-checklist") ?>"
+                        href="<?= home_url("seo-checklist") ?>">
                         <i class="ri-search-line"></i> <span data-key="t-seo-checklist">SEO Checklist</span>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link menu-link <?= activeClassName("web-dev-checklist") ?>" href="<?= home_url("web-dev-checklist") ?>">
+                    <a class="nav-link menu-link <?= activeClassName("web-dev-checklist") ?>"
+                        href="<?= home_url("web-dev-checklist") ?>">
                         <i class="ri-tools-line"></i> <span data-key="t-web-dev-checklist">Web Dev Checklist</span>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link menu-link <?= activeClassName("web-secure-checklist") ?>" href="<?= home_url("web-secure-checklist") ?>">
-                        <i class="ri-shield-line"></i> <span data-key="t-web-secure-checklist">Web Secure Checklist</span>
+                    <a class="nav-link menu-link <?= activeClassName("web-secure-checklist") ?>"
+                        href="<?= home_url("web-secure-checklist") ?>">
+                        <i class="ri-shield-line"></i> <span data-key="t-web-secure-checklist">Web Secure
+                            Checklist</span>
                     </a>
                 </li>
                 <li class="menu-title"><span data-key="t-development">Development</span></li>
@@ -143,6 +154,22 @@
                 <li class="nav-item">
                     <a class="nav-link menu-link <?= activeClassName("blog") ?>" href="<?= home_url("blog") ?>">
                         <i class="ri-article-line"></i> <span data-key="t-blog">Blog</span>
+                    </a>
+                </li>
+                <li class="menu-title"><span data-key="t-network">Network</span></li>
+                <li class="nav-item">
+                    <a class="nav-link menu-link <?= activeClassName("lead") ?>" href="<?= home_url("lead") ?>">
+                        <i class="ri-file-user-line"></i> <span data-key="t-lead">Lead</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link menu-link <?= activeClassName("social") ?>" href="<?= home_url("social") ?>">
+                        <i class="ri-share-line"></i> <span data-key="t-social">Social</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link menu-link <?= activeClassName("website") ?>" href="<?= home_url("website") ?>">
+                        <i class="ri-links-line"></i> <span data-key="t-website">Website</span>
                     </a>
                 </li>
             </ul>
