@@ -19,7 +19,7 @@ require_once __DIR__ . '/utils.php';
 // Include constants
 require_once __DIR__ . '/constants/index.php';
 
-define("DIR", __DIR__);
+const DIR = __DIR__;
 define('HOME_PATH', $_ENV['HOME_PATH'] ?? DEFAULT_HOME_PATH);
 
 // Config timezone
