@@ -173,6 +173,13 @@
                         <i class="ri-booklet-line"></i> <span data-key="t-grammar">Grammar</span>
                     </a>
                 </li>
+                <li class="menu-title"><span data-key="t-network">Game</span></li>
+                <li class="nav-item">
+                    <a class="nav-link menu-link <?= activeClassName("football-manager") ?>"
+                       href="<?= home_url("football-manager") ?>">
+                        <i class="ri-football-line"></i> <span data-key="t-football-manager">Football Manager</span>
+                    </a>
+                </li>
             </ul>
         </div>
         <!-- Sidebar -->

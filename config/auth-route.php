@@ -66,6 +66,7 @@ function getPageData($slug)
         'maintain-web' => ['url' => DIR . '/views/maintain-web.php', 'title' => 'Maintain Web'],
         'lead' => ['url' => DIR . '/views/lead.php', 'title' => 'Lead'],
         'website' => ['url' => DIR . '/views/website.php', 'title' => 'Website'],
+        'football-manager' => ['url' => DIR . '/views/football-manager.php', 'title' => 'Football Manager'],
         // redirectUser
         'dashboard' => ['url' => DIR . '/functions/redirectUser.php', 'title' => 'Redirect'],
         'login' => ['url' => DIR . '/functions/redirectUser.php', 'title' => 'Redirect'],

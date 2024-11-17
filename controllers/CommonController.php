@@ -157,4 +157,35 @@ class CommonController
         ];
     }
 
+    function convertResources(array $resources): array
+    {
+        // Get values from $_GET with defaults
+        $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+        $perPage = 10;
+        $keyword = $_GET['s'] ?? '';
+
+        // Filter resources by keyword if provided
+        if (!empty($keyword)) {
+            $resources = array_filter($resources, function ($resource) use ($keyword) {
+                return stripos($resource['name'], $keyword) !== false;
+            });
+        }
+
+        // Calculate total pages and offset
+        $totalItems = count($resources);
+        $totalPages = ceil($totalItems / $perPage);
+        $offset = ($page - 1) * $perPage;
+
+        // Get the current page items
+        $pagedResources = array_slice($resources, $offset, $perPage) ?? [];
+
+        return [
+            'current_page' => $page,
+            'per_page' => $perPage,
+            'total_items' => $totalItems,
+            'total_pages' => $totalPages,
+            'resources' => $pagedResources,
+        ];
+    }
+
 }
