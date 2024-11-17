@@ -2,6 +2,8 @@
 require 'vendor/autoload.php';
 
 use Phpml\Classification\NaiveBayes;
+use Phpml\Exception\FileException;
+use Phpml\Exception\SerializeException;
 use Phpml\ModelManager;
 
 // Prepare training data
@@ -27,7 +29,7 @@ $labels = [
 ];
 
 // Preprocess data by converting text to lowercase and splitting by spaces
-function preprocess($text)
+function preprocess($text): array
 {
   // Convert to lowercase and split into words
   return explode(' ', strtolower($text));
@@ -50,6 +52,10 @@ $classifier->train($processedSamples, $labels);
 
 // Save the model to a file
 $modelManager = new ModelManager();
-$modelManager->saveToFile($classifier, __DIR__ . '/chatbot_model.model');
+try {
+    $modelManager->saveToFile($classifier, __DIR__ . '/chatbot_model.model');
+} catch (FileException|SerializeException $e) {
+    echo "Failed to translate model: " . $e->getMessage() . "\n";
+}
 
 echo "Model trained and saved!";

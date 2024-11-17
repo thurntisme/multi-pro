@@ -64,6 +64,8 @@ function getPageData($slug)
         'report-working/detail' => ['url' => DIR . '/views/report-working-detail.php', 'title' => 'Report Working Detail'],
         'ai-chat' => ['url' => DIR . '/views/ai-chat.php', 'title' => 'AI Chat'],
         'maintain-web' => ['url' => DIR . '/views/maintain-web.php', 'title' => 'Maintain Web'],
+        'lead' => ['url' => DIR . '/views/lead.php', 'title' => 'Lead'],
+        'website' => ['url' => DIR . '/views/website.php', 'title' => 'Website'],
         // redirectUser
         'dashboard' => ['url' => DIR . '/functions/redirectUser.php', 'title' => 'Redirect'],
         'login' => ['url' => DIR . '/functions/redirectUser.php', 'title' => 'Redirect'],
