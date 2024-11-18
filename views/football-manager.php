@@ -24,7 +24,7 @@ function getRandomFullName($nation, $namesByNation): string
         $randomName = $namesByNation[$nation][array_rand($namesByNation[$nation])];
         return $randomName['firstname'] . ' ' . $randomName['lastname'];
     } else {
-        return "No names found for the provided nation.";
+        return "No names found.";
     }
 }
 
@@ -115,8 +115,7 @@ function calculatePlayerWage(
     array  $playablePositions,
     string $season,
     int    $overallAbility
-): float
-{
+): float {
     // Define base nation multipliers
     $nationMultipliers = [
         'Tier 1' => 1.5,
@@ -178,8 +177,7 @@ function calculatePlayerPrice(
     array  $playablePositions,
     string $season,
     int    $overallAbility
-): float
-{
+): float {
     // Step 1: Define the base salary depending on the nation
     $baseSalaries = [
         'Tier 1' => 2000000, // High-paying countries like Brazil, Germany, Argentina
@@ -493,141 +491,210 @@ $list = $commonController->convertResources($players);
 ob_start();
 ?>
 
-    <div class="row">
-        <div class="col-lg-12">
-            <div class="card">
-                <div class="card-header">
-                    <div class="d-flex align-items-center flex-wrap gap-2">
-                        <div class="flex-grow-1">
-                            <a class="btn btn-info add-btn" href="<?= home_url("football-manager") ?>"><i
-                                        class="ri-add-fill me-1 align-bottom"></i> Home
+<div class="row">
+    <div class="col-lg-12">
+        <div class="card">
+            <div class="card-header">
+                <div class="d-flex align-items-center flex-wrap gap-2">
+                    <div class="flex-grow-1">
+                        <a class="btn btn-info add-btn" href="<?= home_url("football-manager") ?>"><i
+                                class="ri-add-fill me-1 align-bottom"></i> Home
+                        </a>
+                        <a class="btn btn-soft-info add-btn" href="<?= home_url("football-manager/club") ?>"><i
+                                class="ri-add-fill me-1 align-bottom"></i> My Club
+                        </a>
+                        <a class="btn btn-soft-info add-btn" href="<?= home_url("football-manager/club") ?>"><i
+                                class="ri-add-fill me-1 align-bottom"></i> My Player
+                        </a>
+                    </div>
+                    <div class="flex-shrink-0">
+                        <div class="hstack text-nowrap gap-2">
+                            <a class="btn btn-soft-info add-btn"
+                                href="<?= home_url("football-manager/transfer") ?>"><i
+                                    class="ri-add-fill me-1 align-bottom"></i> Transfer
                             </a>
-                            <a class="btn btn-soft-info add-btn" href="<?= home_url("football-manager/club") ?>"><i
-                                        class="ri-add-fill me-1 align-bottom"></i> My Club
+                            <a class="btn btn-soft-info add-btn"
+                                href="<?= home_url("football-manager/store") ?>"><i
+                                    class="ri-add-fill me-1 align-bottom"></i> Store
                             </a>
-                            <a class="btn btn-soft-info add-btn" href="<?= home_url("football-manager/club") ?>"><i
-                                        class="ri-add-fill me-1 align-bottom"></i> My Player
-                            </a>
-                        </div>
-                        <div class="flex-shrink-0">
-                            <div class="hstack text-nowrap gap-2">
-                                <a class="btn btn-soft-info add-btn"
-                                   href="<?= home_url("football-manager/transfer") ?>"><i
-                                            class="ri-add-fill me-1 align-bottom"></i> Transfer
-                                </a>
-                                <a class="btn btn-soft-info add-btn"
-                                   href="<?= home_url("football-manager/store") ?>"><i
-                                            class="ri-add-fill me-1 align-bottom"></i> Store
-                                </a>
-                                <button type="button" id="dropdownMenuLink1" data-bs-toggle="dropdown"
-                                        aria-expanded="false" class="btn btn-soft-info"><i class="ri-more-2-fill"></i>
-                                </button>
-                                <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink1">
-                                    <li><a class="dropdown-item" href="#">All</a></li>
-                                    <li><a class="dropdown-item" href="#">Last Week</a></li>
-                                    <li><a class="dropdown-item" href="#">Last Month</a></li>
-                                    <li><a class="dropdown-item" href="#">Last Year</a></li>
-                                </ul>
-                            </div>
+                            <button type="button" id="dropdownMenuLink1" data-bs-toggle="dropdown"
+                                aria-expanded="false" class="btn btn-soft-info"><i class="ri-more-2-fill"></i>
+                            </button>
+                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink1">
+                                <li><a class="dropdown-item" href="#">All</a></li>
+                                <li><a class="dropdown-item" href="#">Last Week</a></li>
+                                <li><a class="dropdown-item" href="#">Last Month</a></li>
+                                <li><a class="dropdown-item" href="#">Last Year</a></li>
+                            </ul>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <!--end col-->
-        <div class="col-lg-12">
-            <div class="card" id="companyList">
-                <div class="card-header">
-                    <form method="get" action="<?= home_url('football-manager') ?>">
-                        <div class="row g-2">
-                            <div class="col-md-3">
-                                <div class="search-box">
-                                    <input type="text" class="form-control search" name="s"
-                                           placeholder="Search for player..." value="<?= $_GET['s'] ?? '' ?>"/>
-                                    <i class="ri-search-line search-icon"></i>
+    </div>
+    <!--end col-->
+    <div class="col-lg-12">
+        <div class="card">
+            <div class="card-body">
+                <!-- Nav tabs -->
+                <ul class="nav nav-tabs nav-border-top nav-border-top-primary mb-3" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link active" data-bs-toggle="tab" href="#nav-border-top-home" role="tab" aria-selected="false">
+                            My player
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" data-bs-toggle="tab" href="#buy-list" role="tab" aria-selected="false">
+                            Buy List
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" data-bs-toggle="tab" href="#nav-border-top-messages" role="tab" aria-selected="false">
+                            Sell List
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" data-bs-toggle="tab" href="#nav-border-top-settings" role="tab" aria-selected="true">
+                            Bingo
+                        </a>
+                    </li>
+                </ul>
+                <div class="tab-content text-muted">
+                    <div class="tab-pane active" id="nav-border-top-home" role="tabpanel">
+                        <div class="d-flex">
+                            <div class="flex-shrink-0">
+                                <i class="ri-checkbox-circle-line text-success"></i>
+                            </div>
+                            <div class="flex-grow-1 ms-2">
+                                Trust fund seitan letterpress, keytar raw denim keffiyeh etsy art party before they sold out master cleanse gluten-free squid scenester freegan cosby sweater. Fanny pack portland seitan DIY, art party locavore wolf cliche high life echo park Austin. Cred vinyl keffiyeh DIY salvia PBR.
+                                <div class="mt-2">
+                                    <a href="javascript:void(0);" class="btn btn-link">Read More <i class="ri-arrow-right-line ms-1 align-middle"></i></a>
                                 </div>
                             </div>
-                            <div class="col-md-3 ms-auto">
-                                <div class="d-flex align-items-center gap-2">
-                                    <span class="text-muted">Sort by: </span>
-                                    <div class="flex-grow-1">
+                        </div>
+                    </div>
+                    <div class="tab-pane" id="buy-list" role="tabpanel">
+                        <form method="get" class="d-block mb-2" action="<?= home_url('football-manager') ?>">
+                            <div class="row g-2">
+                                <div class="col-md-3">
+                                    <div class="search-box">
+                                        <input type="text" class="form-control search" name="s"
+                                            placeholder="Search for player..." value="<?= $_GET['s'] ?? '' ?>" />
+                                        <i class="ri-search-line search-icon"></i>
+                                    </div>
+                                </div>
+                                <button class="btn btn-light w-auto ms-2" type="button" data-bs-toggle="collapse" data-bs-target="#advancedFilter" aria-expanded="true" aria-controls="advancedFilter">
+                                    <i class="ri-filter-2-line"></i>
+                                </button>
+                                <button type="submit" class="btn btn-primary w-auto ms-2"><i
+                                        class="ri-refresh-line me-1 align-bottom"></i>Filter</button>
+                                <a class="btn btn-soft-success w-auto ms-2" href="<?= home_url("football-manager") ?>"><i
+                                        class="ri-refresh-line me-1 align-bottom"></i>Reset</a>
+                            </div>
+                            <div class="collapse" id="advancedFilter">
+                                <div class="card mb-0">
+                                    <div class="card-body">
+                                        Advanced filter here
                                     </div>
                                 </div>
                             </div>
-                            <a class="btn btn-soft-success w-auto ms-2" href="<?= home_url("football-manager") ?>"><i
-                                        class="ri-refresh-line me-1 align-bottom"></i>Reset</a>
-                        </div>
-                    </form>
-                </div>
-                <div class="card-body">
-                    <div id="tasksList">
-                        <div class="table-responsive table-card mb-3">
-                            <table class="table align-middle table-nowrap mb-0" id="customerTable">
-                                <thead class="table-light">
-                                <tr>
-                                    <th class="sort" scope="col">Title</th>
-                                    <th class="sort text-center" scope="col">Nationality</th>
-                                    <th class="sort text-center" scope="col">Position</th>
-                                    <th class="sort text-center" scope="col">Playable</th>
-                                    <th class="sort text-center" scope="col">Season</th>
-                                    <th class="sort text-center" scope="col">Rating</th>
-                                    <th class="sort text-center" scope="col">Contract Wage</th>
-                                    <th class="sort text-center" scope="col">Price</th>
-                                </tr>
-                                </thead>
-                                <tbody class="list form-check-all">
-                                <?php if (count($list['resources']) > 0) {
-                                    foreach ($list['resources'] as $item) { ?>
+                        </form>
+                        <div id="tasksList" class="px-3">
+                            <div class="table-responsive table-card my-3">
+                                <table class="table align-middle table-nowrap mb-0" id="customerTable">
+                                    <thead class="table-light">
                                         <tr>
-                                            <td>
-                                                <div class="d-flex">
-                                                    <div class="flex-grow-1"><?= $item['name'] ?></div>
-                                                    <div class="flex-shrink-0 ms-4">
-                                                        <ul class="list-inline tasks-list-menu mb-0 pe-4">
-                                                            <li class="list-inline-item">
-                                                                <a class="edit-item-btn"
-                                                                   href="#<?= $item['uuid'] ?>"><i
-                                                                            class="ri-eye-fill align-bottom me-2 text-muted"></i></a>
-                                                            </li>
-                                                        </ul>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td class="text-center"><?= $item['nationality'] ?></td>
-                                            <td class="text-center"><?= $item['best_position'] ?></td>
-                                            <td class="text-center"><?= implode(", ", $item['playable_positions']) ?></td>
-                                            <td class="text-center"><?= $item['abilities']['season'] ?></td>
-                                            <td class="text-center"><?= $item['abilities']['current_ability'] ?></td>
-                                            <td class="text-center"><?= formatCurrency($item['contract']['wage']) ?></td>
-                                            <td class="text-center"><?= formatCurrency($item['price']) ?></td>
+                                            <th class="sort" scope="col">Title</th>
+                                            <th class="sort text-center" scope="col">Nationality</th>
+                                            <th class="sort text-center" scope="col">Position</th>
+                                            <th class="sort text-center" scope="col">Playable</th>
+                                            <th class="sort text-center" scope="col">Season</th>
+                                            <th class="sort text-center" scope="col">Rating</th>
+                                            <th class="sort text-center" scope="col">Contract Wage</th>
+                                            <th class="sort text-center" scope="col">Price</th>
+                                            <th class="text-center" scope="col"></th>
                                         </tr>
-                                    <?php }
-                                } ?>
+                                    </thead>
+                                    <tbody class="list form-check-all">
+                                        <?php if (count($list['resources']) > 0) {
+                                            foreach ($list['resources'] as $item) { ?>
+                                                <tr>
+                                                    <td>
+                                                        <div class="d-flex">
+                                                            <div class="flex-grow-1"><?= $item['name'] ?></div>
+                                                            <div class="flex-shrink-0 ms-4">
+                                                                <ul class="list-inline tasks-list-menu mb-0 pe-4">
+                                                                    <li class="list-inline-item">
+                                                                        <a class="edit-item-btn"
+                                                                            href="#<?= $item['uuid'] ?>"><i
+                                                                                class="ri-eye-fill align-bottom me-2 text-muted"></i></a>
+                                                                    </li>
+                                                                </ul>
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                    <td class="text-center"><?= $item['nationality'] ?></td>
+                                                    <td class="text-center"><?= $item['best_position'] ?></td>
+                                                    <td class="text-center"><?= implode(", ", $item['playable_positions']) ?></td>
+                                                    <td class="text-center"><?= $item['abilities']['season'] ?></td>
+                                                    <td class="text-center"><?= $item['abilities']['current_ability'] ?></td>
+                                                    <td class="text-center"><?= formatCurrency($item['contract']['wage']) ?></td>
+                                                    <td class="text-center"><?= formatCurrency($item['price']) ?></td>
+                                                    <td class="text-center"><button class="btn btn-soft-primary">Buy</button></td>
+                                                </tr>
+                                        <?php }
+                                        } ?>
 
-                                </tbody>
-                            </table>
-                            <div class="noresult" style="display: none">
-                                <div class="text-center">
-                                    <lord-icon src="https://cdn.lordicon.com/msoeawqm.json" trigger="loop"
-                                               colors="primary:#121331,secondary:#08a88a"
-                                               style="width:75px;height:75px"></lord-icon>
-                                    <h5 class="mt-2">Sorry! No Result Found</h5>
-                                    <p class="text-muted mb-0">We've searched more than 150+ companies We did not find
-                                        any companies for you search.</p>
+                                    </tbody>
+                                </table>
+                                <div class="noresult" style="display: none">
+                                    <div class="text-center">
+                                        <lord-icon src="https://cdn.lordicon.com/msoeawqm.json" trigger="loop"
+                                            colors="primary:#121331,secondary:#08a88a"
+                                            style="width:75px;height:75px"></lord-icon>
+                                        <h5 class="mt-2">Sorry! No Result Found</h5>
+                                        <p class="text-muted mb-0">We've searched more than 150+ companies We did not find
+                                            any companies for you search.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <?php
+                            includeFileWithVariables('components/pagination.php', array("count" => $list['total_items']));
+                            ?>
+                        </div>
+                    </div>
+                    <div class="tab-pane" id="nav-border-top-messages" role="tabpanel">
+                        <div class="d-flex">
+                            <div class="flex-shrink-0">
+                                <i class="ri-checkbox-circle-line text-success"></i>
+                            </div>
+                            <div class="flex-grow-1 ms-2">
+                                Etsy mixtape wayfarers, ethical wes anderson tofu before they sold out mcsweeney's organic lomo retro fanny pack lo-fi farm-to-table readymade. Messenger bag gentrify pitchfork tattooed craft beer, iphone skateboard locavore carles etsy salvia banksy hoodie helvetica. DIY synth PBR banksy irony.
+                                <div class="mt-2">
+                                    <a href="javascript:void(0);" class="btn btn-link">Read More <i class="ri-arrow-right-line ms-1 align-middle"></i></a>
                                 </div>
                             </div>
                         </div>
-                        <?php
-                        includeFileWithVariables('components/pagination.php', array("count" => $list['total_items']));
-                        ?>
                     </div>
-
+                    <div class="tab-pane" id="nav-border-top-settings" role="tabpanel">
+                        <div class="d-flex">
+                            <div class="flex-shrink-0">
+                                <i class="ri-checkbox-circle-line text-success"></i>
+                            </div>
+                            <div class="flex-grow-1 ms-2">
+                                when darkness overspreads my eyes, and heaven and earth seem to dwell in my soul and absorb its power, like the form of a beloved mistress, then I often think with longing, Oh, would I could describe these conceptions, could impress upon paper all that is living so full and warm within me, that it might be the.
+                                <div class="mt-2">
+                                    <a href="javascript:void(0);" class="btn btn-link">Read More <i class="ri-arrow-right-line ms-1 align-middle"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-            </div>
-            <!--end card-->
+            </div><!-- end card-body -->
         </div>
-        <!--end col-->
     </div>
+    <!--end col-->
+</div>
 
 <?php
 $pageContent = ob_get_clean();
