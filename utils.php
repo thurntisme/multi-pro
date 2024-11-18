@@ -303,6 +303,7 @@ function getFirstParamInUrl()
 
   // Remove any query parameters if present
   $cleanUri = strtok($uri, '?');
+  var_dump($cleanUri);
 
   // Split the URI by "/"
   $uriParts = explode('/', trim($cleanUri, '/'));
