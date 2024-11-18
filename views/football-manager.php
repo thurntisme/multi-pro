@@ -539,8 +539,8 @@ ob_start();
                 <!-- Nav tabs -->
                 <ul class="nav nav-tabs nav-border-top nav-border-top-primary mb-3" role="tablist">
                     <li class="nav-item">
-                        <a class="nav-link active" data-bs-toggle="tab" href="#nav-border-top-home" role="tab" aria-selected="false">
-                            My player
+                        <a class="nav-link active" data-bs-toggle="tab" href="#my-players" role="tab" aria-selected="false">
+                            My players
                         </a>
                     </li>
                     <li class="nav-item">
@@ -549,28 +549,84 @@ ob_start();
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" data-bs-toggle="tab" href="#nav-border-top-messages" role="tab" aria-selected="false">
+                        <a class="nav-link" data-bs-toggle="tab" href="#sell-list" role="tab" aria-selected="false">
                             Sell List
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" data-bs-toggle="tab" href="#nav-border-top-settings" role="tab" aria-selected="true">
+                        <a class="nav-link" data-bs-toggle="tab" href="#bingo" role="tab" aria-selected="true">
                             Bingo
                         </a>
                     </li>
                 </ul>
                 <div class="tab-content text-muted">
-                    <div class="tab-pane active" id="nav-border-top-home" role="tabpanel">
-                        <div class="d-flex">
-                            <div class="flex-shrink-0">
-                                <i class="ri-checkbox-circle-line text-success"></i>
-                            </div>
-                            <div class="flex-grow-1 ms-2">
-                                Trust fund seitan letterpress, keytar raw denim keffiyeh etsy art party before they sold out master cleanse gluten-free squid scenester freegan cosby sweater. Fanny pack portland seitan DIY, art party locavore wolf cliche high life echo park Austin. Cred vinyl keffiyeh DIY salvia PBR.
-                                <div class="mt-2">
-                                    <a href="javascript:void(0);" class="btn btn-link">Read More <i class="ri-arrow-right-line ms-1 align-middle"></i></a>
+                    <div class="tab-pane active" id="my-players" role="tabpanel">
+                        <div id="tasksList" class="px-3">
+                            <div class="table-responsive table-card my-3">
+                                <table class="table align-middle table-nowrap mb-0" id="customerTable">
+                                    <thead class="table-light">
+                                        <tr>
+                                            <th class="sort" scope="col">Title</th>
+                                            <th class="sort text-center" scope="col">Nationality</th>
+                                            <th class="sort text-center" scope="col">Position</th>
+                                            <th class="sort text-center" scope="col">Playable</th>
+                                            <th class="sort text-center" scope="col">Season</th>
+                                            <th class="sort text-center" scope="col">Rating</th>
+                                            <th class="sort text-center" scope="col">Contract Wage</th>
+                                            <th class="sort text-center" scope="col">Price</th>
+                                            <th class="text-center" scope="col"></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="list form-check-all">
+                                        <?php if (count($list['resources']) > 0) {
+                                            foreach ($list['resources'] as $item) { ?>
+                                                <tr>
+                                                    <td>
+                                                        <div class="d-flex">
+                                                            <div class="flex-grow-1"><?= $item['name'] ?></div>
+                                                            <div class="flex-shrink-0 ms-4">
+                                                                <ul class="list-inline tasks-list-menu mb-0 pe-4">
+                                                                    <li class="list-inline-item">
+                                                                        <a class="edit-item-btn"
+                                                                            href="#<?= $item['uuid'] ?>"><i
+                                                                                class="ri-eye-fill align-bottom me-2 text-muted"></i></a>
+                                                                    </li>
+                                                                </ul>
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                    <td class="text-center"><?= $item['nationality'] ?></td>
+                                                    <td class="text-center"><?= $item['best_position'] ?></td>
+                                                    <td class="text-center"><?= implode(", ", $item['playable_positions']) ?></td>
+                                                    <td class="text-center"><?= $item['abilities']['season'] ?></td>
+                                                    <td class="text-center"><?= $item['abilities']['current_ability'] ?></td>
+                                                    <td class="text-center"><?= formatCurrency($item['contract']['wage']) ?></td>
+                                                    <td class="text-center"><?= formatCurrency($item['price']) ?></td>
+                                                    <td class="text-center">
+                                                        <button class="btn btn-soft-primary">Join</button>
+                                                        <button class="btn btn-soft-success">Sell</button>
+                                                        <button class="btn btn-soft-danger">Delete</button>
+                                                    </td>
+                                                </tr>
+                                        <?php }
+                                        } ?>
+
+                                    </tbody>
+                                </table>
+                                <div class="noresult" style="display: none">
+                                    <div class="text-center">
+                                        <lord-icon src="https://cdn.lordicon.com/msoeawqm.json" trigger="loop"
+                                            colors="primary:#121331,secondary:#08a88a"
+                                            style="width:75px;height:75px"></lord-icon>
+                                        <h5 class="mt-2">Sorry! No Result Found</h5>
+                                        <p class="text-muted mb-0">We've searched more than 150+ companies We did not find
+                                            any companies for you search.</p>
+                                    </div>
                                 </div>
                             </div>
+                            <?php
+                            includeFileWithVariables('components/pagination.php', array("count" => $list['total_items']));
+                            ?>
                         </div>
                     </div>
                     <div class="tab-pane" id="buy-list" role="tabpanel">
@@ -663,26 +719,78 @@ ob_start();
                             ?>
                         </div>
                     </div>
-                    <div class="tab-pane" id="nav-border-top-messages" role="tabpanel">
-                        <div class="d-flex">
-                            <div class="flex-shrink-0">
-                                <i class="ri-checkbox-circle-line text-success"></i>
-                            </div>
-                            <div class="flex-grow-1 ms-2">
-                                Etsy mixtape wayfarers, ethical wes anderson tofu before they sold out mcsweeney's organic lomo retro fanny pack lo-fi farm-to-table readymade. Messenger bag gentrify pitchfork tattooed craft beer, iphone skateboard locavore carles etsy salvia banksy hoodie helvetica. DIY synth PBR banksy irony.
-                                <div class="mt-2">
-                                    <a href="javascript:void(0);" class="btn btn-link">Read More <i class="ri-arrow-right-line ms-1 align-middle"></i></a>
+                    <div class="tab-pane" id="sell-list" role="tabpanel">
+                        <div id="tasksList" class="px-3">
+                            <div class="table-responsive table-card my-3">
+                                <table class="table align-middle table-nowrap mb-0" id="customerTable">
+                                    <thead class="table-light">
+                                        <tr>
+                                            <th class="sort" scope="col">Title</th>
+                                            <th class="sort text-center" scope="col">Nationality</th>
+                                            <th class="sort text-center" scope="col">Position</th>
+                                            <th class="sort text-center" scope="col">Playable</th>
+                                            <th class="sort text-center" scope="col">Season</th>
+                                            <th class="sort text-center" scope="col">Rating</th>
+                                            <th class="sort text-center" scope="col">Contract Wage</th>
+                                            <th class="sort text-center" scope="col">Price</th>
+                                            <th class="text-center" scope="col"></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="list form-check-all">
+                                        <?php if (count($list['resources']) > 0) {
+                                            foreach ($list['resources'] as $item) { ?>
+                                                <tr>
+                                                    <td>
+                                                        <div class="d-flex">
+                                                            <div class="flex-grow-1"><?= $item['name'] ?></div>
+                                                            <div class="flex-shrink-0 ms-4">
+                                                                <ul class="list-inline tasks-list-menu mb-0 pe-4">
+                                                                    <li class="list-inline-item">
+                                                                        <a class="edit-item-btn"
+                                                                            href="#<?= $item['uuid'] ?>"><i
+                                                                                class="ri-eye-fill align-bottom me-2 text-muted"></i></a>
+                                                                    </li>
+                                                                </ul>
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                    <td class="text-center"><?= $item['nationality'] ?></td>
+                                                    <td class="text-center"><?= $item['best_position'] ?></td>
+                                                    <td class="text-center"><?= implode(", ", $item['playable_positions']) ?></td>
+                                                    <td class="text-center"><?= $item['abilities']['season'] ?></td>
+                                                    <td class="text-center"><?= $item['abilities']['current_ability'] ?></td>
+                                                    <td class="text-center"><?= formatCurrency($item['contract']['wage']) ?></td>
+                                                    <td class="text-center"><?= formatCurrency($item['price']) ?></td>
+                                                    <td class="text-center"><button class="btn btn-soft-primary">Cancel</button></td>
+                                                </tr>
+                                        <?php }
+                                        } ?>
+
+                                    </tbody>
+                                </table>
+                                <div class="noresult" style="display: none">
+                                    <div class="text-center">
+                                        <lord-icon src="https://cdn.lordicon.com/msoeawqm.json" trigger="loop"
+                                            colors="primary:#121331,secondary:#08a88a"
+                                            style="width:75px;height:75px"></lord-icon>
+                                        <h5 class="mt-2">Sorry! No Result Found</h5>
+                                        <p class="text-muted mb-0">We've searched more than 150+ companies We did not find
+                                            any companies for you search.</p>
+                                    </div>
                                 </div>
                             </div>
+                            <?php
+                            includeFileWithVariables('components/pagination.php', array("count" => $list['total_items']));
+                            ?>
                         </div>
                     </div>
-                    <div class="tab-pane" id="nav-border-top-settings" role="tabpanel">
+                    <div class="tab-pane" id="bingo" role="tabpanel">
                         <div class="d-flex">
                             <div class="flex-shrink-0">
                                 <i class="ri-checkbox-circle-line text-success"></i>
                             </div>
                             <div class="flex-grow-1 ms-2">
-                                when darkness overspreads my eyes, and heaven and earth seem to dwell in my soul and absorb its power, like the form of a beloved mistress, then I often think with longing, Oh, would I could describe these conceptions, could impress upon paper all that is living so full and warm within me, that it might be the.
+                                Bingo player is coming soon
                                 <div class="mt-2">
                                     <a href="javascript:void(0);" class="btn btn-link">Read More <i class="ri-arrow-right-line ms-1 align-middle"></i></a>
                                 </div>
