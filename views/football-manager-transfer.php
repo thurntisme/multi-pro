@@ -1,5 +1,5 @@
 <?php
-$pageTitle = "Football Manager";
+$pageTitle = "Football Manager Transfer";
 
 require_once DIR . '/functions/generate-player.php';
 // Generate 10 random players
@@ -39,9 +39,39 @@ ob_start();
                             Sell List
                         </a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link" data-bs-toggle="tab" href="#sell-list" role="tab" aria-selected="false">
+                            Favourite
+                        </a>
+                    </li>
                 </ul>
                 <div class="tab-content text-muted">
                     <div class="tab-pane active" id="market" role="tabpanel">
+                        <form method="get" class="d-block mb-2" action="<?= home_url('football-manager') ?>">
+                            <div class="row g-2">
+                                <div class="col-md-3">
+                                    <div class="search-box">
+                                        <input type="text" class="form-control search" name="s"
+                                            placeholder="Search for player..." value="<?= $_GET['s'] ?? '' ?>" />
+                                        <i class="ri-search-line search-icon"></i>
+                                    </div>
+                                </div>
+                                <button class="btn btn-light w-auto ms-2" type="button" data-bs-toggle="collapse" data-bs-target="#advancedFilter" aria-expanded="true" aria-controls="advancedFilter">
+                                    <i class="ri-filter-2-line"></i>
+                                </button>
+                                <button type="submit" class="btn btn-primary w-auto ms-2"><i
+                                        class="ri-refresh-line me-1 align-bottom"></i>Filter</button>
+                                <a class="btn btn-soft-success w-auto ms-2" href="<?= home_url("football-manager/transfer") ?>"><i
+                                        class="ri-refresh-line me-1 align-bottom"></i>Reset</a>
+                            </div>
+                            <div class="collapse" id="advancedFilter">
+                                <div class="card mb-0">
+                                    <div class="card-body">
+                                        Advanced filter here
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
                         <div id="tasksList" class="px-3">
                             <div class="table-responsive table-card my-3">
                                 <table class="table align-middle table-nowrap mb-0" id="customerTable">
@@ -111,31 +141,6 @@ ob_start();
                         </div>
                     </div>
                     <div class="tab-pane" id="buy-list" role="tabpanel">
-                        <form method="get" class="d-block mb-2" action="<?= home_url('football-manager') ?>">
-                            <div class="row g-2">
-                                <div class="col-md-3">
-                                    <div class="search-box">
-                                        <input type="text" class="form-control search" name="s"
-                                            placeholder="Search for player..." value="<?= $_GET['s'] ?? '' ?>" />
-                                        <i class="ri-search-line search-icon"></i>
-                                    </div>
-                                </div>
-                                <button class="btn btn-light w-auto ms-2" type="button" data-bs-toggle="collapse" data-bs-target="#advancedFilter" aria-expanded="true" aria-controls="advancedFilter">
-                                    <i class="ri-filter-2-line"></i>
-                                </button>
-                                <button type="submit" class="btn btn-primary w-auto ms-2"><i
-                                        class="ri-refresh-line me-1 align-bottom"></i>Filter</button>
-                                <a class="btn btn-soft-success w-auto ms-2" href="<?= home_url("football-manager") ?>"><i
-                                        class="ri-refresh-line me-1 align-bottom"></i>Reset</a>
-                            </div>
-                            <div class="collapse" id="advancedFilter">
-                                <div class="card mb-0">
-                                    <div class="card-body">
-                                        Advanced filter here
-                                    </div>
-                                </div>
-                            </div>
-                        </form>
                         <div id="tasksList" class="px-3">
                             <div class="table-responsive table-card my-3">
                                 <table class="table align-middle table-nowrap mb-0" id="customerTable">
@@ -177,7 +182,7 @@ ob_start();
                                                     <td class="text-center"><?= $item['abilities']['current_ability'] ?></td>
                                                     <td class="text-center"><?= formatCurrency($item['contract']['wage']) ?></td>
                                                     <td class="text-center"><?= formatCurrency($item['price']) ?></td>
-                                                    <td class="text-center"><button class="btn btn-soft-primary">Buy</button></td>
+                                                    <td class="text-center"><button class="btn btn-soft-primary">Cancel</button></td>
                                                 </tr>
                                         <?php }
                                         } ?>
@@ -242,7 +247,10 @@ ob_start();
                                                     <td class="text-center"><?= $item['abilities']['current_ability'] ?></td>
                                                     <td class="text-center"><?= formatCurrency($item['contract']['wage']) ?></td>
                                                     <td class="text-center"><?= formatCurrency($item['price']) ?></td>
-                                                    <td class="text-center"><button class="btn btn-soft-primary">Cancel</button></td>
+                                                    <td class="text-center">
+                                                        <button class="btn btn-soft-success">Buy</button>
+                                                        <button class="btn btn-soft-danger">Delete</button>
+                                                    </td>
                                                 </tr>
                                         <?php }
                                         } ?>
