@@ -10,8 +10,8 @@ $slug = getLastSegmentFromUrl();
     <a class="btn btn-<?= $slug !== 'my-club' ? 'soft-' : '' ?>info add-btn" href="<?= home_url("football-manager/my-club") ?>"><i
         class="ri-add-fill me-1 align-bottom"></i> My Club
     </a>
-    <a class="btn btn-<?= $slug !== 'my-players' ? 'soft-' : '' ?>info add-btn" href="<?= home_url("football-manager/my-player") ?>"><i
-        class="ri-add-fill me-1 align-bottom"></i> My Player
+    <a class="btn btn-<?= $slug !== 'my-players' ? 'soft-' : '' ?>info add-btn" href="<?= home_url("football-manager/my-players") ?>"><i
+        class="ri-add-fill me-1 align-bottom"></i> My Players
     </a>
   </div>
   <div class="flex-shrink-0">
