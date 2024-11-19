@@ -10,6 +10,7 @@ define('DEFAULT_DATETIME_FORMAT', 'Y-m-d H:i:s');
 include "version.php";
 include "bookmarks.php";
 include "network.php";
+include "dashboard.php";
 
 $months = [
     '01' => 'January',
