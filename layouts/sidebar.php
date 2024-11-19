@@ -21,7 +21,7 @@
             </span>
         </a>
         <button type="button" class="btn btn-sm p-0 fs-20 header-item float-end btn-vertical-sm-hover"
-                id="vertical-hover">
+            id="vertical-hover">
             <i class="ri-record-circle-line"></i>
         </button>
     </div>
@@ -50,7 +50,7 @@
                 </li>
                 <li class="nav-item">
                     <a class="nav-link menu-link <?= activeClassName("daily-checklist") ?>"
-                       href="<?= home_url("daily-checklist") ?>">
+                        href="<?= home_url("daily-checklist") ?>">
                         <i class="ri-calendar-check-line"></i> <span data-key="t-daily-checklist">Daily Checklist</span>
                     </a>
                 </li>
@@ -61,8 +61,20 @@
                 </li>
                 <li class="nav-item">
                     <a class="nav-link menu-link <?= activeClassName("subscription") ?>"
-                       href="<?= home_url("subscription") ?>">
+                        href="<?= home_url("subscription") ?>">
                         <i class="ri-calendar-check-line"></i> <span data-key="t-subscription">Subscription</span>
+                    </a>
+                </li>
+                <li class="menu-title"><span data-key="t-tech-stack">Tech Stack</span></li>
+                <li class="nav-item">
+                    <a class="nav-link menu-link <?= activeClassName("wordpress") ?>" href="<?= home_url("wordpress") ?>">
+                        <i class="mdi mdi-wordpress"></i> <span data-key="t-wordpress">Wordpress</span>
+                    </a>
+                    <a class="nav-link menu-link <?= activeClassName("reactjs") ?>" href="<?= home_url("reactjs") ?>">
+                        <i class="mdi mdi-react"></i> <span>ReactJS</span>
+                    </a>
+                    <a class="nav-link menu-link <?= activeClassName("salesforce") ?>" href="<?= home_url("salesforce") ?>">
+                        <i class="mdi mdi-salesforce"></i> <span>Salesforce</span>
                     </a>
                 </li>
                 <li class="menu-title"><span data-key="t-app">App</span></li>
@@ -73,13 +85,13 @@
                 </li>
                 <li class="nav-item">
                     <a class="nav-link menu-link <?= activeClassName("short-link") ?>"
-                       href="<?= home_url("short-link") ?>">
+                        href="<?= home_url("short-link") ?>">
                         <i class="ri-link-m"></i> <span data-key="t-short-link">Short Link</span>
                     </a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link menu-link <?= activeClassName("generate-qr") ?>"
-                       href="<?= home_url("generate-qr") ?>">
+                        href="<?= home_url("generate-qr") ?>">
                         <i class="ri-qr-code-line"></i> <span data-key="t-generate-qr">Generate QR</span>
                     </a>
                 </li>
@@ -96,31 +108,31 @@
                 </li>
                 <li class="nav-item">
                     <a class="nav-link menu-link <?= activeClassName("report-working") ?>"
-                       href="<?= home_url("report-working") ?>">
+                        href="<?= home_url("report-working") ?>">
                         <i class="ri-clipboard-line"></i> <span data-key="t-report-working">Report Working</span>
                     </a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link menu-link <?= activeClassName("maintain-web") ?>"
-                       href="<?= home_url("maintain-web") ?>">
+                        href="<?= home_url("maintain-web") ?>">
                         <i class="ri-global-line"></i> <span data-key="t-maintain-web">Maintain Web</span>
                     </a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link menu-link <?= activeClassName("seo-checklist") ?>"
-                       href="<?= home_url("seo-checklist") ?>">
+                        href="<?= home_url("seo-checklist") ?>">
                         <i class="ri-search-line"></i> <span data-key="t-seo-checklist">SEO Checklist</span>
                     </a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link menu-link <?= activeClassName("web-dev-checklist") ?>"
-                       href="<?= home_url("web-dev-checklist") ?>">
+                        href="<?= home_url("web-dev-checklist") ?>">
                         <i class="ri-tools-line"></i> <span data-key="t-web-dev-checklist">Web Dev Checklist</span>
                     </a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link menu-link <?= activeClassName("web-secure-checklist") ?>"
-                       href="<?= home_url("web-secure-checklist") ?>">
+                        href="<?= home_url("web-secure-checklist") ?>">
                         <i class="ri-shield-line"></i> <span data-key="t-web-secure-checklist">Web Secure
                             Checklist</span>
                     </a>
@@ -176,7 +188,7 @@
                 <li class="menu-title"><span data-key="t-network">Game</span></li>
                 <li class="nav-item">
                     <a class="nav-link menu-link <?= activeClassName("football-manager") ?>"
-                       href="<?= home_url("football-manager") ?>">
+                        href="<?= home_url("football-manager") ?>">
                         <i class="ri-football-line"></i> <span data-key="t-football-manager">Football Manager</span>
                     </a>
                 </li>
