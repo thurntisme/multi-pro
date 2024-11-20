@@ -94,11 +94,17 @@ ob_start();
                 <div class="card-body">
                     <?php foreach ($links as $link): ?>
                         <div class="d-flex gap-2 align-items-center mb-2">
-                            <h6 class="mb-0 fs-14 flex-grow-1"><?= $link['title'] ?></h6>
-                            <h6 class="flex-shrink-0 mb-0"><a href="<?= $link['url'] ?>" target="_blank"
-                                                              rel="noreferrer" class="btn btn-link btn-sm">Visit
-                                    Website <i
-                                            class="ri-arrow-right-line align-bottom"></i></a></h6>
+                            <div class="flex-shrink-0">
+                                <img src="<?= home_url($link['logo']) ?>" alt="<?= $link['name'] ?>"
+                                     class="rounded avatar-xxs object-fit-contain">
+                            </div>
+                            <h6 class="mb-0 fs-14 flex-grow-1"><?= $link['name'] ?></h6>
+                            <h6 class="flex-shrink-0 mb-0">
+                                <a href="<?= $link['url'] ?>" target="_blank" rel="noreferrer"
+                                   class="btn btn-link btn-sm">Visit Website <i
+                                            class="ri-arrow-right-line align-bottom"></i>
+                                </a>
+                            </h6>
                         </div>
                     <?php endforeach; ?>
                 </div>
@@ -127,7 +133,10 @@ ob_start();
 
                     <div data-simplebar style="max-height: 328px;">
                         <ul class="list-group list-group-flush border-dashed px-3">
-                            <?php foreach ($checklist as $idx => $item): ?>
+                            <?php foreach ($checklist as $idx => $item):
+                                $deadline = date('d M, Y', strtotime($item['deadline']));
+                                $isToday = date('d M, Y') === $deadline;
+                                ?>
                                 <li class="list-group-item ps-0">
                                     <div class="d-flex align-items-start">
                                         <div class="form-check ps-0 flex-sharink-0">
@@ -137,10 +146,12 @@ ob_start();
                                         <div class="flex-grow-1">
                                             <label class="form-check-label mb-0 ps-2"
                                                    for="task_<?= $idx ?>"><?= $item['title'] ?></label>
+                                            <?php if ($isToday) { ?>
+                                                <span class="badge rounded-pill bg-info-subtle text-info">Focus</span>
+                                            <?php } ?>
                                         </div>
                                         <div class="flex-shrink-0 ms-2">
-                                            <p class="text-muted fs-12 mb-0"><?= date('d M, Y', strtotime($item['deadline']));
-                                                ?></p>
+                                            <p class="text-muted fs-12 mb-0"><?= !$isToday ? $deadline : 'Today'; ?></p>
                                         </div>
                                     </div>
                                 </li>

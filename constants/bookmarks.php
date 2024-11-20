@@ -2,12 +2,11 @@
 
 $bookmarks = [
     "Featured" => [
-        ["url" => "https://www.google.com/", "name" => "Google", "logo" => "https://www.google.com/images/branding/googlelogo/2x/googlelogo_color_92x30dp.png", "tags" => ["popular", "global", "AI-powered"]],
-        ["url" => "https://www.facebook.com/", "name" => "Facebook", "logo" => "https://upload.wikimedia.org/wikipedia/commons/5/51/Facebook_f_logo_%282019%29.svg", "tags" => ["social-networking", "global"]],
-        ["url" => "https://www.youtube.com/", "name" => "YouTube", "logo" => "https://upload.wikimedia.org/wikipedia/commons/b/b8/YouTube_Logo_2017.svg", "tags" => ["videos", "global", "content"]],
-        ["url" => "https://chat.zalo.me/", "name" => "Zalo", "logo" => "https://upload.wikimedia.org/wikipedia/commons/c/c2/Zalo_App_Logo.png", "tags" => ["messaging", "social"]],
-        ["url" => "https://chat.openai.com/", "name" => "ChatGPT", "logo" => "https://upload.wikimedia.org/wikipedia/commons/0/04/OpenAI_Logo.svg", "tags" => ["AI", "chat"]],
-
+        ["url" => "https://www.google.com/", "name" => "Google", "logo" => "/assets/images/brands/google.png", "tags" => ["popular", "global", "AI-powered"]],
+        ["url" => "https://www.facebook.com/", "name" => "Facebook", "logo" => "/assets/images/brands/facebook.png", "tags" => ["social-networking", "global"]],
+        ["url" => "https://www.youtube.com/", "name" => "YouTube", "logo" => "/assets/images/brands/youtube.png", "tags" => ["videos", "global", "content"]],
+        ["url" => "https://chat.zalo.me/", "name" => "Zalo", "logo" => "/assets/images/brands/zalo.png", "tags" => ["messaging", "social"]],
+        ["url" => "https://chat.openai.com/", "name" => "ChatGPT", "logo" => "/assets/images/brands/chatgpt.png", "tags" => ["AI", "chat"]],
     ],
     "Search Engines" => [
         ["url" => "https://www.google.com/", "name" => "Google", "logo" => "https://www.google.com/images/branding/googlelogo/2x/googlelogo_color_92x30dp.png", "tags" => ["popular", "global", "AI-powered"]],

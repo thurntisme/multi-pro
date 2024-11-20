@@ -3,7 +3,7 @@
 $checklist = array(
     array(
         'isDone' => false,
-        'title' => 'Finish crud tech talk - using blog list template',
+        'title' => 'Finish crud tech stack - using blog list template',
         'deadline' => '2024-11-20'
     ),
     array(
@@ -67,6 +67,6 @@ $links = array(
 $dashboard = array(
     'checklist' => $checklist,
     'event' => $event,
-    'links' => $links,
+    'links' => DEFAULT_BOOKMARKS['Featured'],
 );
 define('DEFAULT_DASHBOARD_OPTIONS', $dashboard);
