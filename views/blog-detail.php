@@ -1,7 +1,9 @@
 <?php
-$pageTitle = "Subscription Detail";
+$firstSlug = getFirstParamInUrl();
+$pageTitle = ucfirst($firstSlug) . " Detail Page";
 
 require_once 'controllers/BlogController.php';
+
 $blogController = new BlogController();
 
 $modify_type = getLastSegmentFromUrl();
@@ -197,8 +199,8 @@ ob_start();
                                 <h5 class="card-title mb-0">Action</h5>
                             </div>
                             <div class="card-body">
-                                <a href="<?= home_url('blog') ?>" class="btn btn-light w-sm">Back</a>
-                                <a href="<?= home_url('blog/edit?id=' . $postData['id']) ?>"
+                                <a href="<?= home_url($firstSlug) ?>" class="btn btn-light w-sm">Back</a>
+                                <a href="<?= home_url($firstSlug . '/edit?id=' . $postData['id']) ?>"
                                     class="btn btn-info w-sm mx-2">Edit</a>
                             </div>
                         </div>

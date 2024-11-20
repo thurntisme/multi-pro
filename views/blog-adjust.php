@@ -1,5 +1,6 @@
 <?php
-$pageTitle = "Blog";
+$firstSlug = getFirstParamInUrl();
+$pageTitle = ucfirst($firstSlug) . " Edit Page";
 
 require_once 'controllers/BlogController.php';
 $blogController = new BlogController();
@@ -7,27 +8,24 @@ $blogController = new BlogController();
 $modify_type = getLastSegmentFromUrl();
 
 if (!empty($modify_type)) {
-    $pageTitle .= " " . $modify_type;
     if ($modify_type === "new") {
-        $back_url = home_url("plans");
     } else if ($modify_type == 'edit') {
         if (isset($_GET['id'])) {
             $post_id = $_GET['id'];
             $postData = $blogController->viewBlog($post_id);
         }
-        $back_url = home_url("plans/view") . '?post_id=' . $post_id;
     }
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (isset($_POST['action_name'])) {
             if ($_POST['action_name'] === 'delete_record' && isset($_GET['id'])) {
-                $blogController->deleteBlog();
+                $blogController->deleteBlog($firstSlug);
             }
         } else {
             if ($modify_type === "new") {
-                $blogController->createBlog();
+                $blogController->createBlog($firstSlug);
             }
             if ($modify_type === "edit") {
-                $blogController->updateBlog();
+                $blogController->updateBlog($firstSlug);
             }
         }
     };
@@ -102,7 +100,7 @@ ob_start();
 
             <!-- end card -->
             <div class="text-center mb-4">
-                <a href="<?= home_url('blog') ?>" class="btn btn-light w-sm">Back</a>
+                <a href="<?= home_url($firstSlug) ?>" class="btn btn-light w-sm">Back</a>
                 <button type="submit"
                     class="btn btn-success w-sm"><?= $modify_type === "new" ? "Create" : "Save" ?></button>
             </div>
@@ -114,10 +112,10 @@ ob_start();
                     <h5 class="card-title mb-0">Action</h5>
                 </div>
                 <div class="card-body">
-                    <a href="<?= home_url('blog') ?>" class="btn btn-light w-sm">Back</a>
-                    <a href="<?= home_url('blog/detail?id=' . $postData['id']) ?>"
-                        class="btn btn-info w-sm mx-2">View</a>
+                    <a href="<?= home_url($firstSlug) ?>" class="btn btn-light w-sm">Back</a>
                     <?php if (!empty($post_id)) { ?>
+                        <a href="<?= home_url($firstSlug . '/detail?id=' . $postData['id']) ?>"
+                            class="btn btn-info w-sm mx-2">View</a>
                         <button type="button" class="btn btn-danger w-sm" data-bs-toggle="modal"
                             data-bs-target="#deleteRecordModal">Delete</button>
                     <?php } ?>

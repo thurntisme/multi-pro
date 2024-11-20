@@ -1,10 +1,22 @@
 <?php
 require_once 'controllers/BlogController.php';
 
-$pageTitle = "Blog";
+$firstSlug = getFirstParamInUrl();
+$pageTitle = ucfirst($firstSlug);
 
 $blogController = new BlogController();
-$list = $blogController->listBlogs();
+
+switch ($firstSlug) {
+    case 'wordpress':
+    case 'reactjs':
+    case 'salesforce':
+        $list = $blogController->listBlogsByCategory($firstSlug);
+        break;
+
+    default:
+        $list = $blogController->listBlogs();
+        break;
+}
 
 ob_start();
 ?>
@@ -111,11 +123,11 @@ include_once DIR . '/components/alert.php';
         </div>
     </div>
     <div class="col-xxl-9">
-        <form method="get" action="<?= home_url('blog') ?>">
+        <form method="get" action="<?= home_url($firstSlug) ?>">
             <div class="row g-4 mb-3">
                 <div class="col-sm-auto">
                     <div>
-                        <a href="<?= home_url('blog/new') ?>" class="btn btn-success"><i class="ri-add-line align-bottom me-1"></i> Add New</a>
+                        <a href="<?= home_url($firstSlug . '/new') ?>" class="btn btn-success"><i class="ri-add-line align-bottom me-1"></i> Add New</a>
                     </div>
                 </div>
                 <div class="col-sm">
@@ -150,14 +162,14 @@ include_once DIR . '/components/alert.php';
                                     </div><!--end col-->
                                     <div class="col-xxl-9 col-lg-7">
                                         <p class="mb-2 text-primary text-uppercase"><?= $item['category'] ?? '' ?></p>
-                                        <a href="<?= home_url('blog/detail?id=' . $item['id']) ?>">
+                                        <a href="<?= home_url($firstSlug . '/detail?id=' . $item['id']) ?>">
                                             <h5 class="fs-15 fw-semibold"><?= $item['title'] ?></h5>
                                         </a>
                                         <div class="d-flex align-items-center gap-2 mb-3 flex-wrap">
                                             <span class="text-muted"><i class="ri-calendar-event-line me-1"></i> <?= $commonController->convertDate($item['created_at']) ?></span> | <span class="text-muted"><i class="ri-eye-line me-1"></i> 451</span> | <a href="pages-profile.html"><i class="ri-user-3-line me-1"></i> Admin</a>
                                         </div>
                                         <p class="text-muted mb-2"><?= truncateString($item['content'], 50) ?></p>
-                                        <a href="<?= home_url('blog/detail?id=' . $item['id']) ?>" class="text-decoration-underline">Read more <i class="ri-arrow-right-line"></i></a>
+                                        <a href="<?= home_url($firstSlug . '/detail?id=' . $item['id']) ?>" class="text-decoration-underline">Read more <i class="ri-arrow-right-line"></i></a>
                                         <div class="d-flex align-items-center gap-2 mt-3 flex-wrap">
                                             <?php
                                             if (count(explode(",", $item['tags'])) > 0) {

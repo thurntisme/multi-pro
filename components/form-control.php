@@ -18,7 +18,7 @@ function renderFormControl($id, $name, $label, $options = [], $value = null)
   if (empty($value)) {
     $selected = ' selected';
   }
-  echo '<option value="uncategorized"' . $selected . '>--Select--</option>';
+  echo '<option value=""' . $selected . '>--Select--</option>';
 
   foreach ($options as $option => $text) {
     $selected = $value === $option ? ' selected' : '';

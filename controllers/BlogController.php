@@ -18,7 +18,7 @@ class BlogController
   }
 
   // Handle creating a new blog
-  public function createBlog()
+  public function createBlog($firstSlug)
   {
     $title = $_POST['title'] ?? '';
     $content = $_POST['content'] ?? '';
@@ -34,12 +34,12 @@ class BlogController
       $_SESSION['message'] = "Failed to create blog";
     }
 
-    header("Location: " . home_url("blog"));
+    header("Location: " . home_url($firstSlug));
     exit;
   }
 
   // Handle updating a blog
-  public function updateBlog()
+  public function updateBlog($firstSlug)
   {
     $id = $_POST['blog_id'] ?? '';
     $title = $_POST['title'] ?? '';
@@ -61,12 +61,12 @@ class BlogController
       $_SESSION['message'] = "Blog ID and service name are required.";
     }
 
-    header("Location: " . home_url("blog/edit") . '?id=' . $id);
+    header("Location: " . home_url($firstSlug . "/edit") . '?id=' . $id);
     exit;
   }
 
   // Handle deleting a blog
-  public function deleteBlog()
+  public function deleteBlog($firstSlug)
   {
     $id = $_POST['post_id'] ?? null;
     if ($id) {
@@ -83,12 +83,12 @@ class BlogController
       $_SESSION['message'] = "Failed to delete blog.";
     }
 
-    header("Location: " . home_url("blog"));
+    header("Location: " . home_url($firstSlug));
     exit;
   }
 
   // Get all blogs
-  public function getBlogsSQL($queryType = "result")
+  public function getBlogsSQL($queryType = "result", $category = '')
   {
     // Pagination parameters
     $itemsPerPage = 12; // Number of results per page
@@ -107,6 +107,9 @@ class BlogController
 
     $selectSql = $queryType === "result" ? "SELECT * FROM blogs" : "SELECT COUNT(*) FROM blogs";
     $sql = $selectSql . " WHERE user_id = $this->user_id ";
+    if (!empty($category)) {
+      $sql .= " AND category = '$category' ";
+    }
 
     if ($keyword !== '') {
       $sql .= " AND (title LIKE :keyword OR tags LIKE :keyword OR content LIKE :keyword)";
@@ -156,10 +159,18 @@ class BlogController
   // Handle listing all blogs
   public function listBlogs()
   {
-    // return $this->blogService->getAllBlogs();
     return [
       'list' => $this->getBlogsSQL("result"),
       'count' => $this->getBlogsSQL("count"),
+    ];
+  }
+
+  // Handle listing all blogs
+  public function listBlogsByCategory($category)
+  {
+    return [
+      'list' => $this->getBlogsSQL("result", $category),
+      'count' => $this->getBlogsSQL("count", $category),
     ];
   }
 
