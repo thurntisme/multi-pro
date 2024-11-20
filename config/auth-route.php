@@ -82,6 +82,7 @@ function getPageData($slug)
         'salesforce/new' => ['url' => DIR . '/views/blog-adjust.php', 'title' => 'New Salesforce Blog'],
         'salesforce/edit' => ['url' => DIR . '/views/blog-adjust.php', 'title' => 'Edit Salesforce Blog'],
         'salesforce/detail' => ['url' => DIR . '/views/blog-detail.php', 'title' => 'Salesforce Blog Detail'],
+        'wallet' => ['url' => DIR . '/views/wallet.php', 'title' => 'My Wallet'],
         // redirectUser
         'dashboard' => ['url' => DIR . '/functions/redirectUser.php', 'title' => 'Redirect'],
         'login' => ['url' => DIR . '/functions/redirectUser.php', 'title' => 'Redirect'],

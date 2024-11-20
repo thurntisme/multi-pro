@@ -18,7 +18,7 @@ ob_start();
         <!-- end row -->
     </div>
     <!-- end container -->
-</div>';
+</div>
 
 <?php
 $pageContent = ob_get_clean();
