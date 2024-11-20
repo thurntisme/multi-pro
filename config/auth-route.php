@@ -70,6 +70,10 @@ function getPageData($slug)
         'football-manager/my-club' => ['url' => DIR . '/views/football-manager-club.php', 'title' => 'Football Manager - My Club'],
         'football-manager/transfer' => ['url' => DIR . '/views/football-manager-transfer.php', 'title' => 'Football Manager - Transfer'],
         'football-manager/my-players' => ['url' => DIR . '/views/football-manager-players.php', 'title' => 'Football Manager - My Players'],
+        'wordpress' => ['url' => DIR . '/views/wordpress.php', 'title' => 'Wordpress'],
+        'reactjs' => ['url' => DIR . '/views/reactjs.php', 'title' => 'ReactJS'],
+        'salesforce' => ['url' => DIR . '/views/salesforce.php', 'title' => 'Salesforce'],
+        'tech-stack-detail' => ['url' => DIR . '/views/tech-stack-detail.php', 'title' => 'Tech Stack Detail'],
         // redirectUser
         'dashboard' => ['url' => DIR . '/functions/redirectUser.php', 'title' => 'Redirect'],
         'login' => ['url' => DIR . '/functions/redirectUser.php', 'title' => 'Redirect'],
