@@ -2,7 +2,7 @@
 
 $checklist = array(
     array(
-        'isDone' => false,
+        'isDone' => true,
         'title' => 'Finish crud tech stack - using blog list template',
         'deadline' => '2024-11-20'
     ),
