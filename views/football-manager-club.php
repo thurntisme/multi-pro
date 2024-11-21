@@ -36,7 +36,7 @@ ob_start();
                                                     data-choices-search-false id="formation">
                                                 <option value="442">4-4-2</option>
                                                 <option value="433">4-3-3</option>
-                                                <option value="352">3-5-2</option>
+                                                <option value="343">3-4-3</option>
                                             </select>
                                         </div>
                                     </th>

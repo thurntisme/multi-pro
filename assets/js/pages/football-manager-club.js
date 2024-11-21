@@ -44,33 +44,47 @@ const drawFootballPitch = () => {
     }
 
     // Formations
+    const GK = {x: width * 8 / 100, y: height / 2};
+    const LB = {x: width * 28 / 100, y: height / 4 - 10};
+    const RB = {x: width * 28 / 100, y: height * 3 / 4 + 10};
+    const LCB = {x: width * 20 / 100, y: height / 3};
+    const CB = {x: width * 20 / 100, y: height / 2};
+    const RCB = {x: width * 20 / 100, y: height * 2 / 3};
+    const CDM = {x: width * 35 / 100, y: height / 2};
+    const LCM = {x: width * 45 / 100, y: height / 3};
+    const RCM = {x: width * 45 / 100, y: height * 2 / 3};
+    const LM = {x: width * 65 / 100, y: height / 4 - 10};
+    const RM = {x: width * 65 / 100, y: height * 3 / 4 + 10};
+    const LF = {x: width * 85 / 100, y: height / 4 + 25};
+    const RF = {x: width * 85 / 100, y: height * 3 / 4 - 25};
+    const LW = {x: width * 80 / 100, y: height / 4 - 10};
+    const RW = {x: width * 80 / 100, y: height * 3 / 4 + 10};
+    const CF = {x: width * 75 / 100, y: height / 2};
+    const ST = {x: width * 90 / 100, y: height / 2};
     const formations = {
         '442': [
-            {x: 25, y: height / 2}, // Goalkeeper
-            {x: 90, y: height / 4 - 10}, {x: 90, y: height * 3 / 4 + 10}, // Left and Right Back
-            {x: 60, y: height / 3}, {x: 60, y: height * 2 / 3}, // Center Backs
-            {x: 200, y: height / 4 - 10}, {x: 200, y: height * 3 / 4 + 10}, // Left and Right Midfielders
-            {x: 140, y: height / 4 + 20}, {x: 140, y: height * 3 / 4 - 20}, // Midfielders
-            {x: 260, y: height / 4 + 25}, {x: 260, y: height * 3 / 4 - 25}, // Forwards
+            GK,
+            LB, RB,
+            LCB, RCB,
+            LCM, RCM,
+            LM, RM,
+            LF, RF,
         ],
         '433': [
-            {x: 50, y: height / 2}, // Goalkeeper
-            {x: 100, y: height / 4}, {x: 100, y: height * 3 / 4}, // Left and Right Back
-            {x: 150, y: height / 3}, {x: 150, y: height * 2 / 3}, // Center Backs
-            {x: 250, y: height / 4}, {x: 250, y: height / 2}, {x: 250, y: height * 3 / 4}, // Midfielders
-            {x: 350, y: height / 6}, {x: 350, y: height / 2}, {x: 350, y: height * 5 / 6}, // Forwards
+            GK,
+            LB, RB, LCB, RCB,
+            {...LCM, x: LCM.x + 25}, {...CDM, x: CDM.x + 25}, {...RCM, x: RCM.x + 25},
+            LW, ST, RW,
         ],
-        '352': [
-            {x: 50, y: height / 2}, // Goalkeeper
-            {x: 100, y: height / 4}, {x: 100, y: height * 3 / 4}, // Left and Right Back
-            {x: 150, y: height / 2}, // Center Back
-            {x: 250, y: height / 4}, {x: 250, y: height * 3 / 4}, // Midfielders
-            {x: 300, y: height / 2}, {x: 300, y: height / 6}, {x: 300, y: height * 5 / 6}, // Forwards
-            {x: 350, y: height / 3}, {x: 350, y: height * 2 / 3}, // Strikers
+        '343': [
+            GK,
+            {...LCB, y: LCB.y - 15}, CB, {...RCB, y: RCB.y + 15},
+            {...LM, x: LM.x - 40}, {...LCM, y: LCM.y + 10}, {...RCM, y: RCM.y - 10}, {...RM, x: RM.x - 40},
+            {...LW, y: LW.y + 15}, ST, {...RW, y: RW.y - 15},
         ],
     };
 
-    let team1Positions = formations['442'];
+    let team1Positions = formations['433'];
 
     const team1Players = [
         "Goalkeeper", "Left Back", "Right Back", "Left Center Back", "Right Center Back",
