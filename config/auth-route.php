@@ -70,6 +70,7 @@ function getPageData($slug)
         'football-manager/my-club' => ['url' => DIR . '/views/football-manager-club.php', 'title' => 'Football Manager - My Club'],
         'football-manager/transfer' => ['url' => DIR . '/views/football-manager-transfer.php', 'title' => 'Football Manager - Transfer'],
         'football-manager/my-players' => ['url' => DIR . '/views/football-manager-players.php', 'title' => 'Football Manager - My Players'],
+        'football-manager/match' => ['url' => DIR . '/views/football-manager-match.php', 'title' => 'Football Manager - Match'],
         'wordpress' => ['url' => DIR . '/views/blog.php', 'title' => 'Wordpress'],
         'wordpress/new' => ['url' => DIR . '/views/blog-adjust.php', 'title' => 'New Wordpress Blog'],
         'wordpress/edit' => ['url' => DIR . '/views/blog-adjust.php', 'title' => 'Edit Wordpress Blog'],

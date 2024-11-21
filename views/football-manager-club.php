@@ -237,8 +237,6 @@ $pageContent = ob_get_clean();
 
 ob_start();
 echo "
-    <script src='https://d3js.org/d3.v7.min.js'></script>
-    <script src='https://cdnjs.cloudflare.com/ajax/libs/three.js/0.154.0/three.min.js'></script>
     <script src='" . home_url("/assets/js/pages/football-manager-club.js") . "'></script>
 ";
 $additionJs = ob_get_clean();
