@@ -98,6 +98,40 @@ const drawFootballPitch = () => {
         ctx.fillText(name, x, y + 20);
     }
 
+    // Function to draw a rounded rectangle
+    function drawRoundedRect(x, y, width, height, radius, fillStyle, strokeStyle) {
+        ctx.beginPath();
+        ctx.moveTo(x + radius, y);
+        ctx.lineTo(x + width - radius, y);
+        ctx.quadraticCurveTo(x + width, y, x + width, y + radius);
+        ctx.lineTo(x + width, y + height - radius);
+        ctx.quadraticCurveTo(x + width, y + height, x + width - radius, y + height);
+        ctx.lineTo(x + radius, y + height);
+        ctx.quadraticCurveTo(x, y + height, x, y + height - radius);
+        ctx.lineTo(x, y + radius);
+        ctx.quadraticCurveTo(x, y, x + radius, y);
+        ctx.closePath();
+
+        if (fillStyle) {
+            ctx.fillStyle = fillStyle;
+            ctx.fill();
+        }
+    }
+
+    function drawPlayerScore(x, y, score) {
+        // Draw circle around the score
+        const scoreX = x;
+        const scoreY = y + 28;
+
+        drawRoundedRect(scoreX - 11, scoreY, 22, 14, 5, "black");
+
+        // Add player score
+        ctx.fillStyle = "white";
+        ctx.font = "10px Arial";
+        ctx.textAlign = "center";
+        ctx.fillText(score, scoreX, scoreY + 7);
+    }
+
     // Draw a ball at a specific position
     function drawBall() {
         ctx.beginPath();
@@ -111,14 +145,16 @@ const drawFootballPitch = () => {
     // Draw Team 1
     const drawPlayerPositions = () => {
         team1Positions.forEach((pos, index) => {
-            drawCircle(pos.x, pos.y, 8, team1Color);
+            drawCircle(pos.x, pos.y, 10, team1Color);
             drawPlayerNumber(pos.x, pos.y, index + 1);
             drawPlayerName(pos.x, pos.y, team1Players[index]);
+            drawPlayerScore(pos.x, pos.y, '5.0');
         });
         team2Positions.forEach((pos, index) => {
-            drawCircle(pos.x, pos.y, 8, team2Color);
+            drawCircle(pos.x, pos.y, 10, team2Color);
             drawPlayerNumber(pos.x, pos.y, index + 1);
             drawPlayerName(pos.x, pos.y, team2Players[index]);
+            drawPlayerScore(pos.x, pos.y, '5.0');
         });
     };
 
