@@ -8,8 +8,9 @@ services:
       - ./php.ini:/usr/local/etc/php/php.ini
       - .:/var/www/html
     working_dir: /var/www/html
+    # Remove dependency on nginx
     depends_on:
-      - nginx
+      - mysql
 
   nginx:
     image: nginx:latest
@@ -20,7 +21,34 @@ services:
       - .:/var/www/html
       - ./nginx.conf:/etc/nginx/conf.d/default.conf
     depends_on:
-      - php
+      - php  # Only nginx depends on php
+
+  mysql:
+    image: mysql:8.0
+    container_name: mysql_container
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: phpmyadmin_container
+    environment:
+      PMA_HOST: mysql
+      PMA_PORT: 3306
+    ports:
+      - "8081:80"
+    depends_on:
+      - mysql
+
+volumes:
+  mysql_data:
 
 networks:
   default:
