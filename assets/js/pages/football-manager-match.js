@@ -1,17 +1,73 @@
+const canvas = document.getElementById("footballPitch");
+const ctx = canvas.getContext("2d");
+// Pitch Dimensions
+const width = canvas.width;
+const height = canvas.height;
+
+// Colors
+const pitchColor = "#4CAF50";
+const lineColor = "#FFFFFF";
+const team1Color = "#FF0000"; // Red
+const team2Color = "#0000FF"; // Blue
+const playerScore = 5;
+
+const team2name = 'Red Dragons';
+const team1name = 'Blue Wolves';
+
+// Formations
+const GK = {x: (width * 4) / 100, y: height / 2};
+const LB = {x: (width * 20) / 100, y: height / 6};
+const RB = {x: (width * 20) / 100, y: height * 5 / 6};
+const LCB = {x: (width * 12) / 100, y: height / 3};
+const RCB = {x: (width * 12) / 100, y: (height * 2) / 3};
+const LCM = {x: (width * 28) / 100, y: height / 3};
+const RCM = {x: (width * 28) / 100, y: (height * 2) / 3};
+const LM = {x: (width * 36) / 100, y: height / 6};
+const RM = {x: (width * 36) / 100, y: height * 5 / 6};
+const LF = {x: (width * 45) / 100, y: height * 3 / 8};
+const RF = {x: (width * 45) / 100, y: height * 5 / 8};
+const formations = {
+    442: [GK, LB, RB, LCB, RCB, LCM, RCM, LM, RM, LF, RF],
+};
+
+let team2Players;
+const team1Players = team2Players = [
+    "Goalkeeper",
+    "Left Back",
+    "Right Back",
+    "Left Center Back",
+    "Right Center Back",
+    "Left Midfielder",
+    "Right Midfielder",
+    "Center Midfielder",
+    "Center Midfielder",
+    "Left Forward",
+    "Right Forward",
+];
+
+let team1Positions = formations["442"].map((pos, idx) => {
+    const accuracy = Math.floor(Math.random() * (100 - 50 + 1)) + 50;
+    const speed = Math.floor(Math.random() * (100 - 50 + 1)) + 50;
+    const defense = Math.floor(Math.random() * (100 - 50 + 1)) + 50;
+    return {...pos, score: playerScore, accuracy, speed, defense, name: team1Players[idx]}
+});
+let team2Positions = formations["442"].map((pos, idx) => {
+    const accuracy = Math.floor(Math.random() * (100 - 50 + 1)) + 50;
+    const speed = Math.floor(Math.random() * (100 - 50 + 1)) + 50;
+    const defense = Math.floor(Math.random() * (100 - 50 + 1)) + 50;
+    return {
+        x: width - pos.x,
+        y: pos.y,
+        score: playerScore,
+        accuracy,
+        speed,
+        defense,
+        name: team2Players[idx]
+    };
+});
+
 // Football Pitch
 const drawFootballPitch = () => {
-    const canvas = document.getElementById("footballPitch");
-    const ctx = canvas.getContext("2d");
-
-    // Pitch Dimensions
-    const width = canvas.width;
-    const height = canvas.height;
-
-    // Colors
-    const pitchColor = "#4CAF50";
-    const lineColor = "#FFFFFF";
-    const team1Color = "#FF0000"; // Red
-    const team2Color = "#0000FF"; // Blue
 
     // Helper function to draw lines
     function drawLine(x1, y1, x2, y2) {
@@ -44,42 +100,6 @@ const drawFootballPitch = () => {
         ctx.strokeRect(x, y, w, h);
     }
 
-    // Formations
-    const GK = {x: (width * 4) / 100, y: height / 2};
-    const LB = {x: (width * 20) / 100, y: height / 6};
-    const RB = {x: (width * 20) / 100, y: height * 5 / 6};
-    const LCB = {x: (width * 12) / 100, y: height / 3};
-    const RCB = {x: (width * 12) / 100, y: (height * 2) / 3};
-    const LCM = {x: (width * 28) / 100, y: height / 3};
-    const RCM = {x: (width * 28) / 100, y: (height * 2) / 3};
-    const LM = {x: (width * 36) / 100, y: height / 6};
-    const RM = {x: (width * 36) / 100, y: height * 5 / 6};
-    const LF = {x: (width * 45) / 100, y: height * 3 / 8};
-    const RF = {x: (width * 45) / 100, y: height * 5 / 8};
-    const formations = {
-        442: [GK, LB, RB, LCB, RCB, LCM, RCM, LM, RM, LF, RF],
-    };
-
-    let team1Positions = formations["442"];
-    let team2Positions = formations["442"].map(pos => {
-        return {x: width - pos.x, y: pos.y};
-    });
-
-    let team2Players;
-    const team1Players = team2Players = [
-        "Goalkeeper",
-        "Left Back",
-        "Right Back",
-        "Left Center Back",
-        "Right Center Back",
-        "Left Midfielder",
-        "Right Midfielder",
-        "Center Midfielder",
-        "Center Midfielder",
-        "Left Forward",
-        "Right Forward",
-    ];
-
     // Function to draw player numbers
     function drawPlayerNumber(x, y, number) {
         ctx.font = "10px Arial";
@@ -98,40 +118,6 @@ const drawFootballPitch = () => {
         ctx.fillText(name, x, y + 20);
     }
 
-    // Function to draw a rounded rectangle
-    function drawRoundedRect(x, y, width, height, radius, fillStyle, strokeStyle) {
-        ctx.beginPath();
-        ctx.moveTo(x + radius, y);
-        ctx.lineTo(x + width - radius, y);
-        ctx.quadraticCurveTo(x + width, y, x + width, y + radius);
-        ctx.lineTo(x + width, y + height - radius);
-        ctx.quadraticCurveTo(x + width, y + height, x + width - radius, y + height);
-        ctx.lineTo(x + radius, y + height);
-        ctx.quadraticCurveTo(x, y + height, x, y + height - radius);
-        ctx.lineTo(x, y + radius);
-        ctx.quadraticCurveTo(x, y, x + radius, y);
-        ctx.closePath();
-
-        if (fillStyle) {
-            ctx.fillStyle = fillStyle;
-            ctx.fill();
-        }
-    }
-
-    function drawPlayerScore(x, y, score) {
-        // Draw circle around the score
-        const scoreX = x;
-        const scoreY = y + 28;
-
-        drawRoundedRect(scoreX - 11, scoreY, 22, 14, 5, "black");
-
-        // Add player score
-        ctx.fillStyle = "white";
-        ctx.font = "10px Arial";
-        ctx.textAlign = "center";
-        ctx.fillText(score, scoreX, scoreY + 7);
-    }
-
     // Draw a ball at a specific position
     function drawBall() {
         ctx.beginPath();
@@ -148,13 +134,13 @@ const drawFootballPitch = () => {
             drawCircle(pos.x, pos.y, 10, team1Color);
             drawPlayerNumber(pos.x, pos.y, index + 1);
             drawPlayerName(pos.x, pos.y, team1Players[index]);
-            drawPlayerScore(pos.x, pos.y, '5.0');
+            drawPlayerScore(pos);
         });
         team2Positions.forEach((pos, index) => {
             drawCircle(pos.x, pos.y, 10, team2Color);
             drawPlayerNumber(pos.x, pos.y, index + 1);
             drawPlayerName(pos.x, pos.y, team2Players[index]);
-            drawPlayerScore(pos.x, pos.y, '5.0');
+            drawPlayerScore(pos);
         });
     };
 
@@ -211,6 +197,54 @@ const drawFootballPitch = () => {
     redraw();
 };
 drawFootballPitch();
+
+// Function to draw a rounded rectangle
+function drawRoundedRect(x, y, width, height, radius, fillStyle, strokeStyle) {
+    ctx.beginPath();
+    ctx.moveTo(x + radius, y);
+    ctx.lineTo(x + width - radius, y);
+    ctx.quadraticCurveTo(x + width, y, x + width, y + radius);
+    ctx.lineTo(x + width, y + height - radius);
+    ctx.quadraticCurveTo(x + width, y + height, x + width - radius, y + height);
+    ctx.lineTo(x + radius, y + height);
+    ctx.quadraticCurveTo(x, y + height, x, y + height - radius);
+    ctx.lineTo(x, y + radius);
+    ctx.quadraticCurveTo(x, y, x + radius, y);
+    ctx.closePath();
+
+    if (fillStyle) {
+        ctx.fillStyle = fillStyle;
+        ctx.fill();
+    }
+}
+
+function drawPlayerScore(player) {
+    const {x, y, score} = player;
+    // Draw circle around the score
+    const scoreX = x;
+    const scoreY = y + 28;
+    const maxScore = 10; // Maximum score
+    const normalizedScore = score / maxScore; // Normalize score between 0 and 1
+
+    // Use normalizedScore to create a gradient from blue -> green -> yellow -> red
+    const red = Math.min(255, Math.floor(normalizedScore * 255));
+    const green = Math.min(255, Math.floor((1 - Math.abs(normalizedScore - 0.5) * 2) * 255)); // Peaks in the middle
+    const blue = Math.min(255, Math.floor((1 - normalizedScore) * 255));
+
+    const backgroundColor = `rgb(${red}, ${green}, ${blue})`;
+
+    // Calculate luminance for dynamic text color
+    const luminance = (0.299 * red + 0.587 * green + 0.114 * blue) / 255;
+    const textColor = luminance > 0.5 ? "#000000" : "#ffffff";
+
+    drawRoundedRect(scoreX - 11, scoreY, 22, 14, 5, backgroundColor);
+
+    // Add player score
+    ctx.fillStyle = textColor;
+    ctx.font = "10px Arial";
+    ctx.textAlign = "center";
+    ctx.fillText(score.toFixed(1), scoreX, scoreY + 7);
+}
 
 function simulateMatch(team1, team2) {
     const matchTime = 90 * 60; // Total match duration in minutes
@@ -328,10 +362,12 @@ function simulateAction(team, player, team1, team2, currentTime) {
                 team === team1 ? team2 : team1
             );
             if (scored) {
-                team.score++;
                 logEvent(currentTime, 'goal',
                     `GOAL! ${player.name} scores for ${team.name}.`
                 );
+                player.score += Math.random() * (3 - 1) + 1;
+                player.score = Math.min(player.score, 10);
+                drawPlayerScore(player);
             } else {
                 logEvent(currentTime, 'miss-goal', `${player.name} shoots but misses.`);
             }
@@ -378,6 +414,9 @@ function simulateAction(team, player, team1, team2, currentTime) {
             if (penaltyScored) {
                 team.score++;
                 logEvent(currentTime, 'goal', `${player.name} scores a penalty for ${team.name}.`);
+                player.score += Math.random() * (3 - 1) + 1;
+                player.score = Math.min(player.score, 10);
+                drawPlayerScore(player);
             } else {
                 logEvent(currentTime, 'miss-goal', `${player.name} misses the penalty.`);
             }
@@ -387,6 +426,9 @@ function simulateAction(team, player, team1, team2, currentTime) {
             logEvent(currentTime, 'goal', `${player.name} accidentally scores an own goal!`);
             const opposingTeam = team === team1 ? team2 : team1;
             opposingTeam.score++;
+            player.score -= Math.random() * (2 - 1) + 1;
+            player.score = Math.max(player.score, 1);
+            drawPlayerScore(player);
             break;
 
         default:
@@ -466,31 +508,17 @@ function logEvent(time, action, message) {
 
 // Example teams
 const team1 = {
-    name: "Blue Wolves",
+    name: team1name,
     score: 0,
-    players: [
-        {name: "Player 1", accuracy: 75, speed: 80},
-        {name: "Player 2", accuracy: 65, speed: 70},
-        {name: "Goalkeeper", defense: 90, speed: 50},
-    ],
-    bench: [
-        {name: "Sub 1", accuracy: 60, speed: 65},
-        {name: "Sub 2", accuracy: 50, speed: 60},
-    ],
+    players: team1Positions,
+    bench: team1Positions,
 };
 
 const team2 = {
-    name: "Red Dragons",
+    name: team2name,
     score: 0,
-    players: [
-        {name: "Player A", accuracy: 80, speed: 75},
-        {name: "Player B", accuracy: 70, speed: 70},
-        {name: "Goalkeeper", defense: 85, speed: 60},
-    ],
-    bench: [
-        {name: "Sub A", accuracy: 65, speed: 55},
-        {name: "Sub B", accuracy: 55, speed: 50},
-    ],
+    players: team2Positions,
+    bench: team2Positions,
 };
 
 // Start the match simulation
