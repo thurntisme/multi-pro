@@ -29,7 +29,6 @@ define('HOME_PATH', $_ENV['HOME_PATH'] ?? DEFAULT_HOME_PATH);
 // Config timezone
 require_once "controllers/CommonController.php";
 $commonController = new CommonController();
-date_default_timezone_set($commonController->getTimezone());
 
 require_once "controllers/AuthenticationController.php";
 $authenticationController = new AuthenticationController();

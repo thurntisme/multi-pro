@@ -42,12 +42,14 @@ ob_start();
                 </div>
                 <div class="col-4">
                     <div class="card card-height-100">
-                        <div class="card-header align-items-center d-flex justify-content-center">
+                        <div class="card-header align-items-center d-flex">
                             <h4 class="card-title mb-0 fs-14" id="curr-time">
                                 <span id="minute" class="d-inline-block text-center"
                                       style="width: 20px">00</span>:<span
                                         id="second" class="d-inline-block text-center" style="width: 20px">00</span>
                             </h4>
+                            <button class="btn btn-sm btn-light ms-auto me-1" id="btn-cancel-match">Cancel</button>
+                            <button class="btn btn-sm btn-success" id="btn-accept-match" disabled>Next</button>
                         </div>
                         <div class="card-body">
                             <div class="profile-timeline" data-simplebar style="height: 370px;">

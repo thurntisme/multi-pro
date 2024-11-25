@@ -28,6 +28,18 @@ class AuthenticationService
     $user = $stmt->fetch();
 
     if ($user && password_verify($password, $user['password'])) {
+      // Check existing tokens for the user
+      $stmt = $this->pdo->prepare('SELECT id FROM tokens WHERE user_id = ? ORDER BY last_time_login ASC');
+      $stmt->execute([$user['id']]);
+      $tokens = $stmt->fetchAll(PDO::FETCH_COLUMN); // Fetch only IDs
+
+      // Remove the oldest token if more than 3 exist
+      if (count($tokens) >= 3) {
+        $oldestTokenId = $tokens[0]; // Get the oldest token ID
+        $stmt = $this->pdo->prepare('DELETE FROM tokens WHERE id = ?');
+        $stmt->execute([$oldestTokenId]);
+      }
+
       // Generate a token
       $token = bin2hex(random_bytes(16)); // 32-character token
       $expires_at = date('Y-m-d H:i:s', strtotime('+1 hour')); // Token expiration time

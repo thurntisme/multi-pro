@@ -26,6 +26,9 @@ ob_start();
                     <div class="mt-2">
                         <a href="<?= home_url("football-manager/my-club") ?>" class="btn btn-link">Checkout My Club <i class="ri-arrow-right-line ms-1 align-middle"></i></a>
                     </div>
+                    <div class="mt-2">
+                        <a href="<?= home_url("football-manager/match") ?>" class="btn btn-link">Join a Random Match <i class="ri-arrow-right-line ms-1 align-middle"></i></a>
+                    </div>
                 </div>
             </div><!-- end card body -->
         </div>
