@@ -5,3 +5,4 @@ error_log
 database.sqlite
 .env
 .idea/
+sessions/
