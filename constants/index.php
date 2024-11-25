@@ -11,6 +11,8 @@ include "version.php";
 include "bookmarks.php";
 include "network.php";
 include "dashboard.php";
+include "football-manager.php";
+include "football-player.php";
 
 $months = [
     '01' => 'January',
@@ -345,24 +347,3 @@ $nations = [
     "Zimbabwe",
 ];
 define("DEFAULT_NATIONALITY", $nations);
-
-$namesByNation = [
-    "United States" => [
-        ["firstname" => "John", "lastname" => "Smith"],
-        ["firstname" => "Emily", "lastname" => "Davis"],
-    ],
-    "India" => [
-        ["firstname" => "Rahul", "lastname" => "Sharma"],
-        ["firstname" => "Priya", "lastname" => "Singh"],
-    ],
-    "Japan" => [
-        ["firstname" => "Taro", "lastname" => "Yamamoto"],
-        ["firstname" => "Sakura", "lastname" => "Tanaka"],
-    ],
-    "France" => [
-        ["firstname" => "Jean", "lastname" => "Dupont"],
-        ["firstname" => "Marie", "lastname" => "Durand"],
-    ],
-    // Add more nations and names as needed
-];
-define("DEFAULT_NAME_BY_NATIONALITY", $namesByNation);
