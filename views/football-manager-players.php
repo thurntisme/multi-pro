@@ -8,17 +8,9 @@ $commonController = new CommonController();
 $list = $commonController->convertResources($players);
 
 // Download player data as json file
-//$filteredPlayers = array_filter($players, function ($player) {
-//    return $player['name'] !== 'No names found.';
-//});
-//// Convert players data to JSON format
-//$jsonData = json_encode(array_values($filteredPlayers), JSON_PRETTY_PRINT);
-//// Set headers to force file download
-//header('Content-Type: application/json');
-//header('Content-Disposition: attachment; filename="players.json"');
-//header('Content-Length: ' . strlen($jsonData));
-//// Output the JSON data
-//echo $jsonData;
+$filteredPlayers = array_filter($players, function ($player) {
+    return $player['name'] !== 'No names found.';
+});
 
 ob_start();
 ?>

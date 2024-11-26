@@ -579,3 +579,53 @@ function generateRandomPlayers(int $count = 10): array
 
     return $players;
 }
+
+function getPlayersJson()
+{
+    // Set the file name
+    $fileName = "assets/json/players.json";
+
+    // Check if the JSON file exists
+    $oldData = [];
+    if (file_exists($fileName)) {
+        $existingData = file_get_contents($fileName);
+
+        if ($existingData === false) {
+            error_log("Failed to read data from {$fileName}");
+            return false;
+        }
+
+        $oldData = json_decode($existingData, true);
+        if ($oldData === null) {
+            error_log("Failed to decode JSON from {$fileName}: " . json_last_error_msg());
+            $oldData = [];
+        }
+    } else {
+        error_log("File {$fileName} not found. Initializing new data.");
+    }
+    return $oldData;
+}
+
+function exportPlayersToJson($players)
+{
+    $oldData = getPlayersJson();
+
+    // Merge existing data with new players
+    $mergedData = array_merge($oldData, $players);
+
+    // Convert merged data to JSON
+    $jsonData = json_encode($mergedData, JSON_PRETTY_PRINT);
+    if ($jsonData === false) {
+        error_log("Error encoding JSON: " . json_last_error_msg());
+        return false;
+    }
+
+    // Write the updated data back to the file
+    if (file_put_contents($fileName, $jsonData)) {
+        error_log("Data has been successfully updated in {$fileName}");
+        return true;
+    } else {
+        error_log("Failed to write updated data to file {$fileName}");
+        return false;
+    }
+}

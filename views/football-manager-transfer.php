@@ -2,8 +2,7 @@
 $pageTitle = "Football Manager Transfer";
 
 require_once DIR . '/functions/generate-player.php';
-// Generate 10 random players
-$players = generateRandomPlayers(20);
+$players = getPlayersJson();
 $commonController = new CommonController();
 $list = $commonController->convertResources($players);
 
