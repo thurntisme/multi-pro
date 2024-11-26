@@ -123,3 +123,107 @@ $namesByNation = [
     ],
 ];
 define("DEFAULT_NAME_BY_NATIONALITY", $namesByNation);
+
+$teams = [
+    [
+        'uuid' => '1b6f4567-89a1-4c12-b2d3-7456123a7890',
+        'slug' => 'phoenix-titans',
+        'name' => 'Phoenix Titans',
+    ],
+    [
+        'uuid' => '2c7e5678-90b2-5d23-c3e4-8567234b8901',
+        'slug' => 'atlas-warriors',
+        'name' => 'Atlas Warriors',
+    ],
+    [
+        'uuid' => '3d8f6789-01c3-6e34-d4f5-9678345c9012',
+        'slug' => 'crimson-falcons',
+        'name' => 'Crimson Falcons',
+    ],
+    [
+        'uuid' => '4e9g7890-12d4-7f45-e5g6-0789456d0123',
+        'slug' => 'iron-wolves',
+        'name' => 'Iron Wolves',
+    ],
+    [
+        'uuid' => '5fah8901-23e5-8g56-f6h7-1890567e1234',
+        'slug' => 'olympus-storm',
+        'name' => 'Olympus Storm',
+    ],
+    [
+        'uuid' => '6gbi9012-34f6-9h67-g7i8-2901678f2345',
+        'slug' => 'eternal-dragons',
+        'name' => 'Eternal Dragons',
+    ],
+    [
+        'uuid' => '7hcj0123-45g7-0i78-h8j9-301278901345',
+        'slug' => 'shadow-panthers',
+        'name' => 'Shadow Panthers',
+    ],
+    [
+        'uuid' => '8idk1234-56h8-1j89-i9k0-412389012456',
+        'slug' => 'thundering-rhinos',
+        'name' => 'Thundering Rhinos',
+    ],
+    [
+        'uuid' => '9jel2345-67i9-2k90-j0l1-523490123567',
+        'slug' => 'golden-stallions',
+        'name' => 'Golden Stallions',
+    ],
+    [
+        'uuid' => 'akfm3456-78j0-3l01-k1m2-634501234678',
+        'slug' => 'silver-hawks',
+        'name' => 'Silver Hawks',
+    ],
+    [
+        'uuid' => 'bgln4567-89k1-4m12-l2n3-745612345789',
+        'slug' => 'frost-giants',
+        'name' => 'Frost Giants',
+    ],
+    [
+        'uuid' => 'chmo5678-90l2-5n23-m3o4-856723456890',
+        'slug' => 'midnight-torches',
+        'name' => 'Midnight Torches',
+    ],
+    [
+        'uuid' => 'dimp6789-01m3-6o34-n4p5-967834567901',
+        'slug' => 'emerald-guardians',
+        'name' => 'Emerald Guardians',
+    ],
+    [
+        'uuid' => 'ejnq7890-12n4-7p45-o5q6-078945678012',
+        'slug' => 'scarlet-blades',
+        'name' => 'Scarlet Blades',
+    ],
+    [
+        'uuid' => 'fkpr8901-23o5-8q56-p6r7-189056789123',
+        'slug' => 'azure-knights',
+        'name' => 'Azure Knights',
+    ],
+    [
+        'uuid' => 'glqs9012-34p6-9r67-q7s8-290167890234',
+        'slug' => 'ivory-sharks',
+        'name' => 'Ivory Sharks',
+    ],
+    [
+        'uuid' => 'hmrt0123-45q7-0s78-r8t9-301278901345',
+        'slug' => 'blazing-comets',
+        'name' => 'Blazing Comets',
+    ],
+    [
+        'uuid' => 'inuv1234-56r8-1t89-s9u0-412389012456',
+        'slug' => 'volcanic-eagles',
+        'name' => 'Volcanic Eagles',
+    ],
+    [
+        'uuid' => 'jowv2345-67s9-2u90-t0v1-523490123567',
+        'slug' => 'steel-spartans',
+        'name' => 'Steel Spartans',
+    ],
+    [
+        'uuid' => 'kpxw3456-78t0-3v01-u1w2-634501234678',
+        'slug' => 'radiant-monarchs',
+        'name' => 'Radiant Monarchs',
+    ],
+];
+define("DEFAULT_FOOTBALL_TEAM", $teams);
