@@ -19,15 +19,39 @@ $seasonsRate = [
 ];
 // Updated Popular Nations: Top 10 FIFA rankings for 2024
 $popularNations = [
-    "Argentina", "France", "Brazil", "England", "Belgium",
-    "Portugal", "Netherlands", "Spain", "Italy", "Croatia"
+    "Argentina",
+    "France",
+    "Brazil",
+    "England",
+    "Belgium",
+    "Portugal",
+    "Netherlands",
+    "Spain",
+    "Italy",
+    "Croatia"
 ];
 // Updated Semi-Popular Nations: Ranked 11-30 FIFA rankings for 2024
 $semiPopularNations = [
-    "Germany", "Morocco", "Mexico", "Uruguay", "Switzerland",
-    "Colombia", "Senegal", "USA", "Japan", "Denmark",
-    "Australia", "Serbia", "Poland", "Iran", "Korea Republic",
-    "Peru", "Sweden", "Ukraine", "Chile", "Egypt"
+    "Germany",
+    "Morocco",
+    "Mexico",
+    "Uruguay",
+    "Switzerland",
+    "Colombia",
+    "Senegal",
+    "USA",
+    "Japan",
+    "Denmark",
+    "Australia",
+    "Serbia",
+    "Poland",
+    "Iran",
+    "Korea Republic",
+    "Peru",
+    "Sweden",
+    "Ukraine",
+    "Chile",
+    "Egypt"
 ];
 
 function getRandomFullName($nation, $namesByNation): string
@@ -127,8 +151,7 @@ function calculatePlayerWage(
     array  $playablePositions,
     string $season,
     int    $overallAbility
-): float
-{
+): float {
     // Define base nation multipliers
     global $popularNations, $semiPopularNations;
     $nationMultipliers = [
@@ -191,8 +214,7 @@ function calculateMarketValue(
     array  $playablePositions,
     string $season,
     int    $overallAbility
-): float
-{
+): float {
     // Step 1: Define the base salary depending on the nation
     global $popularNations, $semiPopularNations;
     $baseSalaries = [
@@ -527,10 +549,6 @@ function generateRandomPlayers(int $count = 10): array
 
         // Generate abilities with seasons
         $season = getSeason($overallAbility);
-        $abilities = [
-            'season' => $season,
-            'current_ability' => (int)round($overallAbility * $seasonsRate[$season]),
-        ];
         $height = rand(165, 195); // in cm
         $weight = rand($height - 105, $height - 85); // Proportional weight
 
@@ -543,15 +561,12 @@ function generateRandomPlayers(int $count = 10): array
             'best_position' => $bestPosition,
             'playable_positions' => $playablePositions,
             'attributes' => $attributes,
-            'abilities' => $abilities,
-            'contract' => [
-                'wage' => calculatePlayerWage($nationality, $bestPosition, $playablePositions, $season, $overallAbility),
-                'contract_end' => rand(10, 20),
-            ],
-            'injury' => [
-                'status' => rand(1, 5),
-                'recovery_time' => rand(3, 10),
-            ],
+            'season' => $season,
+            'ability' => (int)round($overallAbility * $seasonsRate[$season]),
+            'contract_wage' => calculatePlayerWage($nationality, $bestPosition, $playablePositions, $season, $overallAbility),
+            'contract_end' => rand(10, 20),
+            'injury' => rand(1, 5),
+            'recovery_time' => rand(3, 10),
             'market_value' => calculateMarketValue($nationality, $bestPosition, $playablePositions, $season, $overallAbility),
             'reputation' => rand(1, 10),
             'form' => rand(1, 10),

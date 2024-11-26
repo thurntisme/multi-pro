@@ -43,7 +43,7 @@ ob_start();
                                 <div class="flex-grow-1 ms-3">
                                     <h5 class="list-title fs-15 mb-1"><?= $player['name'] ?></h5>
                                     <p class="list-text mb-0 fs-12"><?= $player['best_position'] ?>
-                                        | <?= $player['abilities']['current_ability'] ?>
+                                        | <?= $player['ability'] ?>
                                         | <?= implode(", ", $player['playable_positions']) ?></p>
                                 </div>
                             </div>

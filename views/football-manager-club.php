@@ -62,7 +62,7 @@ ob_start();
                                 <h5 class="fs-16 mb-1"><?= $lineupPlayers[0]['name'] ?></h5>
                                 <p class="text-muted mb-0 fs-14"><?= $lineupPlayers[0]['nationality'] ?></p>
                                 <p class="text-muted mb-0 mt-2"><?= $lineupPlayers[0]['best_position'] ?>
-                                    (<?= $lineupPlayers[0]['abilities']['current_ability'] ?>)
+                                    (<?= $lineupPlayers[0]['ability'] ?>)
                                     | <?= implode(", ", $lineupPlayers[0]['playable_positions']) ?></p>
                             </div>
                         </div>
@@ -165,7 +165,7 @@ ob_start();
                                                         <td class="text-center"
                                                             style="width: 10%;"><?= $item['best_position'] ?></td>
                                                         <td><?= $item['name'] ?></td>
-                                                        <td class="text-center"><?= $item['abilities']['current_ability'] ?></td>
+                                                        <td class="text-center"><?= $item['ability'] ?></td>
                                                         <td class="text-center" style="width: 15%;">
                                                             <div class="progress">
                                                                 <div class="progress-bar bg-success" role="progressbar"
@@ -206,7 +206,7 @@ ob_start();
                                                             <td class="text-center"
                                                                 style="width: 10%;"><?= $item['best_position'] ?></td>
                                                             <td><?= $item['name'] ?></td>
-                                                            <td class="text-center"><?= $item['abilities']['current_ability'] ?></td>
+                                                            <td class="text-center"><?= $item['ability'] ?></td>
                                                             <td class="text-center" style="width: 20%;">
                                                                 <div class="progress">
                                                                     <div class="progress-bar bg-success" role="progressbar"
