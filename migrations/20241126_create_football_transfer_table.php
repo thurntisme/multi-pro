@@ -10,10 +10,10 @@ return function (PDO $pdo) {
         'amount BIGINT NOT NULL',
         'user_id INTEGER NOT NULL',
         'player_id INTEGER NOT NULL',
-        'FOREIGN KEY(user_id) REFERENCES users(user_id)',
-        'FOREIGN KEY(player_id) REFERENCES football_player(player_id)',
         'created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP',
         'updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP',
+        'FOREIGN KEY(user_id) REFERENCES users(user_id)',
+        'FOREIGN KEY(player_id) REFERENCES football_player(player_id)',
     ];
 
     // Convert the attributes array into a string
