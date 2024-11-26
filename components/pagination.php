@@ -1,7 +1,7 @@
 <?php
 
 if ($count > 0) {
-    $itemsPerPage = 12; // Number of results per page
+    $itemsPerPage = $perPage ?? 12; // Number of results per page
     $totalItems = $count; // Total number of items
     $currentPage = isset($_GET['page']) ? (int)$_GET['page'] : 1; // Current page from the query string
     $totalPages = ceil($totalItems / $itemsPerPage); // Calculate total pages
@@ -36,16 +36,38 @@ if ($count > 0) {
     }
 
     $pageLinks = '';
+    $adjacentPages = 2; // Number of pages to show before and after the current page
+    $displayFirstLast = true; // Show first and last page links
+
     // Page number links
-    for ($i = 1; $i <= $totalPages; $i++) {
-        if ($i == $currentPage) {
-            $pageLinks .= '<li class="page-item active">
+    if ($totalPages > 1) {
+        // Add the first page link if needed
+        if ($displayFirstLast && $currentPage > ($adjacentPages + 1)) {
+            $pageLinks .= '<li class="page-item">
+                <a href="' . generatePageUrl(['page' => 1]) . '" class="page-link">1</a>
+            </li>';
+            $pageLinks .= '<li class="page-item disabled"><a href="#" class="page-link">...</a></li>';
+        }
+
+        // Add links for pages around the current page
+        for ($i = max(1, $currentPage - $adjacentPages); $i <= min($totalPages, $currentPage + $adjacentPages); $i++) {
+            if ($i == $currentPage) {
+                $pageLinks .= '<li class="page-item active">
                     <a href="#" class="page-link">' . $i . '</a>
                 </li>';
-        } else {
-            $pageLinks .= '<li class="page-item ">
+            } else {
+                $pageLinks .= '<li class="page-item">
                     <a href="' . generatePageUrl(['page' => $i]) . '" class="page-link">' . $i . '</a>
                 </li>';
+            }
+        }
+
+        // Add the last page link if needed
+        if ($displayFirstLast && $currentPage < ($totalPages - $adjacentPages)) {
+            $pageLinks .= '<li class="page-item disabled"><a href="#" class="page-link">...</a></li>';
+            $pageLinks .= '<li class="page-item">
+                <a href="' . generatePageUrl(['page' => $totalPages]) . '" class="page-link">' . $totalPages . '</a>
+            </li>';
         }
     }
 
