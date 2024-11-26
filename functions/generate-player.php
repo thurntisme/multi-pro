@@ -204,7 +204,7 @@ function calculatePlayerWage(
     // Calculate wage
     $wage = $baseNation * ($positionModifier + $flexibilityBonus) * $seasonMultiplier * $overallAbility * 100;
 
-    return round($wage, 2); // Round for readability
+    return round($wage + rand(100, 400), 2); // Round for readability
 }
 
 
@@ -218,9 +218,9 @@ function calculateMarketValue(
     // Step 1: Define the base salary depending on the nation
     global $popularNations, $semiPopularNations;
     $baseSalaries = [
-        'Tier 1' => 2000000, // High-paying countries like Brazil, Germany, Argentina
-        'Tier 2' => 1000000, // Mid-tier countries like Zimbabwe, Egypt, Ghana
-        'Tier 3' => 500000,  // Lower-paying countries
+        'Tier 1' => 1500000,
+        'Tier 2' => 1000000,
+        'Tier 3' => 500000,
     ];
 
     // Assign tier for the nation (using the same tiering system as before)
@@ -272,7 +272,7 @@ function calculateMarketValue(
     $salary = $baseSalary * $positionModifier * $abilityModifier * $seasonMultiplier * (1 + $versatilityBonus);
 
     // Return the calculated salary (annual salary)
-    return round($salary, 2);
+    return round($salary + rand(100, 400), 2);
 }
 
 function formatCurrency(float $value): string
@@ -287,9 +287,9 @@ function getRandomNation($nations)
     global $popularNations, $semiPopularNations;
     $nationRates = array_map(function ($nation) use ($popularNations, $semiPopularNations) {
         if (in_array($nation, $popularNations)) {
-            return [$nation => 10]; // High rate
+            return [$nation => 3]; // High rate
         } elseif (in_array($nation, $semiPopularNations)) {
-            return [$nation => 5]; // Medium rate
+            return [$nation => 2]; // Medium rate
         } else {
             return [$nation => 1]; // Low rate
         }
@@ -312,7 +312,7 @@ function getRandomNation($nations)
 
 function generateRandomPlayers(int $count = 10): array
 {
-    global $positions, $seasons, $seasonsRate;
+    global $positions, $seasonsRate;
     $players = [];
 
     for ($i = 0; $i < $count; $i++) {
@@ -608,6 +608,9 @@ function getPlayersJson()
 
 function exportPlayersToJson($players)
 {
+    // Set the file name
+    $fileName = "assets/json/players.json";
+
     $oldData = getPlayersJson();
 
     // Merge existing data with new players

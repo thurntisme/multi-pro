@@ -11,9 +11,6 @@ ob_start();
 
 <div class="row">
     <div class="col-lg-12">
-        <?php
-        var_dump(DEFAULT_FOOTBALL_PLAYERS);
-        ?>
         <div class="card">
             <div class="card-header">
                 <?php includeFileWithVariables('components/football-player-topbar.php'); ?>

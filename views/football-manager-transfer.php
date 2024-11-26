@@ -118,9 +118,12 @@ ob_start();
                                                     <td class="text-center"><?= formatCurrency($item['contract_wage']) ?></td>
                                                     <td class="text-center"><?= formatCurrency($item['market_value']) ?></td>
                                                     <td class="text-center">
-                                                        <button class="btn btn-soft-primary">Join</button>
-                                                        <button class="btn btn-soft-success">Sell</button>
-                                                        <button class="btn btn-soft-danger">Delete</button>
+                                                        <button class="btn btn-soft-success">
+                                                            <i class="ri ri-shopping-cart-line"></i>
+                                                        </button>
+                                                        <button class="btn btn-soft-danger">
+                                                            <i class="ri ri-heart-line"></i>
+                                                        </button>
                                                     </td>
                                                 </tr>
                                         <?php }
@@ -128,20 +131,9 @@ ob_start();
 
                                     </tbody>
                                 </table>
-                                <div class="noresult" style="display: none">
-                                    <div class="text-center">
-                                        <lord-icon src="https://cdn.lordicon.com/msoeawqm.json" trigger="loop"
-                                            colors="primary:#121331,secondary:#08a88a"
-                                            style="width:75px;height:75px"></lord-icon>
-                                        <h5 class="mt-2">Sorry! No Result Found</h5>
-                                        <p class="text-muted mb-0">We've searched more than 150+ companies We did
-                                            not find
-                                            any companies for you search.</p>
-                                    </div>
-                                </div>
                             </div>
                             <?php
-                            includeFileWithVariables('components/pagination.php', array("count" => $list['total_items']));
+                            includeFileWithVariables('components/pagination.php', array("count" => $list['total_items'], "perPage" => $list['per_page']));
                             ?>
                         </div>
                     </div>
