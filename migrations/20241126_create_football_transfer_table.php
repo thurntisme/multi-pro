@@ -8,6 +8,8 @@ return function (PDO $pdo) {
         'type TEXT NOT NULL',
         'status TEXT NOT NULL DEFAULT "pending"',
         'amount BIGINT NOT NULL',
+        'is_success BOOLEAN DEFAULT 0',
+        'response_at TIMESTAMP',
         'manager_id INTEGER NOT NULL',
         'player_id INTEGER NOT NULL',
         'created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP',

@@ -48,9 +48,18 @@ class FootballTransferService
     // Create a new code
     public function createTransfer($type, $player_id, $amount)
     {
-        $sql = "INSERT INTO football_transfer (type, player_id, amount, manager_id) VALUES (:type, :player_id, :amount, :manager_id)";
+        $is_success = rand(0, 1);  // Random boolean (0 or 1)
+        $current_time = time();  // Current timestamp (now)
+        $min_time = 4 * 60 * 60;  // 4 hours in seconds
+        $max_time = 7 * 24 * 60 * 60;  // 7 days in seconds
+
+        // Random time between 4 hours and 7 days from now
+        $random_time_in_seconds = rand($min_time, $max_time);
+        $response_at = date('Y-m-d H:i:s', $current_time + $random_time_in_seconds);  // Format as MySQL datetime
+
+        $sql = "INSERT INTO football_transfer (type, player_id, amount, manager_id, is_success, response_at) VALUES (:type, :player_id, :amount, :manager_id, :is_success, :response_at)";
         $stmt = $this->pdo->prepare($sql);
-        $stmt->execute([':type' => $type, ':player_id' => $player_id, ':amount' => $amount, ':manager_id' => $this->user_id]);
+        $stmt->execute([':type' => $type, ':player_id' => $player_id, ':amount' => $amount, ':is_success' => $is_success, ':response_at' => $response_at, ':manager_id' => $this->user_id]);
 
         return $this->pdo->lastInsertId();
     }
