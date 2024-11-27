@@ -18,24 +18,27 @@ class FootballTeamController
     }
 
     // Handle creating a new code
-    public function createCode()
+    public function createTeam()
     {
-        $title = $_POST['title'] ?? '';
-        $content = $_POST['content'] ?? '';
-        $tags = $_POST['tags'] ?? '';
-        $url = $_POST['url'] ?? '';
+        $team_name = $_POST['team_name'] ?? '';
 
-        if ($title) {
-            $this->footballTeamService->createCode($title, $content, $tags, $url);
+        if ($team_name) {
+            $this->initializeTeams(DEFAULT_FOOTBALL_TEAM);
+            $this->footballTeamService->createTeam($team_name);
             $_SESSION['message_type'] = 'success';
-            $_SESSION['message'] = "Code created successfully";
+            $_SESSION['message'] = "Team created successfully";
         } else {
             $_SESSION['message_type'] = 'danger';
-            $_SESSION['message'] = "Failed to create code";
+            $_SESSION['message'] = "Failed to create team";
         }
 
-        header("Location: " . home_url("code"));
+        header("Location: " . home_url("football-manager"));
         exit;
+    }
+
+    public function initializeTeams($teams)
+    {
+        $this->footballTeamService->initializeTeams($teams);
     }
 
     // Handle updating a code

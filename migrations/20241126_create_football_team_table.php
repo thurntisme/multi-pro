@@ -18,7 +18,7 @@ return function (PDO $pdo) {
         'created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP',
         'updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP',
         'manager_id TEXT NOT NULL',
-        'FOREIGN KEY(manager_id) REFERENCES users(user_id)'
+        'FOREIGN KEY(manager_id) REFERENCES users(id)'
     ];
 
     // Convert the attributes array into a string

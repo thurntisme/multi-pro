@@ -12,12 +12,45 @@ class FootballTeamService
         $this->user_id = $user_id;
     }
 
-    // Create a new code
-    public function createCode($title, $content, $tags, $url)
+    public function initializeTeams(array $teams)
     {
-        $sql = "INSERT INTO codes (title, content, tags, url, user_id) VALUES (:title, :content, :tags, :url, :user_id)";
+        $sqlCheck = "SELECT COUNT(*) FROM football_team";
+        $stmtCheck = $this->pdo->query($sqlCheck);
+        $count = $stmtCheck->fetchColumn();
+
+        if ($count > 0) {
+            // Teams already initialized
+            return false;
+        }
+
+        $this->pdo->beginTransaction();
+        try {
+            $sqlInsert = "INSERT INTO football_team (team_name, league_position, manager_id) 
+                          VALUES (:team_name, :league_position, :manager_id)";
+            $stmtInsert = $this->pdo->prepare($sqlInsert);
+
+            foreach ($teams as $index => $team) {
+                $stmtInsert->execute([
+                    ':team_name' => $team['name'],
+                    ':league_position' => $index + 1,
+                    ':manager_id' => $this->user_id,
+                ]);
+            }
+
+            $this->pdo->commit();
+            return true;
+        } catch (Exception $e) {
+            $this->pdo->rollBack();
+            throw $e;
+        }
+    }
+
+    // Create a new code
+    public function createTeam($team_name)
+    {
+        $sql = "INSERT INTO football_team (team_name, manager_id) VALUES (:team_name, :manager_id)";
         $stmt = $this->pdo->prepare($sql);
-        $stmt->execute([':title' => $title, ':content' => $content, ':tags' => $tags, ':url' => $url, ':user_id' => $this->user_id]);
+        $stmt->execute([':team_name' => $team_name, ':manager_id' => $this->user_id]);
 
         return $this->pdo->lastInsertId();
     }
@@ -45,7 +78,7 @@ class FootballTeamService
     // Get all codes
     public function getAllTeams()
     {
-        $sql = "SELECT * FROM football_team ORDER BY updated_at DESC ";
+        $sql = "SELECT * FROM football_team ORDER BY league_position ASC ";
         $stmt = $this->pdo->query($sql);
 
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
