@@ -67,4 +67,10 @@ class UserController
     {
         return $this->userService->setUserPoint($user_id);
     }
+
+    public function getSystemUser()
+    {
+        return $this->userService->getUser('username', 'system');
+    }
+
 }

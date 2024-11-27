@@ -18,7 +18,7 @@ return function (PDO $pdo) {
         'budget INTEGER DEFAULT 20241126',
         'created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP',
         'updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP',
-        'manager_id TEXT NOT NULL',
+        'manager_id INTEGER NOT NULL',
         'FOREIGN KEY(manager_id) REFERENCES users(id)'
     ];
 
