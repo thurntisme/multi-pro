@@ -9,7 +9,7 @@ return function (PDO $pdo) {
         'created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP',
         'updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP',
         'user_id INTEGER NOT NULL',
-        'FOREIGN KEY(user_id) REFERENCES users(user_id)'
+        'FOREIGN KEY(user_id) REFERENCES users(id)'
     ];
 
     // Convert the attributes array into a string
