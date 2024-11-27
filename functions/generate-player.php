@@ -275,9 +275,10 @@ function calculateMarketValue(
     return round($salary + rand(100, 400), 2);
 }
 
-function formatCurrency(float $value): string
+function formatCurrency(float $value, bool $displaySymbol = true): string
 {
-    return "$" . number_format($value);
+    if (empty($value)) return '0.00';
+    return ($displaySymbol ? "$" : '') . number_format($value);
 }
 
 // Function to pick a nation based on rates
@@ -604,6 +605,38 @@ function getPlayersJson()
         error_log("File {$fileName} not found. Initializing new data.");
     }
     return $oldData;
+}
+
+function getPlayerJsonByUuid($targetUuid)
+{
+    // Set the file name
+    $fileName = "assets/json/players.json";
+
+    // Check if the JSON file exists
+    $player = null;
+    if (file_exists($fileName)) {
+        $existingData = file_get_contents($fileName);
+
+        if ($existingData === false) {
+            error_log("Failed to read data from {$fileName}");
+            return false;
+        }
+
+        $oldData = json_decode($existingData, true);
+        if ($oldData === null) {
+            error_log("Failed to decode JSON from {$fileName}: " . json_last_error_msg());
+        } else {
+            $filteredArray = array_filter($oldData, function ($item) use ($targetUuid) {
+                return $item['uuid'] === $targetUuid;
+            });
+
+            // Convert the filtered result into a re-indexed array (optional)
+            $player = array_values($filteredArray)[0];
+        }
+    } else {
+        error_log("File {$fileName} not found.");
+    }
+    return $player;
 }
 
 function exportPlayersToJson($players)

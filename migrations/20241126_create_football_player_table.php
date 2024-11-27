@@ -6,10 +6,10 @@ return function (PDO $pdo) {
     $attributes = [
         'id INTEGER PRIMARY KEY AUTOINCREMENT',
         'player_uuid TEXT NOT NULL',
-        'age INTEGER NOT NULL',
-        'injury INTEGER NOT NULL',
-        'recovery_time INTEGER NOT NULL',
-        'ability INTEGER NOT NULL',
+        'age INTEGER',
+        'injury INTEGER',
+        'recovery_time INTEGER',
+        'ability INTEGER',
         'passing INTEGER',
         'dribbling INTEGER',
         'first_touch INTEGER',
@@ -44,7 +44,7 @@ return function (PDO $pdo) {
         'created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP',
         'updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP',
         'team_id TEXT NOT NULL',
-        'FOREIGN KEY(team_id) REFERENCES football_team(team_id)'
+        'FOREIGN KEY(team_id) REFERENCES football_team(id)'
     ];
 
     // Convert the attributes array into a string

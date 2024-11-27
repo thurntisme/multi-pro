@@ -6,14 +6,14 @@ return function (PDO $pdo) {
     $attributes = [
         'id INTEGER PRIMARY KEY AUTOINCREMENT',
         'type TEXT NOT NULL',
-        'status TEXT NOT NULL',
+        'status TEXT NOT NULL DEFAULT "pending"',
         'amount BIGINT NOT NULL',
-        'user_id INTEGER NOT NULL',
+        'manager_id INTEGER NOT NULL',
         'player_id INTEGER NOT NULL',
         'created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP',
         'updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP',
-        'FOREIGN KEY(user_id) REFERENCES users(user_id)',
-        'FOREIGN KEY(player_id) REFERENCES football_player(player_id)',
+        'FOREIGN KEY(manager_id) REFERENCES users(id)',
+        'FOREIGN KEY(player_id) REFERENCES football_player(id)',
     ];
 
     // Convert the attributes array into a string

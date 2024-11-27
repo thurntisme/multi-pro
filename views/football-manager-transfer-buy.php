@@ -2,12 +2,16 @@
 $pageTitle = "Football Manager Transfer";
 
 require_once DIR . '/functions/generate-player.php';
-require_once DIR . '/controllers/FootballPlayerController.php';
-$players = getPlayersJson();
-$commonController = new CommonController();
-$list = $commonController->convertResources($players);
+require_once DIR . '/controllers/FootballTransferController.php';
 
-$footballPlayerController = new FootballPlayerController();
+$player = getPlayerJsonByUuid($_GET['p_uuid']);
+$commonController = new CommonController();
+
+$footballTransferController = new FootballTransferController();
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $footballTransferController->createTransferBuyPlayer();
+};
 
 ob_start();
 ?>
@@ -22,6 +26,9 @@ ob_start();
     </div>
     <!--end col-->
     <div class="col-lg-12">
+        <?php
+        include_once DIR . '/components/alert.php';
+        ?>
         <div class="row">
             <div class="col-xl-3 col-sm-6">
                 <div class="card card-animate">
@@ -158,29 +165,29 @@ ob_start();
                     <div class="card-body p-0">
                         <div class="tab-content text-muted">
                             <div class="tab-pane active" id="cryptoBuy" role="tabpanel">
-                                <div class="p-3 bg-warning-subtle">
+                                <!-- <div class="p-3 bg-warning-subtle">
                                     <div class="float-end ms-2">
                                         <h6 class="text-warning mb-0">Balance : <span class="text-body">$12,426.07</span></h6>
                                     </div>
                                     <h6 class="mb-0 text-danger">Buy Player</h6>
-                                </div>
-                                <div class="p-3">
+                                </div> -->
+                                <form method="POST" action="<?= $_SERVER['REQUEST_URI'] ?>" class="p-3">
+                                    <?php
+                                    $market_value = formatCurrency($player['market_value'], false);
+                                    $fees = $player['market_value'] * 0.05 / 100;
+                                    $total_amount = formatCurrency($player['market_value'] + $fees);
+                                    ?>
+                                    <input type="hidden" name="player_uuid" value="<?= $_GET['p_uuid'] ?>" />
                                     <div>
                                         <div class="input-group mb-3">
                                             <label class="input-group-text">Market Value</label>
-                                            <input type="text" class="form-control" placeholder="0" readonly>
+                                            <input type="text" class="form-control text-end" placeholder="<?= $market_value ?>" readonly>
                                             <label class="input-group-text">$</label>
                                         </div>
 
                                         <div class="input-group mb-3">
                                             <label class="input-group-text">Your Price</label>
-                                            <input type="text" class="form-control" placeholder="2.045585">
-                                            <label class="input-group-text">$</label>
-                                        </div>
-
-                                        <div class="input-group mb-0">
-                                            <label class="input-group-text">Bonus</label>
-                                            <input type="text" class="form-control" placeholder="2700.16">
+                                            <input type="text" class="form-control text-end" placeholder="<?= $market_value ?>" readonly>
                                             <label class="input-group-text">$</label>
                                         </div>
                                     </div>
@@ -190,30 +197,22 @@ ob_start();
                                                 <p class="fs-13 mb-0">Transaction Fees<span class="text-muted ms-1 fs-11">(0.05%)</span></p>
                                             </div>
                                             <div class="flex-shrink-0">
-                                                <h6 class="mb-0">$1.08</h6>
-                                            </div>
-                                        </div>
-                                        <div class="d-flex mb-2">
-                                            <div class="flex-grow-1">
-                                                <p class="fs-13 mb-0">Minimum Received<span class="text-muted ms-1 fs-11">(2%)</span></p>
-                                            </div>
-                                            <div class="flex-shrink-0">
-                                                <h6 class="mb-0">$7.85</h6>
+                                                <h6 class="mb-0"><?= formatCurrency($fees) ?></h6>
                                             </div>
                                         </div>
                                         <div class="d-flex">
                                             <div class="flex-grow-1">
-                                                <p class="fs-13 mb-0">Estimated Rate</p>
+                                                <p class="fs-13 mb-0">Total amount</p>
                                             </div>
                                             <div class="flex-shrink-0">
-                                                <h6 class="mb-0">1 BTC ~ $46982.70</h6>
+                                                <h6 class="mb-0"><?= $total_amount ?></h6>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="mt-3 pt-2">
-                                        <button type="button" class="btn btn-primary w-100">Enter Auction</button>
+                                        <button type="submit" class="btn btn-primary w-100">Enter Auction</button>
                                     </div>
-                                </div>
+                                </form>
                             </div>
                         </div>
                     </div>

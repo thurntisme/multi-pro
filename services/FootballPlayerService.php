@@ -46,11 +46,12 @@ class FootballPlayerService
     }
 
     // Create a new code
-    public function createTeam($team_name)
+    public function createPlayer($team_id, $player)
     {
-        $sql = "INSERT INTO football_team (team_name, manager_id) VALUES (:team_name, :manager_id)";
+        $player_uuid = $player['uuid'];
+        $sql = "INSERT INTO football_player (team_id, player_uuid) VALUES (:team_id, :player_uuid)";
         $stmt = $this->pdo->prepare($sql);
-        $stmt->execute([':team_name' => $team_name, ':manager_id' => $this->user_id]);
+        $stmt->execute([':team_id' => $team_id, ':player_uuid' => $player_uuid]);
 
         return $this->pdo->lastInsertId();
     }
@@ -109,5 +110,13 @@ class FootballPlayerService
             $team['players'] = $this->getTeamPlayers($team['id']);
         }
         return $team;
+    }
+    public function getPlayerById($id)
+    {
+        $sql = "SELECT * FROM football_player WHERE  id = :id";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute([':id' => $id]);
+
+        return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 }

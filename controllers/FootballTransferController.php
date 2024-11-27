@@ -1,11 +1,14 @@
 <?php
 
 require_once DIR . '/services/FootballTransferService.php';
+require_once DIR . '/controllers/FootballPlayerController.php';
+require_once DIR . '/functions/generate-player.php';
 
 class FootballTransferController
 {
     private $user_id;
     private $pdo;
+    private $footballPlayerController;
     private $footballTransferService;
 
     public function __construct()
@@ -14,26 +17,51 @@ class FootballTransferController
         global $pdo;
         $this->user_id = $user_id;
         $this->pdo = $pdo;
+        $this->footballPlayerController = new FootballPlayerController();
         $this->footballTransferService = new FootballTransferService($pdo);
     }
 
     // Handle creating a new code
-    public function createTeam()
+    public function createTransfer($type)
     {
-        $team_name = $_POST['team_name'] ?? '';
-
-        if ($team_name) {
-            $this->initializeTeams(DEFAULT_FOOTBALL_TEAM);
-            $this->footballTransferService->createTeam($team_name);
+        if ($type) {
+            if ($type == 'buy') {
+                $playerId = $this->footballPlayerController->createPlayer($_POST['player_uuid']);
+                if ($playerId) {
+                    $player = $this->footballPlayerController->viewPlayer($playerId);
+                    $player_id = $player['id'];
+                    $market_value = $player['market_value'] ?? 0;
+                    $amount = $market_value + ($market_value * 0.05 / 100);
+                    try {
+                        $this->footballTransferService->createTransfer($type, $player_id, (int)$amount);
+                    } catch (\Throwable $th) {
+                        $_SESSION['message_type'] = 'danger';
+                        $_SESSION['message'] = "Failed to create transfer. " . $th->getMessage() . "\n" . $type . ', ' . $player_id . ', ' . $amount;
+                        header("Location: " . $_SERVER['REQUEST_URI']);
+                        exit;
+                    }
+                }
+            }
             $_SESSION['message_type'] = 'success';
-            $_SESSION['message'] = "Team created successfully";
+            $_SESSION['message'] = "Your transfer is processing";
+            header("Location: " . home_url("football-manager/transfer/buy-list"));
         } else {
             $_SESSION['message_type'] = 'danger';
-            $_SESSION['message'] = "Failed to create team";
+            $_SESSION['message'] = "Failed to create transfer";
+            header("Location: " . $_SERVER['REQUEST_URI']);
         }
 
-        header("Location: " . home_url("football-manager"));
         exit;
+    }
+
+    public function createTransferBuyPlayer()
+    {
+        $this->createTransfer('buy');
+    }
+
+    public function createTransferSellPlayer()
+    {
+        $this->createTransfer('sell');
     }
 
     public function initializeTeams($teams)
@@ -91,18 +119,15 @@ class FootballTransferController
     }
 
     // Get all transfers
-    public function getTransferSQL($queryType = "result", $transferType)
+    public function getTransferSQL($queryType = "result", $transferType = '')
     {
         // Pagination parameters
         $itemsPerPage = 10; // Number of results per page
         $page = isset($_GET['page']) ? (int) $_GET['page'] : 1; // Current page number
         $offset = ($page - 1) * $itemsPerPage; // Offset for LIMIT clause
 
-        // Filter last updated
-        $lastUpdated = isset($_GET['last_updated']) ? $_GET['last_updated'] : '';
-
         $selectSql = $queryType === "result" ? "SELECT * FROM football_transfer" : "SELECT COUNT(*) FROM football_transfer";
-        $sql = $selectSql . " WHERE user_id = $this->user_id ";
+        $sql = $selectSql . " WHERE manager_id = $this->user_id ";
 
         if ($transferType !== '') {
             $sql .= " AND type = :type";

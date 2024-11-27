@@ -46,11 +46,11 @@ class FootballTransferService
     }
 
     // Create a new code
-    public function createTeam($team_name)
+    public function createTransfer($type, $player_id, $amount)
     {
-        $sql = "INSERT INTO football_team (team_name, manager_id) VALUES (:team_name, :manager_id)";
+        $sql = "INSERT INTO football_transfer (type, player_id, amount, manager_id) VALUES (:type, :player_id, :amount, :manager_id)";
         $stmt = $this->pdo->prepare($sql);
-        $stmt->execute([':team_name' => $team_name, ':manager_id' => $this->user_id]);
+        $stmt->execute([':type' => $type, ':player_id' => $player_id, ':amount' => $amount, ':manager_id' => $this->user_id]);
 
         return $this->pdo->lastInsertId();
     }

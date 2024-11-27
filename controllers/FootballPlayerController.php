@@ -1,11 +1,14 @@
 <?php
 
+require_once DIR . '/controllers/FootballTeamController.php';
 require_once DIR . '/services/FootballPlayerService.php';
+require_once DIR . '/functions/generate-player.php';
 
 class FootballPlayerController
 {
     private $user_id;
     private $pdo;
+    private $footballTeamController;
     private $footballPlayerService;
 
     public function __construct()
@@ -15,25 +18,20 @@ class FootballPlayerController
         $this->user_id = $user_id;
         $this->pdo = $pdo;
         $this->footballPlayerService = new FootballPlayerService($pdo);
+        $this->footballTeamController = new FootballTeamController($pdo);
     }
 
     // Handle creating a new code
-    public function createTeam()
+    public function createPlayer($uuid)
     {
-        $team_name = $_POST['team_name'] ?? '';
+        $player = getPlayerJsonByUuid($uuid);
+        $team = $this->footballTeamController->getMyTeam();
 
-        if ($team_name) {
-            $this->initializeTeams(DEFAULT_FOOTBALL_TEAM);
-            $this->footballPlayerService->createTeam($team_name);
-            $_SESSION['message_type'] = 'success';
-            $_SESSION['message'] = "Team created successfully";
+        if ($player) {
+            return $this->footballPlayerService->createPlayer($team['id'], $player);
         } else {
-            $_SESSION['message_type'] = 'danger';
-            $_SESSION['message'] = "Failed to create team";
+            return null;
         }
-
-        header("Location: " . home_url("football-manager"));
-        exit;
     }
 
     public function initializeTeams($teams)
@@ -142,5 +140,22 @@ class FootballPlayerController
             'list' => $this->getFavoritePlayerSQL("result"),
             'count' => $this->getFavoritePlayerSQL("count"),
         ];
+    }
+
+    // Handle viewing a single player
+    public function viewPlayer($id)
+    {
+        if ($id) {
+            $player = $this->footballPlayerService->getPlayerById($id);
+            if ($player) {
+                $player_uuid = $player['player_uuid'];
+                $playerJsonData = getPlayerJsonByUuid($player_uuid);
+                return array_merge($playerJsonData, $player);
+            } else {
+                return null;
+            }
+        }
+
+        return null;
     }
 }
