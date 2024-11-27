@@ -2,9 +2,19 @@
 $pageTitle = "Football Manager Transfer";
 
 require_once DIR . '/functions/generate-player.php';
+require_once DIR . '/controllers/FootballPlayerController.php';
+require_once DIR . '/controllers/FootballTransferController.php';
+
 $players = getPlayersJson();
 $commonController = new CommonController();
 $list = $commonController->convertResources($players);
+
+$footballPlayerController = new FootballPlayerController();
+$favoriteList = $footballPlayerController->listFavoritePlayers();
+
+$footballTransferController = new FootballTransferController();
+$buyList = $footballTransferController->listTransferPlayers('buy');
+$sellList = $footballTransferController->listTransferPlayers('sell');
 
 ob_start();
 ?>
@@ -40,8 +50,8 @@ ob_start();
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" data-bs-toggle="tab" href="#sell-list" role="tab" aria-selected="false">
-                            Favourite
+                        <a class="nav-link" data-bs-toggle="tab" href="#favorite-list" role="tab" aria-selected="false">
+                            Favorite
                         </a>
                     </li>
                 </ul>
@@ -118,9 +128,9 @@ ob_start();
                                                     <td class="text-center"><?= formatCurrency($item['contract_wage']) ?></td>
                                                     <td class="text-center"><?= formatCurrency($item['market_value']) ?></td>
                                                     <td class="text-center">
-                                                        <button class="btn btn-soft-success">
+                                                        <a href="<?= home_url("football-manager/transfer/buy?p_uuid=" . $item['uuid']) ?>" class="btn btn-soft-success">
                                                             <i class="ri ri-shopping-cart-line"></i>
-                                                        </button>
+                                                        </a>
                                                         <button class="btn btn-soft-danger">
                                                             <i class="ri ri-heart-line"></i>
                                                         </button>
@@ -155,8 +165,8 @@ ob_start();
                                         </tr>
                                     </thead>
                                     <tbody class="list form-check-all">
-                                        <?php if (count($list['resources']) > 0) {
-                                            foreach ($list['resources'] as $item) { ?>
+                                        <?php if (count($buyList['list']) > 0) {
+                                            foreach ($buyList['list'] as $item) { ?>
                                                 <tr>
                                                     <td>
                                                         <div class="d-flex">
@@ -185,23 +195,11 @@ ob_start();
                                                 </tr>
                                         <?php }
                                         } ?>
-
                                     </tbody>
                                 </table>
-                                <div class="noresult" style="display: none">
-                                    <div class="text-center">
-                                        <lord-icon src="https://cdn.lordicon.com/msoeawqm.json" trigger="loop"
-                                            colors="primary:#121331,secondary:#08a88a"
-                                            style="width:75px;height:75px"></lord-icon>
-                                        <h5 class="mt-2">Sorry! No Result Found</h5>
-                                        <p class="text-muted mb-0">We've searched more than 150+ companies We did
-                                            not find
-                                            any companies for you search.</p>
-                                    </div>
-                                </div>
                             </div>
                             <?php
-                            includeFileWithVariables('components/pagination.php', array("count" => $list['total_items']));
+                            includeFileWithVariables('components/pagination.php', array("count" => $buyList['count']));
                             ?>
                         </div>
                     </div>
@@ -223,8 +221,8 @@ ob_start();
                                         </tr>
                                     </thead>
                                     <tbody class="list form-check-all">
-                                        <?php if (count($list['resources']) > 0) {
-                                            foreach ($list['resources'] as $item) { ?>
+                                        <?php if (count($sellList['list']) > 0) {
+                                            foreach ($sellList['list'] as $item) { ?>
                                                 <tr>
                                                     <td>
                                                         <div class="d-flex">
@@ -257,20 +255,67 @@ ob_start();
 
                                     </tbody>
                                 </table>
-                                <div class="noresult" style="display: none">
-                                    <div class="text-center">
-                                        <lord-icon src="https://cdn.lordicon.com/msoeawqm.json" trigger="loop"
-                                            colors="primary:#121331,secondary:#08a88a"
-                                            style="width:75px;height:75px"></lord-icon>
-                                        <h5 class="mt-2">Sorry! No Result Found</h5>
-                                        <p class="text-muted mb-0">We've searched more than 150+ companies We did
-                                            not find
-                                            any companies for you search.</p>
-                                    </div>
-                                </div>
                             </div>
                             <?php
-                            includeFileWithVariables('components/pagination.php', array("count" => $list['total_items']));
+                            includeFileWithVariables('components/pagination.php', array("count" => $sellList['count']));
+                            ?>
+                        </div>
+                    </div>
+                    <div class="tab-pane" id="favorite-list" role="tabpanel">
+                        <div id="tasksList" class="px-3">
+                            <div class="table-responsive table-card my-3">
+                                <table class="table align-middle table-nowrap mb-0" id="customerTable">
+                                    <thead class="table-light">
+                                        <tr>
+                                            <th class="sort" scope="col">Name</th>
+                                            <th class="sort text-center" scope="col">Nationality</th>
+                                            <th class="sort text-center" scope="col">Position</th>
+                                            <th class="sort text-center" scope="col">Playable</th>
+                                            <th class="sort text-center" scope="col">Season</th>
+                                            <th class="sort text-center" scope="col">Rating</th>
+                                            <th class="sort text-center" scope="col">Contract Wage</th>
+                                            <th class="sort text-center" scope="col">Price</th>
+                                            <th class="text-center" scope="col"></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="list form-check-all">
+                                        <?php if (count($favoriteList['list']) > 0) {
+                                            foreach ($favoriteList['list'] as $item) { ?>
+                                                <tr>
+                                                    <td>
+                                                        <div class="d-flex">
+                                                            <div class="flex-grow-1"><?= $item['name'] ?></div>
+                                                            <div class="flex-shrink-0 ms-4">
+                                                                <ul class="list-inline tasks-list-menu mb-0 pe-4">
+                                                                    <li class="list-inline-item">
+                                                                        <a class="edit-item-btn"
+                                                                            href="#<?= $item['uuid'] ?>"><i
+                                                                                class="ri-eye-fill align-bottom me-2 text-muted"></i></a>
+                                                                    </li>
+                                                                </ul>
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                    <td class="text-center"><?= $item['nationality'] ?></td>
+                                                    <td class="text-center"><?= $item['best_position'] ?></td>
+                                                    <td class="text-center"><?= implode(", ", $item['playable_positions']) ?></td>
+                                                    <td class="text-center"><?= $item['season'] ?></td>
+                                                    <td class="text-center"><?= $item['ability'] ?></td>
+                                                    <td class="text-center"><?= formatCurrency($item['contract_wage']) ?></td>
+                                                    <td class="text-center"><?= formatCurrency($item['market_value']) ?></td>
+                                                    <td class="text-center">
+                                                        <button class="btn btn-soft-success">Buy</button>
+                                                        <button class="btn btn-soft-danger">Delete</button>
+                                                    </td>
+                                                </tr>
+                                        <?php }
+                                        } ?>
+
+                                    </tbody>
+                                </table>
+                            </div>
+                            <?php
+                            includeFileWithVariables('components/pagination.php', array("count" => $favoriteList['count']));
                             ?>
                         </div>
                     </div>

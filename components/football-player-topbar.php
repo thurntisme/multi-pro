@@ -1,5 +1,10 @@
 <?php
+require_once DIR . '/controllers/FootballTeamController.php';
+
 $slug = getLastSegmentFromUrl();
+
+$footballTeamController = new FootballTeamController();
+$myTeam = $footballTeamController->getMyTeam();
 ?>
 
 <div class="d-flex align-items-center flex-wrap gap-2">
@@ -24,15 +29,9 @@ $slug = getLastSegmentFromUrl();
         href="<?= home_url("football-manager/store") ?>"><i
           class="ri-add-fill me-1 align-bottom"></i> Store
       </a>
-      <button type="button" id="dropdownMenuLink1" data-bs-toggle="dropdown"
-        aria-expanded="false" class="btn btn-soft-info"><i class="ri-more-2-fill"></i>
-      </button>
-      <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink1">
-        <li><a class="dropdown-item" href="#">All</a></li>
-        <li><a class="dropdown-item" href="#">Last Week</a></li>
-        <li><a class="dropdown-item" href="#">Last Month</a></li>
-        <li><a class="dropdown-item" href="#">Last Year</a></li>
-      </ul>
+      <div class="ms-2 d-flex align-items-center">
+        <span class="badge bg-warning-subtle text-warning badge-border fs-20 ms-1"><?= formatCurrency($myTeam['budget'] ?? 0) ?></span>
+      </div>
     </div>
   </div>
 </div>

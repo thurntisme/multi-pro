@@ -2,7 +2,7 @@
 
 return function (PDO $pdo) {
     // Define the table name and attributes
-    $table_name = 'football_player_favourite';
+    $table_name = 'football_favorite_player';
     $attributes = [
         'id INTEGER PRIMARY KEY AUTOINCREMENT',
         'team_name TEXT NOT NULL',
@@ -10,7 +10,9 @@ return function (PDO $pdo) {
         'created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP',
         'updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP',
         'player_id TEXT NOT NULL',
-        'FOREIGN KEY(player_id) REFERENCES football_player(player_id)'
+        'manager_id TEXT NOT NULL',
+        'FOREIGN KEY(player_id) REFERENCES football_player(player_id)',
+        'FOREIGN KEY(manager_id) REFERENCES users(id)'
     ];
 
     // Convert the attributes array into a string
