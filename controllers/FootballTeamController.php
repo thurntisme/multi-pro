@@ -72,6 +72,13 @@ class FootballTeamController
         exit;
     }
 
+    public function updateBudget($amount)
+    {
+        if ($amount) {
+            $rowsAffected = $this->footballTeamService->updateBudget($amount);
+        }
+    }
+
     // Handle deleting a code
     public function deleteCode()
     {

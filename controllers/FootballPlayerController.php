@@ -24,7 +24,46 @@ class FootballPlayerController
     // Handle creating a new code
     public function createPlayer($uuid)
     {
-        $player = getPlayerJsonByUuid($uuid);
+        $data = getPlayerJsonByUuid($uuid);
+        // Prepare player data for insertion
+        $player = [
+            'player_uuid' => $data['uuid'],
+            'age' => $data['age'],
+            'injury' => $data['injury'],
+            'recovery_time' => $data['recovery_time'],
+            'ability' => $data['ability'],
+            'salary' => $data['contract_wage'],
+            'market_value' => $data['market_value'],
+            'passing' => $data['attributes']['technical']['passing'],
+            'dribbling' => $data['attributes']['technical']['dribbling'],
+            'first_touch' => $data['attributes']['technical']['first_touch'],
+            'crossing' => $data['attributes']['technical']['crossing'],
+            'finishing' => $data['attributes']['technical']['finishing'],
+            'long_shots' => $data['attributes']['technical']['long_shots'],
+            'free_kick_accuracy' => $data['attributes']['technical']['free_kick_accuracy'],
+            'heading' => $data['attributes']['technical']['heading'],
+            'tackling' => $data['attributes']['technical']['tackling'],
+            'handling' => $data['attributes']['technical']['handling'],
+            'marking' => $data['attributes']['technical']['marking'],
+            'decision' => $data['attributes']['mental']['decision'],
+            'vision' => $data['attributes']['mental']['vision'],
+            'leadership' => $data['attributes']['mental']['leadership'],
+            'work_rate' => $data['attributes']['mental']['work_rate'],
+            'positioning' => $data['attributes']['mental']['positioning'],
+            'composure' => $data['attributes']['mental']['composure'],
+            'aggression' => $data['attributes']['mental']['aggression'],
+            'anticipation' => $data['attributes']['mental']['anticipation'],
+            'concentration' => $data['attributes']['mental']['concentration'],
+            'off_the_ball' => $data['attributes']['mental']['off_the_ball'],
+            'flair' => $data['attributes']['mental']['flair'],
+            'pace' => $data['attributes']['physical']['pace'],
+            'strength' => $data['attributes']['physical']['strength'],
+            'stamina' => $data['attributes']['physical']['stamina'],
+            'agility' => $data['attributes']['physical']['agility'],
+            'balance' => $data['attributes']['physical']['balance'],
+            'jumping_reach' => $data['attributes']['physical']['jumping_reach'],
+            'natural_fitness' => $data['attributes']['physical']['natural_fitness']
+        ];
         $team = $this->footballTeamController->getMyTeam();
 
         if ($player) {
@@ -34,12 +73,20 @@ class FootballPlayerController
         }
     }
 
+    public function getMyTeam()
+    {
+        return $this->footballPlayerService->getTeamByUserId();
+    }
+
+    // Handle updating a code
+
     public function initializeTeams($teams)
     {
         $this->footballPlayerService->initializeTeams($teams);
     }
 
-    // Handle updating a code
+    // Handle deleting a code
+
     public function updateCode()
     {
         $id = $_POST['code_id'] ?? '';
@@ -66,7 +113,8 @@ class FootballPlayerController
         exit;
     }
 
-    // Handle deleting a code
+    // Get all teams
+
     public function deleteCode()
     {
         $id = $_POST['post_id'] ?? null;
@@ -88,23 +136,28 @@ class FootballPlayerController
         exit;
     }
 
-    // Get all teams
     public function listTeams()
     {
         return $this->footballPlayerService->getAllTeams();
     }
 
-    public function getMyTeam()
+    // Get all favorite players
+
+    public function listFavoritePlayers()
     {
-        return $this->footballPlayerService->getTeamByUserId();
+        return [
+            'list' => $this->getFavoritePlayerSQL("result"),
+            'count' => $this->getFavoritePlayerSQL("count"),
+        ];
     }
 
-    // Get all favorite players
+    // Handle listing all transfers
+
     public function getFavoritePlayerSQL($queryType = "result")
     {
         // Pagination parameters
         $itemsPerPage = 10; // Number of results per page
-        $page = isset($_GET['page']) ? (int) $_GET['page'] : 1; // Current page number
+        $page = isset($_GET['page']) ? (int)$_GET['page'] : 1; // Current page number
         $offset = ($page - 1) * $itemsPerPage; // Offset for LIMIT clause
 
         // Filter last updated
@@ -133,16 +186,8 @@ class FootballPlayerController
         return $queryType === "result" ? $stmt->fetchAll(PDO::FETCH_ASSOC) : $stmt->fetchColumn();
     }
 
-    // Handle listing all transfers
-    public function listFavoritePlayers()
-    {
-        return [
-            'list' => $this->getFavoritePlayerSQL("result"),
-            'count' => $this->getFavoritePlayerSQL("count"),
-        ];
-    }
-
     // Handle viewing a single player
+
     public function viewPlayer($id)
     {
         if ($id) {

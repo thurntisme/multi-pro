@@ -43,7 +43,7 @@ return function (PDO $pdo) {
         'market_value BIGINT',
         'created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP',
         'updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP',
-        'team_id TEXT NOT NULL',
+        'team_id INTEGER NOT NULL',
         'FOREIGN KEY(team_id) REFERENCES football_team(id)'
     ];
 

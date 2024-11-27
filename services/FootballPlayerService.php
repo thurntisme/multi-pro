@@ -48,12 +48,51 @@ class FootballPlayerService
     // Create a new code
     public function createPlayer($team_id, $player)
     {
-        $player_uuid = $player['uuid'];
-        $sql = "INSERT INTO football_player (team_id, player_uuid) VALUES (:team_id, :player_uuid)";
-        $stmt = $this->pdo->prepare($sql);
-        $stmt->execute([':team_id' => $team_id, ':player_uuid' => $player_uuid]);
+        try {
+            // List all the fields that are allowed in the database schema
+            $allowedFields = [
+                'player_uuid', 'age', 'injury', 'recovery_time', 'ability',
+                'passing', 'dribbling', 'first_touch', 'crossing', 'finishing',
+                'long_shots', 'free_kick_accuracy', 'heading', 'tackling',
+                'handling', 'marking', 'decision', 'vision', 'leadership',
+                'work_rate', 'positioning', 'composure', 'aggression',
+                'anticipation', 'concentration', 'off_the_ball', 'flair',
+                'pace', 'strength', 'stamina', 'agility', 'balance',
+                'jumping_reach', 'natural_fitness', 'salary', 'market_value'
+            ];
 
-        return $this->pdo->lastInsertId();
+            // Ensure player_uuid and team_id are present
+            if (!isset($player['player_uuid'])) {
+                throw new Exception("Player UUID is required.");
+            }
+
+            // Add team_id to the fields and values
+            $fields = ['team_id'];
+            $values = [':team_id' => $team_id];
+
+            // Dynamically add provided fields from the $player array
+            foreach ($allowedFields as $field) {
+                if (isset($player[$field])) {
+                    $fields[] = $field;
+                    $values[":$field"] = $player[$field];
+                }
+            }
+
+            // Build the SQL query dynamically
+            $columns = implode(', ', $fields);
+            $placeholders = implode(', ', array_keys($values));
+            $sql = "INSERT INTO football_player ($columns) VALUES ($placeholders)";
+
+            // Prepare and execute the statement
+            $stmt = $this->pdo->prepare($sql);
+            $stmt->execute($values);
+
+            // Return the ID of the newly inserted player
+            return $this->pdo->lastInsertId();
+        } catch (PDOException $e) {
+            // Log or handle database errors
+            throw new Exception("Error creating player: " . $e->getMessage());
+        }
     }
 
     // Update a code
@@ -85,6 +124,15 @@ class FootballPlayerService
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
+    public function getTeamByUserId()
+    {
+        $team = $this->getTeamData();
+        if (!empty($team)) {
+            $team['players'] = $this->getTeamPlayers($team['id']);
+        }
+        return $team;
+    }
+
     public function getTeamData()
     {
         $sql = "SELECT * FROM football_team WHERE manager_id = :manager_id";
@@ -103,14 +151,6 @@ class FootballPlayerService
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
-    public function getTeamByUserId()
-    {
-        $team = $this->getTeamData();
-        if (!empty($team)) {
-            $team['players'] = $this->getTeamPlayers($team['id']);
-        }
-        return $team;
-    }
     public function getPlayerById($id)
     {
         $sql = "SELECT * FROM football_player WHERE  id = :id";
