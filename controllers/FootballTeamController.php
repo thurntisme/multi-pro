@@ -96,16 +96,8 @@ class FootballTeamController
         return $this->footballTeamService->getAllTeams();
     }
 
-    // Handle viewing a single code
-    public function viewCode($id)
+    public function getMyTeam()
     {
-        if ($id) {
-            return $this->footballTeamService->getCodeById($id);
-        }
-
-        $_SESSION['message_type'] = 'danger';
-        $_SESSION['message'] = "Code ID is required.";
-        header("Location: " . $_SERVER['REQUEST_URI']);
-        exit;
+        return $this->footballTeamService->getTeamByUserId();
     }
 }

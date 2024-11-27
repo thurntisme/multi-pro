@@ -128,7 +128,7 @@ ob_start();
                         <table class="table align-middle table-nowrap mb-0">
                             <tbody>
                                 <?php foreach ($teams as $index => $team) { ?>
-                                    <tr>
+                                    <tr class="<?= $team['manager_id'] === $user_id ? 'table-primary' : '' ?>">
                                         <td class="text-center" style="width: 52px"><?= $index + 1 ?></td>
                                         <td>
                                             <div class="d-flex align-items-center">

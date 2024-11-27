@@ -539,3 +539,88 @@ $teams = [
     ],
 ];
 define("DEFAULT_FOOTBALL_TEAM", $teams);
+
+$formations = [
+    [
+        "slug" => "433",
+        "name" => "4-3-3",
+        "player_positions" => [
+            "defenders" => ["LB", "CB", "CB", "RB"],
+            "midfielders" => ["LCM", "CM", "RCM"],
+            "forwards" => ["LW", "CF", "RW"]
+        ]
+    ],
+    [
+        "slug" => "442",
+        "name" => "4-4-2",
+        "player_positions" => [
+            "defenders" => ["LB", "CB", "CB", "RB"],
+            "midfielders" => ["LM", "CM", "CM", "RM"],
+            "forwards" => ["ST", "ST"]
+        ]
+    ],
+    [
+        "slug" => "352",
+        "name" => "3-5-2",
+        "player_positions" => [
+            "defenders" => ["CB", "CB", "CB"],
+            "midfielders" => ["LM", "LCM", "CM", "RCM", "RM"],
+            "forwards" => ["ST", "ST"]
+        ]
+    ],
+    [
+        "slug" => "4231",
+        "name" => "4-2-3-1",
+        "player_positions" => [
+            "defenders" => ["LB", "CB", "CB", "RB"],
+            "midfielders" => ["CDM", "CDM", "CAM", "LW", "RW"],
+            "forwards" => ["ST"]
+        ]
+    ],
+    [
+        "slug" => "4141",
+        "name" => "4-1-4-1",
+        "player_positions" => [
+            "defenders" => ["LB", "CB", "CB", "RB"],
+            "midfielders" => ["CDM", "LM", "CM", "CM", "RM"],
+            "forwards" => ["ST"]
+        ]
+    ],
+    [
+        "slug" => "541",
+        "name" => "5-4-1",
+        "player_positions" => [
+            "defenders" => ["LWB", "CB", "CB", "CB", "RWB"],
+            "midfielders" => ["LM", "CM", "CM", "RM"],
+            "forwards" => ["ST"]
+        ]
+    ],
+    [
+        "slug" => "4312",
+        "name" => "4-3-1-2",
+        "player_positions" => [
+            "defenders" => ["LB", "CB", "CB", "RB"],
+            "midfielders" => ["LCM", "CM", "RCM", "CAM"],
+            "forwards" => ["ST", "ST"]
+        ]
+    ],
+    [
+        "slug" => "343",
+        "name" => "3-4-3",
+        "player_positions" => [
+            "defenders" => ["CB", "CB", "CB"],
+            "midfielders" => ["LM", "CM", "CM", "RM"],
+            "forwards" => ["LW", "CF", "RW"]
+        ]
+    ],
+    [
+        "slug" => "4222",
+        "name" => "4-2-2-2",
+        "player_positions" => [
+            "defenders" => ["LB", "CB", "CB", "RB"],
+            "midfielders" => ["CDM", "CDM", "CAM", "CAM"],
+            "forwards" => ["ST", "ST"]
+        ]
+    ]
+];
+define("DEFAULT_FOOTBALL_FORMATION", $formations);

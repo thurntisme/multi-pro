@@ -84,13 +84,30 @@ class FootballTeamService
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    // Read a code by ID
-    public function getTeamByUserId($id)
+    public function getTeamData()
     {
-        $sql = "SELECT * FROM football_team WHERE user_id = :user_id";
+        $sql = "SELECT * FROM football_team WHERE manager_id = :manager_id";
         $stmt = $this->pdo->prepare($sql);
-        $stmt->execute([':user_id' => $this->user_id]);
+        $stmt->execute([':manager_id' => $this->user_id]);
 
         return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+
+    public function getTeamPlayers()
+    {
+        $sql = "SELECT * FROM football_team_player WHERE team_id = :team_id ORDER BY starting_order ASC";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute([':team_id' => $this->user_id]);
+
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+
+    public function getTeamByUserId()
+    {
+        $team = $this->getTeamData();
+        if (!empty($team)) {
+            $team['players'] = $this->getTeamPlayers($team['id']);
+        }
+        return $team;
     }
 }

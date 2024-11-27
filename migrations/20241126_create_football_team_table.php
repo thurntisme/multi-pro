@@ -8,6 +8,7 @@ return function (PDO $pdo) {
         'team_name TEXT',
         'team_logo TEXT',
         'status TEXT DEFAULT "active"',
+        'formation TEXT DEFAULT "433"',
         'performance_rating INTEGER DEFAULT 0',
         'league_position INTEGER DEFAULT 0',
         'points INTEGER DEFAULT 0',

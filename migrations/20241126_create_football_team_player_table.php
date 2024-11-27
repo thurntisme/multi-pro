@@ -7,6 +7,7 @@ return function (PDO $pdo) {
         'id INTEGER PRIMARY KEY AUTOINCREMENT',
         'team_id INTEGER NOT NULL',
         'player_id INTEGER NOT NULL',
+        'starting_order INTEGER DEFAULT 0',
         'joining_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP',
         'loan BOOLEAN DEFAULT 0',  // Indicates if the player is on loan
         'FOREIGN KEY(team_id) REFERENCES football_team(id)',
