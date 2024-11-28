@@ -89,6 +89,8 @@ echo "
             players: " . json_encode($myTeam['lineup']) . ",
             bench: " . json_encode($myTeam['bench']) . ",
         };
+
+        const positionGroups = " . json_encode($positionGroups) . ";
     </script>
     <script src='" . home_url("/assets/js/pages/football-manager-match.js") . "'></script>
 ";

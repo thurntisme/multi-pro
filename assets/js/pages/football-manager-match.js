@@ -37,7 +37,7 @@ let team1Positions = formations["442"].map((pos, idx) => {
     accuracy,
     speed,
     defense,
-    name: team1.players[idx]["name"],
+    player: team1.players[idx],
   };
 });
 let team2Positions = formations["442"].map((pos, idx) => {
@@ -51,9 +51,26 @@ let team2Positions = formations["442"].map((pos, idx) => {
     accuracy,
     speed,
     defense,
-    name: team2.players[idx]["name"],
+    player: team2.players[idx],
   };
 });
+
+function getPositionColor(position) {
+  const positionColors = {
+    Goalkeepers: "#ff8811",
+    Defenders: "#3ec300",
+    Midfielders: "#337ca0",
+    Attackers: "#ff1d15",
+  };
+
+  for (const [group, positions] of Object.entries(positionGroups)) {
+    if (positions.includes(position)) {
+      return positionColors[group];
+    }
+  }
+
+  return "gray"; // Default color if position is not found
+}
 
 // Football Pitch
 const drawFootballPitch = () => {
@@ -68,9 +85,9 @@ const drawFootballPitch = () => {
   }
 
   // Helper function to draw circles
-  function drawCircle(x, y, radius, color, isFilled = true) {
+  function drawCircle(x, y, color, isFilled = true) {
     ctx.beginPath();
-    ctx.arc(x, y, radius, 0, Math.PI * 2);
+    ctx.arc(x, y, 10, 0, Math.PI * 2);
     if (isFilled) {
       ctx.fillStyle = color;
       ctx.fill();
@@ -119,15 +136,15 @@ const drawFootballPitch = () => {
   // Draw Team
   const drawPlayerPositions = () => {
     team1Positions.forEach((pos, index) => {
-      drawCircle(pos.x, pos.y, 10, team1Color);
+      drawCircle(pos.x, pos.y, getPositionColor(pos.player.best_position));
       drawPlayerNumber(pos.x, pos.y, index + 1);
-      drawPlayerName(pos.x, pos.y, pos.name);
+      drawPlayerName(pos.x, pos.y, pos.player.name);
       drawPlayerScore(pos);
     });
     team2Positions.forEach((pos, index) => {
-      drawCircle(pos.x, pos.y, 10, team2Color);
+      drawCircle(pos.x, pos.y, getPositionColor(pos.player.best_position));
       drawPlayerNumber(pos.x, pos.y, index + 1);
-      drawPlayerName(pos.x, pos.y, pos.name);
+      drawPlayerName(pos.x, pos.y, pos.player.name);
       drawPlayerScore(pos);
     });
   };
@@ -525,4 +542,4 @@ function logEvent(time, action, message) {
 }
 
 // Start the match simulation
-simulateMatch(team1, team2);
+// simulateMatch(team1, team2);
