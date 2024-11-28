@@ -10,7 +10,7 @@ class FootballTransferController
     private $user_id;
     private $pdo;
     private $footballPlayerController;
-    private $footballteamController;
+    private $footballTeamController;
     private $footballTransferService;
 
     public function __construct()

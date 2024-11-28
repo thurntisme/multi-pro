@@ -12,53 +12,48 @@ class FootballPlayerService
         $this->user_id = $user_id;
     }
 
-    public function initializeTeams(array $teams)
-    {
-        $sqlCheck = "SELECT COUNT(*) FROM football_team";
-        $stmtCheck = $this->pdo->query($sqlCheck);
-        $count = $stmtCheck->fetchColumn();
-
-        if ($count > 0) {
-            // Teams already initialized
-            return false;
-        }
-
-        $this->pdo->beginTransaction();
-        try {
-            $sqlInsert = "INSERT INTO football_team (team_name, league_position, manager_id) 
-                          VALUES (:team_name, :league_position, :manager_id)";
-            $stmtInsert = $this->pdo->prepare($sqlInsert);
-
-            foreach ($teams as $index => $team) {
-                $stmtInsert->execute([
-                    ':team_name' => $team['name'],
-                    ':league_position' => $index + 1,
-                    ':manager_id' => $this->user_id,
-                ]);
-            }
-
-            $this->pdo->commit();
-            return true;
-        } catch (Exception $e) {
-            $this->pdo->rollBack();
-            throw $e;
-        }
-    }
-
     // Create a new code
     public function createPlayer($team_id, $player)
     {
         try {
             // List all the fields that are allowed in the database schema
             $allowedFields = [
-                'player_uuid', 'age', 'injury', 'recovery_time', 'ability',
-                'passing', 'dribbling', 'first_touch', 'crossing', 'finishing',
-                'long_shots', 'free_kick_accuracy', 'heading', 'tackling',
-                'handling', 'marking', 'decision', 'vision', 'leadership',
-                'work_rate', 'positioning', 'composure', 'aggression',
-                'anticipation', 'concentration', 'off_the_ball', 'flair',
-                'pace', 'strength', 'stamina', 'agility', 'balance',
-                'jumping_reach', 'natural_fitness', 'salary', 'market_value'
+                'player_uuid',
+                'age',
+                'injury',
+                'recovery_time',
+                'ability',
+                'passing',
+                'dribbling',
+                'first_touch',
+                'crossing',
+                'finishing',
+                'long_shots',
+                'free_kick_accuracy',
+                'heading',
+                'tackling',
+                'handling',
+                'marking',
+                'decision',
+                'vision',
+                'leadership',
+                'work_rate',
+                'positioning',
+                'composure',
+                'aggression',
+                'anticipation',
+                'concentration',
+                'off_the_ball',
+                'flair',
+                'pace',
+                'strength',
+                'stamina',
+                'agility',
+                'balance',
+                'jumping_reach',
+                'natural_fitness',
+                'salary',
+                'market_value'
             ];
 
             // Ensure player_uuid and team_id are present

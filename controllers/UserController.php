@@ -1,14 +1,16 @@
 <?php
 
-require 'services/UserService.php';
+require_once DIR . '/services/UserService.php';
 
 class UserController
 {
     private $userService;
+    private $pdo;
 
     public function __construct()
     {
         global $pdo;
+        $this->pdo = $pdo;
         $this->userService = new UserService($pdo);
     }
 
@@ -72,5 +74,4 @@ class UserController
     {
         return $this->userService->getUser('username', 'system');
     }
-
 }

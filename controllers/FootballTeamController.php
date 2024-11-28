@@ -2,12 +2,13 @@
 
 require_once DIR . '/services/FootballTeamService.php';
 require_once DIR . '/controllers/UserController.php';
+require_once DIR . '/controllers/FootballPlayerController.php';
 
 class FootballTeamController
 {
     private $user_id;
-    private $pdo;
     private $footballTeamService;
+    private $footballPlayerController;
     private $userController;
 
     public function __construct()
@@ -15,9 +16,9 @@ class FootballTeamController
         global $user_id;
         global $pdo;
         $this->user_id = $user_id;
-        $this->pdo = $pdo;
         $this->footballTeamService = new FootballTeamService($pdo);
         $this->userController = new UserController();
+        $this->footballPlayerController = new FootballPlayerController();
     }
 
     // Handle creating a new code
@@ -28,7 +29,10 @@ class FootballTeamController
         if ($team_name) {
             $systemUser = $this->userController->getSystemUser();
             $this->initializeTeams(DEFAULT_FOOTBALL_TEAM, $systemUser['id']);
-            $this->footballTeamService->createTeam($team_name, $this->user_id);
+            $teamId = $this->footballTeamService->createTeam($team_name, $this->user_id);
+            if ($teamId) {
+                $this->initializeTeamPlayers();
+            }
             $_SESSION['message_type'] = 'success';
             $_SESSION['message'] = "Team created successfully";
         } else {
@@ -43,6 +47,11 @@ class FootballTeamController
     public function initializeTeams($teams, $systemUserId)
     {
         $this->footballTeamService->initializeTeams($teams, $systemUserId);
+    }
+
+    public function initializeTeamPlayers()
+    {
+        $this->footballPlayerController->initializeTeamPlayers();
     }
 
     // Handle updating a code

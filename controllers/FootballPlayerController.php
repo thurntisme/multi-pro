@@ -7,7 +7,6 @@ require_once DIR . '/functions/generate-player.php';
 class FootballPlayerController
 {
     private $user_id;
-    private $pdo;
     private $footballTeamController;
     private $footballPlayerService;
 
@@ -16,9 +15,8 @@ class FootballPlayerController
         global $user_id;
         global $pdo;
         $this->user_id = $user_id;
-        $this->pdo = $pdo;
         $this->footballPlayerService = new FootballPlayerService($pdo);
-        $this->footballTeamController = new FootballTeamController($pdo);
+        $this->footballTeamController = new FootballTeamController();
     }
 
     // Handle creating a new code
@@ -78,11 +76,20 @@ class FootballPlayerController
         return $this->footballPlayerService->getTeamByUserId();
     }
 
-    // Handle updating a code
-
-    public function initializeTeams($teams)
+    public function initializeTeamPlayers()
     {
-        $this->footballPlayerService->initializeTeams($teams);
+        $playerArr = getPlayersJson();
+        if (count($playerArr) < 22) {
+            throw new Exception("The player array must contain at least 22 items.");
+        }
+        // Shuffle the array
+        shuffle($playerArr);
+        // Get the first 22 players
+        $players = array_slice($playerArr, 0, 22);
+
+        foreach ($players as $player) {
+            $this->createPlayer($player['uuid']);
+        }
     }
 
     // Handle deleting a code
