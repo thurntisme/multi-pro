@@ -133,7 +133,10 @@ class FootballTeamService
     {
         $team = $this->getTeamData();
         if (!empty($team)) {
-            $team['players'] = $this->getTeamPlayers($team['id']);
+            $players = array_map(function ($player) {
+                return $this->footballPlayerController->viewPlayer($player['id']);
+            }, $this->getTeamPlayers($team['id']));
+            $team['players'] = $players;
         }
         return $team;
     }

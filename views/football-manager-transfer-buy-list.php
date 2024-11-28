@@ -47,7 +47,7 @@ ob_start();
                                     <tbody class="list form-check-all">
                                     <?php if (count($buyList['list']) > 0) {
                                         foreach ($buyList['list'] as $item) {
-                                            $playerData = $footballPlayerController->viewPlayer($item['player_id']);
+                                            // $playerData = $footballPlayerController->viewPlayer($item['player_id']);
                                             ?>
                                             <tr>
                                                 <td><?= $playerData['name'] ?? '' ?></td>

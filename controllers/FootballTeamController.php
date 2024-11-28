@@ -124,4 +124,17 @@ class FootballTeamController
     {
         return $this->footballTeamService->getTeamByUserId();
     }
+
+    public function getMyTeamInMatch()
+    {
+        $team = $this->footballTeamService->getTeamByUserId();
+        $lineupPlayers = array_slice($team['players'], 0, 11);
+        $subPlayers = array_slice($team['players'], 11, 17);
+
+        return [
+            'team_name' => $team['team_name'],
+            'lineup' => $lineupPlayers,
+            'bench' => $subPlayers
+        ];
+    }
 }

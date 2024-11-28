@@ -12,9 +12,6 @@ $lineupPlayers = [];
 $subPlayers = [];
 $myTeam = $footballTeamController->getMyTeam();
 if ($myTeam['players']) {
-    $myTeam['players'] = array_map(function ($player) use ($footballPlayerController) {
-        return $footballPlayerController->viewPlayer($player['id']);
-    }, $myTeam['players']);
     $teamPlayerData = getTeamPlayerData($myTeam['players']);
     $lineupPlayers = array_slice($myTeam['players'], 0, 11);
     $subPlayers = array_slice($myTeam['players'], 11);
