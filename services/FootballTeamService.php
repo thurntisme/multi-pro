@@ -1,15 +1,18 @@
 <?php
+require_once DIR . '/controllers/FootballPlayerController.php';
 
 class FootballTeamService
 {
     private $pdo;
     private $user_id;
+    private $footballPlayerController;
 
     public function __construct($pdo)
     {
         global $user_id;
         $this->pdo = $pdo;
         $this->user_id = $user_id;
+        $this->footballPlayerController = new FootballPlayerController();
     }
 
     public function initializeTeams(array $teams, $systemUserId)
@@ -42,6 +45,26 @@ class FootballTeamService
         } catch (Exception $e) {
             $this->pdo->rollBack();
             throw $e;
+        }
+    }
+
+    public function initializeTeamPlayers($teamId, $players)
+    {
+        if (empty($players)) {
+            throw new Exception("Player list cannot be empty.");
+        }
+
+        $this->pdo->beginTransaction();
+        try {
+            foreach ($players as $player) {
+                $this->footballPlayerController->createPlayer($teamId, $player['uuid']);
+            }
+
+            $this->pdo->commit();
+            return true;
+        } catch (Exception $e) {
+            $this->pdo->rollBack();
+            throw new Exception("Failed to initialize team players: " . $e->getMessage());
         }
     }
 
@@ -117,10 +140,10 @@ class FootballTeamService
 
     public function getTeamPlayers($team_id)
     {
-        $sql = "SELECT * FROM football_team_player WHERE team_id = :team_id ORDER BY starting_order ASC";
+        $sql = "SELECT * FROM football_player WHERE team_id = :team_id ORDER BY starting_order ASC";
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute([':team_id' => $team_id]);
 
-        return $stmt->fetch(PDO::FETCH_ASSOC);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 }

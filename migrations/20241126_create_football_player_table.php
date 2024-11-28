@@ -41,6 +41,8 @@ return function (PDO $pdo) {
         'natural_fitness INTEGER',
         'salary BIGINT',
         'market_value BIGINT',
+        'starting_order INTEGER DEFAULT 999',
+        'joining_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP',
         'created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP',
         'updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP',
         'team_id INTEGER NOT NULL',

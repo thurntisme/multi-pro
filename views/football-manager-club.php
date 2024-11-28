@@ -3,22 +3,21 @@ $pageTitle = "Football Manager - My Club";
 
 require_once DIR . '/functions/generate-player.php';
 require_once DIR . '/controllers/FootballTeamController.php';
+require_once DIR . '/controllers/FootballPlayerController.php';
 
-// Generate 10 random players
-$commonController = new CommonController();
+$footballPlayerController = new FootballPlayerController();
+$footballTeamController = new FootballTeamController();
 
 $lineupPlayers = [];
 $subPlayers = [];
-$footballTeamController = new FootballTeamController();
 $myTeam = $footballTeamController->getMyTeam();
 if ($myTeam['players']) {
-    foreach ($myTeam['players'] as $player) {
-        if ($player['starting_order'] < 11) {  // Assume 11 starting players
-            $lineupPlayers[] = $player;  // Player is a starter
-        } else {
-            $subPlayers[] = $player;  // Player is a substitute
-        }
-    }
+    $myTeam['players'] = array_map(function ($player) use ($footballPlayerController) {
+        return $footballPlayerController->viewPlayer($player['id']);
+    }, $myTeam['players']);
+    $teamPlayerData = getTeamPlayerData($myTeam['players']);
+    $lineupPlayers = array_slice($myTeam['players'], 0, 11);
+    $subPlayers = array_slice($myTeam['players'], 11);
 }
 
 ob_start();
@@ -121,7 +120,7 @@ ob_start();
                                                 <i class="mdi mdi-account-group-outline fs-24 text-muted"></i>
                                             </div>
                                             <div class="flex-grow-1 ms-3">
-                                                <h2 class="mb-0 fs-24">197</h2>
+                                                <h2 class="mb-0 fs-24"><?= $teamPlayerData['total'] ?></h2>
                                             </div>
                                         </div>
                                     </div>
@@ -130,10 +129,10 @@ ob_start();
                                     <div class="py-2 px-3">
                                         <div class="d-flex align-items-center">
                                             <div class="flex-shrink-0">
-                                                <i class="mdi mdi-shield-outline fs-24 text-muted"></i>
+                                                <i class="mdi mdi-shield-outline fs-24 text-success"></i>
                                             </div>
                                             <div class="flex-grow-1 ms-3">
-                                                <h2 class="mb-0 fs-24">197</h2>
+                                                <h2 class="mb-0 fs-24"><?= $teamPlayerData['Defenders']['averageRating'] ?></h2>
                                             </div>
                                         </div>
                                     </div>
@@ -142,10 +141,10 @@ ob_start();
                                     <div class="py-2 px-3">
                                         <div class="d-flex align-items-center">
                                             <div class="flex-shrink-0">
-                                                <i class="mdi mdi-target fs-24 text-muted"></i>
+                                                <i class="mdi mdi-target fs-24 text-primary"></i>
                                             </div>
                                             <div class="flex-grow-1 ms-3">
-                                                <h2 class="mb-0 fs-24">197</h2>
+                                                <h2 class="mb-0 fs-24"><?= $teamPlayerData['Midfielders']['averageRating'] ?></h2>
                                             </div>
                                         </div>
                                     </div>
@@ -154,10 +153,10 @@ ob_start();
                                     <div class="py-2 px-3">
                                         <div class="d-flex align-items-center">
                                             <div class="flex-shrink-0">
-                                                <i class="mdi mdi-soccer fs-24 text-muted"></i>
+                                                <i class="mdi mdi-soccer fs-24 text-danger"></i>
                                             </div>
                                             <div class="flex-grow-1 ms-3">
-                                                <h2 class="mb-0 fs-24">197</h2>
+                                                <h2 class="mb-0 fs-24"><?= $teamPlayerData['Attackers']['averageRating'] ?></h2>
                                             </div>
                                         </div>
                                     </div>
@@ -248,6 +247,10 @@ ob_start();
                                         <?php } ?>
                                     </div>
                                 </div>
+                            </div>
+                            <div class="d-flex justify-center">
+                                <button class="btn btn-light me-2">Reset</button>
+                                <button class="btn btn-success">Save</button>
                             </div>
                         </div>
                     </div>

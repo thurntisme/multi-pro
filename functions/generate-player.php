@@ -1,8 +1,14 @@
 <?php
 
-
 // Possible values for player attributes
 $positions = ['GK', 'CM', 'CF', 'ST', 'RW', 'LW', 'CB', 'RB', 'LB', 'DM', 'AMC', 'LM', 'RM'];
+// Define position groups
+$positionGroups = [
+    'Goalkeepers' => ['GK'],
+    'Defenders' => ['CB', 'RB', 'LB'],
+    'Midfielders' => ['CM', 'DM', 'AMC', 'LM', 'RM'],
+    'Attackers' => ['CF', 'ST', 'RW', 'LW'],
+];
 $seasons = [
     'Legend' => 90,
     'The Best' => 80,
@@ -111,14 +117,7 @@ function getSeason(int $overallAbility): string
 
 function getPlayablePosition(string $specificPosition): array
 {
-    // Define position groups
-    $positionGroups = [
-        'Goalkeepers' => ['GK'],
-        'Defenders' => ['CB', 'RB', 'LB'],
-        'Midfielders' => ['CM', 'DM', 'AMC', 'LM', 'RM'],
-        'Attackers' => ['CF', 'ST', 'RW', 'LW'],
-    ];
-
+    global $positionGroups;
     // Find the group for the specific position
     $playablePositions = [];
     foreach ($positionGroups as $group => $groupPositions) {
@@ -664,4 +663,40 @@ function exportPlayersToJson($players)
         error_log("Failed to write updated data to file {$fileName}");
         return false;
     }
+}
+
+function getTeamPlayerData($teamPlayers)
+{
+    global $positionGroups;
+    $total = count($teamPlayers);
+    $firstEleven = array_slice($teamPlayers, 0, 11);
+    // Initialize the analytics array
+    $analytics = [
+        'Defenders' => ['totalRating' => 0, 'count' => 0],
+        'Midfielders' => ['totalRating' => 0, 'count' => 0],
+        'Attackers' => ['totalRating' => 0, 'count' => 0]
+    ];
+
+    // Loop through the first 11 players
+    foreach ($firstEleven as $player) {
+        // Check player's best position and determine their group
+        $bestPosition = $player['best_position']; // Assuming 'best_position' exists in player data
+        foreach ($positionGroups as $group => $positions) {
+            if (in_array($bestPosition, $positions)) {
+                // Add the player's rating to the group's total rating
+                $analytics[$group]['totalRating'] += $player['ability']; // Assuming 'ability' is the rating
+                $analytics[$group]['count']++;
+                break;
+            }
+        }
+    }
+
+    // Calculate the average rating for each group
+    foreach ($analytics as $group => &$data) {
+        $data['averageRating'] = $data['count'] > 0
+            ? round($data['totalRating'] / $data['count'], 2)
+            : 0;
+    }
+
+    return array_merge(['total' => $total], $analytics);
 }

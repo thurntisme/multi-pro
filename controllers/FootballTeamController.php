@@ -1,14 +1,12 @@
 <?php
 
 require_once DIR . '/services/FootballTeamService.php';
-require_once DIR . '/controllers/UserController.php';
 require_once DIR . '/controllers/FootballPlayerController.php';
 
 class FootballTeamController
 {
     private $user_id;
     private $footballTeamService;
-    private $footballPlayerController;
     private $userController;
 
     public function __construct()
@@ -18,7 +16,6 @@ class FootballTeamController
         $this->user_id = $user_id;
         $this->footballTeamService = new FootballTeamService($pdo);
         $this->userController = new UserController();
-        $this->footballPlayerController = new FootballPlayerController();
     }
 
     // Handle creating a new code
@@ -30,9 +27,7 @@ class FootballTeamController
             $systemUser = $this->userController->getSystemUser();
             $this->initializeTeams(DEFAULT_FOOTBALL_TEAM, $systemUser['id']);
             $teamId = $this->footballTeamService->createTeam($team_name, $this->user_id);
-            if ($teamId) {
-                $this->initializeTeamPlayers();
-            }
+            $this->initializeTeamPlayers($teamId);
             $_SESSION['message_type'] = 'success';
             $_SESSION['message'] = "Team created successfully";
         } else {
@@ -49,9 +44,18 @@ class FootballTeamController
         $this->footballTeamService->initializeTeams($teams, $systemUserId);
     }
 
-    public function initializeTeamPlayers()
+    public function initializeTeamPlayers($teamId)
     {
-        $this->footballPlayerController->initializeTeamPlayers();
+        $playerArr = getPlayersJson();
+        if (count($playerArr) < 22) {
+            throw new Exception("The player array must contain at least 22 items.");
+        }
+        // Shuffle the array
+        shuffle($playerArr);
+        // Get the first 22 players
+        $players = array_slice($playerArr, 0, 22);
+
+        $this->footballTeamService->initializeTeamPlayers($teamId, $players);
     }
 
     // Handle updating a code

@@ -7,7 +7,6 @@ require_once DIR . '/functions/generate-player.php';
 class FootballPlayerController
 {
     private $user_id;
-    private $footballTeamController;
     private $footballPlayerService;
 
     public function __construct()
@@ -16,11 +15,10 @@ class FootballPlayerController
         global $pdo;
         $this->user_id = $user_id;
         $this->footballPlayerService = new FootballPlayerService($pdo);
-        $this->footballTeamController = new FootballTeamController();
     }
 
     // Handle creating a new code
-    public function createPlayer($uuid)
+    public function createPlayer($teamId, $uuid)
     {
         $data = getPlayerJsonByUuid($uuid);
         // Prepare player data for insertion
@@ -62,10 +60,9 @@ class FootballPlayerController
             'jumping_reach' => $data['attributes']['physical']['jumping_reach'],
             'natural_fitness' => $data['attributes']['physical']['natural_fitness']
         ];
-        $team = $this->footballTeamController->getMyTeam();
 
         if ($player) {
-            return $this->footballPlayerService->createPlayer($team['id'], $player);
+            return $this->footballPlayerService->createPlayer($teamId, $player);
         } else {
             return null;
         }
@@ -74,22 +71,6 @@ class FootballPlayerController
     public function getMyTeam()
     {
         return $this->footballPlayerService->getTeamByUserId();
-    }
-
-    public function initializeTeamPlayers()
-    {
-        $playerArr = getPlayersJson();
-        if (count($playerArr) < 22) {
-            throw new Exception("The player array must contain at least 22 items.");
-        }
-        // Shuffle the array
-        shuffle($playerArr);
-        // Get the first 22 players
-        $players = array_slice($playerArr, 0, 22);
-
-        foreach ($players as $player) {
-            $this->createPlayer($player['uuid']);
-        }
     }
 
     // Handle deleting a code

@@ -139,7 +139,7 @@ class FootballPlayerService
 
     public function getTeamPlayers()
     {
-        $sql = "SELECT * FROM football_team_player WHERE team_id = :team_id ORDER BY starting_order ASC";
+        $sql = "SELECT * FROM football_player WHERE team_id = :team_id ORDER BY starting_order ASC";
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute([':team_id' => $this->user_id]);
 

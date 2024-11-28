@@ -35,7 +35,8 @@ class FootballTransferController
     {
         if ($type) {
             if ($type == 'buy') {
-                $playerId = $this->footballPlayerController->createPlayer($_POST['player_uuid']);
+                $team = $this->footballTeamController->getMyTeam();
+                $playerId = $this->footballPlayerController->createPlayer($team['id'], $_POST['player_uuid']);
                 if ($playerId) {
                     $player = $this->footballPlayerController->viewPlayer($playerId);
                     $player_id = $player['id'];
