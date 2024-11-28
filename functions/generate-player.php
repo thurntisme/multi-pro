@@ -694,7 +694,7 @@ function getTeamPlayerData($teamPlayers)
     // Calculate the average rating for each group
     foreach ($analytics as $group => &$data) {
         $data['averageRating'] = $data['count'] > 0
-            ? round($data['totalRating'] / $data['count'], 2)
+            ? round($data['totalRating'] / $data['count'])
             : 0;
     }
 

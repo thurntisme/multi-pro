@@ -537,7 +537,83 @@ $teams = [
         'slug' => 'radiant-monarchs',
         'name' => 'Radiant Monarchs',
     ],
+    [
+        'uuid' => 'lqwr4567-89z1-4w23-l2t4-745612345890',
+        'slug' => 'celestial-tigers',
+        'name' => 'Celestial Tigers',
+    ],
+    [
+        'uuid' => 'mrst5678-90v2-5r34-n3s5-856723456901',
+        'slug' => 'midnight-hawks',
+        'name' => 'Midnight Hawks',
+    ],
+    [
+        'uuid' => 'nuvq6789-01w3-6s45-m4t6-967834567902',
+        'slug' => 'radiant-dragons',
+        'name' => 'Radiant Dragons',
+    ],
+    [
+        'uuid' => 'opfr7890-12x4-7z56-n5u7-078945678013',
+        'slug' => 'thunder-spire',
+        'name' => 'Thunder Spire',
+    ],
+    [
+        'uuid' => 'pqgs8901-23z5-8w67-v6t8-189056789124',
+        'slug' => 'gale-warriors',
+        'name' => 'Gale Warriors',
+    ],
+    [
+        'uuid' => 'qrtu9012-34u6-9x78-p7w9-290167890235',
+        'slug' => 'storm-guardians',
+        'name' => 'Storm Guardians',
+    ],
+    [
+        'uuid' => 'rsuv2345-67w8-3y90-v7z1-523490123578',
+        'slug' => 'lunar-knights',
+        'name' => 'Lunar Knights',
+    ],
+    [
+        'uuid' => 'stuw3456-78x9-4z01-w8y2-634501234679',
+        'slug' => 'solar-ascendants',
+        'name' => 'Solar Ascendants',
+    ],
+    [
+        'uuid' => 'txyv4567-89y0-5w12-x9z3-745612345790',
+        'slug' => 'oceanic-phantoms',
+        'name' => 'Oceanic Phantoms',
+    ],
+    [
+        'uuid' => 'uxyz5678-90z1-6y23-v0w4-856723456902',
+        'slug' => 'crystal-vipers',
+        'name' => 'Crystal Vipers',
+    ],
+    [
+        'uuid' => 'vyza6789-01x2-7z34-w1y5-967834567903',
+        'slug' => 'diamond-fury',
+        'name' => 'Diamond Fury',
+    ],
+    [
+        'uuid' => 'wzab7890-12y3-8z56-v2x7-078945678014',
+        'slug' => 'wildfire-predators',
+        'name' => 'Wildfire Predators',
+    ],
+    [
+        'uuid' => 'xabc8901-23z4-9x67-y3z8-189056789125',
+        'slug' => 'storm-wolves',
+        'name' => 'Storm Wolves',
+    ],
+    [
+        'uuid' => 'ydef9012-34z5-0w78-x6y9-290167890236',
+        'slug' => 'frost-wardens',
+        'name' => 'Frost Wardens',
+    ],
+    [
+        'uuid' => 'zghj0123-45w6-2z89-v7y0-301278901346',
+        'slug' => 'blizzard-sentinels',
+        'name' => 'Blizzard Sentinels',
+    ]
 ];
+
 define("DEFAULT_FOOTBALL_TEAM", $teams);
 
 $formations = [

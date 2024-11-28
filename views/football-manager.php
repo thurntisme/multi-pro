@@ -5,18 +5,26 @@ $pageTitle = "Football Manager";
 
 require_once DIR . '/functions/generate-player.php';
 require_once DIR . '/controllers/FootballTeamController.php';
+require_once DIR . '/controllers/FootballLeagueController.php';
 
 // Generate 8 random players
 $popular_players = generateRandomPlayers(8);
 $commonController = new CommonController();
 
 $footballTeamController = new FootballTeamController();
+$footballLeagueController = new FootballLeagueController();
 $teams = $footballTeamController->listTeams();
+
+$curr_league = $footballLeagueController->getNewestLeague();
+$schedule = $footballLeagueController->getMySchedule();
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_POST['action_name'])) {
-        if ($_POST['action_name'] === 'add_record') {
+        if ($_POST['action_name'] === 'add_team') {
             $footballTeamController->createTeam();
+        }
+        if ($_POST['action_name'] === 'add_league') {
+            $footballLeagueController->createLeague();
         }
     }
 }
@@ -73,27 +81,50 @@ ob_start();
             </div>
         </div>
         <div class="col-lg-4">
-            <div class="card card-body text-center">
-                <div class="row py-3 mb-2">
-                    <div class="col-6">
-                        <div class="avatar-sm mx-auto mb-3">
-                            <div class="avatar-title bg-success-subtle text-success fs-17 rounded">
-                                <i class="ri-add-line"></i>
-                            </div>
-                        </div>
-                        <h4 class="card-title">Crimson Falcons</h4>
+            <?php if ($curr_league) { ?>
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title mb-0 text-center"><?= $curr_league['name'] ?></h4>
+                        <div class="text-muted text-center mt-1 fs-12"><?= $curr_league['season'] ?></div>
                     </div>
-                    <div class="col-6">
-                        <div class="avatar-sm mx-auto mb-3">
-                            <div class="avatar-title bg-success-subtle text-success fs-17 rounded">
-                                <i class="ri-add-line"></i>
+                    <div class="card-body text-center">
+                        <div class="row py-3 mb-2">
+                            <div class="col-6">
+                                <div class="avatar-sm mx-auto mb-3">
+                                    <div class="avatar-title bg-success-subtle text-success fs-17 rounded">
+                                        <i class="ri-add-line"></i>
+                                    </div>
+                                </div>
+                                <h4 class="card-title"><?= $schedule['home']['team_name'] ?></h4>
+                            </div>
+                            <div class="col-6">
+                                <div class="avatar-sm mx-auto mb-3">
+                                    <div class="avatar-title bg-success-subtle text-success fs-17 rounded">
+                                        <i class="ri-add-line"></i>
+                                    </div>
+                                </div>
+                                <h4 class="card-title"><?= $schedule['away']['team_name'] ?></h4>
                             </div>
                         </div>
-                        <h4 class="card-title">Azure Knights</h4>
+                        <a class="btn btn-success" href="<?= home_url('football-manager/match') ?>">Game On</a>
                     </div>
                 </div>
-                <a class="btn btn-success" href="<?= home_url('football-manager/match') ?>">Game On</a>
-            </div>
+            <?php } else { ?>
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title mb-0 text-center">League</h4>
+                    </div>
+                    <div class="card-body text-center">
+                        <p class="card-text py-2 mb-3">No league found.<br />Please create a new league to get started!</p>
+                        <form method="POST" action="<?= $_SERVER['REQUEST_URI'] ?>">
+                            <input type="hidden" name="action_name" value="add_league">
+                            <div class="text-center">
+                                <button type="submit" class="btn btn-primary">Create League</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            <?php } ?>
             <div class="card">
                 <div class="card-header">
                     <h4 class="card-title mb-0 text-center">Challenge Match</h4>
@@ -139,7 +170,13 @@ ob_start();
                                                     </div>
                                                 </div>
                                                 <div class="flex-shrink-0 ms-2">
-                                                    <h6 class="fs-14 mb-0"><?= $team['team_name'] ?></h6>
+                                                    <h6 class="fs-14 mb-0">
+                                                        <?php if ($team['manager_id'] === $user_id) { ?>
+                                                            <a href="<?= home_url("football-manager/my-club") ?>"><?= $team['team_name'] ?></a>
+                                                        <?php } else { ?>
+                                                            <?= $team['team_name'] ?>
+                                                    </h6>
+                                                <?php } ?>
                                                 </div>
                                             </div>
                                         </td>
@@ -163,7 +200,7 @@ ob_start();
                             <label for="employeeName" class="form-label">Team Name</label>
                             <input type="text" class="form-control" name="team_name"
                                 placeholder="Enter your team name">
-                            <input type="hidden" name="action_name" value="add_record">
+                            <input type="hidden" name="action_name" value="add_team">
                         </div>
                         <div class="text-center">
                             <button type="submit" class="btn btn-primary">Create Team</button>
