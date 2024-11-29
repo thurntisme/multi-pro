@@ -132,7 +132,9 @@ class FootballTeamController
         $subPlayers = array_slice($team['players'], 11, 17);
 
         return [
+            'team_id' => $team['id'],
             'team_name' => $team['team_name'],
+            'formation' => $team['formation'],
             'lineup' => $lineupPlayers,
             'bench' => $subPlayers
         ];

@@ -78,6 +78,7 @@ echo "
     <script type='text/javascript'>
         const team1 = {
             name: '" . $myTeam['team_name'] . "',
+            formation: '" . $myTeam['formation'] . "',
             score: 0,
             players: " . json_encode($myTeam['lineup']) . ",
             bench: " . json_encode($myTeam['bench']) . ",
@@ -85,12 +86,13 @@ echo "
 
         const team2 = {
             name: '" . $myTeam['team_name'] . "',
+            formation: '" . $myTeam['formation'] . "',
             score: 0,
             players: " . json_encode($myTeam['lineup']) . ",
             bench: " . json_encode($myTeam['bench']) . ",
         };
 
-        const positionGroups = " . json_encode($positionGroups) . ";
+        const positionGroups = " . json_encode($positionGroupsExtra) . ";
     </script>
     <script src='" . home_url("/assets/js/pages/football-manager-match.js") . "'></script>
 ";

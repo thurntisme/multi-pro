@@ -9,6 +9,12 @@ $positionGroups = [
     'Midfielders' => ['CM', 'DM', 'AMC', 'LM', 'RM'],
     'Attackers' => ['CF', 'ST', 'RW', 'LW'],
 ];
+$positionGroupsExtra = [
+    'Goalkeepers' => ['GK'],
+    'Defenders' => ['CB', 'LCB', 'RCB', 'RB', 'LB'],
+    'Midfielders' => ['CM', 'RCM', 'LCM', 'DM', 'AMC', 'LM', 'RM'],
+    'Attackers' => ['CF', 'ST', 'LF', 'RF', 'RW', 'LW'],
+];
 $seasons = [
     'Legend' => 90,
     'The Best' => 80,

@@ -12,48 +12,46 @@ const team2Color = "#0000FF"; // Blue
 const playerScore = 5;
 
 // Formations
-const GK = { x: (width * 4) / 100, y: height / 2 };
-const LB = { x: (width * 20) / 100, y: height / 6 };
-const RB = { x: (width * 20) / 100, y: (height * 5) / 6 };
-const LCB = { x: (width * 12) / 100, y: height / 3 };
-const RCB = { x: (width * 12) / 100, y: (height * 2) / 3 };
-const LCM = { x: (width * 28) / 100, y: height / 3 };
-const RCM = { x: (width * 28) / 100, y: (height * 2) / 3 };
-const LM = { x: (width * 36) / 100, y: height / 6 };
-const RM = { x: (width * 36) / 100, y: (height * 5) / 6 };
-const LF = { x: (width * 45) / 100, y: (height * 3) / 8 };
-const RF = { x: (width * 45) / 100, y: (height * 5) / 8 };
+const GK = { posName: "GK", x: (width * 4) / 100, y: height / 2 };
+const LB = { posName: "LB", x: (width * 20) / 100, y: height / 6 };
+const RB = { posName: "RB", x: (width * 20) / 100, y: (height * 5) / 6 };
+const LCB = { posName: "LCB", x: (width * 12) / 100, y: height / 3 };
+const RCB = { posName: "RCB", x: (width * 12) / 100, y: (height * 2) / 3 };
+const LCM = { posName: "LCM", x: (width * 28) / 100, y: height / 3 };
+const RCM = { posName: "RCM", x: (width * 28) / 100, y: (height * 2) / 3 };
+const LM = { posName: "LM", x: (width * 36) / 100, y: height / 6 };
+const RM = { posName: "RM", x: (width * 36) / 100, y: (height * 5) / 6 };
+const LF = { posName: "LF", x: (width * 45) / 100, y: (height * 3) / 8 };
+const RF = { posName: "RF", x: (width * 45) / 100, y: (height * 5) / 8 };
 const formations = {
   442: [GK, LB, RB, LCB, RCB, LCM, RCM, LM, RM, LF, RF],
 };
 
-let team1Positions = formations["442"].map((pos, idx) => {
-  const accuracy = Math.floor(Math.random() * (100 - 50 + 1)) + 50;
-  const speed = Math.floor(Math.random() * (100 - 50 + 1)) + 50;
-  const defense = Math.floor(Math.random() * (100 - 50 + 1)) + 50;
-  return {
-    ...pos,
-    score: playerScore,
-    accuracy,
-    speed,
-    defense,
-    player: team1.players[idx],
-  };
-});
-let team2Positions = formations["442"].map((pos, idx) => {
-  const accuracy = Math.floor(Math.random() * (100 - 50 + 1)) + 50;
-  const speed = Math.floor(Math.random() * (100 - 50 + 1)) + 50;
-  const defense = Math.floor(Math.random() * (100 - 50 + 1)) + 50;
-  return {
-    x: width - pos.x,
-    y: pos.y,
-    score: playerScore,
-    accuracy,
-    speed,
-    defense,
-    player: team2.players[idx],
-  };
-});
+let team1InMatch = {
+  name: team1.name,
+  score: 0,
+  players: formations["442"].map((pos, idx) => {
+    return {
+      ...pos,
+      ...team1.players[idx],
+      score: playerScore,
+    };
+  }),
+  bench: team1.bench,
+};
+let team2InMatch = {
+  name: team2.name,
+  score: 0,
+  players: formations["442"].map((pos, idx) => {
+    return {
+      ...pos,
+      x: width - pos.x,
+      ...team2.players[idx],
+      score: playerScore,
+    };
+  }),
+  bench: team2.bench,
+};
 
 function getPositionColor(position) {
   const positionColors = {
@@ -135,16 +133,16 @@ const drawFootballPitch = () => {
 
   // Draw Team
   const drawPlayerPositions = () => {
-    team1Positions.forEach((pos, index) => {
-      drawCircle(pos.x, pos.y, getPositionColor(pos.player.best_position));
+    team1InMatch.players.forEach((pos, index) => {
+      drawCircle(pos.x, pos.y, getPositionColor(pos.posName));
       drawPlayerNumber(pos.x, pos.y, index + 1);
-      drawPlayerName(pos.x, pos.y, pos.player.name);
+      drawPlayerName(pos.x, pos.y, pos.name);
       drawPlayerScore(pos);
     });
-    team2Positions.forEach((pos, index) => {
-      drawCircle(pos.x, pos.y, getPositionColor(pos.player.best_position));
+    team2InMatch.players.forEach((pos, index) => {
+      drawCircle(pos.x, pos.y, getPositionColor(pos.posName));
       drawPlayerNumber(pos.x, pos.y, index + 1);
-      drawPlayerName(pos.x, pos.y, pos.player.name);
+      drawPlayerName(pos.x, pos.y, pos.name);
       drawPlayerScore(pos);
     });
   };
@@ -304,7 +302,15 @@ function simulateMatch(team1, team2) {
         const team = Math.random() < 0.5 ? team1 : team2;
         const player =
           team.players[Math.floor(Math.random() * team.players.length)];
-        simulateAction(team, player, team1, team2, currentTimeInSeconds);
+        let previousAction = null; // Initially, no previous action
+        simulateAction(
+          team,
+          player,
+          team1,
+          team2,
+          currentTimeInSeconds,
+          previousAction
+        );
       }
     }
 
@@ -326,31 +332,117 @@ function formatTime(time) {
   };
 }
 
-function simulateAction(team, player, team1, team2, currentTime) {
-  const actions = [
-    // "pass",
-    "shoot",
-    "foul",
-    // "card",
-    // "injury",
-    "corner",
-    "save",
-    "assist",
-    "tackle",
-    "offside",
-    "penalty",
-    "ownGoal",
-  ];
+// Function to get follow-up actions based on the previous action
+function getFollowUpActions(previousAction, position, validActionsByPosition) {
+  const followUpActions = {
+    dribble: ["assist", "shoot", "pass"],
+    assist: ["shoot", "cross", "pass"],
+    shoot: ["rebound", "assist", "pass"],
+    header: ["assist", "shoot", "clearance"],
+    pass: ["dribble", "shoot", "assist"],
+    longShot: ["pass", "assist"],
+    chipShot: ["shoot", "pass"],
+  };
+
+  // If no follow-up actions for this action, return all possible actions for the position
+  if (followUpActions[previousAction]) {
+    return followUpActions[previousAction];
+  }
+
+  return validActionsByPosition[position]; // If no specific follow-up, return all actions for the position
+}
+
+function simulateAction(
+  team,
+  player,
+  team1,
+  team2,
+  currentTime,
+  previousAction
+) {
+  // Define valid actions for each position
+  const validActionsByPosition = {
+    GK: [
+      "save",
+      "catch",
+      "punch",
+      "goalKick",
+      "distribution",
+      "ownGoal",
+      "foul",
+    ],
+    CM: [
+      "pass",
+      "dribble",
+      "keyPass",
+      "longShot",
+      "assist",
+      "foul",
+      "tackle",
+      "intercept",
+      "clearance",
+    ],
+    CF: [
+      "shoot",
+      "offside",
+      "assist",
+      "ownGoal",
+      "penalty",
+      "header",
+      "longShot",
+    ],
+    ST: [
+      "shoot",
+      "offside",
+      "assist",
+      "ownGoal",
+      "penalty",
+      "header",
+      "chipShot",
+    ],
+    RW: ["cross", "cutInside", "dribble", "assist", "shoot", "ownGoal", "pass"],
+    LW: ["cross", "cutInside", "dribble", "assist", "shoot", "ownGoal", "pass"],
+    CB: ["tackle", "clearance", "header", "block", "foul", "ownGoal"],
+    RB: ["tackle", "clearance", "header", "cross", "assist", "foul", "ownGoal"],
+    LB: ["tackle", "clearance", "header", "cross", "assist", "foul", "ownGoal"],
+    DM: [
+      "intercept",
+      "shieldBall",
+      "throughBall",
+      "switchPlay",
+      "assist",
+      "tackle",
+      "foul",
+      "ownGoal",
+    ],
+    AMC: [
+      "keyPass",
+      "assist",
+      "shoot",
+      "foul",
+      "offside",
+      "longShot",
+      "ownGoal",
+    ],
+    LM: ["shoot", "assist", "dribble", "foul", "ownGoal", "cross"],
+    RM: ["shoot", "assist", "dribble", "foul", "ownGoal", "cross"],
+  };
+  const { posName } = player;
+  // Randomly select a valid action for the chosen position
+  let actions = validActionsByPosition[posName];
+  if (previousAction) {
+    actions = getFollowUpActions(
+      previousAction,
+      posName,
+      validActionsByPosition
+    );
+  }
   const action = actions[Math.floor(Math.random() * actions.length)];
 
   const team1score = document.getElementById("team-1-score");
   const team2score = document.getElementById("team-2-score");
 
   switch (action) {
-    case "pass":
-      logEvent(currentTime, "pass", `${player.name} passes the ball.`);
-      break;
-
     case "shoot":
       const scored = attemptOutcome(
         action,
@@ -373,6 +465,9 @@ function simulateAction(team, player, team1, team2, currentTime) {
 
     case "foul":
       logEvent(currentTime, "foul", `${player.name} commits a foul.`);
+      player.score -= Math.random() * (2 - 0.5) + 0.5;
+      player.score = Math.max(player.score, 1);
+      drawPlayerScore(player);
       break;
 
     case "card":
@@ -389,10 +484,16 @@ function simulateAction(team, player, team1, team2, currentTime) {
 
     case "save":
       logEvent(currentTime, "save", `Goalkeeper saves a shot!`);
+      player.score += Math.random() * (3 - 1) + 1;
+      player.score = Math.min(player.score, 10);
+      drawPlayerScore(player);
       break;
 
     case "assist":
       logEvent(currentTime, "assist", `${player.name} assists in a goal.`);
+      player.score += Math.random() * (3 - 1) + 1;
+      player.score = Math.min(player.score, 10);
+      drawPlayerScore(player);
       break;
 
     case "tackle":
@@ -401,6 +502,9 @@ function simulateAction(team, player, team1, team2, currentTime) {
         "tackle",
         `${player.name} successfully tackles an opponent.`
       );
+      player.score += Math.random() * (2 - 0.5) + 0.5;
+      player.score = Math.min(player.score, 10);
+      drawPlayerScore(player);
       break;
 
     case "offside":
@@ -433,20 +537,23 @@ function simulateAction(team, player, team1, team2, currentTime) {
       break;
 
     case "ownGoal":
-      logEvent(
-        currentTime,
-        "goal",
-        `${player.name} accidentally scores an own goal!`
-      );
-      const opposingTeam = team === team1 ? team2 : team1;
-      opposingTeam.score++;
-      player.score -= Math.random() * (2 - 1) + 1;
-      player.score = Math.max(player.score, 1);
-      drawPlayerScore(player);
+      const ownGoal = attemptOutcome(action, player, team);
+      if (ownGoal) {
+        logEvent(
+          currentTime,
+          "goal",
+          `${player.name} accidentally scores an own goal!`
+        );
+        const opposingTeam = team === team1 ? team2 : team1;
+        opposingTeam.score++;
+        player.score -= Math.random() * (2 - 1) + 1;
+        player.score = Math.max(player.score, 1);
+        drawPlayerScore(player);
+      }
       break;
 
     default:
-      logEvent(currentTime, "", `Unknown action.`);
+      // logEvent(currentTime, "", `Unknown action.`);
       break;
   }
 
@@ -568,4 +675,4 @@ function logEvent(time, action, message) {
 }
 
 // Start the match simulation
-simulateMatch(team1, team2);
+simulateMatch(team1InMatch, team2InMatch);
