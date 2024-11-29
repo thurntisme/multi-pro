@@ -156,7 +156,8 @@ function calculatePlayerWage(
     array  $playablePositions,
     string $season,
     int    $overallAbility
-): float {
+): float
+{
     // Define base nation multipliers
     global $popularNations, $semiPopularNations;
     $nationMultipliers = [
@@ -219,7 +220,8 @@ function calculateMarketValue(
     array  $playablePositions,
     string $season,
     int    $overallAbility
-): float {
+): float
+{
     // Step 1: Define the base salary depending on the nation
     global $popularNations, $semiPopularNations;
     $baseSalaries = [
@@ -705,4 +707,22 @@ function getTeamPlayerData($teamPlayers)
     }
 
     return array_merge(['total' => $total], $analytics);
+}
+
+function getBackgroundColor($ability): string
+{
+    if ($ability < 50 || $ability > 120) {
+        throw new InvalidArgumentException("Ability must be between 50 and 120.");
+    }
+
+    // Assign colors based on ability ranges
+    if ($ability <= 70) {
+        return "rgba(255, 255, 255, 0)"; // Transparent
+    } elseif ($ability <= 90) {
+        return "rgba(255, 255, 150, 0.5)"; // Soft Yellow
+    } elseif ($ability <= 110) {
+        return "rgba(255, 100, 100, 0.75)"; // Soft Red
+    } else {
+        return "rgba(200, 100, 255, 1)"; // Soft Violet
+    }
 }

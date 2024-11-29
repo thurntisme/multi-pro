@@ -436,7 +436,7 @@ $namesByNation = [
 ];
 define("DEFAULT_NAME_BY_NATIONALITY", $namesByNation);
 
-$teams = [
+const DEFAULT_FOOTBALL_TEAM = [
     [
         'uuid' => '1b6f4567-89a1-4c12-b2d3-7456123a7890',
         'slug' => 'phoenix-titans',
@@ -613,8 +613,6 @@ $teams = [
         'name' => 'Blizzard Sentinels',
     ]
 ];
-
-define("DEFAULT_FOOTBALL_TEAM", $teams);
 
 $formations = [
     [
