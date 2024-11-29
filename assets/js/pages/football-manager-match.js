@@ -241,9 +241,6 @@ function simulateMatch(team1, team2) {
   let extraTimePassed = false;
   let matchOver = false;
 
-  document.getElementById("team-1-name").innerText = team1.name;
-  document.getElementById("team-2-name").innerText = team2.name;
-
   // Random extra time
   const extraHalfTime = Math.floor(Math.random() * maxExtraTime) * 60;
   const extraTime = Math.floor(Math.random() * maxExtraTime) * 60;
@@ -331,11 +328,11 @@ function formatTime(time) {
 
 function simulateAction(team, player, team1, team2, currentTime) {
   const actions = [
-    "pass",
+    // "pass",
     "shoot",
     "foul",
-    "card",
-    "injury",
+    // "card",
+    // "injury",
     "corner",
     "save",
     "assist",
@@ -356,8 +353,8 @@ function simulateAction(team, player, team1, team2, currentTime) {
 
     case "shoot":
       const scored = attemptOutcome(
+        action,
         player,
-        team,
         team === team1 ? team2 : team1
       );
       if (scored) {
@@ -412,8 +409,8 @@ function simulateAction(team, player, team1, team2, currentTime) {
 
     case "penalty":
       const penaltyScored = attemptOutcome(
+        action,
         player,
-        team,
         team === team1 ? team2 : team1
       );
       if (penaltyScored) {
@@ -457,12 +454,41 @@ function simulateAction(team, player, team1, team2, currentTime) {
   team2score.innerText = team2.score;
 }
 
-function attemptOutcome(player, attackingTeam, defendingTeam) {
-  const attackerSkill = player.accuracy + Math.random() * player.speed;
-  const defenderSkill = defendingTeam.players.find((p) =>
-    p.name.includes("Goalkeeper")
-  ).defense;
-  return attackerSkill > defenderSkill;
+function attemptOutcome(type, attacker, defendingTeam) {
+  const goalkeeper = defendingTeam.players.find(
+    (p) => p.best_position === "GK"
+  );
+
+  // Forward attributes
+  const { composure, finishing, heading, flair, off_the_ball } = attacker;
+
+  // Goalkeeper attributes
+  const { decision, concentration } = goalkeeper;
+
+  let baseChance = 0;
+  let goalkeeperImpact = 0;
+
+  if (type === "shoot") {
+    // Logic for regular shot
+    baseChance =
+      composure * 0.3 + finishing * 0.4 + heading * 0.2 + flair * 0.1;
+
+    const positioningBonus = off_the_ball * 0.2; // Adds to base chance
+    baseChance += positioningBonus;
+
+    goalkeeperImpact = decision * 0.5 + concentration * 0.5;
+  } else if (type === "penalty") {
+    // Logic for penalty
+    baseChance = composure * 0.5 + finishing * 0.5;
+    goalkeeperImpact = decision * 0.7; // Decision is more critical for penalties
+  }
+
+  // Calculate final chance
+  const finalChance = Math.max(0, baseChance - goalkeeperImpact);
+
+  // Randomly determine the outcome
+  const randomChance = Math.random() * 100; // Random number between 0 and 100
+  return randomChance < finalChance;
 }
 
 function handleCard(player, team, currentTime) {
@@ -542,4 +568,4 @@ function logEvent(time, action, message) {
 }
 
 // Start the match simulation
-// simulateMatch(team1, team2);
+simulateMatch(team1, team2);
