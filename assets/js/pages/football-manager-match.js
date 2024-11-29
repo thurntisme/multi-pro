@@ -12,25 +12,180 @@ const team2Color = "#0000FF"; // Blue
 const playerScore = 5;
 
 // Formations
-const GK = { posName: "GK", x: (width * 4) / 100, y: height / 2 };
-const LB = { posName: "LB", x: (width * 20) / 100, y: height / 6 };
-const RB = { posName: "RB", x: (width * 20) / 100, y: (height * 5) / 6 };
-const LCB = { posName: "LCB", x: (width * 12) / 100, y: height / 3 };
-const RCB = { posName: "RCB", x: (width * 12) / 100, y: (height * 2) / 3 };
-const LCM = { posName: "LCM", x: (width * 28) / 100, y: height / 3 };
-const RCM = { posName: "RCM", x: (width * 28) / 100, y: (height * 2) / 3 };
-const LM = { posName: "LM", x: (width * 36) / 100, y: height / 6 };
-const RM = { posName: "RM", x: (width * 36) / 100, y: (height * 5) / 6 };
-const LF = { posName: "LF", x: (width * 45) / 100, y: (height * 3) / 8 };
-const RF = { posName: "RF", x: (width * 45) / 100, y: (height * 5) / 8 };
-const formations = {
-  442: [GK, LB, RB, LCB, RCB, LCM, RCM, LM, RM, LF, RF],
+const pitchX = 100;
+
+// Player Positions for the 4-4-2 Formation
+const GK = { posName: "GK", x: (width * 4) / pitchX, y: height / 2 };
+const LB = { posName: "LB", x: (width * 18) / pitchX, y: height / 6 };
+const RB = { posName: "RB", x: (width * 18) / pitchX, y: (height * 5) / 6 };
+const LCB = { posName: "CB", x: (width * 12) / pitchX, y: height / 3 };
+const RCB = { posName: "CB", x: (width * 12) / pitchX, y: (height * 2) / 3 };
+const LCM = { posName: "CM", x: (width * 30) / pitchX, y: height / 3 };
+const RCM = { posName: "CM", x: (width * 30) / pitchX, y: (height * 2) / 3 };
+const LM = { posName: "LM", x: (width * 30) / pitchX, y: height / 6 };
+const RM = { posName: "RM", x: (width * 30) / pitchX, y: (height * 5) / 6 };
+const LF = { posName: "LF", x: (width * 45) / pitchX, y: (height * 3) / 8 };
+const RF = { posName: "RF", x: (width * 45) / pitchX, y: (height * 5) / 8 };
+
+// Player Positions for the 4-3-3 Formation
+const LW = { posName: "LW", x: (width * 40) / pitchX, y: height / 6 };
+const RW = { posName: "RW", x: (width * 40) / pitchX, y: (height * 5) / 6 };
+const CF = { posName: "CF", x: (width * 40) / pitchX, y: height / 2 };
+const ST = { posName: "ST", x: (width * 45) / pitchX, y: height / 2 };
+
+// Player Positions for the 3-5-2 Formation
+const LCB_3_5_2 = {
+  posName: "CB",
+  x: (width * 12) / pitchX,
+  y: (height * 1) / 3 - 12,
 };
+const CB_3_5_2 = { posName: "CB", x: (width * 12) / pitchX, y: height / 2 };
+const RCB_3_5_2 = {
+  posName: "CB",
+  x: (width * 12) / pitchX,
+  y: height - (height * 1) / 3 + 12,
+};
+const LM_3_5_2 = { posName: "LM", x: (width * 36) / pitchX, y: height / 6 };
+const RM_3_5_2 = {
+  posName: "RM",
+  x: (width * 36) / pitchX,
+  y: (height * 5) / 6,
+};
+const AMC_3_5_2 = { posName: "AMC", x: (width * 36) / pitchX, y: height / 2 };
+
+// Player Positions for the 4-2-3-1 Formation
+const CDM1_4_2_3_1 = {
+  posName: "DM",
+  x: (width * 25) / pitchX,
+  y: height / 3,
+};
+const CDM2_4_2_3_1 = {
+  posName: "DM",
+  x: (width * 25) / pitchX,
+  y: (height * 2) / 3,
+};
+const AMC = { posName: "AMC", x: (width * 35) / pitchX, y: height / 2 };
+const LW_4_2_3_1 = { posName: "LW", x: (width * 40) / pitchX, y: height / 4 };
+const RW_4_2_3_1 = {
+  posName: "RW",
+  x: (width * 40) / pitchX,
+  y: (height * 3) / 4,
+};
+
+// Player Positions for the 4-1-4-1 Formation
+const DM = { posName: "DM", x: (width * 24) / pitchX, y: height / 2 };
+const LCM_4_1_4_1 = { posName: "CM", x: (width * 28) / pitchX, y: height / 3 };
+const RCM_4_1_4_1 = {
+  posName: "CM",
+  x: (width * 28) / pitchX,
+  y: (height * 2) / 3,
+};
+const ST_4_1_4_1 = { posName: "ST", x: (width * 50) / pitchX, y: height / 2 };
+
+// Player Positions for the 5-4-1 Formation
+const LWB = { posName: "LB", x: (width * 20) / pitchX, y: height / 6 };
+const RWB = {
+  posName: "RB",
+  x: (width * 20) / pitchX,
+  y: (height * 5) / 6,
+};
+const LCB_5_4_1 = { posName: "CB", x: (width * 10) / pitchX, y: height / 3 };
+const CB_5_4_1 = { posName: "CB", x: (width * 20) / pitchX, y: height / 2 };
+const RCB_5_4_1 = { posName: "CB", x: (width * 30) / pitchX, y: height / 3 };
+const CM_5_4_1 = { posName: "CM", x: (width * 35) / pitchX, y: height / 2 };
+const ST_5_4_1 = { posName: "ST", x: (width * 50) / pitchX, y: height / 2 };
+
+// Function to generate player positions for various formations
+function generateFormation(formation) {
+  switch (formation) {
+    case "433":
+      return [GK, LB, LCB, RCB, RB, LCM, RCM, LW, CF, RW];
+    case "442":
+      return [GK, LB, LCB, RCB, RB, LM, LCM, RCM, RM, LF, RF];
+    case "352":
+      return [
+        GK,
+        LCB_3_5_2,
+        CB_3_5_2,
+        RCB_3_5_2,
+        { ...CDM1_4_2_3_1, y: CDM1_4_2_3_1.y + 12 },
+        { ...CDM2_4_2_3_1, y: CDM2_4_2_3_1.y - 12 },
+        LM_3_5_2,
+        RM_3_5_2,
+        AMC_3_5_2,
+        LF,
+        RF,
+      ];
+    case "4231":
+      return [
+        GK,
+        LB,
+        LCB,
+        RCB,
+        RB,
+        CDM1_4_2_3_1,
+        CDM2_4_2_3_1,
+        AMC,
+        LM,
+        RM,
+        CF,
+      ];
+    case "4141":
+      return [
+        GK,
+        LB,
+        LCB,
+        RCB,
+        RB,
+        { ...DM, x: DM.x - 12 },
+        { ...LCM, x: LCM.x + 16 },
+        { ...RCM, x: RCM.x + 16 },
+        LM,
+        RM,
+        ST,
+      ];
+    case "541":
+      return [
+        GK,
+        LWB,
+        LCB_3_5_2,
+        CB_3_5_2,
+        RCB_3_5_2,
+        RWB,
+        LCM_4_1_4_1,
+        RCM_4_1_4_1,
+        LM_3_5_2,
+        RM_3_5_2,
+        ST,
+      ];
+    case "4312":
+      return [GK, LB, LCB, RCB, RB, DM, LCM, RCM, CF, LF, RF];
+    case "343":
+      return [
+        GK,
+        LCB_3_5_2,
+        CB_3_5_2,
+        RCB_3_5_2,
+        LM,
+        LCM_4_1_4_1,
+        RCM_4_1_4_1,
+        RM,
+        LW_4_2_3_1,
+        ST,
+        RW_4_2_3_1,
+      ];
+    case "4222":
+      return [GK, LB, LCB, RCB, RB, LCM, RCM, LF, RF, LM_3_5_2, RM_3_5_2];
+    default:
+      console.error("Invalid formation");
+      return [];
+  }
+}
 
 let team1InMatch = {
   name: team1.name,
   score: 0,
-  players: formations["442"].map((pos, idx) => {
+  players: generateFormation(team1.formation).map((pos, idx) => {
     return {
       ...pos,
       ...team1.players[idx],
@@ -42,7 +197,7 @@ let team1InMatch = {
 let team2InMatch = {
   name: team2.name,
   score: 0,
-  players: formations["442"].map((pos, idx) => {
+  players: generateFormation("442").map((pos, idx) => {
     return {
       ...pos,
       x: width - pos.x,
@@ -383,6 +538,24 @@ function simulateAction(
       "clearance",
     ],
     CF: [
+      "shoot",
+      "offside",
+      "assist",
+      "ownGoal",
+      "penalty",
+      "header",
+      "longShot",
+    ],
+    LF: [
+      "shoot",
+      "offside",
+      "assist",
+      "ownGoal",
+      "penalty",
+      "header",
+      "longShot",
+    ],
+    RF: [
       "shoot",
       "offside",
       "assist",
