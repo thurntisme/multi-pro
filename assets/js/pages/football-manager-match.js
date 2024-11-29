@@ -52,8 +52,6 @@ const RM_3_5_2 = {
   y: (height * 5) / 6,
 };
 const AMC_3_5_2 = { posName: "AMC", x: (width * 36) / pitchX, y: height / 2 };
-
-// Player Positions for the 4-2-3-1 Formation
 const CDM1_4_2_3_1 = {
   posName: "DM",
   x: (width * 25) / pitchX,
@@ -71,8 +69,6 @@ const RW_4_2_3_1 = {
   x: (width * 40) / pitchX,
   y: (height * 3) / 4,
 };
-
-// Player Positions for the 4-1-4-1 Formation
 const DM = { posName: "DM", x: (width * 24) / pitchX, y: height / 2 };
 const LCM_4_1_4_1 = { posName: "CM", x: (width * 28) / pitchX, y: height / 3 };
 const RCM_4_1_4_1 = {
@@ -81,8 +77,6 @@ const RCM_4_1_4_1 = {
   y: (height * 2) / 3,
 };
 const ST_4_1_4_1 = { posName: "ST", x: (width * 50) / pitchX, y: height / 2 };
-
-// Player Positions for the 5-4-1 Formation
 const LWB = { posName: "LB", x: (width * 20) / pitchX, y: height / 6 };
 const RWB = {
   posName: "RB",

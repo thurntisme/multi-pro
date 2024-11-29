@@ -57,6 +57,7 @@ ob_start();
                             </table>
                             <div class="p-3 d-flex align-items-center justify-content-center">
                                 <canvas id="footballPitch" width="320" height="160"></canvas>
+                                <input type="hidden" name="team_formation" value="<?= $myTeam['formation'] ?>">
                             </div>
                         </div>
                     </div>
@@ -272,6 +273,28 @@ $pageContent = ob_get_clean();
 
 ob_start();
 echo "
+    <script type='text/javascript'>
+        const canvas = document.getElementById('footballPitch');
+        const ctx = canvas.getContext('2d');
+
+        // Pitch Dimensions
+        const width = canvas.width;
+        const height = canvas.height;
+
+        const team1 = {
+            name: '" . $myTeam['team_name'] . "',
+            formation: '" . $myTeam['formation'] . "',
+            score: 0,
+            players: " . json_encode($lineupPlayers) . ",
+            bench: " . json_encode($subPlayers) . ",
+        };
+        const groupTeams = [team1];
+        const pitchX = 50 * groupTeams.length;
+
+        const positionGroups = " . json_encode($positionGroupsExtra) . ";
+    </script>
+    <script src='" . home_url("/assets/js/pages/football-manager-formation.js") . "'></script>
+    <script src='" . home_url("/assets/js/pages/football-manager.js") . "'></script>
     <script src='" . home_url("/assets/js/pages/football-manager-club.js") . "'></script>
 ";
 $additionJs = ob_get_clean();
