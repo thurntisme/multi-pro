@@ -596,7 +596,7 @@ function getPlayersJson($fileName = '')
     } else {
         error_log("File {$fileName} not found. Initializing new data.");
     }
-    return $oldData;
+    return array_reverse($oldData);
 }
 
 function getPlayerJsonByUuid($targetUuid)

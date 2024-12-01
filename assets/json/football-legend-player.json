@@ -4,7 +4,7 @@
     "nationality": "Brazil",
     "weight": "73",
     "height": "1.73",
-    "age_peak_ability": 25,
+    "age": 25,
     "best_position": "ST",
     "playable_positions": [
       "ST",
@@ -17,7 +17,7 @@
     "nationality": "Argentina",
     "weight": "70",
     "height": "1.65",
-    "age_peak_ability": 26,
+    "age": 26,
     "best_position": "CAM",
     "playable_positions": [
       "CAM",
@@ -30,7 +30,7 @@
     "nationality": "Italy",
     "weight": "85",
     "height": "1.86",
-    "age_peak_ability": 30,
+    "age": 30,
     "best_position": "LB",
     "playable_positions": [
       "LB",
@@ -42,7 +42,7 @@
     "nationality": "Spain",
     "weight": "68",
     "height": "1.70",
-    "age_peak_ability": 29,
+    "age": 29,
     "best_position": "CM",
     "playable_positions": [
       "CM",
@@ -55,7 +55,7 @@
     "nationality": "Spain",
     "weight": "68",
     "height": "1.71",
-    "age_peak_ability": 28,
+    "age": 28,
     "best_position": "CAM",
     "playable_positions": [
       "CAM",
@@ -68,7 +68,7 @@
     "nationality": "Brazil",
     "weight": "73",
     "height": "1.68",
-    "age_peak_ability": 28,
+    "age": 28,
     "best_position": "LB",
     "playable_positions": [
       "LB",
@@ -80,7 +80,7 @@
     "nationality": "Italy",
     "weight": "92",
     "height": "1.91",
-    "age_peak_ability": 28,
+    "age": 28,
     "best_position": "GK",
     "playable_positions": [
       "GK"
@@ -91,7 +91,7 @@
     "nationality": "Italy",
     "weight": "79",
     "height": "1.80",
-    "age_peak_ability": 30,
+    "age": 30,
     "best_position": "CF",
     "playable_positions": [
       "CF",
@@ -103,7 +103,7 @@
     "nationality": "Northern Ireland",
     "weight": "70",
     "height": "1.75",
-    "age_peak_ability": 27,
+    "age": 27,
     "best_position": "LW",
     "playable_positions": [
       "LW",
@@ -116,7 +116,7 @@
     "nationality": "Wales",
     "weight": "68",
     "height": "1.80",
-    "age_peak_ability": 27,
+    "age": 27,
     "best_position": "LM",
     "playable_positions": [
       "LM",
@@ -129,7 +129,7 @@
     "nationality": "France",
     "weight": "83",
     "height": "1.88",
-    "age_peak_ability": 28,
+    "age": 28,
     "best_position": "ST",
     "playable_positions": [
       "ST",
@@ -142,7 +142,7 @@
     "nationality": "Spain",
     "weight": "68",
     "height": "1.80",
-    "age_peak_ability": 26,
+    "age": 26,
     "best_position": "ST",
     "playable_positions": [
       "ST",
@@ -154,7 +154,7 @@
     "nationality": "Italy",
     "weight": "78",
     "height": "1.82",
-    "age_peak_ability": 35,
+    "age": 35,
     "best_position": "GK",
     "playable_positions": [
       "GK"
@@ -165,7 +165,7 @@
     "nationality": "Italy",
     "weight": "73",
     "height": "1.74",
-    "age_peak_ability": 27,
+    "age": 27,
     "best_position": "CF",
     "playable_positions": [
       "CF",
@@ -177,7 +177,7 @@
     "nationality": "Argentina",
     "weight": "75",
     "height": "1.78",
-    "age_peak_ability": 30,
+    "age": 30,
     "best_position": "RB",
     "playable_positions": [
       "RB",
@@ -190,7 +190,7 @@
     "nationality": "Germany",
     "weight": "67",
     "height": "1.70",
-    "age_peak_ability": 29,
+    "age": 29,
     "best_position": "RB",
     "playable_positions": [
       "RB",
@@ -203,7 +203,7 @@
     "nationality": "Colombia",
     "weight": "73",
     "height": "1.77",
-    "age_peak_ability": 29,
+    "age": 29,
     "best_position": "CAM",
     "playable_positions": [
       "CAM",
@@ -215,7 +215,7 @@
     "nationality": "Denmark",
     "weight": "76",
     "height": "1.83",
-    "age_peak_ability": 28,
+    "age": 28,
     "best_position": "CAM",
     "playable_positions": [
       "CAM",
@@ -228,7 +228,7 @@
     "nationality": "Brazil",
     "weight": "77",
     "height": "1.81",
-    "age_peak_ability": 28,
+    "age": 28,
     "best_position": "CAM",
     "playable_positions": [
       "CAM",
@@ -240,7 +240,7 @@
     "nationality": "Netherlands",
     "weight": "80",
     "height": "1.88",
-    "age_peak_ability": 27,
+    "age": 27,
     "best_position": "ST",
     "playable_positions": [
       "ST",
@@ -252,7 +252,7 @@
     "nationality": "Brazil",
     "weight": "68",
     "height": "1.67",
-    "age_peak_ability": 28,
+    "age": 28,
     "best_position": "ST",
     "playable_positions": [
       "ST",
@@ -264,7 +264,7 @@
     "nationality": "Brazil",
     "weight": "72",
     "height": "1.72",
-    "age_peak_ability": 28,
+    "age": 28,
     "best_position": "CAM",
     "playable_positions": [
       "CAM",
@@ -277,7 +277,7 @@
     "nationality": "France",
     "weight": "70",
     "height": "1.74",
-    "age_peak_ability": 30,
+    "age": 30,
     "best_position": "CDM",
     "playable_positions": [
       "CDM",
@@ -289,7 +289,7 @@
     "nationality": "France",
     "weight": "83",
     "height": "1.92",
-    "age_peak_ability": 28,
+    "age": 28,
     "best_position": "CDM",
     "playable_positions": [
       "CDM",
@@ -301,7 +301,7 @@
     "nationality": "Argentina",
     "weight": "78",
     "height": "1.86",
-    "age_peak_ability": 29,
+    "age": 29,
     "best_position": "CDM",
     "playable_positions": [
       "CDM",
@@ -313,7 +313,7 @@
     "nationality": "Italy",
     "weight": "75",
     "height": "1.78",
-    "age_peak_ability": 28,
+    "age": 28,
     "best_position": "CB",
     "playable_positions": [
       "CB",
@@ -325,7 +325,7 @@
     "nationality": "Romania",
     "weight": "72",
     "height": "1.74",
-    "age_peak_ability": 29,
+    "age": 29,
     "best_position": "CAM",
     "playable_positions": [
       "CAM",
@@ -338,7 +338,7 @@
     "nationality": "Netherlands",
     "weight": "80",
     "height": "1.80",
-    "age_peak_ability": 30,
+    "age": 30,
     "best_position": "RW",
     "playable_positions": [
       "RW",
@@ -351,7 +351,7 @@
     "nationality": "Germany",
     "weight": "91",
     "height": "1.88",
-    "age_peak_ability": 33,
+    "age": 33,
     "best_position": "GK",
     "playable_positions": [
       "GK"
@@ -362,7 +362,7 @@
     "nationality": "Italy",
     "weight": "70",
     "height": "1.73",
-    "age_peak_ability": 28,
+    "age": 28,
     "best_position": "RM",
     "playable_positions": [
       "RM",
@@ -375,7 +375,7 @@
     "nationality": "France",
     "weight": "83",
     "height": "1.86",
-    "age_peak_ability": 28,
+    "age": 28,
     "best_position": "LW",
     "playable_positions": [
       "LW",
@@ -388,7 +388,7 @@
     "nationality": "Ivory Coast",
     "weight": "84",
     "height": "1.89",
-    "age_peak_ability": 32,
+    "age": 32,
     "best_position": "ST",
     "playable_positions": [
       "ST",
@@ -400,7 +400,7 @@
     "nationality": "Serbia",
     "weight": "84",
     "height": "1.90",
-    "age_peak_ability": 30,
+    "age": 30,
     "best_position": "CB",
     "playable_positions": [
       "CB"
@@ -411,7 +411,7 @@
     "nationality": "Argentina",
     "weight": "78",
     "height": "1.77",
-    "age_peak_ability": 30,
+    "age": 30,
     "best_position": "CDM",
     "playable_positions": [
       "CDM",
@@ -423,7 +423,7 @@
     "nationality": "Mexico",
     "weight": "70",
     "height": "1.75",
-    "age_peak_ability": 28,
+    "age": 28,
     "best_position": "ST",
     "playable_positions": [
       "ST",
@@ -435,7 +435,7 @@
     "nationality": "Italy",
     "weight": "68",
     "height": "1.77",
-    "age_peak_ability": 31,
+    "age": 31,
     "best_position": "CDM",
     "playable_positions": [
       "CDM",
@@ -448,7 +448,7 @@
     "nationality": "Brazil",
     "weight": "73",
     "height": "1.76",
-    "age_peak_ability": 30,
+    "age": 30,
     "best_position": "RB",
     "playable_positions": [
       "RB",
@@ -460,7 +460,7 @@
     "nationality": "England",
     "weight": "85",
     "height": "1.91",
-    "age_peak_ability": 30,
+    "age": 30,
     "best_position": "CB",
     "playable_positions": [
       "CB"
@@ -471,7 +471,7 @@
     "nationality": "Spain",
     "weight": "70",
     "height": "1.69",
-    "age_peak_ability": 28,
+    "age": 28,
     "best_position": "LW",
     "playable_positions": [
       "LW",
@@ -483,7 +483,7 @@
     "nationality": "Italy",
     "weight": "79",
     "height": "1.87",
-    "age_peak_ability": 29,
+    "age": 29,
     "best_position": "CB",
     "playable_positions": [
       "CB"
@@ -494,7 +494,7 @@
     "nationality": "Spain",
     "weight": "79",
     "height": "1.83",
-    "age_peak_ability": 30,
+    "age": 30,
     "best_position": "CM",
     "playable_positions": [
       "CM",
@@ -506,7 +506,7 @@
     "nationality": "England",
     "weight": "72",
     "height": "1.68",
-    "age_peak_ability": 29,
+    "age": 29,
     "best_position": "CM",
     "playable_positions": [
       "CM",
@@ -518,7 +518,7 @@
     "nationality": "Spain",
     "weight": "84",
     "height": "1.88",
-    "age_peak_ability": 29,
+    "age": 29,
     "best_position": "CB",
     "playable_positions": [
       "CB",
@@ -530,7 +530,7 @@
     "nationality": "Portugal",
     "weight": "74",
     "height": "1.80",
-    "age_peak_ability": 28,
+    "age": 28,
     "best_position": "CAM",
     "playable_positions": [
       "CAM",
@@ -542,7 +542,7 @@
     "nationality": "Cameroon",
     "weight": "75",
     "height": "1.80",
-    "age_peak_ability": 28,
+    "age": 28,
     "best_position": "ST",
     "playable_positions": [
       "ST",
@@ -554,7 +554,7 @@
     "nationality": "Netherlands",
     "weight": "78",
     "height": "1.83",
-    "age_peak_ability": 29,
+    "age": 29,
     "best_position": "CF",
     "playable_positions": [
       "CF",
@@ -567,7 +567,7 @@
     "nationality": "France",
     "weight": "82",
     "height": "1.88",
-    "age_peak_ability": 28,
+    "age": 28,
     "best_position": "CAM",
     "playable_positions": [
       "CAM",
@@ -580,7 +580,7 @@
     "nationality": "Netherlands",
     "weight": "85",
     "height": "1.90",
-    "age_peak_ability": 29,
+    "age": 29,
     "best_position": "CDM",
     "playable_positions": [
       "CDM",
@@ -592,7 +592,7 @@
     "nationality": "Brazil",
     "weight": "75",
     "height": "1.75",
-    "age_peak_ability": 29,
+    "age": 29,
     "best_position": "CDM",
     "playable_positions": [
       "CDM",
@@ -604,7 +604,7 @@
     "nationality": "Argentina",
     "weight": "78",
     "height": "1.82",
-    "age_peak_ability": 28,
+    "age": 28,
     "best_position": "CAM",
     "playable_positions": [
       "CAM",
@@ -616,7 +616,7 @@
     "nationality": "Argentina",
     "weight": "81",
     "height": "1.85",
-    "age_peak_ability": 29,
+    "age": 29,
     "best_position": "ST",
     "playable_positions": [
       "ST",
@@ -628,7 +628,7 @@
     "nationality": "France",
     "weight": "69",
     "height": "1.69",
-    "age_peak_ability": 30,
+    "age": 30,
     "best_position": "LB",
     "playable_positions": [
       "LB",
@@ -640,7 +640,7 @@
     "nationality": "Spain",
     "weight": "80",
     "height": "1.81",
-    "age_peak_ability": 31,
+    "age": 31,
     "best_position": "GK",
     "playable_positions": [
       "GK"
