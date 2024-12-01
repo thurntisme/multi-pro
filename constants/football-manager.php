@@ -698,3 +698,598 @@ $formations = [
     ]
 ];
 define("DEFAULT_FOOTBALL_FORMATION", $formations);
+
+$seasons = [
+    'Legend' => 90,
+    'The Best' => 80,
+    'Superstar' => 70,
+    'Rising Star' => 60,
+    'Normal' => 0,
+];
+
+// Possible values for player attributes
+$positions = ['GK', 'CM', 'CF', 'ST', 'RW', 'LW', 'CB', 'RB', 'LB', 'DM', 'AMC', 'LM', 'RM'];
+// Define position groups
+$positionGroups = [
+    'Goalkeepers' => ['GK'],
+    'Defenders' => ['CB', 'RB', 'LB'],
+    'Midfielders' => ['CM', 'DM', 'AMC', 'LM', 'RM'],
+    'Attackers' => ['CF', 'ST', 'RW', 'LW'],
+];
+$positionGroupsExtra = [
+    'Goalkeepers' => ['GK'],
+    'Defenders' => ['CB', 'LCB', 'RCB', 'RB', 'LB'],
+    'Midfielders' => ['CM', 'RCM', 'LCM', 'DM', 'AMC', 'LM', 'RM'],
+    'Attackers' => ['CF', 'ST', 'LF', 'RF', 'RW', 'LW'],
+];
+$seasonsRate = [
+    'Legend' => 1.5,
+    'The Best' => 1.3,
+    'Superstar' => 1.2,
+    'Rising Star' => 1.1,
+    'Normal' => 1.0,
+];
+// Updated Popular Nations: Top 10 FIFA rankings for 2024
+$popularNations = [
+    "Argentina",
+    "France",
+    "Brazil",
+    "England",
+    "Belgium",
+    "Portugal",
+    "Netherlands",
+    "Spain",
+    "Italy",
+    "Croatia"
+];
+// Updated Semi-Popular Nations: Ranked 11-30 FIFA rankings for 2024
+$semiPopularNations = [
+    "Germany",
+    "Morocco",
+    "Mexico",
+    "Uruguay",
+    "Switzerland",
+    "Colombia",
+    "Senegal",
+    "USA",
+    "Japan",
+    "Denmark",
+    "Australia",
+    "Serbia",
+    "Poland",
+    "Iran",
+    "Korea Republic",
+    "Peru",
+    "Sweden",
+    "Ukraine",
+    "Chile",
+    "Egypt"
+];
+
+const DEFAULT_STORE_ITEMS = [
+    [
+        'id' => 1,
+        'name' => 'Normal Player',
+        'slug' => 'normal-player',
+        'price' => 1000000,
+        'description' => 'Get a new Normal Player with balanced stats.',
+        'type' => 'player',
+        'rarity' => 'normal',
+        'attributes' => [
+            'position' => 'any',
+            'skill_level' => 50,
+            'potential' => 60,
+        ],
+        'image' => 'images/normal-player.jpg',
+    ],
+    [
+        'id' => 2,
+        'name' => 'Rising Star Player',
+        'slug' => 'rising-star-player',
+        'price' => 3000000,
+        'description' => 'Get a new Rising Star Player with high potential.',
+        'type' => 'player',
+        'rarity' => 'rare',
+        'attributes' => [
+            'position' => 'any',
+            'skill_level' => 70,
+            'potential' => 90,
+        ],
+        'image' => 'images/rising-star-player.jpg',
+    ],
+    [
+        'id' => 3,
+        'name' => 'Superstar Player',
+        'slug' => 'superstar-player',
+        'price' => 5000000,
+        'description' => 'Get a Superstar Player with excellent stats.',
+        'type' => 'player',
+        'rarity' => 'epic',
+        'attributes' => [
+            'position' => 'forward',
+            'skill_level' => 85,
+            'potential' => 95,
+        ],
+        'image' => 'images/superstar-player.jpg',
+    ],
+    [
+        'id' => 4,
+        'name' => 'The Best Player',
+        'slug' => 'the-best-player',
+        'price' => 8000000,
+        'description' => 'Get a top-tier player, one of the best in the world.',
+        'type' => 'player',
+        'rarity' => 'legendary',
+        'attributes' => [
+            'position' => 'midfielder',
+            'skill_level' => 95,
+            'potential' => 99,
+        ],
+        'image' => 'images/the-best-player.jpg',
+    ],
+    [
+        'id' => 5,
+        'name' => 'Legend Player',
+        'slug' => 'legend-player',
+        'price' => 12000000,
+        'description' => 'Get a Legendary player with unbeatable stats.',
+        'type' => 'player',
+        'rarity' => 'legendary',
+        'attributes' => [
+            'position' => 'any',
+            'skill_level' => 99,
+            'potential' => 100,
+        ],
+        'image' => 'images/legend-player.jpg',
+    ],
+    [
+        'id' => 6,
+        'name' => 'Legendary Pack',
+        'slug' => 'legendary-pack',
+        'price' => 20000000,
+        'description' => 'Unlock a Legendary player with rare attributes and skills.',
+        'type' => 'pack',
+        'rarity' => 'legendary',
+        'items_included' => 1,
+        'image' => 'images/legendary-pack.jpg',
+    ],
+    [
+        'id' => 7,
+        'name' => 'Premium Pack',
+        'slug' => 'premium-pack',
+        'price' => 10000000,
+        'description' => 'Unlock a high-value player with a mix of Superstar, The Best, or Legend players.',
+        'type' => 'pack',
+        'rarity' => 'epic',
+        'items_included' => 1,
+        'image' => 'images/premium-pack.jpg',
+    ],
+    [
+        'id' => 8,
+        'name' => 'Superstar Pack',
+        'slug' => 'superstar-pack',
+        'price' => 7500000,
+        'description' => 'Unlock a Superstar player with high stats.',
+        'type' => 'pack',
+        'rarity' => 'epic',
+        'items_included' => 1,
+        'image' => 'images/superstar-pack.jpg',
+    ],
+    [
+        'id' => 9,
+        'name' => 'Season Pass',
+        'slug' => 'season-pass',
+        'price' => 25000000,
+        'description' => 'Get access to exclusive players and events for an entire season.',
+        'type' => 'pass',
+        'rarity' => 'special',
+        'benefits' => [
+            'exclusive_players' => true,
+            'bonus_events' => true,
+            'discounts' => 10, // percentage
+        ],
+        'image' => 'images/season-pass.jpg',
+    ],
+    [
+        'id' => 10,
+        'name' => 'Player Upgrade Token',
+        'slug' => 'player-upgrade-token',
+        'price' => 1500000,
+        'description' => 'Upgrade a player’s skill level and stats to a higher tier.',
+        'type' => 'utility',
+        'rarity' => 'common',
+        'effects' => [
+            'skill_increase' => 5, // percentage
+            'max_potential_increase' => 5, // percentage
+        ],
+        'image' => 'images/player-upgrade-token.jpg',
+    ],
+    [
+        'name' => 'Young Talent Pack',
+        'slug' => 'young-talent-pack',
+        'price' => 2000000,
+        'description' => 'Unlock a promising young player with high potential growth.',
+    ],
+    [
+        'name' => 'Veteran Player Pack',
+        'slug' => 'veteran-player-pack',
+        'price' => 4000000,
+        'description' => 'Get an experienced player to bring stability and leadership to your team.',
+    ],
+    [
+        'name' => 'Mystery Pack',
+        'slug' => 'mystery-pack',
+        'price' => 5500000,
+        'description' => 'Get a completely random player, ranging from Normal to Legend.',
+    ],
+    [
+        'name' => 'Defensive Specialist Pack',
+        'slug' => 'defensive-specialist-pack',
+        'price' => 3500000,
+        'description' => 'Unlock a top-tier defender or goalkeeper to strengthen your defense.',
+    ],
+    [
+        'name' => 'Offensive Specialist Pack',
+        'slug' => 'offensive-specialist-pack',
+        'price' => 3500000,
+        'description' => 'Unlock a forward or midfielder known for scoring or creating goals.',
+    ],
+    [
+        'name' => 'Training Booster',
+        'slug' => 'training-booster',
+        'price' => 1000000,
+        'description' => 'Boost the growth of a player’s stats by 10% during training sessions.',
+    ],
+    [
+        'name' => 'Skill Upgrade Card',
+        'slug' => 'skill-upgrade-card',
+        'price' => 2000000,
+        'description' => 'Upgrade a specific skill (e.g., passing, shooting) of a player by one level.',
+    ],
+    [
+        'name' => 'Stamina Booster',
+        'slug' => 'stamina-booster',
+        'price' => 800000,
+        'description' => 'Fully restore the stamina of a player for the next match.',
+    ],
+    [
+        'name' => 'XP Multiplier (x2)',
+        'slug' => 'xp-multiplier',
+        'price' => 3000000,
+        'description' => 'Double the experience points gained by your players for 5 matches.',
+    ],
+    [
+        'name' => 'Iconic Player Pack',
+        'slug' => 'iconic-player-pack',
+        'price' => 15000000,
+        'description' => 'Get a legendary player inspired by real-life football icons.',
+    ],
+    [
+        'name' => 'Event Exclusive Player',
+        'slug' => 'event-exclusive-player',
+        'price' => 12000000,
+        'description' => 'Obtain a rare player available only for a limited time.',
+    ],
+    [
+        'name' => 'Custom Player Pack',
+        'slug' => 'custom-player-pack',
+        'price' => 20000000,
+        'description' => 'Create a player with your desired stats and position.',
+    ],
+    [
+        'name' => 'Tactical Blueprint',
+        'slug' => 'tactical-blueprint',
+        'price' => 1500000,
+        'description' => 'Unlock a unique formation or tactic to improve team performance.',
+    ],
+    [
+        'name' => 'Team Morale Booster',
+        'slug' => 'team-morale-booster',
+        'price' => 2000000,
+        'description' => 'Increase your entire team’s morale for the next 3 matches.',
+    ],
+    [
+        'name' => 'Team Performance Booster',
+        'slug' => 'team-performance-booster',
+        'price' => 2500000,
+        'description' => 'Temporarily improve your team\'s overall performance by 5% for the next match.',
+    ],
+    [
+        'name' => 'Custom Kit',
+        'slug' => 'custom-kit',
+        'price' => 1000000,
+        'description' => 'Design a unique team kit to stand out on the pitch.',
+    ],
+    [
+        'name' => 'Custom Stadium Pack',
+        'slug' => 'custom-stadium-pack',
+        'price' => 5000000,
+        'description' => 'Unlock a custom stadium with enhanced visuals and crowd effects.',
+    ],
+    [
+        'name' => 'Fan Banner',
+        'slug' => 'fan-banner',
+        'price' => 500000,
+        'description' => 'Add banners and chants to your stadium to increase crowd support.',
+    ],
+    [
+        'name' => 'Event Participation Ticket',
+        'slug' => 'event-participation-ticket',
+        'price' => 1000000,
+        'description' => 'Join a special event to compete for exclusive rewards.',
+    ],
+    [
+        'name' => 'Special Transfer Token',
+        'slug' => 'special-transfer-token',
+        'price' => 3000000,
+        'description' => 'Get a rare player transfer from a special event.',
+    ],
+
+    // Added Items
+    [
+        'name' => 'Future Star Pack',
+        'slug' => 'future-star-pack',
+        'price' => 3000000,
+        'description' => 'Unlock a young player with exceptional potential to dominate future seasons.',
+    ],
+    [
+        'name' => 'Elite Midfielder Pack',
+        'slug' => 'elite-midfielder-pack',
+        'price' => 4500000,
+        'description' => 'Add a world-class midfielder known for creativity and control.',
+    ],
+    [
+        'name' => 'Golden Goalkeeper Pack',
+        'slug' => 'golden-goalkeeper-pack',
+        'price' => 3000000,
+        'description' => 'Strengthen your team with a top-tier goalkeeper who guarantees clean sheets.',
+    ],
+    [
+        'name' => 'Wildcard Pack',
+        'slug' => 'wildcard-pack',
+        'price' => 6000000,
+        'description' => 'Get a player with a random skill boost, making them unpredictable on the pitch.',
+    ],
+    [
+        'name' => 'Injury Recovery Pack',
+        'slug' => 'injury-recovery-pack',
+        'price' => 2000000,
+        'description' => 'Heal all injured players in your squad instantly.',
+    ],
+    [
+        'name' => 'Speed Booster',
+        'slug' => 'speed-booster',
+        'price' => 1200000,
+        'description' => 'Enhance a player’s speed stats by 10% for 3 matches.',
+    ],
+    [
+        'name' => 'Captain’s Boost',
+        'slug' => 'captains-boost',
+        'price' => 2500000,
+        'description' => 'Temporarily improve your team captain’s stats to inspire the team.',
+    ],
+    [
+        'name' => 'Matchday Booster Pack',
+        'slug' => 'matchday-booster-pack',
+        'price' => 1800000,
+        'description' => 'Improve your entire team\'s stamina and performance for one crucial match.',
+    ],
+    [
+        'name' => 'Rival Player Transfer',
+        'slug' => 'rival-player-transfer',
+        'price' => 18000000,
+        'description' => 'Poach a star player from your biggest rival to weaken them and strengthen your squad.',
+    ],
+    [
+        'name' => 'Golden Age Player Pack',
+        'slug' => 'golden-age-player-pack',
+        'price' => 13000000,
+        'description' => 'Get a player inspired by the greatest footballers of the past.',
+    ],
+    [
+        'name' => 'Set-Piece Master Tactic',
+        'slug' => 'set-piece-master-tactic',
+        'price' => 2000000,
+        'description' => 'Unlock a specialized tactic to dominate free kicks and corners.',
+    ],
+    [
+        'name' => 'Home Advantage Boost',
+        'slug' => 'home-advantage-boost',
+        'price' => 2500000,
+        'description' => 'Increase your team\'s morale and fan support for home games.',
+    ],
+    [
+        'name' => 'Advanced Scouting Report',
+        'slug' => 'advanced-scouting-report',
+        'price' => 1500000,
+        'description' => 'Gain insights into your next opponent’s tactics and weaknesses.',
+    ],
+    [
+        'name' => 'Retro Kit Pack',
+        'slug' => 'retro-kit-pack',
+        'price' => 1500000,
+        'description' => 'Unlock classic kits inspired by your team’s history.',
+    ],
+    [
+        'name' => 'Mascot Unlock',
+        'slug' => 'mascot-unlock',
+        'price' => 2000000,
+        'description' => 'Add a team mascot to boost crowd morale and branding.',
+    ],
+    [
+        'name' => 'Stadium Light Show',
+        'slug' => 'stadium-light-show',
+        'price' => 1000000,
+        'description' => 'Enhance your stadium atmosphere with a custom light show for night matches.',
+    ],
+    [
+        'name' => 'Tournament Entry Token',
+        'slug' => 'tournament-entry-token',
+        'price' => 2000000,
+        'description' => 'Join a global tournament with massive rewards for top players.',
+    ],
+    [
+        'name' => 'Exclusive Player Draft',
+        'slug' => 'exclusive-player-draft',
+        'price' => 5000000,
+        'description' => 'Participate in a draft to choose from a pool of rare players.',
+    ],
+    [
+        'name' => 'Legends Coaching Staff',
+        'slug' => 'legends-coaching-staff',
+        'price' => 10000000,
+        'description' => 'Hire a legendary player as your coach to boost training and tactics.',
+    ],
+    [
+        'name' => 'Youth Academy Expansion',
+        'slug' => 'youth-academy-expansion',
+        'price' => 7500000,
+        'description' => 'Invest in your youth academy to discover top young talent.',
+    ],
+    [
+        'name' => 'Global Scouting Network',
+        'slug' => 'global-scouting-network',
+        'price' => 5000000,
+        'description' => 'Unlock scouts from around the world to find hidden gems.',
+    ],
+    [
+        'name' => 'Extra Challenge Ticket',
+        'slug' => 'extra-challenge-ticket',
+        'price' => 500000,
+        'description' => 'Play an additional challenge match beyond the daily limit.',
+    ],
+    [
+        'name' => 'Challenge Stamina Restore',
+        'slug' => 'challenge-stamina-restore',
+        'price' => 200000,
+        'description' => 'Restore stamina to retry a failed challenge immediately.',
+    ],
+    [
+        'name' => 'Challenge Boost Pack',
+        'slug' => 'challenge-boost-pack',
+        'price' => 1000000,
+        'description' => 'Temporarily increase your team\'s stats by 10% for the next challenge.',
+    ],
+    [
+        'name' => 'Challenge Bonus Reward',
+        'slug' => 'challenge-bonus-reward',
+        'price' => 800000,
+        'description' => 'Earn 50% more rewards (money, XP, etc.) from your next challenge match.',
+    ],
+
+    // League-Related Items
+    [
+        'name' => 'League Participation Token',
+        'slug' => 'league-participation-token',
+        'price' => 2000000,
+        'description' => 'Unlock access to join the next season of the league.',
+    ],
+    [
+        'name' => 'League Revival Pass',
+        'slug' => 'league-revival-pass',
+        'price' => 1500000,
+        'description' => 'Revive your team in a league after being eliminated.',
+    ],
+    [
+        'name' => 'League Prestige Pack',
+        'slug' => 'league-prestige-pack',
+        'price' => 5000000,
+        'description' => 'Get exclusive league-themed rewards, such as special players or kits.',
+    ],
+    [
+        'name' => 'League Match Boost',
+        'slug' => 'league-match-boost',
+        'price' => 3000000,
+        'description' => 'Temporarily increase your team\'s stats by 15% for one league match.',
+    ],
+
+    // My Club-Related Items
+    [
+        'name' => 'Club Expansion Pack',
+        'slug' => 'club-expansion-pack',
+        'price' => 3000000,
+        'description' => 'Increase your squad size to add more players to your roster.',
+    ],
+    [
+        'name' => 'Club Training Facility Upgrade',
+        'slug' => 'training-facility-upgrade',
+        'price' => 5000000,
+        'description' => 'Unlock better training facilities to speed up player growth by 10%.',
+    ],
+    [
+        'name' => 'Club Reputation Booster',
+        'slug' => 'club-reputation-booster',
+        'price' => 4000000,
+        'description' => 'Improve your club’s reputation to attract higher-quality players.',
+    ],
+    [
+        'name' => 'Custom Club Branding Pack',
+        'slug' => 'custom-club-branding-pack',
+        'price' => 2000000,
+        'description' => 'Customize your club’s logo, kit, and stadium to make it unique.',
+    ],
+    [
+        'name' => 'Special Coach Contract',
+        'slug' => 'special-coach-contract',
+        'price' => 1500000,
+        'description' => 'Hire a specialized coach to improve specific skills, such as defense or attack.',
+    ],
+
+    // My Money-Related Items
+    [
+        'name' => 'Money Multiplier (x2)',
+        'slug' => 'money-multiplier',
+        'price' => 1000000,
+        'description' => 'Double the money earned from matches for the next 5 games.',
+    ],
+    [
+        'name' => 'Sponsor Deal Pack',
+        'slug' => 'sponsor-deal-pack',
+        'price' => 3000000,
+        'description' => 'Sign a sponsorship deal to earn extra money after every match.',
+    ],
+    [
+        'name' => 'Daily Income Booster',
+        'slug' => 'daily-income-booster',
+        'price' => 2000000,
+        'description' => 'Increase your daily income by 25% for the next week.',
+    ],
+    [
+        'name' => 'Financial Recovery Pack',
+        'slug' => 'financial-recovery-pack',
+        'price' => 2500000,
+        'description' => 'Instantly recover a portion of your lost money after a failed match.',
+    ],
+    [
+        'name' => 'Investor Pack',
+        'slug' => 'investor-pack',
+        'price' => 10000000,
+        'description' => 'Attract wealthy investors to increase your overall club funds by 10%.',
+    ],
+
+    // General Items
+    [
+        'name' => 'Legendary Challenge Player',
+        'slug' => 'legendary-challenge-player',
+        'price' => 15000000,
+        'description' => 'Unlock a special player with elite stats for use in Challenge Matches.',
+    ],
+    [
+        'name' => 'League Master Pack',
+        'slug' => 'league-master-pack',
+        'price' => 8000000,
+        'description' => 'Gain an exclusive player, bonus money, and league boosts.',
+    ],
+    [
+        'name' => 'Challenge Victory Trophy',
+        'slug' => 'challenge-victory-trophy',
+        'price' => 1200000,
+        'description' => 'Display a trophy in your club\'s collection to commemorate winning challenges.',
+    ],
+    [
+        'name' => 'Custom Match Ball',
+        'slug' => 'custom-match-ball',
+        'price' => 500000,
+        'description' => 'Change the design of your match ball for a personal touch.',
+    ],
+];

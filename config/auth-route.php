@@ -75,6 +75,7 @@ function getPageData($slug)
         'football-manager/transfer/buy' => ['url' => DIR . '/views/football-manager-transfer-buy.php', 'title' => 'Football Manager - Transfer Buy Player'],
         'football-manager/my-players' => ['url' => DIR . '/views/football-manager-players.php', 'title' => 'Football Manager - My Players'],
         'football-manager/match' => ['url' => DIR . '/views/football-manager-match.php', 'title' => 'Football Manager - Match'],
+        'football-manager/store' => ['url' => DIR . '/views/football-manager-store.php', 'title' => 'Football Manager - Store'],
         'wordpress' => ['url' => DIR . '/views/blog.php', 'title' => 'Wordpress'],
         'wordpress/new' => ['url' => DIR . '/views/blog-adjust.php', 'title' => 'New Wordpress Blog'],
         'wordpress/edit' => ['url' => DIR . '/views/blog-adjust.php', 'title' => 'Edit Wordpress Blog'],

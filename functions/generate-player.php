@@ -1,71 +1,5 @@
 <?php
 
-// Possible values for player attributes
-$positions = ['GK', 'CM', 'CF', 'ST', 'RW', 'LW', 'CB', 'RB', 'LB', 'DM', 'AMC', 'LM', 'RM'];
-// Define position groups
-$positionGroups = [
-    'Goalkeepers' => ['GK'],
-    'Defenders' => ['CB', 'RB', 'LB'],
-    'Midfielders' => ['CM', 'DM', 'AMC', 'LM', 'RM'],
-    'Attackers' => ['CF', 'ST', 'RW', 'LW'],
-];
-$positionGroupsExtra = [
-    'Goalkeepers' => ['GK'],
-    'Defenders' => ['CB', 'LCB', 'RCB', 'RB', 'LB'],
-    'Midfielders' => ['CM', 'RCM', 'LCM', 'DM', 'AMC', 'LM', 'RM'],
-    'Attackers' => ['CF', 'ST', 'LF', 'RF', 'RW', 'LW'],
-];
-$seasons = [
-    'Legend' => 90,
-    'The Best' => 80,
-    'Superstar' => 70,
-    'Rising Star' => 60,
-    'Normal' => 0,
-];
-$seasonsRate = [
-    'Legend' => 1.5,
-    'The Best' => 1.3,
-    'Superstar' => 1.2,
-    'Rising Star' => 1.1,
-    'Normal' => 1.0,
-];
-// Updated Popular Nations: Top 10 FIFA rankings for 2024
-$popularNations = [
-    "Argentina",
-    "France",
-    "Brazil",
-    "England",
-    "Belgium",
-    "Portugal",
-    "Netherlands",
-    "Spain",
-    "Italy",
-    "Croatia"
-];
-// Updated Semi-Popular Nations: Ranked 11-30 FIFA rankings for 2024
-$semiPopularNations = [
-    "Germany",
-    "Morocco",
-    "Mexico",
-    "Uruguay",
-    "Switzerland",
-    "Colombia",
-    "Senegal",
-    "USA",
-    "Japan",
-    "Denmark",
-    "Australia",
-    "Serbia",
-    "Poland",
-    "Iran",
-    "Korea Republic",
-    "Peru",
-    "Sweden",
-    "Ukraine",
-    "Chile",
-    "Egypt"
-];
-
 function getRandomFullName($nation, $namesByNation): string
 {
     if (array_key_exists($nation, $namesByNation) && !empty($namesByNation[$nation])) {
@@ -673,7 +607,7 @@ function exportPlayersToJson($players)
     }
 }
 
-function getTeamPlayerData($teamPlayers)
+function getTeamPlayerData($teamPlayers): array
 {
     global $positionGroups;
     $total = count($teamPlayers);
