@@ -1,0 +1,650 @@
+[
+  {
+    "name": "Pelé",
+    "nationality": "Brazil",
+    "weight": "73",
+    "height": "1.73",
+    "age_peak_ability": 25,
+    "best_position": "ST",
+    "playable_positions": [
+      "ST",
+      "CF",
+      "LW"
+    ]
+  },
+  {
+    "name": "Diego Maradona",
+    "nationality": "Argentina",
+    "weight": "70",
+    "height": "1.65",
+    "age_peak_ability": 26,
+    "best_position": "CAM",
+    "playable_positions": [
+      "CAM",
+      "CF",
+      "LW"
+    ]
+  },
+  {
+    "name": "Paolo Maldini",
+    "nationality": "Italy",
+    "weight": "85",
+    "height": "1.86",
+    "age_peak_ability": 30,
+    "best_position": "LB",
+    "playable_positions": [
+      "LB",
+      "CB"
+    ]
+  },
+  {
+    "name": "Xavi Hernandez",
+    "nationality": "Spain",
+    "weight": "68",
+    "height": "1.70",
+    "age_peak_ability": 29,
+    "best_position": "CM",
+    "playable_positions": [
+      "CM",
+      "CDM",
+      "CAM"
+    ]
+  },
+  {
+    "name": "Andres Iniesta",
+    "nationality": "Spain",
+    "weight": "68",
+    "height": "1.71",
+    "age_peak_ability": 28,
+    "best_position": "CAM",
+    "playable_positions": [
+      "CAM",
+      "CM",
+      "LM"
+    ]
+  },
+  {
+    "name": "Roberto Carlos",
+    "nationality": "Brazil",
+    "weight": "73",
+    "height": "1.68",
+    "age_peak_ability": 28,
+    "best_position": "LB",
+    "playable_positions": [
+      "LB",
+      "LM"
+    ]
+  },
+  {
+    "name": "Gianluigi Buffon",
+    "nationality": "Italy",
+    "weight": "92",
+    "height": "1.91",
+    "age_peak_ability": 28,
+    "best_position": "GK",
+    "playable_positions": [
+      "GK"
+    ]
+  },
+  {
+    "name": "Francesco Totti",
+    "nationality": "Italy",
+    "weight": "79",
+    "height": "1.80",
+    "age_peak_ability": 30,
+    "best_position": "CF",
+    "playable_positions": [
+      "CF",
+      "CAM"
+    ]
+  },
+  {
+    "name": "George Best",
+    "nationality": "Northern Ireland",
+    "weight": "70",
+    "height": "1.75",
+    "age_peak_ability": 27,
+    "best_position": "LW",
+    "playable_positions": [
+      "LW",
+      "RW",
+      "ST"
+    ]
+  },
+  {
+    "name": "Ryan Giggs",
+    "nationality": "Wales",
+    "weight": "68",
+    "height": "1.80",
+    "age_peak_ability": 27,
+    "best_position": "LM",
+    "playable_positions": [
+      "LM",
+      "LW",
+      "CM"
+    ]
+  },
+  {
+    "name": "Thierry Henry",
+    "nationality": "France",
+    "weight": "83",
+    "height": "1.88",
+    "age_peak_ability": 28,
+    "best_position": "ST",
+    "playable_positions": [
+      "ST",
+      "LW",
+      "CF"
+    ]
+  },
+  {
+    "name": "Raúl González",
+    "nationality": "Spain",
+    "weight": "68",
+    "height": "1.80",
+    "age_peak_ability": 26,
+    "best_position": "ST",
+    "playable_positions": [
+      "ST",
+      "CF"
+    ]
+  },
+  {
+    "name": "Dino Zoff",
+    "nationality": "Italy",
+    "weight": "78",
+    "height": "1.82",
+    "age_peak_ability": 35,
+    "best_position": "GK",
+    "playable_positions": [
+      "GK"
+    ]
+  },
+  {
+    "name": "Roberto Baggio",
+    "nationality": "Italy",
+    "weight": "73",
+    "height": "1.74",
+    "age_peak_ability": 27,
+    "best_position": "CF",
+    "playable_positions": [
+      "CF",
+      "CAM"
+    ]
+  },
+  {
+    "name": "Javier Zanetti",
+    "nationality": "Argentina",
+    "weight": "75",
+    "height": "1.78",
+    "age_peak_ability": 30,
+    "best_position": "RB",
+    "playable_positions": [
+      "RB",
+      "CDM",
+      "LB"
+    ]
+  },
+  {
+    "name": "Philip Lahm",
+    "nationality": "Germany",
+    "weight": "67",
+    "height": "1.70",
+    "age_peak_ability": 29,
+    "best_position": "RB",
+    "playable_positions": [
+      "RB",
+      "LB",
+      "CDM"
+    ]
+  },
+  {
+    "name": "Carlos Valderrama",
+    "nationality": "Colombia",
+    "weight": "73",
+    "height": "1.77",
+    "age_peak_ability": 29,
+    "best_position": "CAM",
+    "playable_positions": [
+      "CAM",
+      "CM"
+    ]
+  },
+  {
+    "name": "Michael Laudrup",
+    "nationality": "Denmark",
+    "weight": "76",
+    "height": "1.83",
+    "age_peak_ability": 28,
+    "best_position": "CAM",
+    "playable_positions": [
+      "CAM",
+      "CM",
+      "LW"
+    ]
+  },
+  {
+    "name": "Soccer",
+    "nationality": "Brazil",
+    "weight": "77",
+    "height": "1.81",
+    "age_peak_ability": 28,
+    "best_position": "CAM",
+    "playable_positions": [
+      "CAM",
+      "CM"
+    ]
+  },
+  {
+    "name": "Marco van Basten",
+    "nationality": "Netherlands",
+    "weight": "80",
+    "height": "1.88",
+    "age_peak_ability": 27,
+    "best_position": "ST",
+    "playable_positions": [
+      "ST",
+      "CF"
+    ]
+  },
+  {
+    "name": "Romário",
+    "nationality": "Brazil",
+    "weight": "68",
+    "height": "1.67",
+    "age_peak_ability": 28,
+    "best_position": "ST",
+    "playable_positions": [
+      "ST",
+      "CF"
+    ]
+  },
+  {
+    "name": "Zico",
+    "nationality": "Brazil",
+    "weight": "72",
+    "height": "1.72",
+    "age_peak_ability": 28,
+    "best_position": "CAM",
+    "playable_positions": [
+      "CAM",
+      "CF",
+      "RW"
+    ]
+  },
+  {
+    "name": "Claude Makélélé",
+    "nationality": "France",
+    "weight": "70",
+    "height": "1.74",
+    "age_peak_ability": 30,
+    "best_position": "CDM",
+    "playable_positions": [
+      "CDM",
+      "CM"
+    ]
+  },
+  {
+    "name": "Patrick Vieira",
+    "nationality": "France",
+    "weight": "83",
+    "height": "1.92",
+    "age_peak_ability": 28,
+    "best_position": "CDM",
+    "playable_positions": [
+      "CDM",
+      "CM"
+    ]
+  },
+  {
+    "name": "Fernando Redondo",
+    "nationality": "Argentina",
+    "weight": "78",
+    "height": "1.86",
+    "age_peak_ability": 29,
+    "best_position": "CDM",
+    "playable_positions": [
+      "CDM",
+      "CM"
+    ]
+  },
+  {
+    "name": "Gaetano Scirea",
+    "nationality": "Italy",
+    "weight": "75",
+    "height": "1.78",
+    "age_peak_ability": 28,
+    "best_position": "CB",
+    "playable_positions": [
+      "CB",
+      "SW"
+    ]
+  },
+  {
+    "name": "Gheorghe Hagi",
+    "nationality": "Romania",
+    "weight": "72",
+    "height": "1.74",
+    "age_peak_ability": 29,
+    "best_position": "CAM",
+    "playable_positions": [
+      "CAM",
+      "LM",
+      "CF"
+    ]
+  },
+  {
+    "name": "Arjen Robben",
+    "nationality": "Netherlands",
+    "weight": "80",
+    "height": "1.80",
+    "age_peak_ability": 30,
+    "best_position": "RW",
+    "playable_positions": [
+      "RW",
+      "LW",
+      "CF"
+    ]
+  },
+  {
+    "name": "Oliver Kahn",
+    "nationality": "Germany",
+    "weight": "91",
+    "height": "1.88",
+    "age_peak_ability": 33,
+    "best_position": "GK",
+    "playable_positions": [
+      "GK"
+    ]
+  },
+  {
+    "name": "Roberto Donadoni",
+    "nationality": "Italy",
+    "weight": "70",
+    "height": "1.73",
+    "age_peak_ability": 28,
+    "best_position": "RM",
+    "playable_positions": [
+      "RM",
+      "LM",
+      "CAM"
+    ]
+  },
+  {
+    "name": "David Ginola",
+    "nationality": "France",
+    "weight": "83",
+    "height": "1.86",
+    "age_peak_ability": 28,
+    "best_position": "LW",
+    "playable_positions": [
+      "LW",
+      "RW",
+      "CAM"
+    ]
+  },
+  {
+    "name": "Didier Drogba",
+    "nationality": "Ivory Coast",
+    "weight": "84",
+    "height": "1.89",
+    "age_peak_ability": 32,
+    "best_position": "ST",
+    "playable_positions": [
+      "ST",
+      "CF"
+    ]
+  },
+  {
+    "name": "Nemanja Vidić",
+    "nationality": "Serbia",
+    "weight": "84",
+    "height": "1.90",
+    "age_peak_ability": 30,
+    "best_position": "CB",
+    "playable_positions": [
+      "CB"
+    ]
+  },
+  {
+    "name": "Esteban Cambiasso",
+    "nationality": "Argentina",
+    "weight": "78",
+    "height": "1.77",
+    "age_peak_ability": 30,
+    "best_position": "CDM",
+    "playable_positions": [
+      "CDM",
+      "CM"
+    ]
+  },
+  {
+    "name": "Hugo Sánchez",
+    "nationality": "Mexico",
+    "weight": "70",
+    "height": "1.75",
+    "age_peak_ability": 28,
+    "best_position": "ST",
+    "playable_positions": [
+      "ST",
+      "CF"
+    ]
+  },
+  {
+    "name": "Andrea Pirlo",
+    "nationality": "Italy",
+    "weight": "68",
+    "height": "1.77",
+    "age_peak_ability": 31,
+    "best_position": "CDM",
+    "playable_positions": [
+      "CDM",
+      "CM",
+      "CAM"
+    ]
+  },
+  {
+    "name": "Cafu",
+    "nationality": "Brazil",
+    "weight": "73",
+    "height": "1.76",
+    "age_peak_ability": 30,
+    "best_position": "RB",
+    "playable_positions": [
+      "RB",
+      "RM"
+    ]
+  },
+  {
+    "name": "Tony Adams",
+    "nationality": "England",
+    "weight": "85",
+    "height": "1.91",
+    "age_peak_ability": 30,
+    "best_position": "CB",
+    "playable_positions": [
+      "CB"
+    ]
+  },
+  {
+    "name": "Francisco Gento",
+    "nationality": "Spain",
+    "weight": "70",
+    "height": "1.69",
+    "age_peak_ability": 28,
+    "best_position": "LW",
+    "playable_positions": [
+      "LW",
+      "RW"
+    ]
+  },
+  {
+    "name": "Alessandro Nesta",
+    "nationality": "Italy",
+    "weight": "79",
+    "height": "1.87",
+    "age_peak_ability": 29,
+    "best_position": "CB",
+    "playable_positions": [
+      "CB"
+    ]
+  },
+  {
+    "name": "Xabi Alonso",
+    "nationality": "Spain",
+    "weight": "79",
+    "height": "1.83",
+    "age_peak_ability": 30,
+    "best_position": "CM",
+    "playable_positions": [
+      "CM",
+      "CDM"
+    ]
+  },
+  {
+    "name": "Paul Scholes",
+    "nationality": "England",
+    "weight": "72",
+    "height": "1.68",
+    "age_peak_ability": 29,
+    "best_position": "CM",
+    "playable_positions": [
+      "CM",
+      "CAM"
+    ]
+  },
+  {
+    "name": "Fernando Hierro",
+    "nationality": "Spain",
+    "weight": "84",
+    "height": "1.88",
+    "age_peak_ability": 29,
+    "best_position": "CB",
+    "playable_positions": [
+      "CB",
+      "CDM"
+    ]
+  },
+  {
+    "name": "Rui Costa",
+    "nationality": "Portugal",
+    "weight": "74",
+    "height": "1.80",
+    "age_peak_ability": 28,
+    "best_position": "CAM",
+    "playable_positions": [
+      "CAM",
+      "CM"
+    ]
+  },
+  {
+    "name": "Samuel Eto'o",
+    "nationality": "Cameroon",
+    "weight": "75",
+    "height": "1.80",
+    "age_peak_ability": 28,
+    "best_position": "ST",
+    "playable_positions": [
+      "ST",
+      "CF"
+    ]
+  },
+  {
+    "name": "Dennis Bergkamp",
+    "nationality": "Netherlands",
+    "weight": "78",
+    "height": "1.83",
+    "age_peak_ability": 29,
+    "best_position": "CF",
+    "playable_positions": [
+      "CF",
+      "CAM",
+      "ST"
+    ]
+  },
+  {
+    "name": "Eric Cantona",
+    "nationality": "France",
+    "weight": "82",
+    "height": "1.88",
+    "age_peak_ability": 28,
+    "best_position": "CAM",
+    "playable_positions": [
+      "CAM",
+      "CF",
+      "ST"
+    ]
+  },
+  {
+    "name": "Frank Rijkaard",
+    "nationality": "Netherlands",
+    "weight": "85",
+    "height": "1.90",
+    "age_peak_ability": 29,
+    "best_position": "CDM",
+    "playable_positions": [
+      "CDM",
+      "CB"
+    ]
+  },
+  {
+    "name": "Mauro Silva",
+    "nationality": "Brazil",
+    "weight": "75",
+    "height": "1.75",
+    "age_peak_ability": 29,
+    "best_position": "CDM",
+    "playable_positions": [
+      "CDM",
+      "CM"
+    ]
+  },
+  {
+    "name": "Juan Román Riquelme",
+    "nationality": "Argentina",
+    "weight": "78",
+    "height": "1.82",
+    "age_peak_ability": 28,
+    "best_position": "CAM",
+    "playable_positions": [
+      "CAM",
+      "CM"
+    ]
+  },
+  {
+    "name": "Gabriel Batistuta",
+    "nationality": "Argentina",
+    "weight": "81",
+    "height": "1.85",
+    "age_peak_ability": 29,
+    "best_position": "ST",
+    "playable_positions": [
+      "ST",
+      "CF"
+    ]
+  },
+  {
+    "name": "Bixente Lizarazu",
+    "nationality": "France",
+    "weight": "69",
+    "height": "1.69",
+    "age_peak_ability": 30,
+    "best_position": "LB",
+    "playable_positions": [
+      "LB",
+      "LM"
+    ]
+  },
+  {
+    "name": "Santiago Cañizares",
+    "nationality": "Spain",
+    "weight": "80",
+    "height": "1.81",
+    "age_peak_ability": 31,
+    "best_position": "GK",
+    "playable_positions": [
+      "GK"
+    ]
+  }
+]
+

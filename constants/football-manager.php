@@ -700,9 +700,10 @@ $formations = [
 define("DEFAULT_FOOTBALL_FORMATION", $formations);
 
 $seasons = [
-    'Legend' => 80,
-    'The Best' => 72,
-    'Superstar' => 67,
+    "Ballon d'Or" => 100,
+    'Legend' => 90,
+    'The Best' => 80,
+    'Superstar' => 70,
     'Rising Star' => 60,
     'Normal' => 0,
 ];
@@ -723,6 +724,7 @@ $positionGroupsExtra = [
     'Attackers' => ['CF', 'ST', 'LF', 'RF', 'RW', 'LW'],
 ];
 $seasonsRate = [
+    "Ballon d'Or" => 1.8,
     'Legend' => 1.5,
     'The Best' => 1.3,
     'Superstar' => 1.2,

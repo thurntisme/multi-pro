@@ -270,14 +270,20 @@ function generateRandomPlayers(int $count = 10, $type = ''): array
     global $positions, $seasonsRate;
     $players = [];
     $playerData = [];
-    $minAttr = 50;
-    $maxAttr = 76;
+    $minAttr = 44;
+    $maxAttr = 87;
 
-    if ($type == 'ballon-d-or') {
+    if (!empty($type)) {
         $playerData = getFootballJsonData($type);
         $count = count($playerData);
-        $minAttr = 76;
-        $maxAttr = 90;
+        if ($type == 'legend') {
+            $minAttr = 87;
+            $maxAttr = 97;
+        }
+        if ($type == 'ballon-d-or') {
+            $minAttr = 97;
+            $maxAttr = 110;
+        }
     }
 
     for ($i = 0; $i < $count; $i++) {
@@ -514,10 +520,11 @@ function generateRandomPlayers(int $count = 10, $type = ''): array
 
         // Generate abilities with seasons
         $season = getSeason($overallAbility);
+        $ability = (int)round($overallAbility);
         $height = rand(165, 195); // in cm
         $weight = rand($height - 105, $height - 85); // Proportional weight
 
-        if ($type == 'ballon-d-or') {
+        if (!empty($type)) {
             $nationality = $playerData[$i]['nationality'];
             $name = $playerData[$i]['name'];
             $bestPosition = $playerData[$i]['best_position'];
@@ -537,7 +544,7 @@ function generateRandomPlayers(int $count = 10, $type = ''): array
             'playable_positions' => $playablePositions,
             'attributes' => $attributes,
             'season' => $season,
-            'ability' => (int)round($overallAbility * $seasonsRate[$season]),
+            'ability' => $ability,
             'contract_wage' => calculatePlayerWage($nationality, $bestPosition, $playablePositions, $season, $overallAbility, $type),
             'contract_end' => rand(10, 20),
             'injury' => rand(1, 5),
@@ -559,7 +566,8 @@ function getFootballJsonData($type)
 {
     return match ($type) {
         'ballon-d-or' => getPlayersJson('assets/json/football-ballon-d-or-player.json'),
-        default => '',
+        'legend' => getPlayersJson('assets/json/football-legend-player.json'),
+        default => [],
     };
 }
 
