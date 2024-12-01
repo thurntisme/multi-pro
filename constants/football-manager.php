@@ -700,9 +700,9 @@ $formations = [
 define("DEFAULT_FOOTBALL_FORMATION", $formations);
 
 $seasons = [
-    'Legend' => 90,
-    'The Best' => 80,
-    'Superstar' => 70,
+    'Legend' => 80,
+    'The Best' => 72,
+    'Superstar' => 67,
     'Rising Star' => 60,
     'Normal' => 0,
 ];

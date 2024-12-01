@@ -89,7 +89,8 @@ function calculatePlayerWage(
     string $position,
     array  $playablePositions,
     string $season,
-    int    $overallAbility
+    int    $overallAbility,
+    string $type
 ): float
 {
     // Define base nation multipliers
@@ -141,6 +142,11 @@ function calculatePlayerWage(
 
     $seasonMultiplier = $seasonMultipliers[$season] ?? 1.0;
 
+    if ($type == 'ballon-d-or') {
+        $baseNation = 1.8;
+        $seasonMultiplier = 2.2;
+    }
+
     // Calculate wage
     $wage = $baseNation * ($positionModifier + $flexibilityBonus) * $seasonMultiplier * $overallAbility * 100;
 
@@ -153,7 +159,8 @@ function calculateMarketValue(
     string $position,
     array  $playablePositions,
     string $season,
-    int    $overallAbility
+    int    $overallAbility,
+    string $type
 ): float
 {
     // Step 1: Define the base salary depending on the nation
@@ -209,11 +216,17 @@ function calculateMarketValue(
     // Step 5: Versatility bonus (if the player can play multiple positions)
     $versatilityBonus = count($playablePositions) > 1 ? 0.1 : 0;
 
+    if ($type == 'ballon-d-or') {
+        $baseSalary = 2000000;
+        $seasonMultiplier = 2.2;
+        $positionModifier = 1.6;
+    }
+
     // Step 6: Calculate the salary
     $salary = $baseSalary * $positionModifier * $abilityModifier * $seasonMultiplier * (1 + $versatilityBonus);
 
     // Return the calculated salary (annual salary)
-    return round($salary + rand(100, 400), 2);
+    return round($salary, 2);
 }
 
 function formatCurrency(float $value, bool $displaySymbol = true): string
@@ -252,10 +265,20 @@ function getRandomNation($nations)
     return $weightedNations[array_rand($weightedNations)];
 }
 
-function generateRandomPlayers(int $count = 10): array
+function generateRandomPlayers(int $count = 10, $type = ''): array
 {
     global $positions, $seasonsRate;
     $players = [];
+    $playerData = [];
+    $minAttr = 50;
+    $maxAttr = 76;
+
+    if ($type == 'ballon-d-or') {
+        $playerData = getFootballJsonData($type);
+        $count = count($playerData);
+        $minAttr = 76;
+        $maxAttr = 90;
+    }
 
     for ($i = 0; $i < $count; $i++) {
         // Randomly select or generate player data
@@ -269,39 +292,39 @@ function generateRandomPlayers(int $count = 10): array
         // Generate random attributes
         $attributes = [
             'technical' => [
-                'passing' => rand(40, 90),
-                'dribbling' => rand(40, 90),
-                'first_touch' => rand(40, 90),
-                'crossing' => rand(40, 90),
-                'finishing' => rand(40, 90),
-                'long_shots' => rand(40, 90),
-                'free_kick_accuracy' => rand(40, 90),
-                'heading' => rand(40, 90),
-                'tackling' => rand(40, 90),
-                'handling' => rand(40, 90), // New: For goalkeepers
-                'marking' => rand(40, 90), // New: For defenders
+                'passing' => rand($minAttr, $maxAttr),
+                'dribbling' => rand($minAttr, $maxAttr),
+                'first_touch' => rand($minAttr, $maxAttr),
+                'crossing' => rand($minAttr, $maxAttr),
+                'finishing' => rand($minAttr, $maxAttr),
+                'long_shots' => rand($minAttr, $maxAttr),
+                'free_kick_accuracy' => rand($minAttr, $maxAttr),
+                'heading' => rand($minAttr, $maxAttr),
+                'tackling' => rand($minAttr, $maxAttr),
+                'handling' => rand($minAttr, $maxAttr), // New: For goalkeepers
+                'marking' => rand($minAttr, $maxAttr), // New: For defenders
             ],
             'mental' => [
-                'decision' => rand(40, 90),
-                'vision' => rand(40, 90),
-                'leadership' => rand(40, 90),
-                'work_rate' => rand(40, 90),
-                'positioning' => rand(40, 90),
-                'composure' => rand(40, 90),
-                'aggression' => rand(40, 90),
-                'anticipation' => rand(40, 90),
-                'concentration' => rand(40, 90), // New: For maintaining focus
-                'off_the_ball' => rand(40, 90), // New: For attackers and midfielders
-                'flair' => rand(40, 90), // New: For creative and attacking players
+                'decision' => rand($minAttr, $maxAttr),
+                'vision' => rand($minAttr, $maxAttr),
+                'leadership' => rand($minAttr, $maxAttr),
+                'work_rate' => rand($minAttr, $maxAttr),
+                'positioning' => rand($minAttr, $maxAttr),
+                'composure' => rand($minAttr, $maxAttr),
+                'aggression' => rand($minAttr, $maxAttr),
+                'anticipation' => rand($minAttr, $maxAttr),
+                'concentration' => rand($minAttr, $maxAttr), // New: For maintaining focus
+                'off_the_ball' => rand($minAttr, $maxAttr), // New: For attackers and midfielders
+                'flair' => rand($minAttr, $maxAttr), // New: For creative and attacking players
             ],
             'physical' => [
-                'pace' => rand(40, 90),
-                'strength' => rand(40, 90),
-                'stamina' => rand(40, 90),
-                'agility' => rand(40, 90),
-                'balance' => rand(40, 90),
-                'jumping_reach' => rand(40, 90), // Updated: Aerial ability
-                'natural_fitness' => rand(40, 90),
+                'pace' => rand($minAttr, $maxAttr),
+                'strength' => rand($minAttr, $maxAttr),
+                'stamina' => rand($minAttr, $maxAttr),
+                'agility' => rand($minAttr, $maxAttr),
+                'balance' => rand($minAttr, $maxAttr),
+                'jumping_reach' => rand($minAttr, $maxAttr), // Updated: Aerial ability
+                'natural_fitness' => rand($minAttr, $maxAttr),
             ],
         ];
 
@@ -494,6 +517,16 @@ function generateRandomPlayers(int $count = 10): array
         $height = rand(165, 195); // in cm
         $weight = rand($height - 105, $height - 85); // Proportional weight
 
+        if ($type == 'ballon-d-or') {
+            $nationality = $playerData[$i]['nationality'];
+            $name = $playerData[$i]['name'];
+            $bestPosition = $playerData[$i]['best_position'];
+            $playablePositions = $playerData[$i]['playable_positions'];
+            $age = $playerData[$i]['age'];
+            $weight = $playerData[$i]['weight'];
+            $height = $playerData[$i]['height'];
+        }
+
         // Build player array
         $players[] = [
             'uuid' => $uuid,
@@ -505,11 +538,11 @@ function generateRandomPlayers(int $count = 10): array
             'attributes' => $attributes,
             'season' => $season,
             'ability' => (int)round($overallAbility * $seasonsRate[$season]),
-            'contract_wage' => calculatePlayerWage($nationality, $bestPosition, $playablePositions, $season, $overallAbility),
+            'contract_wage' => calculatePlayerWage($nationality, $bestPosition, $playablePositions, $season, $overallAbility, $type),
             'contract_end' => rand(10, 20),
             'injury' => rand(1, 5),
             'recovery_time' => rand(3, 10),
-            'market_value' => calculateMarketValue($nationality, $bestPosition, $playablePositions, $season, $overallAbility),
+            'market_value' => calculateMarketValue($nationality, $bestPosition, $playablePositions, $season, $overallAbility, $type),
             'reputation' => rand(1, 10),
             'form' => rand(1, 10),
             'morale' => rand(1, 10),
@@ -522,10 +555,20 @@ function generateRandomPlayers(int $count = 10): array
     return $players;
 }
 
-function getPlayersJson()
+function getFootballJsonData($type)
 {
-    // Set the file name
-    $fileName = "assets/json/players.json";
+    return match ($type) {
+        'ballon-d-or' => getPlayersJson('assets/json/football-ballon-d-or-player.json'),
+        default => '',
+    };
+}
+
+function getPlayersJson($fileName = '')
+{
+    if (empty($fileName)) {
+        // Set the file name
+        $fileName = "assets/json/players.json";
+    }
 
     // Check if the JSON file exists
     $oldData = [];
