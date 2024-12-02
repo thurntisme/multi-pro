@@ -3,7 +3,7 @@ $pageTitle = "Football Manager - My Players";
 
 require_once DIR . '/functions/generate-player.php';
 
-$players = generateRandomPlayers(20);
+$players = generateRandomPlayers(20, 'legend');
 $commonController = new CommonController();
 $list = $commonController->convertResources($players);
 

@@ -163,11 +163,27 @@ class CommonController
         $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
         $perPage = 10;
         $keyword = $_GET['s'] ?? '';
+        $sortBy = $_GET['sort_by'] ?? '';
+        $sortOrder = $_GET['sort_order'] ?? 'asc';
 
         // Filter resources by keyword if provided
         if (!empty($keyword)) {
             $resources = array_filter($resources, function ($resource) use ($keyword) {
                 return stripos($resource['name'], $keyword) !== false;
+            });
+        }
+
+        if (!empty($sortBy)) {
+            usort($resources, function ($a, $b) use ($sortBy, $sortOrder) {
+                $valueA = $a[$sortBy] ?? null;
+                $valueB = $b[$sortBy] ?? null;
+
+                if ($valueA == $valueB) {
+                    return 0;
+                }
+
+                $comparison = $valueA < $valueB ? -1 : 1;
+                return $sortOrder === 'desc' ? -$comparison : $comparison;
             });
         }
 
