@@ -10,6 +10,51 @@ function get_log_message()
   }
 }
 
+function isUserCheckIn()
+{
+  $data = get_log_message();
+  if (!empty($data) && count($data) > 0) {
+    $timestamp = end($data)['timestamp'];
+
+    // Convert the date string to a timestamp
+    $timestamp = strtotime($timestamp);
+
+    // Get the current date in the "Y-m-d" format
+    $today = date("Y-m-d");
+
+    // Check if the given date matches today's date
+    if (date("Y-m-d", $timestamp) === $today) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+  return false;
+}
+
+function resetLogs()
+{
+  $fileName = "assets/json/system_log.json";
+
+  // Save logs back to the file
+  file_put_contents($fileName, json_encode([], JSON_PRETTY_PRINT));
+}
+
+function checkIn()
+{
+  global $user_id;
+  resetLogs();
+  log_message('INFO', 'User checked in.', ['user_id' => $user_id]);
+}
+
+function checkOut()
+{
+  $logs = get_log_message();
+  var_dump($logs);
+  resetLogs();
+  die();
+}
+
 function log_message($level, $message, $context = [])
 {
   $fileName = "assets/json/system_log.json";

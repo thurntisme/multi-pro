@@ -1,12 +1,28 @@
 <?php
 $pageTitle = "Dashboard";
 
+require_once DIR . '/functions/system.php';
+// log_message('INFO', 'User logged in.', ['user_id' => 123]);
+
 $checklist = DEFAULT_DASHBOARD_OPTIONS['checklist'];
 $event = DEFAULT_DASHBOARD_OPTIONS['event'];
 $links = DEFAULT_DASHBOARD_OPTIONS['links'];
 
 $user = new UserController();
 $user_fullName = $user->getUserFullName($user_id);
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    if (!empty($_POST['action_name'])) {
+        if ($_POST['action_name'] === 'check_in_out') {
+            if (isUserCheckIn()) {
+                checkOut();
+            } else {
+                checkIn();
+            }
+        }
+    }
+}
+
 ob_start();
 ?>
 <div class="row">
@@ -75,7 +91,13 @@ ob_start();
                                     class="fw-semibold">Free trial</span>, to ‘Premium Plan’ <i
                                     class="mdi mdi-arrow-right"></i></p>
                             <div class="mt-3">
-                                <a href="pages-pricing.html" class="btn btn-success">Upgrade Account!</a>
+                                <form action="<?= $_SERVER['REQUEST_URI'] ?>" method="POST">
+                                    <input type="hidden" name="action_name" value="check_in_out">
+                                    <button type="submit"
+                                        class="btn btn-success btn-label right ms-auto"><i
+                                            class="ri-arrow-right-line label-icon align-bottom fs-16 ms-2"></i>
+                                        Check <?= isUserCheckIn() ? 'Out' : 'In' ?></button>
+                                </form>
                             </div>
                         </div>
                     </div>

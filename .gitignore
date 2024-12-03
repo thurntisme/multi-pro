@@ -6,3 +6,4 @@ database.sqlite
 .env
 .idea/
 sessions/
+assets/json/system_log.json
