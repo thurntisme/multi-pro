@@ -72,7 +72,8 @@ class AuthenticationService
 
     public function getTokenData($token)
     {
-        $stmt = $this->pdo->prepare('SELECT * FROM tokens WHERE token = ? AND expires_at > datetime("now")');
+        $now = $_ENV['DB_DRIVER'] === 'mysql' ? 'NOW()' : 'datetime("now")';
+        $stmt = $this->pdo->prepare("SELECT * FROM tokens WHERE token = ? AND expires_at > $now");
         $stmt->execute([$token]);
         $tokenData = $stmt->fetch();
 

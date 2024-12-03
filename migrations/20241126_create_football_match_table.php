@@ -14,8 +14,8 @@ return function (PDO $pdo) {
         'venue TEXT',  // Venue or location of the match (optional)
         'created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP',  // Date and time when the record is created
         'updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP',  // Date and time when the record is updated
-        'FOREIGN KEY(team_home_id) REFERENCES teams(id)',  // Foreign key to the teams table (home team)
-        'FOREIGN KEY(team_away_id) REFERENCES teams(id)',  // Foreign key to the teams table (away team)
+        'FOREIGN KEY(team_home_id) REFERENCES football_team(id)',  // Foreign key to the teams table (home team)
+        'FOREIGN KEY(team_away_id) REFERENCES football_team(id)',  // Foreign key to the teams table (away team)
     ];
 
     // Convert the attributes array into a string

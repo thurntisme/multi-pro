@@ -8,9 +8,9 @@ return function (PDO $pdo) {
         'created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP',
         'updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP',
         'user_id INTEGER NOT NULL',
-        'team_id TEXT NOT NULL',
-        'FOREIGN KEY(user_id) REFERENCES users(user_id)',
-        'FOREIGN KEY(team_id) REFERENCES football_team(team_id)'
+        'team_id INTEGER NOT NULL',
+        'FOREIGN KEY(user_id) REFERENCES users(id)',
+        'FOREIGN KEY(team_id) REFERENCES football_team(id)'
     ];
 
     // Convert the attributes array into a string

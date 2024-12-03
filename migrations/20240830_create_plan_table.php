@@ -7,7 +7,7 @@ return function (PDO $pdo) {
         'id INTEGER PRIMARY KEY AUTOINCREMENT',
         'title TEXT NOT NULL',
         'content  TEXT',
-        'status' => "TEXT NOT NULL DEFAULT 'pending'",
+        'status TEXT NOT NULL',
         'start_date DATE',
         'end_date DATE',
         'created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP',

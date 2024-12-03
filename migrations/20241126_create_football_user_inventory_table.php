@@ -10,7 +10,7 @@ return function (PDO $pdo) {
         'quantity INTEGER DEFAULT 1',  // Quantity of the item the user has
         'created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP',  // When the item was purchased
         'updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP',  // When the item was last updated
-        'FOREIGN KEY(user_id) REFERENCES users(user_id)',  // Link to the users table
+        'FOREIGN KEY(user_id) REFERENCES users(id)',  // Link to the users table
         'FOREIGN KEY(item_id) REFERENCES football_store(id)'  // Link to the football_store table
     ];
 

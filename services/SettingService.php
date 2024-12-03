@@ -26,7 +26,7 @@ class SettingService
                 $this->setSetting(INIT_SETTINGS);
 
                 echo "Initialized settings successfully\n";
-            } catch (\Throwable $th) {
+            } catch (Throwable $th) {
                 echo "Failed to initialize settings: " . $th->getMessage() . "\n";
             }
         }
@@ -59,9 +59,9 @@ class SettingService
     // Get a setting by key
     public function getSetting($key)
     {
-        $sql = "SELECT * FROM settings WHERE key = :key AND user_id = :user_id";
+        $sql = "SELECT * FROM settings WHERE option_key = :option_key AND user_id = :user_id";
         $stmt = $this->pdo->prepare($sql);
-        $stmt->execute([':key' => $key, ':user_id' => $this->user_id]);
+        $stmt->execute([':option_key' => $key, ':user_id' => $this->user_id]);
 
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }

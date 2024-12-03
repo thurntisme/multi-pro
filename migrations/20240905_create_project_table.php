@@ -12,11 +12,15 @@ return function (PDO $pdo) {
         'user_id INTEGER',
         'status TEXT CHECK(status IN ("not_started", "in_progress", "completed", "on_hold", "cancelled", "archive")) DEFAULT "not_started"',
         'type TEXT CHECK(type IN ("owner", "freelancer")) DEFAULT "owner"',
+        'dev_url TEXT',
+        'staging_url TEXT',
+        'production_url TEXT',
+        'source_url TEXT',
         'created_at DATETIME DEFAULT CURRENT_TIMESTAMP',
         'updated_at DATETIME DEFAULT CURRENT_TIMESTAMP',
         'FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE'
     ];
-    
+
     // Convert the attributes array into a string
     convertTheAttributesArrayIntoAString($attributes, $table_name, $pdo);
 };
