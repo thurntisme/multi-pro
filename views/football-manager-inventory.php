@@ -1,22 +1,9 @@
 <?php
-$pageTitle = "Football Manager - Store";
+$pageTitle = "Football Manager - Inventory";
 $commonController = new CommonController();
 $list = $commonController->convertResources(DEFAULT_STORE_ITEMS);
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    if (!empty($_POST['action_name'])) {
-        if ($_POST['action_name'] === 'buy_item') {
-            var_dump($_POST);
-            die();
-        }
-    }
-}
-
 ob_start();
-?>
-
-<?php
-include_once DIR . '/components/alert.php';
 ?>
 
 <div class="row">
@@ -34,12 +21,12 @@ include_once DIR . '/components/alert.php';
                 <!-- Nav tabs -->
                 <ul class="nav nav-tabs nav-border-top nav-border-top-primary" role="tablist">
                     <li class="nav-item">
-                        <a class="nav-link active" href="#">
+                        <a class="nav-link" href="<?= home_url("football-manager/store") ?>">
                             Items
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="<?= home_url("football-manager/store/inventory") ?>">
+                        <a class="nav-link active" href="#">
                             My Inventory
                         </a>
                     </li>
@@ -371,14 +358,10 @@ include_once DIR . '/components/alert.php';
                                     </div>
                                     <div class="col-sm-auto">
                                         <div class="d-flex align-items-center gap-2 text-muted">
-                                            <form action="<?= $_SERVER['REQUEST_URI'] ?>" method="POST">
-                                                <input type="hidden" name="action_name" value="buy_item">
-                                                <input type="hidden" name="item_id" value="<?= uniqid() ?>">
-                                                <button type="submit"
-                                                    class="btn btn-<?= $index === 0 ? 'danger' : 'success' ?> btn-label right ms-auto"><i
-                                                        class="ri-arrow-right-line label-icon align-bottom fs-16 ms-2"></i>
-                                                    Buy it</button>
-                                            </form>
+                                            <a href="<?= home_url("football-manager/store/item?id=" . uniqid()) ?>"
+                                                class="btn btn-<?= $index === 0 ? 'danger' : 'success' ?> btn-label right ms-auto"><i
+                                                    class="ri-arrow-right-line label-icon align-bottom fs-16 ms-2"></i>
+                                                Take it</a>
                                         </div>
                                     </div>
                                 </div>
