@@ -346,3 +346,11 @@ $nations = [
     "Zimbabwe",
 ];
 define("DEFAULT_NATIONALITY", $nations);
+
+$player_cards = [
+    'normal',
+    'young',
+    'legend',
+    'demand'
+];
+define('DEFAULT_PLAYER_CARD', $player_cards);

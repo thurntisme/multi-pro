@@ -84,20 +84,26 @@ class FootballLeagueController
 
     public function getMyLeagueStanding($myTeamId)
     {
-        $currLeagueId = $this->getNewestLeague()['id'];
-        $standing = $this->footballLeagueService->getMyLeagueStanding($currLeagueId, $myTeamId);
-        return $standing;
+        if (!empty($this->getNewestLeague())) {
+            $currLeagueId = $this->getNewestLeague()['id'];
+            $standing = $this->footballLeagueService->getMyLeagueStanding($currLeagueId, $myTeamId);
+            return $standing;
+        }
+        return null;
     }
 
     public function getMySchedule()
     {
-        $myTeamId = $this->myTeam['id'];
-        $myLeagueStand = $this->getMyLeagueStanding($myTeamId);
-        $myStand = $myLeagueStand ? count($myLeagueStand) : 0;
-        $schedule = $this->getLeagueSchedule();
-        return array_filter($schedule[$myStand], function ($sc) use ($myTeamId) {
-            return $sc['home']['id'] == $myTeamId || $sc['away']['id'] == $myTeamId;
-        })[0];
+        if (!empty($this->myTeam)) {
+            $myTeamId = $this->myTeam['id'];
+            $myLeagueStand = $this->getMyLeagueStanding($myTeamId);
+            $myStand = $myLeagueStand ? count($myLeagueStand) : 0;
+            $schedule = $this->getLeagueSchedule();
+            return array_filter($schedule[$myStand], function ($sc) use ($myTeamId) {
+                return $sc['home']['id'] == $myTeamId || $sc['away']['id'] == $myTeamId;
+            })[0];
+        }
+        return null;
     }
 
     public function getNewestLeague()

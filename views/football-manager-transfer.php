@@ -12,72 +12,73 @@ $sort_order = !empty($_GET['sort_order']) && $_GET['sort_order'] === 'asc' ? 'de
 ob_start();
 ?>
 
-    <div class="row">
-        <div class="col-lg-12">
-            <div class="card">
-                <div class="card-header">
-                    <?php includeFileWithVariables('components/football-player-topbar.php'); ?>
-                </div>
+<div class="row">
+    <div class="col-lg-12">
+        <div class="card">
+            <div class="card-header">
+                <?php includeFileWithVariables('components/football-player-topbar.php'); ?>
             </div>
         </div>
-        <!--end col-->
-        <div class="col-lg-12">
-            <div class="card">
-                <div class="card-body">
-                    <?php includeFileWithVariables('components/football-market-topbar.php'); ?>
-                    <div class="tab-content text-muted">
-                        <form method="get" class="d-block mb-2" action="<?= home_url('football-manager/transfer') ?>">
-                            <div class="row g-2">
-                                <div class="col-md-3">
-                                    <div class="search-box">
-                                        <input type="text" class="form-control search" name="s"
-                                               placeholder="Search for player..." value="<?= $_GET['s'] ?? '' ?>"/>
-                                        <i class="ri-search-line search-icon"></i>
-                                    </div>
-                                </div>
-                                <button class="btn btn-light w-auto ms-2" type="button" data-bs-toggle="collapse"
-                                        data-bs-target="#advancedFilter" aria-expanded="true"
-                                        aria-controls="advancedFilter">
-                                    <i class="ri-filter-2-line"></i>
-                                </button>
-                                <button type="submit" class="btn btn-primary w-auto ms-2"><i
-                                            class="ri-refresh-line me-1 align-bottom"></i>Filter
-                                </button>
-                                <a class="btn btn-soft-success w-auto ms-2"
-                                   href="<?= home_url("football-manager/transfer") ?>"><i
-                                            class="ri-refresh-line me-1 align-bottom"></i>Reset</a>
-                            </div>
-                            <div class="collapse" id="advancedFilter">
-                                <div class="card mb-0">
-                                    <div class="card-body">
-                                        Advanced filter here
-                                    </div>
+    </div>
+    <!--end col-->
+    <div class="col-lg-12">
+        <div class="card">
+            <div class="card-body">
+                <?php includeFileWithVariables('components/football-market-topbar.php'); ?>
+                <div class="tab-content text-muted">
+                    <form method="get" class="d-block mb-2" action="<?= home_url('football-manager/transfer') ?>">
+                        <div class="row g-2">
+                            <div class="col-md-3">
+                                <div class="search-box">
+                                    <input type="text" class="form-control search" name="s"
+                                        placeholder="Search for player..." value="<?= $_GET['s'] ?? '' ?>" />
+                                    <i class="ri-search-line search-icon"></i>
                                 </div>
                             </div>
-                        </form>
-                        <div id="tasksList" class="px-3">
-                            <div class="table-responsive table-card my-3">
-                                <table class="table align-middle table-nowrap mb-0" id="customerTable">
-                                    <thead class="table-light">
+                            <button class="btn btn-light w-auto ms-2" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#advancedFilter" aria-expanded="true"
+                                aria-controls="advancedFilter">
+                                <i class="ri-filter-2-line"></i>
+                            </button>
+                            <button type="submit" class="btn btn-primary w-auto ms-2"><i
+                                    class="ri-refresh-line me-1 align-bottom"></i>Filter
+                            </button>
+                            <a class="btn btn-soft-success w-auto ms-2"
+                                href="<?= home_url("football-manager/transfer") ?>"><i
+                                    class="ri-refresh-line me-1 align-bottom"></i>Reset</a>
+                        </div>
+                        <div class="collapse" id="advancedFilter">
+                            <div class="card mb-0">
+                                <div class="card-body">
+                                    Advanced filter here
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                    <div id="tasksList" class="px-3">
+                        <div class="table-responsive table-card my-3">
+                            <table class="table align-middle table-nowrap mb-0" id="customerTable">
+                                <thead class="table-light">
                                     <tr>
                                         <th class="sort" scope="col">Title</th>
                                         <th class="sort text-center" scope="col">Nationality</th>
+                                        <th class="sort text-center" scope="col"><a
+                                                href="?sort_by=age&sort_order=<?= $sort_order ?>">Age</a></th>
+                                        <th class="sort text-center" scope="col">Height</th>
+                                        <th class="sort text-center" scope="col">Weight</th>
                                         <th class="sort text-center" scope="col">Position</th>
                                         <th class="sort text-center" scope="col">Playable</th>
                                         <th class="sort text-center" scope="col">Season</th>
                                         <th class="sort text-center" scope="col"><a
-                                                    href="?sort_by=ability&sort_order=<?= $sort_order ?>"
-                                            >Ability</a></th>
+                                                href="?sort_by=ability&sort_order=<?= $sort_order ?>">Ability</a></th>
                                         <th class="sort text-center" scope="col"><a
-                                                    href="?sort_by=contract_wage&sort_order=<?= $sort_order ?>"
-                                            >Contract Wage</a></th>
+                                                href="?sort_by=contract_wage&sort_order=<?= $sort_order ?>">Contract Wage</a></th>
                                         <th class="sort text-center" scope="col"><a
-                                                    href="?sort_by=market_value&sort_order=<?= $sort_order ?>"
-                                            >Price</a></th>
+                                                href="?sort_by=market_value&sort_order=<?= $sort_order ?>">Price</a></th>
                                         <th class="text-center" scope="col"></th>
                                     </tr>
-                                    </thead>
-                                    <tbody class="list form-check-all">
+                                </thead>
+                                <tbody class="list form-check-all">
                                     <?php if (count($list['resources']) > 0) {
                                         foreach ($list['resources'] as $item) { ?>
                                             <tr>
@@ -88,14 +89,17 @@ ob_start();
                                                             <ul class="list-inline tasks-list-menu mb-0 pe-4">
                                                                 <li class="list-inline-item">
                                                                     <a class="edit-item-btn"
-                                                                       href="#<?= $item['uuid'] ?>"><i
-                                                                                class="ri-eye-fill align-bottom me-2 text-muted"></i></a>
+                                                                        href="#<?= $item['uuid'] ?>"><i
+                                                                            class="ri-eye-fill align-bottom me-2 text-muted"></i></a>
                                                                 </li>
                                                             </ul>
                                                         </div>
                                                     </div>
                                                 </td>
                                                 <td class="text-center"><?= $item['nationality'] ?></td>
+                                                <td class="text-center"><?= $item['age'] ?></td>
+                                                <td class="text-center"><?= $item['height'] ?> cm</td>
+                                                <td class="text-center"><?= $item['weight'] ?> kg</td>
                                                 <td class="text-center"><?= $item['best_position'] ?></td>
                                                 <td class="text-center"><?= implode(", ", $item['playable_positions']) ?></td>
                                                 <td class="text-center"><?= $item['season'] ?></td>
@@ -104,7 +108,7 @@ ob_start();
                                                 <td class="text-center"><?= formatCurrency($item['market_value']) ?></td>
                                                 <td class="text-center">
                                                     <a href="<?= home_url("football-manager/transfer/buy?p_uuid=" . $item['uuid']) ?>"
-                                                       class="btn btn-soft-success">
+                                                        class="btn btn-soft-success">
                                                         <i class="ri ri-shopping-cart-line"></i>
                                                     </a>
                                                     <button class="btn btn-soft-danger">
@@ -112,22 +116,22 @@ ob_start();
                                                     </button>
                                                 </td>
                                             </tr>
-                                        <?php }
+                                    <?php }
                                     } ?>
 
-                                    </tbody>
-                                </table>
-                            </div>
-                            <?php
-                            includeFileWithVariables('components/pagination.php', array("count" => $list['total_items'], "perPage" => $list['per_page']));
-                            ?>
+                                </tbody>
+                            </table>
                         </div>
+                        <?php
+                        includeFileWithVariables('components/pagination.php', array("count" => $list['total_items'], "perPage" => $list['per_page']));
+                        ?>
                     </div>
-                </div><!-- end card-body -->
-            </div>
+                </div>
+            </div><!-- end card-body -->
         </div>
-        <!--end col-->
     </div>
+    <!--end col-->
+</div>
 
 <?php
 $pageContent = ob_get_clean();

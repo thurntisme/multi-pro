@@ -1,19 +1,6 @@
 <?php
 $pageTitle = "Football Manager - My Players";
 
-require_once DIR . '/functions/generate-player.php';
-
-$players = generateRandomPlayers(20, 'legend');
-$commonController = new CommonController();
-$list = $commonController->convertResources($players);
-
-// Download player data as json file
-$filteredPlayers = array_filter($players, function ($player) {
-    return $player['name'] !== 'No names found.';
-});
-
-//exportPlayersToJson($filteredPlayers);
-
 ob_start();
 ?>
 

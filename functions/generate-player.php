@@ -91,8 +91,7 @@ function calculatePlayerWage(
     string $season,
     int    $overallAbility,
     string $type
-): float
-{
+): float {
     // Define base nation multipliers
     global $popularNations, $semiPopularNations;
     $nationMultipliers = [
@@ -161,8 +160,7 @@ function calculateMarketValue(
     string $season,
     int    $overallAbility,
     string $type
-): float
-{
+): float {
     // Step 1: Define the base salary depending on the nation
     global $popularNations, $semiPopularNations;
     $baseSalaries = [
@@ -265,17 +263,14 @@ function getRandomNation($nations)
     return $weightedNations[array_rand($weightedNations)];
 }
 
-function generateRandomPlayers(int $count = 10, $type = ''): array
+function generateRandomPlayers($type = '', $playerData = []): array
 {
-    global $positions, $seasonsRate;
+    global $positions;
     $players = [];
-    $playerData = [];
     $minAttr = 44;
     $maxAttr = 87;
 
     if (!empty($type)) {
-        $playerData = getFootballJsonData($type);
-        $count = count($playerData);
         if ($type == 'legend') {
             $minAttr = 87;
             $maxAttr = 97;
@@ -284,280 +279,284 @@ function generateRandomPlayers(int $count = 10, $type = ''): array
             $minAttr = 97;
             $maxAttr = 110;
         }
+        if ($type == 'demand') {
+            $maxAttr = 77;
+        }
     }
 
-    for ($i = 0; $i < $count; $i++) {
-        // Randomly select or generate player data
-        $uuid = uniqid();
-        $age = rand(18, 35);
-        $nationality = getRandomNation(DEFAULT_NATIONALITY);
-        $name = getRandomFullName($nationality, DEFAULT_NAME_BY_NATIONALITY);
-        $bestPosition = $positions[array_rand($positions)];
-        $playablePositions = getPlayablePosition($bestPosition);
+    // Randomly select or generate player data
+    $uuid = uniqid();
+    $age = rand(18, 35);
+    $nationality = getRandomNation(DEFAULT_NATIONALITY);
+    $name = getRandomFullName($nationality, DEFAULT_NAME_BY_NATIONALITY);
+    $bestPosition = $positions[array_rand($positions)];
+    $playablePositions = getPlayablePosition($bestPosition);
 
-        // Generate random attributes
-        $attributes = [
+    // Generate random attributes
+    $attributes = [
+        'technical' => [
+            'passing' => rand($minAttr, $maxAttr),
+            'dribbling' => rand($minAttr, $maxAttr),
+            'first_touch' => rand($minAttr, $maxAttr),
+            'crossing' => rand($minAttr, $maxAttr),
+            'finishing' => rand($minAttr, $maxAttr),
+            'long_shots' => rand($minAttr, $maxAttr),
+            'free_kick_accuracy' => rand($minAttr, $maxAttr),
+            'heading' => rand($minAttr, $maxAttr),
+            'tackling' => rand($minAttr, $maxAttr),
+            'handling' => rand($minAttr, $maxAttr), // New: For goalkeepers
+            'marking' => rand($minAttr, $maxAttr), // New: For defenders
+        ],
+        'mental' => [
+            'decision' => rand($minAttr, $maxAttr),
+            'vision' => rand($minAttr, $maxAttr),
+            'leadership' => rand($minAttr, $maxAttr),
+            'work_rate' => rand($minAttr, $maxAttr),
+            'positioning' => rand($minAttr, $maxAttr),
+            'composure' => rand($minAttr, $maxAttr),
+            'aggression' => rand($minAttr, $maxAttr),
+            'anticipation' => rand($minAttr, $maxAttr),
+            'concentration' => rand($minAttr, $maxAttr), // New: For maintaining focus
+            'off_the_ball' => rand($minAttr, $maxAttr), // New: For attackers and midfielders
+            'flair' => rand($minAttr, $maxAttr), // New: For creative and attacking players
+        ],
+        'physical' => [
+            'pace' => rand($minAttr, $maxAttr),
+            'strength' => rand($minAttr, $maxAttr),
+            'stamina' => rand($minAttr, $maxAttr),
+            'agility' => rand($minAttr, $maxAttr),
+            'balance' => rand($minAttr, $maxAttr),
+            'jumping_reach' => rand($minAttr, $maxAttr), // Updated: Aerial ability
+            'natural_fitness' => rand($minAttr, $maxAttr),
+        ],
+    ];
+
+    // Weights for attributes by position
+    $weights = [
+        'GK' => [
             'technical' => [
-                'passing' => rand($minAttr, $maxAttr),
-                'dribbling' => rand($minAttr, $maxAttr),
-                'first_touch' => rand($minAttr, $maxAttr),
-                'crossing' => rand($minAttr, $maxAttr),
-                'finishing' => rand($minAttr, $maxAttr),
-                'long_shots' => rand($minAttr, $maxAttr),
-                'free_kick_accuracy' => rand($minAttr, $maxAttr),
-                'heading' => rand($minAttr, $maxAttr),
-                'tackling' => rand($minAttr, $maxAttr),
-                'handling' => rand($minAttr, $maxAttr), // New: For goalkeepers
-                'marking' => rand($minAttr, $maxAttr), // New: For defenders
+                'handling' => 0.4,
+                'passing' => 0.2,
             ],
             'mental' => [
-                'decision' => rand($minAttr, $maxAttr),
-                'vision' => rand($minAttr, $maxAttr),
-                'leadership' => rand($minAttr, $maxAttr),
-                'work_rate' => rand($minAttr, $maxAttr),
-                'positioning' => rand($minAttr, $maxAttr),
-                'composure' => rand($minAttr, $maxAttr),
-                'aggression' => rand($minAttr, $maxAttr),
-                'anticipation' => rand($minAttr, $maxAttr),
-                'concentration' => rand($minAttr, $maxAttr), // New: For maintaining focus
-                'off_the_ball' => rand($minAttr, $maxAttr), // New: For attackers and midfielders
-                'flair' => rand($minAttr, $maxAttr), // New: For creative and attacking players
+                'decision' => 0.3,
+                'concentration' => 0.3,
             ],
             'physical' => [
-                'pace' => rand($minAttr, $maxAttr),
-                'strength' => rand($minAttr, $maxAttr),
-                'stamina' => rand($minAttr, $maxAttr),
-                'agility' => rand($minAttr, $maxAttr),
-                'balance' => rand($minAttr, $maxAttr),
-                'jumping_reach' => rand($minAttr, $maxAttr), // Updated: Aerial ability
-                'natural_fitness' => rand($minAttr, $maxAttr),
+                'jumping_reach' => 0.4,
+                'strength' => 0.2,
             ],
-        ];
+        ],
+        'CM' => [ // Central Midfielder
+            'technical' => [
+                'passing' => 0.4,
+                'first_touch' => 0.3,
+                'long_shots' => 0.2,
+            ],
+            'mental' => [
+                'vision' => 0.4,
+                'work_rate' => 0.3,
+                'decision' => 0.2,
+            ],
+            'physical' => [
+                'stamina' => 0.3,
+                'pace' => 0.2,
+            ],
+        ],
+        'CF' => [ // Center Forward
+            'technical' => [
+                'finishing' => 0.4,
+                'dribbling' => 0.3,
+                'first_touch' => 0.2,
+            ],
+            'mental' => [
+                'off_the_ball' => 0.4,
+                'composure' => 0.3,
+            ],
+            'physical' => [
+                'pace' => 0.4,
+                'strength' => 0.3,
+            ],
+        ],
+        'ST' => [ // Striker
+            'technical' => [
+                'finishing' => 0.5,
+                'heading' => 0.3,
+            ],
+            'mental' => [
+                'decision' => 0.3,
+                'off_the_ball' => 0.4,
+            ],
+            'physical' => [
+                'pace' => 0.4,
+                'strength' => 0.4,
+            ],
+        ],
+        'RW' => [ // Right Winger
+            'technical' => [
+                'crossing' => 0.5,
+                'dribbling' => 0.4,
+            ],
+            'mental' => [
+                'flair' => 0.3,
+            ],
+            'physical' => [
+                'pace' => 0.5,
+            ],
+        ],
+        'LW' => [ // Left Winger
+            'technical' => [
+                'crossing' => 0.5,
+                'dribbling' => 0.4,
+            ],
+            'mental' => [
+                'flair' => 0.3,
+            ],
+            'physical' => [
+                'pace' => 0.5,
+            ],
+        ],
+        'CB' => [ // Center Back
+            'technical' => [
+                'tackling' => 0.4,
+                'heading' => 0.3,
+            ],
+            'mental' => [
+                'decision' => 0.3,
+                'marking' => 0.4,
+            ],
+            'physical' => [
+                'strength' => 0.5,
+                'jumping_reach' => 0.4,
+            ],
+        ],
+        'RB' => [ // Right Back
+            'technical' => [
+                'crossing' => 0.3,
+                'tackling' => 0.3,
+            ],
+            'mental' => [
+                'work_rate' => 0.4,
+            ],
+            'physical' => [
+                'pace' => 0.4,
+                'stamina' => 0.4,
+            ],
+        ],
+        'LB' => [ // Left Back
+            'technical' => [
+                'crossing' => 0.3,
+                'tackling' => 0.3,
+            ],
+            'mental' => [
+                'work_rate' => 0.4,
+            ],
+            'physical' => [
+                'pace' => 0.4,
+                'stamina' => 0.4,
+            ],
+        ],
+        'DM' => [ // Defensive Midfielder
+            'technical' => [
+                'passing' => 0.3,
+                'tackling' => 0.3,
+            ],
+            'mental' => [
+                'positioning' => 0.4,
+                'decision' => 0.3,
+            ],
+            'physical' => [
+                'strength' => 0.4,
+                'stamina' => 0.3,
+            ],
+        ],
+        'AMC' => [ // Attacking Midfielder
+            'technical' => [
+                'dribbling' => 0.5,
+                'first_touch' => 0.4,
+            ],
+            'mental' => [
+                'vision' => 0.5,
+                'flair' => 0.3,
+            ],
+            'physical' => [
+                'pace' => 0.3,
+            ],
+        ],
+        'LM' => [ // Left Midfielder
+            'technical' => [
+                'crossing' => 0.4,
+                'dribbling' => 0.4,
+            ],
+            'mental' => [
+                'vision' => 0.3,
+            ],
+            'physical' => [
+                'pace' => 0.4,
+                'stamina' => 0.4,
+            ],
+        ],
+        'RM' => [ // Right Midfielder
+            'technical' => [
+                'crossing' => 0.4,
+                'dribbling' => 0.4,
+            ],
+            'mental' => [
+                'vision' => 0.3,
+            ],
+            'physical' => [
+                'pace' => 0.4,
+                'stamina' => 0.4,
+            ],
+        ],
+    ];
 
-        // Weights for attributes by position
-        $weights = [
-            'GK' => [
-                'technical' => [
-                    'handling' => 0.4,
-                    'passing' => 0.2,
-                ],
-                'mental' => [
-                    'decision' => 0.3,
-                    'concentration' => 0.3,
-                ],
-                'physical' => [
-                    'jumping_reach' => 0.4,
-                    'strength' => 0.2,
-                ],
-            ],
-            'CM' => [ // Central Midfielder
-                'technical' => [
-                    'passing' => 0.4,
-                    'first_touch' => 0.3,
-                    'long_shots' => 0.2,
-                ],
-                'mental' => [
-                    'vision' => 0.4,
-                    'work_rate' => 0.3,
-                    'decision' => 0.2,
-                ],
-                'physical' => [
-                    'stamina' => 0.3,
-                    'pace' => 0.2,
-                ],
-            ],
-            'CF' => [ // Center Forward
-                'technical' => [
-                    'finishing' => 0.4,
-                    'dribbling' => 0.3,
-                    'first_touch' => 0.2,
-                ],
-                'mental' => [
-                    'off_the_ball' => 0.4,
-                    'composure' => 0.3,
-                ],
-                'physical' => [
-                    'pace' => 0.4,
-                    'strength' => 0.3,
-                ],
-            ],
-            'ST' => [ // Striker
-                'technical' => [
-                    'finishing' => 0.5,
-                    'heading' => 0.3,
-                ],
-                'mental' => [
-                    'decision' => 0.3,
-                    'off_the_ball' => 0.4,
-                ],
-                'physical' => [
-                    'pace' => 0.4,
-                    'strength' => 0.4,
-                ],
-            ],
-            'RW' => [ // Right Winger
-                'technical' => [
-                    'crossing' => 0.5,
-                    'dribbling' => 0.4,
-                ],
-                'mental' => [
-                    'flair' => 0.3,
-                ],
-                'physical' => [
-                    'pace' => 0.5,
-                ],
-            ],
-            'LW' => [ // Left Winger
-                'technical' => [
-                    'crossing' => 0.5,
-                    'dribbling' => 0.4,
-                ],
-                'mental' => [
-                    'flair' => 0.3,
-                ],
-                'physical' => [
-                    'pace' => 0.5,
-                ],
-            ],
-            'CB' => [ // Center Back
-                'technical' => [
-                    'tackling' => 0.4,
-                    'heading' => 0.3,
-                ],
-                'mental' => [
-                    'decision' => 0.3,
-                    'marking' => 0.4,
-                ],
-                'physical' => [
-                    'strength' => 0.5,
-                    'jumping_reach' => 0.4,
-                ],
-            ],
-            'RB' => [ // Right Back
-                'technical' => [
-                    'crossing' => 0.3,
-                    'tackling' => 0.3,
-                ],
-                'mental' => [
-                    'work_rate' => 0.4,
-                ],
-                'physical' => [
-                    'pace' => 0.4,
-                    'stamina' => 0.4,
-                ],
-            ],
-            'LB' => [ // Left Back
-                'technical' => [
-                    'crossing' => 0.3,
-                    'tackling' => 0.3,
-                ],
-                'mental' => [
-                    'work_rate' => 0.4,
-                ],
-                'physical' => [
-                    'pace' => 0.4,
-                    'stamina' => 0.4,
-                ],
-            ],
-            'DM' => [ // Defensive Midfielder
-                'technical' => [
-                    'passing' => 0.3,
-                    'tackling' => 0.3,
-                ],
-                'mental' => [
-                    'positioning' => 0.4,
-                    'decision' => 0.3,
-                ],
-                'physical' => [
-                    'strength' => 0.4,
-                    'stamina' => 0.3,
-                ],
-            ],
-            'AMC' => [ // Attacking Midfielder
-                'technical' => [
-                    'dribbling' => 0.5,
-                    'first_touch' => 0.4,
-                ],
-                'mental' => [
-                    'vision' => 0.5,
-                    'flair' => 0.3,
-                ],
-                'physical' => [
-                    'pace' => 0.3,
-                ],
-            ],
-            'LM' => [ // Left Midfielder
-                'technical' => [
-                    'crossing' => 0.4,
-                    'dribbling' => 0.4,
-                ],
-                'mental' => [
-                    'vision' => 0.3,
-                ],
-                'physical' => [
-                    'pace' => 0.4,
-                    'stamina' => 0.4,
-                ],
-            ],
-            'RM' => [ // Right Midfielder
-                'technical' => [
-                    'crossing' => 0.4,
-                    'dribbling' => 0.4,
-                ],
-                'mental' => [
-                    'vision' => 0.3,
-                ],
-                'physical' => [
-                    'pace' => 0.4,
-                    'stamina' => 0.4,
-                ],
-            ],
-        ];
+    $positionAbility = calculateAbility($attributes, $weights[$bestPosition]);
+    $generalAbility = calculateGeneralAbility($attributes);
+    $overallAbility = (int)round(($positionAbility * 0.7) + ($generalAbility * 0.3));
 
-        $positionAbility = calculateAbility($attributes, $weights[$bestPosition]);
-        $generalAbility = calculateGeneralAbility($attributes);
-        $overallAbility = (int)round(($positionAbility * 0.7) + ($generalAbility * 0.3));
+    // Generate abilities with seasons
+    $season = getSeason($overallAbility);
+    $ability = (int)round($overallAbility);
+    $height = rand(165, 195); // in cm
+    $weight = rand($height - 105, $height - 85); // Proportional weight
 
-        // Generate abilities with seasons
-        $season = getSeason($overallAbility);
-        $ability = (int)round($overallAbility);
-        $height = rand(165, 195); // in cm
-        $weight = rand($height - 105, $height - 85); // Proportional weight
-
-        if (!empty($type)) {
-            $nationality = $playerData[$i]['nationality'];
-            $name = $playerData[$i]['name'];
-            $bestPosition = $playerData[$i]['best_position'];
-            $playablePositions = $playerData[$i]['playable_positions'];
-            $age = $playerData[$i]['age'];
-            $weight = $playerData[$i]['weight'];
-            $height = $playerData[$i]['height'];
+    if (!empty($type)) {
+        $nationality = $playerData['nationality'];
+        $name = $playerData['name'];
+        $bestPosition = $playerData['best_position'];
+        $playablePositions = $playerData['playable_positions'];
+        $age = $playerData['age'];
+        $weight = $playerData['weight'];
+        $height = $playerData['height'];
+        if ($type === 'young') {
+            $age = rand(18, 19);
         }
-
-        // Build player array
-        $players[] = [
-            'uuid' => $uuid,
-            'name' => $name,
-            'age' => $age,
-            'nationality' => $nationality,
-            'best_position' => $bestPosition,
-            'playable_positions' => $playablePositions,
-            'attributes' => $attributes,
-            'season' => $season,
-            'ability' => $ability,
-            'contract_wage' => calculatePlayerWage($nationality, $bestPosition, $playablePositions, $season, $overallAbility, $type),
-            'contract_end' => rand(10, 20),
-            'injury' => rand(1, 5),
-            'recovery_time' => rand(3, 10),
-            'market_value' => calculateMarketValue($nationality, $bestPosition, $playablePositions, $season, $overallAbility, $type),
-            'reputation' => rand(1, 10),
-            'form' => rand(1, 10),
-            'morale' => rand(1, 10),
-            'potential' => rand(60, 99),
-            'height' => $height, // Height in cm
-            'weight' => $weight, // Weight in kg
-        ];
     }
+
+    // Build player array
+    $players[] = [
+        'uuid' => $uuid,
+        'name' => $name,
+        'age' => $age,
+        'nationality' => $nationality,
+        'best_position' => $bestPosition,
+        'playable_positions' => $playablePositions,
+        'attributes' => $attributes,
+        'season' => $season,
+        'ability' => $ability,
+        'contract_wage' => calculatePlayerWage($nationality, $bestPosition, $playablePositions, $season, $overallAbility, $type),
+        'contract_end' => rand(10, 20),
+        'injury' => rand(1, 5),
+        'recovery_time' => rand(3, 10),
+        'market_value' => calculateMarketValue($nationality, $bestPosition, $playablePositions, $season, $overallAbility, $type),
+        'reputation' => rand(1, 10),
+        'form' => rand(1, 10),
+        'morale' => rand(1, 10),
+        'potential' => rand(60, 99),
+        'height' => $height, // Height in cm
+        'weight' => $weight, // Weight in kg
+    ];
 
     return $players;
 }

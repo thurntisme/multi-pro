@@ -770,6 +770,21 @@ $semiPopularNations = [
 
 const DEFAULT_STORE_ITEMS = [
     [
+        'id' => 0,
+        'name' => 'Player on Demand',
+        'slug' => 'player-on-demand',
+        'price' => 1000000,
+        'description' => 'Submit a player for consideration. We will review your submission and publish the player once approved.',
+        'type' => 'player',
+        'rarity' => 'normal',
+        'attributes' => [
+            'position' => 'any',
+            'skill_level' => 50,
+            'potential' => 60,
+        ],
+        'image' => 'images/normal-player.jpg',
+    ],
+    [
         'id' => 1,
         'name' => 'Normal Player',
         'slug' => 'normal-player',

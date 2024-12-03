@@ -223,9 +223,9 @@ function generatePageUrl($params = [])
 
   // Parse the URL to get its components
   $urlParts = parse_url($currentUrl);
+  $queryParams = $_GET;
 
   // Parse the query string into an associative array
-  $queryParams = [];
   if (isset($urlParts['query'])) {
     parse_str($urlParts['query'], $queryParams);
   }

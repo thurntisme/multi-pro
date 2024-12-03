@@ -157,11 +157,10 @@ class CommonController
         ];
     }
 
-    function convertResources(array $resources): array
+    function convertResources(array $resources, $perPage = 10): array
     {
         // Get values from $_GET with defaults
         $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
-        $perPage = 10;
         $keyword = $_GET['s'] ?? '';
         $sortBy = $_GET['sort_by'] ?? '';
         $sortOrder = $_GET['sort_order'] ?? 'asc';
@@ -203,5 +202,4 @@ class CommonController
             'resources' => $pagedResources,
         ];
     }
-
 }
