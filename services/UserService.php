@@ -52,11 +52,4 @@ class UserService
             throw new Exception("Error retrieving users: " . $e->getMessage());
         }
     }
-
-    public function setUserPoint($user_id)
-    {
-        $stmt = $this->pdo->prepare("INSERT INTO user_point (user_id) VALUES (:user_id)");
-        $stmt->execute(['user_id' => $user_id]);
-        return $this->pdo->lastInsertId();
-    }
 }

@@ -1,79 +1,107 @@
 <?php
 
+function get_log_badge($level): string
+{
+    $badge = match ($level) {
+        'INFO' => 'info',
+        default => 'light',
+    };
+    return '<span class="badge bg-primary-subtle text-' . $badge . ' badge-border me-2"><i class="mdi mdi-circle-medium"></i>' . $level . '</span>';
+}
+
+function get_all_logs()
+{
+    $fileName = "assets/json/system_log.json";
+    if (file_exists($fileName)) {
+        return json_decode(file_get_contents($fileName), true) ?? [];
+    } else {
+        return [];
+    }
+}
+
 function get_log_message()
 {
-  $fileName = "assets/json/system_log.json";
-  if (file_exists($fileName)) {
-    return json_decode(file_get_contents($fileName), true);
-  } else {
-    return [];
-  }
-}
-
-function isUserCheckIn()
-{
-  $data = get_log_message();
-  if (!empty($data) && count($data) > 0) {
-    $timestamp = end($data)['timestamp'];
-
-    // Convert the date string to a timestamp
-    $timestamp = strtotime($timestamp);
-
-    // Get the current date in the "Y-m-d" format
-    $today = date("Y-m-d");
-
-    // Check if the given date matches today's date
-    if (date("Y-m-d", $timestamp) === $today) {
-      return true;
+    global $user_id;
+    $logs = get_all_logs();
+    if (count($logs) > 0) {
+        return array_filter($logs, function ($item) use ($user_id) {
+            return $item['user_id'] === $user_id;
+        });
     } else {
-      return false;
+        return [];
     }
-  }
-  return false;
 }
 
-function resetLogs()
+function isUserCheckIn(): bool
 {
-  $fileName = "assets/json/system_log.json";
+    $data = get_log_message();
+    if (!empty($data) && count($data) > 0) {
+        $timestamp = end($data)['timestamp'];
 
-  // Save logs back to the file
-  file_put_contents($fileName, json_encode([], JSON_PRETTY_PRINT));
+        // Convert the date string to a timestamp
+        $timestamp = strtotime($timestamp);
+
+        // Get the current date in the "Y-m-d" format
+        $today = date("Y-m-d");
+
+        // Check if the given date matches today's date
+        if (date("Y-m-d", $timestamp) === $today) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    return false;
 }
 
-function checkIn()
+function resetLogs(): void
 {
-  global $user_id;
-  resetLogs();
-  log_message('INFO', 'User checked in.', ['user_id' => $user_id]);
+    global $user_id;
+    $fileName = "assets/json/system_log.json";
+    $logs = get_all_logs();
+    if (count($logs) > 0) {
+        $reset_data = array_filter($logs, function ($item) use ($user_id) {
+            return $item['user_id'] !== $user_id;
+        });
+        // Save logs back to the file
+        file_put_contents($fileName, json_encode(array_values($reset_data), JSON_PRETTY_PRINT));
+    }
 }
 
-function checkOut()
+function checkIn(): void
 {
-  $logs = get_log_message();
-  var_dump($logs);
-  resetLogs();
-  die();
+    resetLogs();
+    log_message('INFO', 'User checked in.');
 }
 
-function log_message($level, $message, $context = [])
+function checkOut(): void
 {
-  $fileName = "assets/json/system_log.json";
-  $logData = [
-    'level' => $level,
-    'message' => $message,
-    'timestamp' => date('Y-m-d H:i:s'),
-    'context' => $context,
-  ];
-
-  // Read the existing logs
-  $logs = get_log_message();
-
-  // Add the new log entry
-  $logs[] = $logData;
-
-  // Save logs back to the file
-  file_put_contents($fileName, json_encode($logs, JSON_PRETTY_PRINT));
+    $logs = get_log_message();
+    $total_budget = array_sum(array_column($logs, 'budget'));
+    var_dump($total_budget);
+    resetLogs();
+    die();
 }
 
-// Example usage
-// log_message('INFO', 'User logged in.', ['user_id' => 123]);
+function log_message($level, $message, $context = []): void
+{
+    global $user_id;
+    $fileName = "assets/json/system_log.json";
+    $logData = [
+        'level' => $level,
+        'message' => $message,
+        'timestamp' => date('Y-m-d H:i:s'),
+        'context' => $context,
+        'user_id' => $user_id,
+        'budget' => rand(0, 99)
+    ];
+
+    // Read the existing logs
+    $logs = get_log_message();
+
+    // Add the new log entry
+    $logs[] = $logData;
+
+    // Save logs back to the file
+    file_put_contents($fileName, json_encode($logs, JSON_PRETTY_PRINT));
+}

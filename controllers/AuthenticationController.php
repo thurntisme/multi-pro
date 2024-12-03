@@ -37,7 +37,6 @@ class AuthenticationController
             $userId = $this->authenticationService->createUser($firstName, $lastName, $username, $email, $password);
 
             if ($userId) {
-                $this->userController->setUserPoint($userId);
                 // Check if the "system" user already exists
                 if (!$this->authenticationService->userExists('system')) {
                     // Create the "system" user
