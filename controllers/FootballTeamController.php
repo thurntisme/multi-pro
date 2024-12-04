@@ -18,16 +18,15 @@ class FootballTeamController
         $this->userController = new UserController();
     }
 
-    // Handle creating a new code
+    // Handle creating a new team
     public function createTeam()
     {
         $team_name = $_POST['team_name'] ?? '';
 
         if ($team_name) {
-            $systemUser = $this->userController->getSystemUser();
-            $this->initializeTeams(DEFAULT_FOOTBALL_TEAM, $systemUser['id']);
             $teamId = $this->footballTeamService->createTeam($team_name, $this->user_id);
             $this->initializeTeamPlayers($teamId);
+            $this->initializeSystemTeams();
             $_SESSION['message_type'] = 'success';
             $_SESSION['message'] = "Team created successfully";
         } else {
@@ -37,11 +36,6 @@ class FootballTeamController
 
         header("Location: " . home_url("football-manager"));
         exit;
-    }
-
-    public function initializeTeams($teams, $systemUserId)
-    {
-        $this->footballTeamService->initializeTeams($teams, $systemUserId);
     }
 
     public function initializeTeamPlayers($teamId)
@@ -58,31 +52,13 @@ class FootballTeamController
         $this->footballTeamService->initializeTeamPlayers($teamId, $players);
     }
 
-    // Handle updating a code
-    public function updateCode()
+    public function initializeSystemTeams()
     {
-        $id = $_POST['code_id'] ?? '';
-        $title = $_POST['title'] ?? '';
-        $content = $_POST['content'] ?? '';
-        $tags = $_POST['tags'] ?? '';
-        $url = $_POST['url'] ?? '';
-
-        if ($id && $title) {
-            $rowsAffected = $this->footballTeamService->updateCode($id, $title, $content, $tags, $url);
-            if ($rowsAffected) {
-                $_SESSION['message_type'] = 'success';
-                $_SESSION['message'] = "Code updated successfully.";
-            } else {
-                $_SESSION['message_type'] = 'danger';
-                $_SESSION['message'] = "Failed to update code.";
-            }
-        } else {
-            $_SESSION['message_type'] = 'danger';
-            $_SESSION['message'] = "Code ID and service name are required.";
+        $systemUser = $this->userController->getSystemUser();
+        foreach (DEFAULT_FOOTBALL_TEAM as $index => $team) {
+            $teamId = $this->footballTeamService->createTeam($team['name'], $systemUser['id'], $index + 2);
+            $this->initializeTeamPlayers($teamId);
         }
-
-        header("Location: " . home_url("code/edit") . '?id=' . $id);
-        exit;
     }
 
     public function updateBudget($amount)
@@ -90,28 +66,6 @@ class FootballTeamController
         if ($amount) {
             $rowsAffected = $this->footballTeamService->updateBudget($amount);
         }
-    }
-
-    // Handle deleting a code
-    public function deleteCode()
-    {
-        $id = $_POST['post_id'] ?? null;
-        if ($id) {
-            $rowsAffected = $this->footballTeamService->deleteCode($id);
-            if ($rowsAffected) {
-                $_SESSION['message_type'] = 'success';
-                $_SESSION['message'] = "Code deleted successfully.";
-            } else {
-                $_SESSION['message_type'] = 'danger';
-                $_SESSION['message'] = "Failed to delete code.";
-            }
-        } else {
-            $_SESSION['message_type'] = 'danger';
-            $_SESSION['message'] = "Failed to delete code.";
-        }
-
-        header("Location: " . home_url("code"));
-        exit;
     }
 
     // Get all teams

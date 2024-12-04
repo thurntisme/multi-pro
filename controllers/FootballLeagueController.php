@@ -18,7 +18,7 @@ class FootballLeagueController
         $this->myTeam = $this->footballTeamController->getMyTeam();
     }
 
-    public function createLeague()
+    public function createLeague(): void
     {
         // List of awesome league names
         $leagueNames = [
@@ -45,13 +45,42 @@ class FootballLeagueController
             $this->footballLeagueService->createLeague($name, $season, $start_date, $end_date, $win_amount);
             $_SESSION['message_type'] = 'success';
             $_SESSION['message'] = "League created successfully";
-        } catch (\Throwable $th) {
+        } catch (Throwable $th) {
             $_SESSION['message_type'] = 'danger';
             $_SESSION['message'] = "Failed to create league";
         }
 
         header("Location: " . home_url("football-manager"));
         exit;
+    }
+
+    public function getMySchedule()
+    {
+        if (!empty($this->myTeam)) {
+            $myTeamId = $this->myTeam['id'];
+            $myLeagueStand = $this->getMyLeagueStanding($myTeamId);
+            $myStand = $myLeagueStand ? count($myLeagueStand) : 0;
+            $schedule = $this->getLeagueSchedule();
+            return array_filter($schedule[$myStand], function ($sc) use ($myTeamId) {
+                return $sc['home']['id'] == $myTeamId || $sc['away']['id'] == $myTeamId;
+            })[0];
+        }
+        return null;
+    }
+
+    public function getMyLeagueStanding($myTeamId)
+    {
+        if (!empty($this->getNewestLeague())) {
+            $currLeagueId = $this->getNewestLeague()['id'];
+            $standing = $this->footballLeagueService->getMyLeagueStanding($currLeagueId, $myTeamId);
+            return $standing;
+        }
+        return null;
+    }
+
+    public function getNewestLeague()
+    {
+        return $this->footballLeagueService->getNewestLeague();
     }
 
     public function getLeagueSchedule()
@@ -80,34 +109,5 @@ class FootballLeagueController
         }
 
         return $rounds;
-    }
-
-    public function getMyLeagueStanding($myTeamId)
-    {
-        if (!empty($this->getNewestLeague())) {
-            $currLeagueId = $this->getNewestLeague()['id'];
-            $standing = $this->footballLeagueService->getMyLeagueStanding($currLeagueId, $myTeamId);
-            return $standing;
-        }
-        return null;
-    }
-
-    public function getMySchedule()
-    {
-        if (!empty($this->myTeam)) {
-            $myTeamId = $this->myTeam['id'];
-            $myLeagueStand = $this->getMyLeagueStanding($myTeamId);
-            $myStand = $myLeagueStand ? count($myLeagueStand) : 0;
-            $schedule = $this->getLeagueSchedule();
-            return array_filter($schedule[$myStand], function ($sc) use ($myTeamId) {
-                return $sc['home']['id'] == $myTeamId || $sc['away']['id'] == $myTeamId;
-            })[0];
-        }
-        return null;
-    }
-
-    public function getNewestLeague()
-    {
-        return $this->footballLeagueService->getNewestLeague();
     }
 }

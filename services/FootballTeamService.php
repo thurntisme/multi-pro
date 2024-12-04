@@ -69,23 +69,13 @@ class FootballTeamService
     }
 
     // Create a new code
-    public function createTeam($team_name, $system_user_id)
+    public function createTeam($team_name, $system_user_id, $league_position = 1)
     {
-        $sql = "INSERT INTO football_team (team_name, manager_id) VALUES (:team_name, :manager_id)";
+        $sql = "INSERT INTO football_team (team_name, manager_id, league_position) VALUES (:team_name, :manager_id, :league_position)";
         $stmt = $this->pdo->prepare($sql);
-        $stmt->execute([':team_name' => $team_name, ':manager_id' => $system_user_id]);
+        $stmt->execute([':team_name' => $team_name, ':manager_id' => $system_user_id, ':league_position' => $league_position]);
 
         return $this->pdo->lastInsertId();
-    }
-
-    // Update a code
-    public function updateCode($id, $title, $content, $tags, $url)
-    {
-        $sql = "UPDATE codes SET title = :title, content = :content, tags = :tags, url = :url, updated_at = CURRENT_TIMESTAMP WHERE user_id = :user_id AND id = :id";
-        $stmt = $this->pdo->prepare($sql);
-        $stmt->execute([':title' => $title, ':content' => $content, ':tags' => $tags, ':url' => $url, ':id' => $id, ':user_id' => $this->user_id]);
-
-        return $stmt->rowCount();
     }
 
     public function updateBudget($amount)
