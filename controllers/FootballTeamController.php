@@ -55,8 +55,12 @@ class FootballTeamController
     public function initializeSystemTeams()
     {
         $systemUser = $this->userController->getSystemUser();
+        $formation = array_map(function ($formation) {
+            return $formation['slug'];
+        }, DEFAULT_FOOTBALL_FORMATION);
         foreach (DEFAULT_FOOTBALL_TEAM as $index => $team) {
-            $teamId = $this->footballTeamService->createTeam($team['name'], $systemUser['id'], $index + 2);
+            $randomFormation = $formation[array_rand($formation)];
+            $teamId = $this->footballTeamService->createTeam($team['name'], $systemUser['id'], $index + 2, $randomFormation);
             $this->initializeTeamPlayers($teamId);
         }
     }
@@ -79,9 +83,9 @@ class FootballTeamController
         return $this->footballTeamService->getTeamByUserId();
     }
 
-    public function getMyTeamInMatch()
+    public function getMyTeamInMatch($teamId)
     {
-        $team = $this->footballTeamService->getTeamByUserId();
+        $team = $this->footballTeamService->getTeamById($teamId);
         $lineupPlayers = array_slice($team['players'], 0, 11);
         $subPlayers = array_slice($team['players'], 11, 17);
 

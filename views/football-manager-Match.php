@@ -10,10 +10,8 @@ $footballLeagueController = new FootballLeagueController();
 
 $match_uuid = $_GET['uuid'];
 $match = $footballLeagueController->getMatch($match_uuid);
-var_dump($match);
-die();
-
-$myTeam = $footballTeamController->getMyTeamInMatch();
+$home_team = $match['home'];
+$away_team = $match['away'];
 
 ob_start();
 ?>
@@ -32,13 +30,13 @@ ob_start();
                 <div class="col-8">
                     <div class="card">
                         <div class="card-header align-items-center justify-content-center d-flex">
-                            <span class="text-muted fs-12" id="team-1-name"><?= $myTeam['team_name'] ?></span>
+                            <span class="text-muted fs-12" id="team-1-name"><?= $home_team['team_name'] ?></span>
                             <h4 class="card-title mb-0 fs-20 mx-2">
                                 <span id="team-1-score">0</span>
                                 <span class="mx-1">:</span>
                                 <span id="team-2-score">0</span>
                             </h4>
-                            <span class="text-muted fs-12" id="team-2-name"><?= $myTeam['team_name'] ?></span>
+                            <span class="text-muted fs-12" id="team-2-name"><?= $away_team['team_name'] ?></span>
                         </div>
                         <div class="card-body p-0">
                             <div class="p-3 d-flex align-items-center justify-content-center">
@@ -78,19 +76,19 @@ ob_start();
 echo "
     <script type='text/javascript'>
         const team1 = {
-            name: '" . $myTeam['team_name'] . "',
-            formation: '" . $myTeam['formation'] . "',
+            name: '" . $home_team['team_name'] . "',
+            formation: '" . $home_team['formation'] . "',
             score: 0,
-            players: " . json_encode($myTeam['lineup']) . ",
-            bench: " . json_encode($myTeam['bench']) . ",
+            players: " . json_encode($home_team['lineup']) . ",
+            bench: " . json_encode($home_team['bench']) . ",
         }
 
         const team2 = {
-            name: '" . $myTeam['team_name'] . "',
-            formation: '" . $myTeam['formation'] . "',
+            name: '" . $away_team['team_name'] . "',
+            formation: '" . $away_team['formation'] . "',
             score: 0,
-            players: " . json_encode($myTeam['lineup']) . ",
-            bench: " . json_encode($myTeam['bench']) . ",
+            players: " . json_encode($away_team['lineup']) . ",
+            bench: " . json_encode($away_team['bench']) . ",
         }
 
         const positionGroups = " . json_encode($positionGroupsExtra) . ";

@@ -1,11 +1,13 @@
 <?php
 require_once DIR . '/controllers/FootballPlayerController.php';
+require_once DIR . '/controllers/FootballTeamController.php';
 
 class FootballLeagueService
 {
     private $pdo;
     private $user_id;
     private $footballPlayerController;
+    private $footballTeamController;
 
     public function __construct($pdo)
     {
@@ -13,6 +15,7 @@ class FootballLeagueService
         $this->pdo = $pdo;
         $this->user_id = $user_id;
         $this->footballPlayerController = new FootballPlayerController();
+        $this->footballTeamController = new FootballTeamController();
     }
 
     public function createLeague($name, $season, $start_date, $end_date, $win_amount)
@@ -122,6 +125,15 @@ class FootballLeagueService
         $stmt = $this->pdo->query($sql);
         $stmt->execute([':uuid' => $uuid, 'league_id' => $currLeagueId, ':team_id' => $myTeamId]);
 
-        return $stmt->fetch(PDO::FETCH_ASSOC);
+        $match = $stmt->fetch(PDO::FETCH_ASSOC);
+        if (!empty($match)) {
+            $team_home_id = $match['team_home_id'];
+            $team_away_id = $match['team_away_id'];
+            return [
+                'home' => $this->footballTeamController->getMyTeamInMatch($team_home_id),
+                'away' => $this->footballTeamController->getMyTeamInMatch($team_away_id),
+            ];
+        }
+        return null;
     }
 }

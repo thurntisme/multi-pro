@@ -69,11 +69,11 @@ class FootballTeamService
     }
 
     // Create a new code
-    public function createTeam($team_name, $system_user_id, $league_position = 1)
+    public function createTeam($team_name, $system_user_id, $league_position = 1, $formation = '442')
     {
-        $sql = "INSERT INTO football_team (team_name, manager_id, league_position) VALUES (:team_name, :manager_id, :league_position)";
+        $sql = "INSERT INTO football_team (team_name, manager_id, formation, league_position) VALUES (:team_name, :manager_id, :formation, :league_position)";
         $stmt = $this->pdo->prepare($sql);
-        $stmt->execute([':team_name' => $team_name, ':manager_id' => $system_user_id, ':league_position' => $league_position]);
+        $stmt->execute([':team_name' => $team_name, ':manager_id' => $system_user_id, ':formation' => $formation, ':league_position' => $league_position]);
 
         return $this->pdo->lastInsertId();
     }
@@ -91,16 +91,16 @@ class FootballTeamService
 
     // Delete a code
 
-    public function getTeamData()
+    public function getTeamData($teamId)
     {
-        $sql = "SELECT * FROM football_team WHERE manager_id = :manager_id";
+        $sql = "SELECT * FROM football_team WHERE id = :team_id";
         $stmt = $this->pdo->prepare($sql);
-        $stmt->execute([':manager_id' => $this->user_id]);
+        $stmt->execute([':team_id' => $teamId]);
 
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
-    // Get all codes
+    // Delete a code
 
     public function deleteCode($id)
     {
@@ -110,6 +110,8 @@ class FootballTeamService
 
         return $stmt->rowCount();
     }
+
+    // Get all codes
 
     public function getAllTeams()
     {
@@ -121,7 +123,7 @@ class FootballTeamService
 
     public function getTeamByUserId()
     {
-        $team = $this->getTeamData();
+        $team = $this->getMyTeamData();
         if (!empty($team)) {
             $players = array_map(function ($player) {
                 return $this->footballPlayerController->viewPlayer($player['id']);
@@ -131,6 +133,15 @@ class FootballTeamService
         return $team;
     }
 
+    public function getMyTeamData()
+    {
+        $sql = "SELECT * FROM football_team WHERE manager_id = :manager_id";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute([':manager_id' => $this->user_id]);
+
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+
     public function getTeamPlayers($team_id)
     {
         $sql = "SELECT * FROM football_player WHERE team_id = :team_id ORDER BY starting_order ASC";
@@ -138,5 +149,17 @@ class FootballTeamService
         $stmt->execute([':team_id' => $team_id]);
 
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function getTeamById($teamId)
+    {
+        $team = $this->getTeamData($teamId);
+        if (!empty($team)) {
+            $players = array_map(function ($player) {
+                return $this->footballPlayerController->viewPlayer($player['id']);
+            }, $this->getTeamPlayers($teamId));
+            $team['players'] = $players;
+        }
+        return $team;
     }
 }
