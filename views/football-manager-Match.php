@@ -3,8 +3,15 @@ $pageTitle = "Football Manager - Match";
 
 require_once DIR . '/functions/generate-player.php';
 require_once DIR . '/controllers/FootballTeamController.php';
+require_once DIR . '/controllers/FootballLeagueController.php';
 
 $footballTeamController = new FootballTeamController();
+$footballLeagueController = new FootballLeagueController();
+
+$match_uuid = $_GET['uuid'];
+$match = $footballLeagueController->getMatch($match_uuid);
+var_dump($match);
+die();
 
 $myTeam = $footballTeamController->getMyTeamInMatch();
 

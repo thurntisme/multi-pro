@@ -56,14 +56,24 @@ class FootballLeagueController
 
     public function getMySchedule()
     {
+        $schedule = $this->getCurrLeagueSchedule();
+        if (!empty($schedule)) {
+            $myTeamId = $this->myTeam['id'];
+            return array_filter($schedule, function ($sc) use ($myTeamId) {
+                return $sc['home']['id'] == $myTeamId || $sc['away']['id'] == $myTeamId;
+            })[0];
+        }
+        return null;
+    }
+
+    public function getCurrLeagueSchedule()
+    {
         if (!empty($this->myTeam)) {
             $myTeamId = $this->myTeam['id'];
             $myLeagueStand = $this->getMyLeagueStanding($myTeamId);
             $myStand = $myLeagueStand ? count($myLeagueStand) : 0;
             $schedule = $this->getLeagueSchedule();
-            return array_filter($schedule[$myStand], function ($sc) use ($myTeamId) {
-                return $sc['home']['id'] == $myTeamId || $sc['away']['id'] == $myTeamId;
-            })[0];
+            return $schedule[$myStand];
         }
         return null;
     }
@@ -109,5 +119,37 @@ class FootballLeagueController
         }
 
         return $rounds;
+    }
+
+    public function gameOn()
+    {
+        $schedule = $this->getCurrLeagueSchedule();
+        $currLeague = $this->getNewestLeague();
+        $myTeamId = $this->myTeam['id'];
+        if (!empty($schedule) && is_array($schedule) && !empty($currLeague)) {
+            $match_uuid = $this->footballLeagueService->createLeagueMatches($schedule, $currLeague['id'], $myTeamId);
+            if (!empty($match_uuid)) {
+                header("Location: " . home_url("football-manager/match?uuid=$match_uuid"));
+            } else {
+                $_SESSION['message_type'] = 'danger';
+                $_SESSION['message'] = "Failed to create match";
+                header("Location: " . home_url("football-manager"));
+            }
+        } else {
+            $_SESSION['message_type'] = 'danger';
+            $_SESSION['message'] = "Failed to create match";
+            header("Location: " . home_url("football-manager"));
+        }
+        exit;
+    }
+
+    public function getMatch($uuid)
+    {
+        $currLeague = $this->getNewestLeague();
+        $myTeamId = $this->myTeam['id'];
+        if (!empty($currLeague) && is_array($currLeague) && !empty($currLeague['id'])) {
+            return $this->footballLeagueService->getMatch($uuid, $currLeague['id'], $myTeamId);
+        }
+        return null;
     }
 }
