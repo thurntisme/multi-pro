@@ -6,7 +6,7 @@ return function (PDO $pdo) {
     $attributes = [
         'id INTEGER PRIMARY KEY AUTOINCREMENT',
         'task_id INTEGER NOT NULL',
-        "status TEXT CHECK( status IN ('revoked', 'completed') ) DEFAULT 'completed'",
+        "status TEXT DEFAULT 'completed'",
         'user_id INTEGER NOT NULL',
         'created_at DATETIME DEFAULT CURRENT_TIMESTAMP',
         'updated_at DATETIME DEFAULT CURRENT_TIMESTAMP',

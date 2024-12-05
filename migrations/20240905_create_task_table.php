@@ -8,7 +8,7 @@ return function (PDO $pdo) {
         'project_id INTEGER',
         'title TEXT NOT NULL',
         'description TEXT',
-        'status TEXT CHECK(status IN ("pending", "in_progress", "completed", "on_hold", "cancelled", "review", "reopened")) DEFAULT "pending"',
+        'status TEXT DEFAULT "pending"',
         'due_date DATE',
         'created_at DATETIME DEFAULT CURRENT_TIMESTAMP',
         'updated_at DATETIME DEFAULT CURRENT_TIMESTAMP',

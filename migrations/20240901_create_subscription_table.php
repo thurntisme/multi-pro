@@ -10,7 +10,7 @@ return function (PDO $pdo) {
         'amount REAL NOT NULL',
         'currency TEXT NOT NULL',
         'payment_date TEXT NOT NULL',
-        'payment_type TEXT NOT NULL CHECK(payment_type IN ("monthly", "yearly")) DEFAULT "monthly"',
+        'payment_type TEXT NOT NULL DEFAULT "monthly"',
         'created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP',
         'updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP',
         'user_id INTEGER NOT NULL',

@@ -12,10 +12,11 @@ try {
     }
 
     if ($_ENV['DB_DRIVER'] === 'mysql') {
+        $mysqlHost = $_ENV['MYSQL_HOST'];
         $mysqlDb = $_ENV['MYSQL_DATABASE'];
         $mysqlUser = $_ENV['MYSQL_USER'];
         $mysqlPass = $_ENV['MYSQL_PASSWORD'];
-        $pdo = new PDO("mysql:host=mysql;dbname=$mysqlDb;charset=utf8mb4", $mysqlUser, $mysqlPass);
+        $pdo = new PDO("mysql:host=$mysqlHost;dbname=$mysqlDb;charset=utf8mb4", $mysqlUser, $mysqlPass);
 
         $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     }
