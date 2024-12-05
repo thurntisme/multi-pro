@@ -169,7 +169,7 @@ class AuthenticationController
     public function getTokenData($token)
     {
         $tokenData = $this->authenticationService->getTokenData($token);
-        return $tokenData ? $tokenData : false;
+        return $tokenData ?? false;
     }
 
     public function listDevices()

@@ -72,12 +72,11 @@ class AuthenticationService
 
     public function getTokenData($token)
     {
-        $now = $_ENV['DB_DRIVER'] === 'mysql' ? 'NOW()' : 'datetime("now")';
-        $stmt = $this->pdo->prepare("SELECT * FROM tokens WHERE token = ? AND expires_at > $now");
-        $stmt->execute([$token]);
-        $tokenData = $stmt->fetch();
+        $timestamp = (new DateTime())->format('Y-m-d H:i:s');
 
-        return $tokenData;
+        $stmt = $this->pdo->prepare("SELECT * FROM tokens WHERE token = ? AND expires_at > ?");
+        $stmt->execute([$token, $timestamp]);
+        return $stmt->fetch();
     }
 
     // Get all devices
