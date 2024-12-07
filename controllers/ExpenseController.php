@@ -132,7 +132,7 @@ class ExpenseController
     public function getExpensesSQL($queryType = "result")
     {
         // Pagination parameters
-        $itemsPerPage = 10; // Number of results per page
+        $itemsPerPage = 6; // Number of results per page
         $page = isset($_GET['page']) ? (int)$_GET['page'] : 1; // Current page number
         $offset = ($page - 1) * $itemsPerPage; // Offset for LIMIT clause
 
@@ -164,11 +164,11 @@ class ExpenseController
         }
 
         // Sorting parameters (optional)
-        $sortColumn = $_GET['sort'] ?? 'updated_at';
+        $sortColumn = $_GET['sort'] ?? 'date_expense';
         $sortOrder = isset($_GET['order']) && in_array(strtoupper($_GET['order']), ['ASC', 'DESC']) ? strtoupper($_GET['order']) : 'DESC'; // Default to DESC
 
         // Add the ORDER BY clause dynamically
-        $sql .= " ORDER BY $sortColumn $sortOrder";
+        $sql .= " ORDER BY $sortColumn $sortOrder, updated_at DESC";
 
         if ($queryType === "result") {
             // Add pagination (LIMIT and OFFSET)
@@ -199,14 +199,109 @@ class ExpenseController
 
     function monthlyExpenses()
     {
-        $sql = "SELECT SUM(amount) AS total_expense
-            FROM expenses
-            WHERE YEAR(date_expense) = YEAR(CURRENT_DATE)
-            AND MONTH(date_expense) = MONTH(CURRENT_DATE);
-            AND user_id = :user_id";
-        $stmt = $this->pdo->prepare($sql);
-        $stmt->execute([':user_id' => $this->user_id]);
+        // Query for this month's expenses
+        $sqlThisMonth = "SELECT SUM(amount) AS total_expense
+                     FROM expenses
+                     WHERE YEAR(date_expense) = YEAR(CURRENT_DATE)
+                       AND MONTH(date_expense) = MONTH(CURRENT_DATE)
+                       AND user_id = :user_id";
+        $stmtThisMonth = $this->pdo->prepare($sqlThisMonth);
+        $stmtThisMonth->execute([':user_id' => $this->user_id]);
+        $thisMonthExpense = $stmtThisMonth->fetch(PDO::FETCH_ASSOC)['total_expense'] ?? 0;
 
-        return $stmt->fetch(PDO::FETCH_ASSOC);
+        // Query for last month's expenses
+        $sqlLastMonth = "SELECT SUM(amount) AS total_expense
+                     FROM expenses
+                     WHERE YEAR(date_expense) = YEAR(CURRENT_DATE - INTERVAL 1 MONTH)
+                       AND MONTH(date_expense) = MONTH(CURRENT_DATE - INTERVAL 1 MONTH)
+                       AND user_id = :user_id";
+        $stmtLastMonth = $this->pdo->prepare($sqlLastMonth);
+        $stmtLastMonth->execute([':user_id' => $this->user_id]);
+        $lastMonthExpense = $stmtLastMonth->fetch(PDO::FETCH_ASSOC)['total_expense'] ?? 0;
+
+        // Calculate percentage change
+        if ($lastMonthExpense == 0) {
+            // Avoid division by zero
+            if ($thisMonthExpense > 0) {
+                return [
+                    'percentageChange' => 100,
+                    'expense' => $thisMonthExpense,
+                    'lastExpense' => 0,
+                    'direction' => 'up'
+                ];
+            } else {
+                return [
+                    'percentageChange' => 0,
+                    'expense' => $thisMonthExpense,
+                    'lastExpense' => 0,
+                    'direction' => 'no change'
+                ];
+            }
+        }
+
+        $percentageChange = (($thisMonthExpense - $lastMonthExpense) / $lastMonthExpense) * 100;
+
+        // Determine direction
+        $direction = $percentageChange > 0 ? 'up' : ($percentageChange < 0 ? 'down' : 'no change');
+
+        return [
+            'expense' => $thisMonthExpense,
+            'lastExpense' => $lastMonthExpense,
+            'percentageChange' => round($percentageChange, 2),
+            'direction' => $direction
+        ];
+    }
+
+    function dailyExpenses()
+    {
+        // Query for today's expenses
+        $sqlToday = "SELECT SUM(amount) AS total_expense
+                 FROM expenses
+                 WHERE DATE(date_expense) = CURRENT_DATE
+                   AND user_id = :user_id";
+        $stmtToday = $this->pdo->prepare($sqlToday);
+        $stmtToday->execute([':user_id' => $this->user_id]);
+        $todayExpense = $stmtToday->fetch(PDO::FETCH_ASSOC)['total_expense'] ?? 0;
+
+        // Query for yesterday's expenses
+        $sqlYesterday = "SELECT SUM(amount) AS total_expense
+                     FROM expenses
+                     WHERE DATE(date_expense) = CURRENT_DATE - INTERVAL 1 DAY
+                       AND user_id = :user_id";
+        $stmtYesterday = $this->pdo->prepare($sqlYesterday);
+        $stmtYesterday->execute([':user_id' => $this->user_id]);
+        $yesterdayExpense = $stmtYesterday->fetch(PDO::FETCH_ASSOC)['total_expense'] ?? 0;
+
+        // Calculate percentage change
+        if ($yesterdayExpense == 0) {
+            // Avoid division by zero
+            if ($todayExpense > 0) {
+                return [
+                    'expense' => $todayExpense,
+                    'lastExpense' => 0,
+                    'percentageChange' => 100,
+                    'direction' => 'up'
+                ];
+            } else {
+                return [
+                    'expense' => $todayExpense,
+                    'lastExpense' => 0,
+                    'percentageChange' => 0,
+                    'direction' => 'no change'
+                ];
+            }
+        }
+
+        $percentageChange = (($todayExpense - $yesterdayExpense) / $yesterdayExpense) * 100;
+
+        // Determine direction
+        $direction = $percentageChange > 0 ? 'up' : ($percentageChange < 0 ? 'down' : 'no change');
+
+        return [
+            'expense' => $todayExpense,
+            'lastExpense' => $yesterdayExpense,
+            'percentageChange' => round($percentageChange, 2),
+            'direction' => $direction
+        ];
     }
 }

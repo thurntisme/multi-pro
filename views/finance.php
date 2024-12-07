@@ -4,12 +4,22 @@ require_once 'controllers/ExpenseController.php';
 
 $pageTitle = "Expenses";
 
-$totalExpenses = 6350000;
+$total_expense = 6350000;
 
 $expenseController = new ExpenseController();
 $monthlyExpenses = $expenseController->monthlyExpenses();
-$total_expense = $monthlyExpenses['total_expense'] ?? 0;
+$dailyExpenses = $expenseController->dailyExpenses();
 $list = $expenseController->listExpenses();
+
+$percentageChange = $monthlyExpenses['lastExpense'] > 0 ? (($monthlyExpenses['expense'] - $monthlyExpenses['lastExpense']) / $monthlyExpenses['lastExpense']) * 100 : 100;
+$direction = $percentageChange > 0 ? 'up' : ($percentageChange < 0 ? 'down' : 'no change');
+
+$balance = [
+    'expense' => $total_expense - $monthlyExpenses['expense'],
+    'lastExpense' => $total_expense - $monthlyExpenses['lastExpense'],
+    'percentageChange' => $percentageChange,
+    'direction' => $direction
+];
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_POST['action_name'])) {
@@ -23,6 +33,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $expenseController->deleteExpense();
         }
     }
+}
+
+function renderPercentage($item)
+{
+    $text_color = 'muted';
+    $icon = ' d-none ';
+    if ($item['direction'] !== 'no change') {
+        $icon = $item['direction'];
+        if ($item['direction'] !== 'up') {
+            $text_color = 'success';
+        } else {
+            $text_color = 'danger';
+        }
+    }
+
+    echo '<span class="badge bg-light text-' . $text_color . ' mb-0"><i class="ri-arrow-' . $icon . '-line align-middle"></i> ' . $item['percentageChange'] . ' %</span>';
 }
 
 ob_start();
@@ -59,7 +85,7 @@ include_once DIR . '/components/alert.php';
                                     <label for="job-type-Input" class="form-label">Category<span
                                                 class="text-danger">*</span></label>
                                     <select class="form-control" name="category" required data-choices
-                                            data-choices-sorting-false data-choices-search-false>
+                                            data-choices-sorting-false>
                                         <?php foreach ($finance_categories as $category): ?>
                                             <option value="<?php echo htmlspecialchars($category['slug']); ?>" <?= $category['slug'] === 'other' ? 'selected' : '' ?>>
                                                 <?php echo htmlspecialchars($category['icon'] . '  ' . $category['title']); ?>
@@ -98,7 +124,7 @@ include_once DIR . '/components/alert.php';
                                     <label for="tags-field" class="form-label">Tags</label>
                                     <input class="form-control" id="tags-field" name="tags" data-choices
                                            data-choices-removeItem multiple
-                                           data-choices-text-unique-true type="text" required/>
+                                           data-choices-text-unique-true type="text"/>
                                 </div>
                             </div>
 
@@ -116,20 +142,98 @@ include_once DIR . '/components/alert.php';
             </div>
         </div>
         <div class="col-md-9">
-            <div class="card" id="tasksList">
-                <div class="card-header border-0">
-                    <div class="d-flex align-items-center justify-content-between">
-                        <h5 class="card-title mb-0 text-muted">Max Budget: <?= convertAmount($totalExpenses); ?>
-                            vnd</h5>
-                        <h5 class="card-title mb-0 text-muted">Monthly
-                            Expenses (<?= date('Y/m') . '): ' . convertAmount($total_expense); ?>
-                            vnd</h5>
-                        <h5 class="card-title mb-0">Monthly
-                            Remaining: <?= convertAmount($totalExpenses - $total_expense); ?>
-                            vnd</h5>
+            <div class="row">
+                <div class="col-xl-3 col-md-6">
+                    <!-- card -->
+                    <div class="card card-animate card-height-100">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center">
+                                <div class="flex-grow-1 overflow-hidden">
+                                    <p class="text-uppercase fw-medium text-muted text-truncate mb-0"> Total
+                                        Budget</p>
+                                </div>
+                                <div class="flex-shrink-0">
+                                    <h5 class="text-success fs-14 mb-0">
+                                        <i class="ri-arrow-right-up-line fs-13 align-middle"></i> +100 %
+                                    </h5>
+                                </div>
+                            </div>
+                            <div class="d-flex align-items-end justify-content-between mt-4">
+                                <div>
+                                    <h4 class="fs-22 fw-semibold ff-secondary mb-4"><?= convertAmount($total_expense); ?>
+                                        vnd</h4>
+                                    <a href="" class="text-decoration-underline" data-bs-toggle="modal"
+                                       data-bs-target="#budgetModal">View Budget Detail</a>
+                                </div>
+                                <div class="avatar-sm flex-shrink-0">
+                                                        <span class="avatar-title bg-success-subtle rounded fs-3">
+                                                            <i class="bx bx-dollar-circle text-success"></i>
+                                                        </span>
+                                </div>
+                            </div>
+                        </div><!-- end card body -->
+                    </div><!-- end card -->
+                </div><!-- end col -->
+
+                <div class="col-xl-3 col-md-6">
+                    <div class="card card-animate card-height-100">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <p class="fw-medium text-muted mb-0">Monthly Expense</p>
+                                    <h2 class="mt-3 ff-secondary fw-semibold fs-22"><?= convertAmount($monthlyExpenses['expense']); ?>
+                                        vnd
+                                    </h2><?php if (!empty($monthlyExpenses['lastExpense']) && $monthlyExpenses['lastExpense'] > 0) { ?>
+                                        <span class="text-muted fs-12">/ <?= convertAmount($monthlyExpenses['lastExpense']); ?> vnd</span>
+                                    <?php } ?>
+                                    <p class="mb-0 mt-2 text-muted"><?= renderPercentage($monthlyExpenses) ?>
+                                        vs. previous month</p>
+                                </div>
+                            </div>
+                        </div><!-- end card body -->
                     </div>
-                </div>
-                <div class="card-body border border-dashed border-end-0 border-start-0">
+                </div><!-- end col -->
+
+                <div class="col-xl-3 col-md-6">
+                    <div class="card card-animate card-height-100">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <p class="fw-medium text-muted mb-0">Daily Expense</p>
+                                    <h2 class="mt-3 ff-secondary fw-semibold fs-22"><?= convertAmount($dailyExpenses['expense']); ?>
+                                        vnd</h2>
+                                    <?php if (!empty($dailyExpenses['lastExpense']) && $dailyExpenses['lastExpense'] > 0) { ?>
+                                        <span class="text-muted fs-12">/ <?= convertAmount($dailyExpenses['lastExpense']); ?> vnd</span>
+                                    <?php } ?>
+                                    <p class="mb-0 mt-1 text-muted"><?= renderPercentage($dailyExpenses) ?>
+                                        vs. yesterday</p>
+                                </div>
+                            </div>
+                        </div><!-- end card body -->
+                    </div>
+                </div><!-- end col -->
+
+                <div class="col-xl-3 col-md-6">
+                    <div class="card card-animate card-height-100">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <p class="fw-medium text-muted mb-0">My Balance</p>
+                                    <h2 class="mt-3 ff-secondary fw-semibold fs-22"><?= convertAmount($balance['expense']); ?>
+                                        vnd</h2>
+                                    <?php if (!empty($balance['lastExpense']) && $balance['lastExpense'] > 0) { ?>
+                                        <span class="text-muted fs-12">/ <?= convertAmount($balance['lastExpense']); ?> vnd</span>
+                                    <?php } ?>
+                                    <p class="mb-0 mt-1 text-muted"><?= renderPercentage($balance) ?>
+                                        vs. previous month</p>
+                                </div>
+                            </div>
+                        </div><!-- end card body -->
+                    </div>
+                </div><!-- end col -->
+            </div>
+            <div class="card">
+                <div class="card-body border border-dashed border-end-0 border-start-0 border-top-0">
                     <form method="get" action="<?= $_SERVER['REQUEST_URI'] ?>">
                         <div class="row g-3">
                             <div class="col-xxl-3 col-sm-12">
@@ -148,7 +252,7 @@ include_once DIR . '/components/alert.php';
                             </div>
                             <div class="col-xxl-3 col-sm-4">
                                 <div class="input-light">
-                                    <select class="form-control" data-choices data-choices-search-false
+                                    <select class="form-control" data-choices
                                             name="category">
                                         <option value="">Select Category</option>
                                         <?php
@@ -169,7 +273,7 @@ include_once DIR . '/components/alert.php';
                                             class="ri-equalizer-fill me-1 align-bottom"></i>
                                     Filters
                                 </button>
-                                <a href="<?= home_url("expense") ?>" class="btn btn-danger ms-1"><i
+                                <a href="<?= home_url("finance") ?>" class="btn btn-danger ms-1"><i
                                             class="ri-delete-bin-2-fill me-1 align-bottom"></i>Reset</a>
                             </div>
                             <!--end col-->
@@ -227,7 +331,7 @@ include_once DIR . '/components/alert.php';
                         </div>
                     </div>
                     <?php
-                    includeFileWithVariables('components/pagination.php', array("count" => $list['count']));
+                    includeFileWithVariables('components/pagination.php', array("count" => $list['count'], 'perPage' => 6));
                     ?>
                 </div>
                 <!--end card-body-->
@@ -235,6 +339,43 @@ include_once DIR . '/components/alert.php';
         </div>
     </div>
 
+    <!-- Default Modals -->
+    <div id="budgetModal" class="modal fade" tabindex="-1" aria-labelledby="myModalLabel" aria-hidden="true"
+         style="display: none;">
+        <div class="modal-dialog modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="myModalLabel">Budget Detail</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- Striped Rows -->
+                    <table class="table table-striped">
+                        <thead>
+                        <tr>
+                            <th scope="col">Id</th>
+                            <th scope="col">Title</th>
+                            <th scope="col" class="text-end">Amount</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <?php foreach ($finance_categories as $index => $item) { ?>
+                            <tr>
+                                <td><?= $index + 1 ?></td>
+                                <td><?= $item['icon'] . '&nbsp;&nbsp;' . $item['title'] ?></td>
+                                <td class="text-end"><?= convertAmount($item['amount']) ?> vnd</td>
+                            </tr>
+                        <?php } ?>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="modal-footer d-flex justify-content-center">
+                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
+                </div>
+
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
 
 <?php
 $pageContent = ob_get_clean();
