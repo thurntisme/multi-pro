@@ -367,3 +367,61 @@ $player_cards = [
     'demand'
 ];
 define('DEFAULT_PLAYER_CARD', $player_cards);
+
+$finance_categories = [
+    'rent' => [
+        'slug' => 'rent',
+        'icon' => '🏠',  // House icon, you can change it to any other relevant icon
+        'title' => 'Rent'
+    ],
+    'utilities' => [
+        'slug' => 'utilities',
+        'icon' => '💡',  // Light bulb for utilities (electricity, water, etc.)
+        'title' => 'Utilities'
+    ],
+    'groceries' => [
+        'slug' => 'groceries',
+        'icon' => '🥕',  // Carrot icon for groceries
+        'title' => 'Groceries'
+    ],
+    'transportation' => [
+        'slug' => 'transportation',
+        'icon' => '🚗',  // Car icon for transportation
+        'title' => 'Transportation'
+    ],
+    'healthcare' => [
+        'slug' => 'healthcare',
+        'icon' => '💊',  // Pill icon for healthcare
+        'title' => 'Healthcare'
+    ],
+    'insurance' => [
+        'slug' => 'insurance',
+        'icon' => '🛡️',  // Shield icon for insurance
+        'title' => 'Insurance'
+    ],
+    'entertainment' => [
+        'slug' => 'entertainment',
+        'icon' => '🎮',  // Video game controller for entertainment
+        'title' => 'Entertainment'
+    ],
+    'dining_out' => [
+        'slug' => 'dining_out',
+        'icon' => '🍽️',  // Plate with utensils for dining out
+        'title' => 'Dining Out'
+    ],
+    'subscriptions' => [
+        'slug' => 'subscriptions',
+        'icon' => '📅',  // Calendar icon for subscriptions
+        'title' => 'Subscriptions'
+    ],
+    'loans_and_debts' => [
+        'slug' => 'loans_and_debts',
+        'icon' => '💳',  // Credit card icon for loans and debts
+        'title' => 'Loans and Debts'
+    ],
+    'other' => [
+        'slug' => 'other',
+        'icon' => '❓',  // Question mark icon for 'Other' category
+        'title' => 'Other'
+    ]
+];

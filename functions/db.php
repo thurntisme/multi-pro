@@ -6,7 +6,6 @@ function convertSqliteToMysql($attributes): array
         $typeMapping = [
             'INTEGER PRIMARY KEY AUTOINCREMENT' => 'INT AUTO_INCREMENT PRIMARY KEY',
             'INTEGER' => 'INT',
-            'TEXT' => 'VARCHAR(255)',
             'DATETIME DEFAULT CURRENT_TIMESTAMP' => 'DATETIME DEFAULT CURRENT_TIMESTAMP',
         ];
         foreach ($typeMapping as $sqliteType => $mysqlType) {

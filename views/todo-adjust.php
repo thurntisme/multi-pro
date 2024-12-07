@@ -171,8 +171,8 @@ ob_start();
 
                         <div>
                             <label for="choices-text-input" class="form-label">Tags</label>
-                            <input class="form-control" id="choices-text-input" data-choices
-                                   data-choices-limit="Required Limit" placeholder="Enter Skills"
+                            <input class="form-control" id="choices-text-input" data-choices data-choices-removeItem
+                                   multiple data-choices-limit="Required Limit" placeholder="Enter Skills"
                                    type="text"
                                    name="tags"
                                    value="<?= $postData['tags'] ?? '' ?>"/>

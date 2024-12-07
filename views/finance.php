@@ -1,182 +1,242 @@
 <?php
-$pageTitle = "Finance";
-
-require_once 'controllers/BudgetController.php';
+global $priorities, $status, $finance_categories;
 require_once 'controllers/ExpenseController.php';
-require_once 'controllers/IncomeController.php';
-$budgetController = new BudgetController();
+
+$pageTitle = "Expenses";
+
+$totalExpenses = 6350000;
+
 $expenseController = new ExpenseController();
-$incomeController = new IncomeController();
+$monthlyExpenses = $expenseController->monthlyExpenses();
+$total_expense = $monthlyExpenses['total_expense'] ?? 0;
+$list = $expenseController->listExpenses();
 
-// Get the current month and year
-$currentMonth = date('n');  // 'n' gives the numeric month without leading zero (1-12)
-$currentYear = date('Y');   // 'Y' gives the full year (e.g., 2024)
-
-// Sample data for budget, income, and expenses
-$budget = $budgetController->getTotalBudget(); // Total budget for the month
-$totalDaysInMonth = cal_days_in_month(CAL_GREGORIAN, $currentMonth, $currentYear);;
-$budgetPerDay = $budget / $totalDaysInMonth;
-
-$expensesLast7Days = $expenseController->listExpensesLast7Days();
-$incomesLast7Days = $incomeController->listIncomesLast7Days();
-
-$income = [
-  ["source" => "Salary", "amount" => 1500],
-  ["source" => "Freelance", "amount" => 300]
-];
-$expenses = [
-  ["title" => "Groceries", "amount" => 150],
-  ["title" => "Electricity Bill", "amount" => 75],
-  ["title" => "Car Maintenance", "amount" => 300],
-  ["title" => "Dining Out", "amount" => 50]
-];
-
-// Calculate total income and total expenses
-$totalIncome = array_sum(array_column($income, 'amount'));
-$totalExpenses = array_sum(array_column($expenses, 'amount'));
-
-// Calculate remaining budget
-$remainingBudget = $budget + $totalIncome - $totalExpenses;
-
-// Prepare data for the chart
-$labels = ['Average Budget', 'Income', 'Expenses'];
-$data = [$budget, $totalIncome, $totalExpenses];
-
-// Calculate total income and total expenses for the week
-$totalWeeklyIncome = array_sum(array_column($incomesLast7Days, 'amount'));
-$totalWeeklyExpenses = array_sum(array_column($expensesLast7Days, 'amount'));
-
-// Prepare data for the chart
-$labels = [];
-$incomeData = [];
-$expensesData = [];
-
-// Loop through the week (assuming week starts on Sunday)
-for ($i = 6; $i >= 0; $i--) {
-  $date = date('Y-m-d', strtotime("-$i days"));
-  $labels[] = date('D', strtotime($date)); // Add day of the week as label
-
-  // Find income for the day
-  $incomeForDay = array_sum(array_column(array_filter($incomesLast7Days, fn($entry) => $entry && date('Y-m-d', strtotime($entry['created_at'])) == $date), 'amount'));
-
-  $incomeData[] = $incomeForDay;
-
-  // Find expenses for the day
-  $expensesForDay = array_sum(array_column(array_filter($expensesLast7Days, fn($entry) => $entry && date('Y-m-d', strtotime($entry['created_at'])) == $date), 'amount'));
-  $expensesData[] = $expensesForDay;
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    if (isset($_POST['action_name'])) {
+        if ($_POST['action_name'] === 'delete_record' && isset($_GET['id'])) {
+            $expenseController->deleteExpense();
+        }
+        if ($_POST['action_name'] === 'new_record') {
+            $expenseController->createExpense();
+        }
+        if ($_POST['action_name'] === 'delete_record') {
+            $expenseController->deleteExpense();
+        }
+    }
 }
 
-// Reverse the arrays to show the week starting from the first day
-$labels = array_reverse($labels);
-$incomeData = array_reverse($incomeData);
-$expensesData = array_reverse($expensesData);
-
 ob_start();
+?>
 
-include_once DIR . "/components/finance-top.php";
+<?php
+include_once DIR . '/components/alert.php';
+?>
 
-echo '<div class="mt-5">
-    <div class="row mt-4">
+    <div class="row">
+        <div class="col-md-12">
+            <?php
+            include_once DIR . '/components/alert.php';
+            ?>
+        </div>
         <div class="col-md-3">
-          <div class="card text-white bg-info mb-3 border-info">
-              <div class="card-header"><span class="text-dark">Budget:</span> <span class="text-dark">' . number_format($budget) . ' vnd</span></div>
-          </div>
-          <div class="card text-white bg-success mb-3 border-success">
-              <div class="card-header"><span class="text-dark">Income:</span> <span class="text-dark">' . number_format($totalIncome) . ' vnd</span></div>
-          </div>
-          <div class="card text-white bg-danger mb-3 border-danger">
-              <div class="card-header"><span class="text-dark">Expense:</span> <span class="text-dark">' . number_format($totalExpenses) . ' vnd</span></div>
-          </div>
-          <div class="card text-white bg-dark mb-3">
-              <div class="card-header font-weight-bold"><span class="text-dark">Budget:</span> <span class="text-dark">' . number_format($remainingBudget) . ' vnd</span></div>
-          </div>
+            <div class="card">
+                <form method="POST" action="<?= $_SERVER['REQUEST_URI'] ?>">
+                    <div class="card-header">
+                        <h5 class="card-title mb-0">Create Finance</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row g-4">
+                            <input type="hidden" name="action_name" value="new_record">
+                            <div class="col-lg-12">
+                                <div>
+                                    <label for="title-Input" class="form-label">Title <span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control" id="title-Input" name="title"
+                                           placeholder="Enter title" required/>
+                                </div>
+                            </div>
+                            <div class="col-lg-12">
+                                <div>
+                                    <label for="job-type-Input" class="form-label">Category<span
+                                                class="text-danger">*</span></label>
+                                    <select class="form-control" name="category" required data-choices
+                                            data-choices-sorting-false data-choices-search-false>
+                                        <?php foreach ($finance_categories as $category): ?>
+                                            <option value="<?php echo htmlspecialchars($category['slug']); ?>" <?= $category['slug'] === 'other' ? 'selected' : '' ?>>
+                                                <?php echo htmlspecialchars($category['icon'] . '  ' . $category['title']); ?>
+                                            </option>
+                                        <?php endforeach; ?>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-lg-12">
+                                <div>
+                                    <label for="date-expense-Input" class="form-label">Date of Expense <span
+                                                class="text-danger">*</span></label>
+                                    <input type="text" class="form-control" id="date-expense-Input"
+                                           data-provider="flatpickr" data-date-format="Y-m-d" placeholder="Select date"
+                                           name="date_expense" value="<?= date('Y-m-d') ?>"
+                                           required/>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div>
+                                    <label for="amount-Input" class="form-label">Amount <span
+                                                class="text-danger">*</span></label>
+                                    <input type="number" class="form-control" id="amount-Input" name="amount"
+                                           placeholder="Enter start salary" required/>
+                                </div>
+                            </div>
+                            <div class="col-lg-12">
+                                <div>
+                                    <label for="description-field" class="form-label">Description</label>
+                                    <textarea class="form-control" name="description" rows="3"
+                                              placeholder="Enter description"></textarea>
+                                </div>
+                            </div>
+                            <div class="col-lg-12">
+                                <div>
+                                    <label for="tags-field" class="form-label">Tags</label>
+                                    <input class="form-control" id="tags-field" name="tags" data-choices
+                                           data-choices-removeItem multiple
+                                           data-choices-text-unique-true type="text" required/>
+                                </div>
+                            </div>
+
+                            <div class="col-lg-12">
+                                <div class="hstack justify-content-center gap-2">
+                                    <button type="reset" class="btn btn-ghost-danger"><i
+                                                class="ri-close-line align-bottom"></i> Reset
+                                    </button>
+                                    <button type="submit" class="btn btn-primary">Add Finance</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
         </div>
         <div class="col-md-9">
-          <div class="card card-height-100">
-              <div class="card-header align-items-center d-flex">
-                  <h4 class="card-title mb-0 flex-grow-1">Balance Overview</h4>
-                  <div class="flex-shrink-0">
-                      <div class="dropdown card-header-dropdown">
-                          <a class="text-reset dropdown-btn" href="#" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                              <span class="fw-semibold text-uppercase fs-12">Sort by: </span><span class="text-muted">Current Year<i class="mdi mdi-chevron-down ms-1"></i></span>
-                          </a>
-                          <div class="dropdown-menu dropdown-menu-end">
-                              <a class="dropdown-item" href="#">Today</a>
-                              <a class="dropdown-item" href="#">Last Week</a>
-                              <a class="dropdown-item" href="#">Last Month</a>
-                              <a class="dropdown-item" href="#">Current Year</a>
-                          </div>
-                      </div>
-                  </div>
-              </div><!-- end card header -->
-              <div class="card-body px-0">
-                  <ul class="list-inline main-chart text-center mb-0">
-                      <li class="list-inline-item chart-border-left me-0 border-0">
-                          <h4 class="text-primary">$584k <span class="text-muted d-inline-block fs-13 align-middle ms-2">Revenue</span></h4>
-                      </li>
-                      <li class="list-inline-item chart-border-left me-0">
-                          <h4>$497k<span class="text-muted d-inline-block fs-13 align-middle ms-2">Expenses</span>
-                          </h4>
-                      </li>
-                      <li class="list-inline-item chart-border-left me-0">
-                          <h4><span data-plugin="counterup">3.6</span>%<span class="text-muted d-inline-block fs-13 align-middle ms-2">Profit Ratio</span></h4>
-                      </li>
-                  </ul>
-
-                  <div id="revenue-expenses-charts" class="apex-charts" dir="ltr"></div>
-              </div>
-          </div><!-- end card -->
+            <div class="card" id="tasksList">
+                <div class="card-header border-0">
+                    <div class="d-flex align-items-center justify-content-between">
+                        <h5 class="card-title mb-0 text-muted">Max Budget: <?= convertAmount($totalExpenses); ?>
+                            vnd</h5>
+                        <h5 class="card-title mb-0 text-muted">Monthly
+                            Expenses (<?= date('Y/m') . '): ' . convertAmount($total_expense); ?>
+                            vnd</h5>
+                        <h5 class="card-title mb-0">Monthly
+                            Remaining: <?= convertAmount($totalExpenses - $total_expense); ?>
+                            vnd</h5>
+                    </div>
+                </div>
+                <div class="card-body border border-dashed border-end-0 border-start-0">
+                    <form method="get" action="<?= $_SERVER['REQUEST_URI'] ?>">
+                        <div class="row g-3">
+                            <div class="col-xxl-3 col-sm-12">
+                                <div class="search-box">
+                                    <input type="text" name="s" class="form-control search bg-light border-light"
+                                           placeholder="Search for expenses or something..."
+                                           value="<?= $_GET['s'] ?? '' ?>">
+                                    <i class="ri-search-line search-icon"></i>
+                                </div>
+                            </div>
+                            <!--end col-->
+                            <div class="col-xxl-3 col-sm-4">
+                                <input type="text" class="form-control bg-light border-light" name="date_expense"
+                                       data-provider="flatpickr" data-date-format="Y-m-d" data-range-date="true"
+                                       placeholder="Select date range" value="<?= $_GET['date_expense'] ?? '' ?>">
+                            </div>
+                            <div class="col-xxl-3 col-sm-4">
+                                <div class="input-light">
+                                    <select class="form-control" data-choices data-choices-search-false
+                                            name="category">
+                                        <option value="">Select Category</option>
+                                        <?php
+                                        foreach ($finance_categories as $category):
+                                            $selected = (!empty($_GET['category']) ? $category['slug'] === $_GET['category'] : $category['slug'] === '') ? 'selected' : '';
+                                            ?>
+                                            <option value="<?php echo htmlspecialchars($category['slug']); ?>" <?= $selected ?>>
+                                                <?php echo htmlspecialchars($category['icon'] . '  ' . $category['title']); ?>
+                                            </option>
+                                        <?php endforeach; ?>
+                                        ?>
+                                    </select>
+                                </div>
+                            </div>
+                            <!--end col-->
+                            <div class="col-xxl-3 col-sm-4 d-flex">
+                                <button type="submit" class="btn btn-primary"><i
+                                            class="ri-equalizer-fill me-1 align-bottom"></i>
+                                    Filters
+                                </button>
+                                <a href="<?= home_url("expense") ?>" class="btn btn-danger ms-1"><i
+                                            class="ri-delete-bin-2-fill me-1 align-bottom"></i>Reset</a>
+                            </div>
+                            <!--end col-->
+                        </div>
+                        <!--end row-->
+                    </form>
+                </div>
+                <!--end card-body-->
+                <div class="card-body">
+                    <div class="table-responsive table-card mb-4">
+                        <table class="table align-middle table-nowrap mb-0" id="expensesTable">
+                            <thead class="table-light text-muted">
+                            <tr>
+                                <th>Title</th>
+                                <th>Description</th>
+                                <th class="text-center">Category</th>
+                                <th class="text-center">Amount</th>
+                                <th class="text-center">Date of Expense</th>
+                                <th class="text-center">Tags</th>
+                                <th></th>
+                            </tr>
+                            </thead>
+                            <tbody class="list form-check-all">
+                            <?php if (count($list['list']) > 0) {
+                                foreach ($list['list'] as $item) { ?>
+                                    <tr>
+                                        <td><?= $item['title'] ?></td>
+                                        <td><?= $item['description'] ?></td>
+                                        <td class="text-center"><?= $item['category'] ?></td>
+                                        <td class="text-center"><?= convertAmount($item['amount']) ?></td>
+                                        <td class="text-center"><?= $commonController->convertDate($item['date_expense']) ?></td>
+                                        <td class="text-center"><?= $item['tags'] ?></td>
+                                        <td class="text-center">
+                                            <form method="POST" action="<?= $_SERVER['REQUEST_URI'] ?>">
+                                                <input type="hidden" name="action_name" value="delete_record">
+                                                <input type="hidden" name="expense_id" value="<?= $item['id'] ?>">
+                                                <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                <?php }
+                            } ?>
+                            </tbody>
+                        </table>
+                        <!--end table-->
+                        <div class="noresult" style="display: none">
+                            <div class="text-center">
+                                <lord-icon src="https://cdn.lordicon.com/msoeawqm.json" trigger="loop"
+                                           colors="primary:#121331,secondary:#08a88a"
+                                           style="width:75px;height:75px"></lord-icon>
+                                <h5 class="mt-2">Sorry! No Result Found</h5>
+                                <p class="text-muted mb-0">Weve searched more than 200k+ expenses We did not find any
+                                    expenses for you search.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <?php
+                    includeFileWithVariables('components/pagination.php', array("count" => $list['count']));
+                    ?>
+                </div>
+                <!--end card-body-->
+            </div>
         </div>
     </div>
-</div>';
 
+
+<?php
 $pageContent = ob_get_clean();
-
-ob_start();
-echo '<!-- Chart.js Library -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>';
-$additionCss = ob_get_clean();
-
-ob_start();
-echo '
-    <!-- apexcharts -->
-    <script src="' . home_url("/assets/libs/apexcharts/apexcharts.min.js") . '"></script>
-
-<script type="text/javascript">
-      // Data for the chart
-    const labels = ' . json_encode($labels) . ';
-    const incomeData = ' . json_encode($incomeData) . ';
-    const expensesData = ' . json_encode($expensesData) . ';
-    const budget = ' . $budget . ';
-
-    const data = {
-        labels: labels,
-        datasets: [
-            {
-                label: "Average Budget",
-                data: [' . $budgetPerDay . ', ' . $budgetPerDay . ',' . $budgetPerDay . ',' . $budgetPerDay . ',' . $budgetPerDay . ',' . $budgetPerDay . ',' . $budgetPerDay . ',], // Show budget only on first label
-                borderColor: "#36b9cc",
-                fill: false,
-            },
-            {
-                label: "Income",
-                data: ' . json_encode($incomeData) . ', // Show income only on second label
-                borderColor: "#1cc88a",
-                fill: false,
-            },
-            {
-                label: "Expenses",
-                data: ' . json_encode($expensesData) . ', // Show expenses only on third label
-                borderColor: "#e74a3b",
-                fill: false,
-            }
-        ]
-    };
-  </script>
-
-    <!-- Dashboard init -->
-  <script src="' . home_url("/assets/js/pages/finance.js") . '" type="text/javascript"></script>
-  ';
-$additionJs = ob_get_clean();
 
 include 'layout.php';

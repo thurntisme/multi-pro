@@ -138,10 +138,11 @@ class TodoController
             $sql .= " AND status = :status";
         }
 
-        $date_array = explode('to', $due_date);
-        $date_array = array_map('trim', $date_array);
-        list($startDate, $endDate) = $date_array;
         if ($due_date !== '') {
+            $date_array = explode('to', $due_date);
+            $date_array = array_map('trim', $date_array);
+            list($startDate, $endDate) = $date_array;
+            $endDate = $endDate ?? $startDate;
             $sql .= " AND due_date BETWEEN :start_date AND :end_date";
         }
 
