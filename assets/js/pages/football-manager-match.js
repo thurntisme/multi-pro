@@ -24,7 +24,6 @@ const LCM = {posName: "CM", x: (width * 30) / pitchX, y: height / 3};
 const RCM = {posName: "CM", x: (width * 30) / pitchX, y: (height * 2) / 3};
 const LM = {posName: "LM", x: (width * 30) / pitchX, y: height / 6};
 const RM = {posName: "RM", x: (width * 30) / pitchX, y: (height * 5) / 6};
-const LF = {posName: "LF", x: (width * 45) / pitchX, y: (height * 3) / 8};
 const RF = {posName: "RF", x: (width * 45) / pitchX, y: (height * 5) / 8};
 
 // Player Positions for the 4-3-3 Formation
@@ -51,7 +50,7 @@ const RM_3_5_2 = {
     x: (width * 36) / pitchX,
     y: (height * 5) / 6,
 };
-const AMC_3_5_2 = {posName: "AMC", x: (width * 36) / pitchX, y: height / 2};
+const CAM_3_5_2 = {posName: "CAM", x: (width * 36) / pitchX, y: height / 2};
 const CDM1_4_2_3_1 = {
     posName: "DM",
     x: (width * 25) / pitchX,
@@ -62,7 +61,7 @@ const CDM2_4_2_3_1 = {
     x: (width * 25) / pitchX,
     y: (height * 2) / 3,
 };
-const AMC = {posName: "AMC", x: (width * 35) / pitchX, y: height / 2};
+const CAM = {posName: "CAM", x: (width * 35) / pitchX, y: height / 2};
 const LW_4_2_3_1 = {posName: "LW", x: (width * 40) / pitchX, y: height / 4};
 const RW_4_2_3_1 = {
     posName: "RW",
@@ -76,18 +75,12 @@ const RCM_4_1_4_1 = {
     x: (width * 28) / pitchX,
     y: (height * 2) / 3,
 };
-const ST_4_1_4_1 = {posName: "ST", x: (width * 50) / pitchX, y: height / 2};
 const LWB = {posName: "LB", x: (width * 20) / pitchX, y: height / 6};
 const RWB = {
     posName: "RB",
     x: (width * 20) / pitchX,
     y: (height * 5) / 6,
 };
-const LCB_5_4_1 = {posName: "CB", x: (width * 10) / pitchX, y: height / 3};
-const CB_5_4_1 = {posName: "CB", x: (width * 20) / pitchX, y: height / 2};
-const RCB_5_4_1 = {posName: "CB", x: (width * 30) / pitchX, y: height / 3};
-const CM_5_4_1 = {posName: "CM", x: (width * 35) / pitchX, y: height / 2};
-const ST_5_4_1 = {posName: "ST", x: (width * 50) / pitchX, y: height / 2};
 
 // Function to generate player positions for various formations
 function generateFormation(formation) {
@@ -106,7 +99,7 @@ function generateFormation(formation) {
                 {...CDM2_4_2_3_1, y: CDM2_4_2_3_1.y - 12},
                 LM_3_5_2,
                 RM_3_5_2,
-                AMC_3_5_2,
+                CAM_3_5_2,
                 LF,
                 RF,
             ];
@@ -119,7 +112,7 @@ function generateFormation(formation) {
                 RB,
                 CDM1_4_2_3_1,
                 CDM2_4_2_3_1,
-                AMC,
+                CAM,
                 LM,
                 RM,
                 CF,
@@ -582,7 +575,7 @@ function simulateAction(
             "foul",
             "ownGoal",
         ],
-        AMC: [
+        CAM: [
             "keyPass",
             "assist",
             "shoot",

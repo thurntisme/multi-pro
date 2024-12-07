@@ -709,19 +709,25 @@ $seasons = [
 ];
 
 // Possible values for player attributes
-$positions = ['GK', 'CM', 'CF', 'ST', 'RW', 'LW', 'CB', 'RB', 'LB', 'DM', 'AMC', 'LM', 'RM'];
+$positions = ['GK', 'CM', 'CF', 'ST', 'RW', 'LW', 'CB', 'RB', 'LB', 'CDM', 'CAM', 'LM', 'RM'];
 // Define position groups
 $positionGroups = [
     'Goalkeepers' => ['GK'],
     'Defenders' => ['CB', 'RB', 'LB'],
-    'Midfielders' => ['CM', 'DM', 'AMC', 'LM', 'RM'],
+    'Midfielders' => ['CM', 'CDM', 'CAM', 'LM', 'RM'],
     'Attackers' => ['CF', 'ST', 'RW', 'LW'],
 ];
 $positionGroupsExtra = [
     'Goalkeepers' => ['GK'],
     'Defenders' => ['CB', 'LCB', 'RCB', 'RB', 'LB'],
-    'Midfielders' => ['CM', 'RCM', 'LCM', 'DM', 'AMC', 'LM', 'RM'],
+    'Midfielders' => ['CM', 'RCM', 'LCM', 'CDM', 'CAM', 'LM', 'RM'],
     'Attackers' => ['CF', 'ST', 'LF', 'RF', 'RW', 'LW'],
+];
+$positionColors = [
+    'Goalkeepers' => "#ff8811",
+    'Defenders' => "#3ec300",
+    'Midfielders' => "#337ca0",
+    'Attackers' => "#ff1d15",
 ];
 $seasonsRate = [
     "Ballon d'Or" => 1.8,

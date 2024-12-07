@@ -5,7 +5,10 @@
     "age": 30,
     "nationality": "England",
     "best_position": "CM",
-    "playable_positions": ["CM", "CAM"],
+    "playable_positions": [
+      "CM",
+      "CAM"
+    ],
     "attributes": {
       "technical": {
         "passing": 95,
@@ -63,7 +66,11 @@
     "age": 28,
     "nationality": "England",
     "best_position": "CM",
-    "playable_positions": ["CM", "CAM", "CDM"],
+    "playable_positions": [
+      "CM",
+      "CAM",
+      "CDM"
+    ],
     "attributes": {
       "technical": {
         "passing": 87,
@@ -121,7 +128,10 @@
     "age": 31,
     "nationality": "England",
     "best_position": "CDM",
-    "playable_positions": ["CDM", "CM"],
+    "playable_positions": [
+      "CDM",
+      "CM"
+    ],
     "attributes": {
       "technical": {
         "passing": 89,
@@ -179,7 +189,11 @@
     "age": 29,
     "nationality": "Germany",
     "best_position": "CM",
-    "playable_positions": ["CM", "CDM", "RM"],
+    "playable_positions": [
+      "CM",
+      "CDM",
+      "RM"
+    ],
     "attributes": {
       "technical": {
         "passing": 94,
@@ -237,7 +251,11 @@
     "age": 28,
     "nationality": "Italy",
     "best_position": "CM",
-    "playable_positions": ["CM", "CDM", "CAM"],
+    "playable_positions": [
+      "CM",
+      "CDM",
+      "CAM"
+    ],
     "attributes": {
       "technical": {
         "passing": 91,
@@ -295,7 +313,11 @@
     "age": 27,
     "nationality": "Brazil",
     "best_position": "CDM",
-    "playable_positions": ["CDM", "CM", "CB"],
+    "playable_positions": [
+      "CDM",
+      "CM",
+      "CB"
+    ],
     "attributes": {
       "technical": {
         "passing": 88,
@@ -353,7 +375,11 @@
     "age": 30,
     "nationality": "Brazil",
     "best_position": "CAM",
-    "playable_positions": ["CAM", "CM", "RW"],
+    "playable_positions": [
+      "CAM",
+      "CM",
+      "RW"
+    ],
     "attributes": {
       "technical": {
         "passing": 95,
@@ -411,7 +437,12 @@
     "age": 27,
     "nationality": "Brazil",
     "best_position": "LM",
-    "playable_positions": ["LM", "LB", "CAM", "LW"],
+    "playable_positions": [
+      "LM",
+      "LB",
+      "CAM",
+      "LW"
+    ],
     "attributes": {
       "technical": {
         "passing": 90,
@@ -469,7 +500,11 @@
     "age": 29,
     "nationality": "Bulgaria",
     "best_position": "ST",
-    "playable_positions": ["ST", "CF", "CAM"],
+    "playable_positions": [
+      "ST",
+      "CF",
+      "CAM"
+    ],
     "attributes": {
       "technical": {
         "passing": 94,
@@ -527,7 +562,11 @@
     "age": 26,
     "nationality": "Nigeria",
     "best_position": "CDM",
-    "playable_positions": ["CDM", "CM", "CB"],
+    "playable_positions": [
+      "CDM",
+      "CM",
+      "CB"
+    ],
     "attributes": {
       "technical": {
         "passing": 94,
@@ -585,7 +624,11 @@
     "age": 30,
     "nationality": "Germany",
     "best_position": "CM",
-    "playable_positions": ["CM", "CDM", "CAM"],
+    "playable_positions": [
+      "CM",
+      "CDM",
+      "CAM"
+    ],
     "attributes": {
       "technical": {
         "passing": 97,
@@ -643,7 +686,11 @@
     "age": 28,
     "nationality": "Germany",
     "best_position": "CDM",
-    "playable_positions": ["CDM", "CM", "CB"],
+    "playable_positions": [
+      "CDM",
+      "CM",
+      "CB"
+    ],
     "attributes": {
       "technical": {
         "passing": 90,
@@ -701,7 +748,11 @@
     "age": 26,
     "nationality": "Germany",
     "best_position": "CDM",
-    "playable_positions": ["CDM", "CB", "CM"],
+    "playable_positions": [
+      "CDM",
+      "CB",
+      "CM"
+    ],
     "attributes": {
       "technical": {
         "passing": 87,
@@ -759,7 +810,11 @@
     "age": 25,
     "nationality": "Germany",
     "best_position": "CDM",
-    "playable_positions": ["CDM", "CM", "RB"],
+    "playable_positions": [
+      "CDM",
+      "CM",
+      "RB"
+    ],
     "attributes": {
       "technical": {
         "passing": 94,
@@ -817,7 +872,11 @@
     "age": 23,
     "nationality": "Germany",
     "best_position": "LW",
-    "playable_positions": ["LW", "RW", "CF"],
+    "playable_positions": [
+      "LW",
+      "RW",
+      "CF"
+    ],
     "attributes": {
       "technical": {
         "passing": 93,
@@ -875,7 +934,11 @@
     "age": 24,
     "nationality": "Portugal",
     "best_position": "LW",
-    "playable_positions": ["LW", "RW", "CAM"],
+    "playable_positions": [
+      "LW",
+      "RW",
+      "CAM"
+    ],
     "attributes": {
       "technical": {
         "passing": 96,
@@ -933,7 +996,11 @@
     "age": 25,
     "nationality": "Brazil",
     "best_position": "CM",
-    "playable_positions": ["CM", "CDM", "RW"],
+    "playable_positions": [
+      "CM",
+      "CDM",
+      "RW"
+    ],
     "attributes": {
       "technical": {
         "passing": 94,
@@ -991,7 +1058,11 @@
     "age": 28,
     "nationality": "France",
     "best_position": "CM",
-    "playable_positions": ["CM", "CDM", "LM"],
+    "playable_positions": [
+      "CM",
+      "CDM",
+      "LM"
+    ],
     "attributes": {
       "technical": {
         "passing": 92,
@@ -1049,7 +1120,11 @@
     "age": 24,
     "nationality": "Spain",
     "best_position": "CDM",
-    "playable_positions": ["CDM", "CB", "CM"],
+    "playable_positions": [
+      "CDM",
+      "CB",
+      "CM"
+    ],
     "attributes": {
       "technical": {
         "passing": 88,
@@ -1107,7 +1182,10 @@
     "age": 24,
     "nationality": "France",
     "best_position": "CB",
-    "playable_positions": ["CB", "LB"],
+    "playable_positions": [
+      "CB",
+      "LB"
+    ],
     "attributes": {
       "technical": {
         "passing": 94,
@@ -1165,7 +1243,10 @@
     "age": 25,
     "nationality": "France",
     "best_position": "CDM",
-    "playable_positions": ["CDM", "CM"],
+    "playable_positions": [
+      "CDM",
+      "CM"
+    ],
     "attributes": {
       "technical": {
         "passing": 91,
@@ -1223,7 +1304,11 @@
     "age": 24,
     "nationality": "Spain",
     "best_position": "ST",
-    "playable_positions": ["ST", "CF", "LW"],
+    "playable_positions": [
+      "ST",
+      "CF",
+      "LW"
+    ],
     "attributes": {
       "technical": {
         "passing": 96,
@@ -1281,7 +1366,9 @@
     "age": 30,
     "nationality": "Poland",
     "best_position": "GK",
-    "playable_positions": ["GK"],
+    "playable_positions": [
+      "GK"
+    ],
     "attributes": {
       "technical": {
         "passing": 77,
@@ -1339,7 +1426,9 @@
     "age": 22,
     "nationality": "Australia",
     "best_position": "RM",
-    "playable_positions": ["RM"],
+    "playable_positions": [
+      "RM"
+    ],
     "attributes": {
       "technical": {
         "passing": 84,
@@ -1397,7 +1486,12 @@
     "age": 28,
     "nationality": "Mexico",
     "best_position": "CM",
-    "playable_positions": ["AMC", "LM", "CM", "RM"],
+    "playable_positions": [
+      "CAM",
+      "LM",
+      "CM",
+      "RM"
+    ],
     "attributes": {
       "technical": {
         "passing": 60,
@@ -1454,8 +1548,11 @@
     "name": "Valentina P\u00e9rez",
     "age": 28,
     "nationality": "Argentina",
-    "best_position": "AMC",
-    "playable_positions": ["AMC", "CM"],
+    "best_position": "CAM",
+    "playable_positions": [
+      "CAM",
+      "CM"
+    ],
     "attributes": {
       "technical": {
         "passing": 72,
@@ -1513,7 +1610,10 @@
     "age": 25,
     "nationality": "Serbia",
     "best_position": "LW",
-    "playable_positions": ["LW", "ST"],
+    "playable_positions": [
+      "LW",
+      "ST"
+    ],
     "attributes": {
       "technical": {
         "passing": 53,
@@ -1571,7 +1671,10 @@
     "age": 20,
     "nationality": "Germany",
     "best_position": "CM",
-    "playable_positions": ["CM", "DM"],
+    "playable_positions": [
+      "CM",
+      "CDM"
+    ],
     "attributes": {
       "technical": {
         "passing": 83,
@@ -1629,7 +1732,12 @@
     "age": 29,
     "nationality": "Portugal",
     "best_position": "RM",
-    "playable_positions": ["LM", "RM", "DM", "CM"],
+    "playable_positions": [
+      "LM",
+      "RM",
+      "CDM",
+      "CM"
+    ],
     "attributes": {
       "technical": {
         "passing": 66,
@@ -1687,7 +1795,11 @@
     "age": 35,
     "nationality": "Netherlands",
     "best_position": "CM",
-    "playable_positions": ["CM", "AMC", "LM"],
+    "playable_positions": [
+      "CM",
+      "CAM",
+      "LM"
+    ],
     "attributes": {
       "technical": {
         "passing": 64,
@@ -1745,7 +1857,12 @@
     "age": 23,
     "nationality": "Japan",
     "best_position": "ST",
-    "playable_positions": ["ST", "CF", "RW", "LW"],
+    "playable_positions": [
+      "ST",
+      "CF",
+      "RW",
+      "LW"
+    ],
     "attributes": {
       "technical": {
         "passing": 61,
@@ -1803,7 +1920,10 @@
     "age": 30,
     "nationality": "Uruguay",
     "best_position": "RW",
-    "playable_positions": ["RW", "LW"],
+    "playable_positions": [
+      "RW",
+      "LW"
+    ],
     "attributes": {
       "technical": {
         "passing": 57,
@@ -1861,7 +1981,10 @@
     "age": 21,
     "nationality": "France",
     "best_position": "ST",
-    "playable_positions": ["LW", "ST"],
+    "playable_positions": [
+      "LW",
+      "ST"
+    ],
     "attributes": {
       "technical": {
         "passing": 59,
@@ -1918,8 +2041,12 @@
     "name": "Sofia Gonzalez",
     "age": 30,
     "nationality": "Spain",
-    "best_position": "DM",
-    "playable_positions": ["RM", "DM", "LM"],
+    "best_position": "CDM",
+    "playable_positions": [
+      "RM",
+      "CDM",
+      "LM"
+    ],
     "attributes": {
       "technical": {
         "passing": 45,
@@ -1977,7 +2104,9 @@
     "age": 27,
     "nationality": "Iran",
     "best_position": "CF",
-    "playable_positions": ["CF"],
+    "playable_positions": [
+      "CF"
+    ],
     "attributes": {
       "technical": {
         "passing": 65,
@@ -2035,7 +2164,12 @@
     "age": 19,
     "nationality": "Peru",
     "best_position": "CM",
-    "playable_positions": ["CM", "RM", "DM", "AMC"],
+    "playable_positions": [
+      "CM",
+      "RM",
+      "CDM",
+      "CAM"
+    ],
     "attributes": {
       "technical": {
         "passing": 58,
@@ -2093,7 +2227,12 @@
     "age": 30,
     "nationality": "Uruguay",
     "best_position": "CM",
-    "playable_positions": ["CM", "LM", "AMC", "DM"],
+    "playable_positions": [
+      "CM",
+      "LM",
+      "CAM",
+      "CDM"
+    ],
     "attributes": {
       "technical": {
         "passing": 81,
@@ -2151,7 +2290,11 @@
     "age": 26,
     "nationality": "Brazil",
     "best_position": "RB",
-    "playable_positions": ["RB", "LB", "CB"],
+    "playable_positions": [
+      "RB",
+      "LB",
+      "CB"
+    ],
     "attributes": {
       "technical": {
         "passing": 78,
@@ -2209,7 +2352,11 @@
     "age": 26,
     "nationality": "Belgium",
     "best_position": "LM",
-    "playable_positions": ["RM", "LM", "AMC"],
+    "playable_positions": [
+      "RM",
+      "LM",
+      "CAM"
+    ],
     "attributes": {
       "technical": {
         "passing": 79,
@@ -2267,7 +2414,11 @@
     "age": 23,
     "nationality": "Germany",
     "best_position": "ST",
-    "playable_positions": ["ST", "LW", "CF"],
+    "playable_positions": [
+      "ST",
+      "LW",
+      "CF"
+    ],
     "attributes": {
       "technical": {
         "passing": 51,
@@ -2324,8 +2475,12 @@
     "name": "Gabriel Moreau",
     "age": 22,
     "nationality": "France",
-    "best_position": "AMC",
-    "playable_positions": ["LM", "RM", "AMC"],
+    "best_position": "CAM",
+    "playable_positions": [
+      "LM",
+      "RM",
+      "CAM"
+    ],
     "attributes": {
       "technical": {
         "passing": 75,
@@ -2383,7 +2538,10 @@
     "age": 26,
     "nationality": "Peru",
     "best_position": "CF",
-    "playable_positions": ["CF", "LW"],
+    "playable_positions": [
+      "CF",
+      "LW"
+    ],
     "attributes": {
       "technical": {
         "passing": 77,
@@ -2441,7 +2599,12 @@
     "age": 32,
     "nationality": "Argentina",
     "best_position": "LM",
-    "playable_positions": ["CM", "DM", "LM", "AMC"],
+    "playable_positions": [
+      "CM",
+      "CDM",
+      "LM",
+      "CAM"
+    ],
     "attributes": {
       "technical": {
         "passing": 63,
@@ -2499,7 +2662,11 @@
     "age": 19,
     "nationality": "Croatia",
     "best_position": "RB",
-    "playable_positions": ["RB", "CB", "LB"],
+    "playable_positions": [
+      "RB",
+      "CB",
+      "LB"
+    ],
     "attributes": {
       "technical": {
         "passing": 48,
@@ -2556,8 +2723,13 @@
     "name": "Mohamed Belhaj",
     "age": 18,
     "nationality": "Morocco",
-    "best_position": "DM",
-    "playable_positions": ["LM", "DM", "CM", "AMC"],
+    "best_position": "CDM",
+    "playable_positions": [
+      "LM",
+      "CDM",
+      "CM",
+      "CAM"
+    ],
     "attributes": {
       "technical": {
         "passing": 47,
@@ -2615,7 +2787,12 @@
     "age": 18,
     "nationality": "Portugal",
     "best_position": "CM",
-    "playable_positions": ["RM", "DM", "AMC", "CM"],
+    "playable_positions": [
+      "RM",
+      "CDM",
+      "CAM",
+      "CM"
+    ],
     "attributes": {
       "technical": {
         "passing": 55,
@@ -2673,7 +2850,12 @@
     "age": 23,
     "nationality": "Chile",
     "best_position": "RM",
-    "playable_positions": ["LM", "CM", "RM", "AMC"],
+    "playable_positions": [
+      "LM",
+      "CM",
+      "RM",
+      "CAM"
+    ],
     "attributes": {
       "technical": {
         "passing": 44,
@@ -2731,7 +2913,12 @@
     "age": 26,
     "nationality": "Morocco",
     "best_position": "LW",
-    "playable_positions": ["CF", "RW", "LW", "ST"],
+    "playable_positions": [
+      "CF",
+      "RW",
+      "LW",
+      "ST"
+    ],
     "attributes": {
       "technical": {
         "passing": 82,
@@ -2789,7 +2976,9 @@
     "age": 25,
     "nationality": "Ukraine",
     "best_position": "GK",
-    "playable_positions": ["GK"],
+    "playable_positions": [
+      "GK"
+    ],
     "attributes": {
       "technical": {
         "passing": 47,
@@ -2847,7 +3036,12 @@
     "age": 26,
     "nationality": "Netherlands",
     "best_position": "ST",
-    "playable_positions": ["LW", "CF", "ST", "RW"],
+    "playable_positions": [
+      "LW",
+      "CF",
+      "ST",
+      "RW"
+    ],
     "attributes": {
       "technical": {
         "passing": 52,
@@ -2904,8 +3098,13 @@
     "name": "Nikola Markovic",
     "age": 26,
     "nationality": "Serbia",
-    "best_position": "DM",
-    "playable_positions": ["DM", "RM", "CM", "LM"],
+    "best_position": "CDM",
+    "playable_positions": [
+      "CDM",
+      "RM",
+      "CM",
+      "LM"
+    ],
     "attributes": {
       "technical": {
         "passing": 75,
@@ -2963,7 +3162,12 @@
     "age": 33,
     "nationality": "Uruguay",
     "best_position": "LM",
-    "playable_positions": ["CM", "RM", "DM", "LM"],
+    "playable_positions": [
+      "CM",
+      "RM",
+      "CDM",
+      "LM"
+    ],
     "attributes": {
       "technical": {
         "passing": 83,
@@ -3021,7 +3225,9 @@
     "age": 29,
     "nationality": "Sweden",
     "best_position": "GK",
-    "playable_positions": ["GK"],
+    "playable_positions": [
+      "GK"
+    ],
     "attributes": {
       "technical": {
         "passing": 45,
@@ -3079,7 +3285,9 @@
     "age": 23,
     "nationality": "Switzerland",
     "best_position": "CM",
-    "playable_positions": ["CM"],
+    "playable_positions": [
+      "CM"
+    ],
     "attributes": {
       "technical": {
         "passing": 54,
@@ -3137,7 +3345,9 @@
     "age": 19,
     "nationality": "Mexico",
     "best_position": "GK",
-    "playable_positions": ["GK"],
+    "playable_positions": [
+      "GK"
+    ],
     "attributes": {
       "technical": {
         "passing": 70,
@@ -3195,7 +3405,11 @@
     "age": 22,
     "nationality": "Brazil",
     "best_position": "CB",
-    "playable_positions": ["CB", "LB", "RB"],
+    "playable_positions": [
+      "CB",
+      "LB",
+      "RB"
+    ],
     "attributes": {
       "technical": {
         "passing": 78,
@@ -3253,7 +3467,10 @@
     "age": 29,
     "nationality": "Colombia",
     "best_position": "LB",
-    "playable_positions": ["LB", "CB"],
+    "playable_positions": [
+      "LB",
+      "CB"
+    ],
     "attributes": {
       "technical": {
         "passing": 56,
@@ -3311,7 +3528,11 @@
     "age": 26,
     "nationality": "Peru",
     "best_position": "CM",
-    "playable_positions": ["RM", "AMC", "CM"],
+    "playable_positions": [
+      "RM",
+      "CAM",
+      "CM"
+    ],
     "attributes": {
       "technical": {
         "passing": 74,
@@ -3368,8 +3589,12 @@
     "name": "Ivana Novak",
     "age": 23,
     "nationality": "Croatia",
-    "best_position": "DM",
-    "playable_positions": ["DM", "LM", "AMC"],
+    "best_position": "CDM",
+    "playable_positions": [
+      "CDM",
+      "LM",
+      "CAM"
+    ],
     "attributes": {
       "technical": {
         "passing": 53,
@@ -3426,8 +3651,10 @@
     "name": "Fatma Hassan",
     "age": 26,
     "nationality": "Egypt",
-    "best_position": "DM",
-    "playable_positions": ["DM"],
+    "best_position": "CDM",
+    "playable_positions": [
+      "CDM"
+    ],
     "attributes": {
       "technical": {
         "passing": 82,
@@ -3485,7 +3712,11 @@
     "age": 32,
     "nationality": "Chile",
     "best_position": "LM",
-    "playable_positions": ["LM", "CM", "AMC"],
+    "playable_positions": [
+      "LM",
+      "CM",
+      "CAM"
+    ],
     "attributes": {
       "technical": {
         "passing": 44,
@@ -3543,7 +3774,11 @@
     "age": 30,
     "nationality": "Serbia",
     "best_position": "CF",
-    "playable_positions": ["CF", "LW", "RW"],
+    "playable_positions": [
+      "CF",
+      "LW",
+      "RW"
+    ],
     "attributes": {
       "technical": {
         "passing": 81,
@@ -3601,7 +3836,11 @@
     "age": 31,
     "nationality": "Morocco",
     "best_position": "CB",
-    "playable_positions": ["CB", "LB", "RB"],
+    "playable_positions": [
+      "CB",
+      "LB",
+      "RB"
+    ],
     "attributes": {
       "technical": {
         "passing": 85,
@@ -3659,7 +3898,11 @@
     "age": 19,
     "nationality": "Nigeria",
     "best_position": "ST",
-    "playable_positions": ["ST", "CF", "LW"],
+    "playable_positions": [
+      "ST",
+      "CF",
+      "LW"
+    ],
     "attributes": {
       "technical": {
         "passing": 65,
@@ -3717,7 +3960,9 @@
     "age": 26,
     "nationality": "France",
     "best_position": "GK",
-    "playable_positions": ["GK"],
+    "playable_positions": [
+      "GK"
+    ],
     "attributes": {
       "technical": {
         "passing": 83,
@@ -3775,7 +4020,10 @@
     "age": 27,
     "nationality": "Serbia",
     "best_position": "LB",
-    "playable_positions": ["RB", "LB"],
+    "playable_positions": [
+      "RB",
+      "LB"
+    ],
     "attributes": {
       "technical": {
         "passing": 87,
@@ -3832,8 +4080,13 @@
     "name": "Antonia Rojas",
     "age": 31,
     "nationality": "Chile",
-    "best_position": "DM",
-    "playable_positions": ["RM", "AMC", "DM", "LM"],
+    "best_position": "CDM",
+    "playable_positions": [
+      "RM",
+      "CAM",
+      "CDM",
+      "LM"
+    ],
     "attributes": {
       "technical": {
         "passing": 49,
@@ -3891,7 +4144,9 @@
     "age": 22,
     "nationality": "Ecuador",
     "best_position": "LB",
-    "playable_positions": ["LB"],
+    "playable_positions": [
+      "LB"
+    ],
     "attributes": {
       "technical": {
         "passing": 86,
@@ -3949,7 +4204,9 @@
     "age": 24,
     "nationality": "France",
     "best_position": "CM",
-    "playable_positions": ["CM"],
+    "playable_positions": [
+      "CM"
+    ],
     "attributes": {
       "technical": {
         "passing": 45,
@@ -4007,7 +4264,10 @@
     "age": 29,
     "nationality": "Peru",
     "best_position": "CB",
-    "playable_positions": ["CB", "LB"],
+    "playable_positions": [
+      "CB",
+      "LB"
+    ],
     "attributes": {
       "technical": {
         "passing": 45,
@@ -4065,7 +4325,10 @@
     "age": 24,
     "nationality": "Uruguay",
     "best_position": "CM",
-    "playable_positions": ["CM", "RM"],
+    "playable_positions": [
+      "CM",
+      "RM"
+    ],
     "attributes": {
       "technical": {
         "passing": 78,
@@ -4123,7 +4386,12 @@
     "age": 32,
     "nationality": "Mexico",
     "best_position": "CF",
-    "playable_positions": ["ST", "LW", "CF", "RW"],
+    "playable_positions": [
+      "ST",
+      "LW",
+      "CF",
+      "RW"
+    ],
     "attributes": {
       "technical": {
         "passing": 66,
@@ -4181,7 +4449,9 @@
     "age": 31,
     "nationality": "Spain",
     "best_position": "GK",
-    "playable_positions": ["GK"],
+    "playable_positions": [
+      "GK"
+    ],
     "attributes": {
       "technical": {
         "passing": 96,
@@ -4239,7 +4509,10 @@
     "age": 30,
     "nationality": "France",
     "best_position": "LB",
-    "playable_positions": ["LB", "LM"],
+    "playable_positions": [
+      "LB",
+      "LM"
+    ],
     "attributes": {
       "technical": {
         "passing": 95,
@@ -4297,7 +4570,10 @@
     "age": 29,
     "nationality": "Argentina",
     "best_position": "ST",
-    "playable_positions": ["ST", "CF"],
+    "playable_positions": [
+      "ST",
+      "CF"
+    ],
     "attributes": {
       "technical": {
         "passing": 96,
@@ -4355,7 +4631,10 @@
     "age": 28,
     "nationality": "Argentina",
     "best_position": "CAM",
-    "playable_positions": ["CAM", "CM"],
+    "playable_positions": [
+      "CAM",
+      "CM"
+    ],
     "attributes": {
       "technical": {
         "passing": 90,
@@ -4413,7 +4692,10 @@
     "age": 29,
     "nationality": "Brazil",
     "best_position": "CDM",
-    "playable_positions": ["CDM", "CM"],
+    "playable_positions": [
+      "CDM",
+      "CM"
+    ],
     "attributes": {
       "technical": {
         "passing": 89,
@@ -4471,7 +4753,10 @@
     "age": 29,
     "nationality": "Netherlands",
     "best_position": "CDM",
-    "playable_positions": ["CDM", "CB"],
+    "playable_positions": [
+      "CDM",
+      "CB"
+    ],
     "attributes": {
       "technical": {
         "passing": 90,
@@ -4529,7 +4814,11 @@
     "age": 28,
     "nationality": "France",
     "best_position": "CAM",
-    "playable_positions": ["CAM", "CF", "ST"],
+    "playable_positions": [
+      "CAM",
+      "CF",
+      "ST"
+    ],
     "attributes": {
       "technical": {
         "passing": 87,
@@ -4587,7 +4876,11 @@
     "age": 29,
     "nationality": "Netherlands",
     "best_position": "CF",
-    "playable_positions": ["CF", "CAM", "ST"],
+    "playable_positions": [
+      "CF",
+      "CAM",
+      "ST"
+    ],
     "attributes": {
       "technical": {
         "passing": 90,
@@ -4645,7 +4938,10 @@
     "age": 28,
     "nationality": "Cameroon",
     "best_position": "ST",
-    "playable_positions": ["ST", "CF"],
+    "playable_positions": [
+      "ST",
+      "CF"
+    ],
     "attributes": {
       "technical": {
         "passing": 91,
@@ -4703,7 +4999,10 @@
     "age": 28,
     "nationality": "Portugal",
     "best_position": "CAM",
-    "playable_positions": ["CAM", "CM"],
+    "playable_positions": [
+      "CAM",
+      "CM"
+    ],
     "attributes": {
       "technical": {
         "passing": 92,
@@ -4761,7 +5060,10 @@
     "age": 29,
     "nationality": "Spain",
     "best_position": "CB",
-    "playable_positions": ["CB", "CDM"],
+    "playable_positions": [
+      "CB",
+      "CDM"
+    ],
     "attributes": {
       "technical": {
         "passing": 97,
@@ -4819,7 +5121,10 @@
     "age": 29,
     "nationality": "England",
     "best_position": "CM",
-    "playable_positions": ["CM", "CAM"],
+    "playable_positions": [
+      "CM",
+      "CAM"
+    ],
     "attributes": {
       "technical": {
         "passing": 96,
@@ -4877,7 +5182,10 @@
     "age": 30,
     "nationality": "Spain",
     "best_position": "CM",
-    "playable_positions": ["CM", "CDM"],
+    "playable_positions": [
+      "CM",
+      "CDM"
+    ],
     "attributes": {
       "technical": {
         "passing": 95,
@@ -4935,7 +5243,10 @@
     "age": 28,
     "nationality": "Spain",
     "best_position": "LW",
-    "playable_positions": ["LW", "RW"],
+    "playable_positions": [
+      "LW",
+      "RW"
+    ],
     "attributes": {
       "technical": {
         "passing": 87,
@@ -4993,7 +5304,9 @@
     "age": 30,
     "nationality": "England",
     "best_position": "CB",
-    "playable_positions": ["CB"],
+    "playable_positions": [
+      "CB"
+    ],
     "attributes": {
       "technical": {
         "passing": 93,
@@ -5051,7 +5364,10 @@
     "age": 28,
     "nationality": "Mexico",
     "best_position": "ST",
-    "playable_positions": ["ST", "CF"],
+    "playable_positions": [
+      "ST",
+      "CF"
+    ],
     "attributes": {
       "technical": {
         "passing": 92,
@@ -5109,7 +5425,10 @@
     "age": 30,
     "nationality": "Argentina",
     "best_position": "CDM",
-    "playable_positions": ["CDM", "CM"],
+    "playable_positions": [
+      "CDM",
+      "CM"
+    ],
     "attributes": {
       "technical": {
         "passing": 97,
@@ -5167,7 +5486,9 @@
     "age": 30,
     "nationality": "Serbia",
     "best_position": "CB",
-    "playable_positions": ["CB"],
+    "playable_positions": [
+      "CB"
+    ],
     "attributes": {
       "technical": {
         "passing": 96,
@@ -5225,7 +5546,10 @@
     "age": 32,
     "nationality": "Ivory Coast",
     "best_position": "ST",
-    "playable_positions": ["ST", "CF"],
+    "playable_positions": [
+      "ST",
+      "CF"
+    ],
     "attributes": {
       "technical": {
         "passing": 88,
@@ -5283,7 +5607,11 @@
     "age": 28,
     "nationality": "Italy",
     "best_position": "RM",
-    "playable_positions": ["RM", "LM", "CAM"],
+    "playable_positions": [
+      "RM",
+      "LM",
+      "CAM"
+    ],
     "attributes": {
       "technical": {
         "passing": 89,
@@ -5341,7 +5669,9 @@
     "age": 33,
     "nationality": "Germany",
     "best_position": "GK",
-    "playable_positions": ["GK"],
+    "playable_positions": [
+      "GK"
+    ],
     "attributes": {
       "technical": {
         "passing": 95,
@@ -5399,7 +5729,11 @@
     "age": 30,
     "nationality": "Netherlands",
     "best_position": "RW",
-    "playable_positions": ["RW", "LW", "CF"],
+    "playable_positions": [
+      "RW",
+      "LW",
+      "CF"
+    ],
     "attributes": {
       "technical": {
         "passing": 96,
@@ -5457,7 +5791,11 @@
     "age": 29,
     "nationality": "Romania",
     "best_position": "CAM",
-    "playable_positions": ["CAM", "LM", "CF"],
+    "playable_positions": [
+      "CAM",
+      "LM",
+      "CF"
+    ],
     "attributes": {
       "technical": {
         "passing": 96,
@@ -5515,7 +5853,10 @@
     "age": 28,
     "nationality": "Italy",
     "best_position": "CB",
-    "playable_positions": ["CB", "SW"],
+    "playable_positions": [
+      "CB",
+      "SW"
+    ],
     "attributes": {
       "technical": {
         "passing": 95,
@@ -5573,7 +5914,10 @@
     "age": 27,
     "nationality": "Argentina",
     "best_position": "CDM",
-    "playable_positions": ["CDM", "CM"],
+    "playable_positions": [
+      "CDM",
+      "CM"
+    ],
     "attributes": {
       "technical": {
         "passing": 97,
@@ -5631,7 +5975,10 @@
     "age": 28,
     "nationality": "France",
     "best_position": "CDM",
-    "playable_positions": ["CDM", "CM"],
+    "playable_positions": [
+      "CDM",
+      "CM"
+    ],
     "attributes": {
       "technical": {
         "passing": 87,
@@ -5689,7 +6036,10 @@
     "age": 30,
     "nationality": "France",
     "best_position": "CDM",
-    "playable_positions": ["CDM", "CM"],
+    "playable_positions": [
+      "CDM",
+      "CM"
+    ],
     "attributes": {
       "technical": {
         "passing": 91,
@@ -5747,7 +6097,11 @@
     "age": 28,
     "nationality": "Brazil",
     "best_position": "CAM",
-    "playable_positions": ["CAM", "CF", "RW"],
+    "playable_positions": [
+      "CAM",
+      "CF",
+      "RW"
+    ],
     "attributes": {
       "technical": {
         "passing": 93,
@@ -5805,7 +6159,10 @@
     "age": 26,
     "nationality": "Brazil",
     "best_position": "ST",
-    "playable_positions": ["ST", "CF"],
+    "playable_positions": [
+      "ST",
+      "CF"
+    ],
     "attributes": {
       "technical": {
         "passing": 88,
@@ -5863,7 +6220,10 @@
     "age": 28,
     "nationality": "Brazil",
     "best_position": "CAM",
-    "playable_positions": ["CAM", "CM"],
+    "playable_positions": [
+      "CAM",
+      "CM"
+    ],
     "attributes": {
       "technical": {
         "passing": 97,
@@ -5921,7 +6281,11 @@
     "age": 28,
     "nationality": "Denmark",
     "best_position": "CAM",
-    "playable_positions": ["CAM", "CM", "LW"],
+    "playable_positions": [
+      "CAM",
+      "CM",
+      "LW"
+    ],
     "attributes": {
       "technical": {
         "passing": 92,
@@ -5979,7 +6343,11 @@
     "age": 29,
     "nationality": "Germany",
     "best_position": "RB",
-    "playable_positions": ["RB", "LB", "CDM"],
+    "playable_positions": [
+      "RB",
+      "LB",
+      "CDM"
+    ],
     "attributes": {
       "technical": {
         "passing": 91,
@@ -6037,7 +6405,10 @@
     "age": 27,
     "nationality": "Italy",
     "best_position": "CF",
-    "playable_positions": ["CF", "CAM"],
+    "playable_positions": [
+      "CF",
+      "CAM"
+    ],
     "attributes": {
       "technical": {
         "passing": 93,
@@ -6095,7 +6466,9 @@
     "age": 35,
     "nationality": "Italy",
     "best_position": "GK",
-    "playable_positions": ["GK"],
+    "playable_positions": [
+      "GK"
+    ],
     "attributes": {
       "technical": {
         "passing": 94,
@@ -6153,7 +6526,10 @@
     "age": 26,
     "nationality": "Spain",
     "best_position": "ST",
-    "playable_positions": ["ST", "CF"],
+    "playable_positions": [
+      "ST",
+      "CF"
+    ],
     "attributes": {
       "technical": {
         "passing": 92,
@@ -6211,7 +6587,11 @@
     "age": 28,
     "nationality": "France",
     "best_position": "ST",
-    "playable_positions": ["ST", "LW", "CF"],
+    "playable_positions": [
+      "ST",
+      "LW",
+      "CF"
+    ],
     "attributes": {
       "technical": {
         "passing": 97,
@@ -6269,7 +6649,11 @@
     "age": 27,
     "nationality": "Wales",
     "best_position": "LM",
-    "playable_positions": ["LM", "LW", "CM"],
+    "playable_positions": [
+      "LM",
+      "LW",
+      "CM"
+    ],
     "attributes": {
       "technical": {
         "passing": 93,
@@ -6327,7 +6711,11 @@
     "age": 22,
     "nationality": "Northern Ireland",
     "best_position": "LW",
-    "playable_positions": ["LW", "RW", "ST"],
+    "playable_positions": [
+      "LW",
+      "RW",
+      "ST"
+    ],
     "attributes": {
       "technical": {
         "passing": 96,
@@ -6385,7 +6773,10 @@
     "age": 30,
     "nationality": "Italy",
     "best_position": "CF",
-    "playable_positions": ["CF", "CAM"],
+    "playable_positions": [
+      "CF",
+      "CAM"
+    ],
     "attributes": {
       "technical": {
         "passing": 94,
@@ -6443,7 +6834,9 @@
     "age": 28,
     "nationality": "Italy",
     "best_position": "GK",
-    "playable_positions": ["GK"],
+    "playable_positions": [
+      "GK"
+    ],
     "attributes": {
       "technical": {
         "passing": 97,
@@ -6501,7 +6894,10 @@
     "age": 28,
     "nationality": "Brazil",
     "best_position": "LB",
-    "playable_positions": ["LB", "LM"],
+    "playable_positions": [
+      "LB",
+      "LM"
+    ],
     "attributes": {
       "technical": {
         "passing": 91,
@@ -6559,7 +6955,11 @@
     "age": 28,
     "nationality": "Spain",
     "best_position": "CAM",
-    "playable_positions": ["CAM", "CM", "LM"],
+    "playable_positions": [
+      "CAM",
+      "CM",
+      "LM"
+    ],
     "attributes": {
       "technical": {
         "passing": 89,
@@ -6617,7 +7017,11 @@
     "age": 29,
     "nationality": "Spain",
     "best_position": "CM",
-    "playable_positions": ["CM", "CDM", "CAM"],
+    "playable_positions": [
+      "CM",
+      "CDM",
+      "CAM"
+    ],
     "attributes": {
       "technical": {
         "passing": 97,
@@ -6675,7 +7079,10 @@
     "age": 30,
     "nationality": "Italy",
     "best_position": "LB",
-    "playable_positions": ["LB", "CB"],
+    "playable_positions": [
+      "LB",
+      "CB"
+    ],
     "attributes": {
       "technical": {
         "passing": 96,
@@ -6733,7 +7140,11 @@
     "age": 26,
     "nationality": "Argentina",
     "best_position": "CAM",
-    "playable_positions": ["CAM", "CF", "LW"],
+    "playable_positions": [
+      "CAM",
+      "CF",
+      "LW"
+    ],
     "attributes": {
       "technical": {
         "passing": 97,
@@ -6791,7 +7202,11 @@
     "age": 25,
     "nationality": "Brazil",
     "best_position": "ST",
-    "playable_positions": ["ST", "CF", "LW"],
+    "playable_positions": [
+      "ST",
+      "CF",
+      "LW"
+    ],
     "attributes": {
       "technical": {
         "passing": 94,
@@ -6849,7 +7264,9 @@
     "age": 28,
     "nationality": "Italy",
     "best_position": "CB",
-    "playable_positions": ["CB"],
+    "playable_positions": [
+      "CB"
+    ],
     "attributes": {
       "technical": {
         "passing": 91,
@@ -6907,7 +7324,10 @@
     "age": 30,
     "nationality": "Brazil",
     "best_position": "RB",
-    "playable_positions": ["RB", "RM"],
+    "playable_positions": [
+      "RB",
+      "RM"
+    ],
     "attributes": {
       "technical": {
         "passing": 91,
@@ -6965,7 +7385,11 @@
     "age": 31,
     "nationality": "Italy",
     "best_position": "CDM",
-    "playable_positions": ["CDM", "CM", "CAM"],
+    "playable_positions": [
+      "CDM",
+      "CM",
+      "CAM"
+    ],
     "attributes": {
       "technical": {
         "passing": 87,
@@ -7023,7 +7447,11 @@
     "age": 29,
     "nationality": "France",
     "best_position": "LW",
-    "playable_positions": ["LW", "RW", "CAM"],
+    "playable_positions": [
+      "LW",
+      "RW",
+      "CAM"
+    ],
     "attributes": {
       "technical": {
         "passing": 89,
@@ -7081,7 +7509,10 @@
     "age": 27,
     "nationality": "Colombia",
     "best_position": "CAM",
-    "playable_positions": ["CAM", "CM"],
+    "playable_positions": [
+      "CAM",
+      "CM"
+    ],
     "attributes": {
       "technical": {
         "passing": 96,
@@ -7139,7 +7570,11 @@
     "age": 36,
     "nationality": "Argentina",
     "best_position": "RB",
-    "playable_positions": ["RB", "CDM", "LB"],
+    "playable_positions": [
+      "RB",
+      "CDM",
+      "LB"
+    ],
     "attributes": {
       "technical": {
         "passing": 96,
@@ -7197,7 +7632,11 @@
     "age": 29,
     "nationality": "Germany",
     "best_position": "CDM",
-    "playable_positions": ["CDM", "CB", "CM"],
+    "playable_positions": [
+      "CDM",
+      "CB",
+      "CM"
+    ],
     "attributes": {
       "technical": {
         "passing": 107,
@@ -7255,7 +7694,10 @@
     "age": 27,
     "nationality": "Argentina",
     "best_position": "CAM",
-    "playable_positions": ["CAM", "CF"],
+    "playable_positions": [
+      "CAM",
+      "CF"
+    ],
     "attributes": {
       "technical": {
         "passing": 105,
@@ -7313,7 +7755,10 @@
     "age": 27,
     "nationality": "Spain",
     "best_position": "CAM",
-    "playable_positions": ["CAM", "CM"],
+    "playable_positions": [
+      "CAM",
+      "CM"
+    ],
     "attributes": {
       "technical": {
         "passing": 109,
@@ -7371,7 +7816,10 @@
     "age": 26,
     "nationality": "Denmark",
     "best_position": "RW",
-    "playable_positions": ["RW", "CF"],
+    "playable_positions": [
+      "RW",
+      "CF"
+    ],
     "attributes": {
       "technical": {
         "passing": 102,
@@ -7429,7 +7877,10 @@
     "age": 26,
     "nationality": "Germany",
     "best_position": "ST",
-    "playable_positions": ["ST", "CF"],
+    "playable_positions": [
+      "ST",
+      "CF"
+    ],
     "attributes": {
       "technical": {
         "passing": 110,
@@ -7487,7 +7938,10 @@
     "age": 26,
     "nationality": "Ukraine",
     "best_position": "ST",
-    "playable_positions": ["ST", "CF"],
+    "playable_positions": [
+      "ST",
+      "CF"
+    ],
     "attributes": {
       "technical": {
         "passing": 105,
@@ -7545,7 +7999,10 @@
     "age": 28,
     "nationality": "France",
     "best_position": "ST",
-    "playable_positions": ["ST", "CF"],
+    "playable_positions": [
+      "ST",
+      "CF"
+    ],
     "attributes": {
       "technical": {
         "passing": 99,
@@ -7603,7 +8060,10 @@
     "age": 32,
     "nationality": "England",
     "best_position": "RW",
-    "playable_positions": ["RW", "LW"],
+    "playable_positions": [
+      "RW",
+      "LW"
+    ],
     "attributes": {
       "technical": {
         "passing": 109,
@@ -7661,7 +8121,10 @@
     "age": 28,
     "nationality": "Argentina",
     "best_position": "CF",
-    "playable_positions": ["CF", "CAM"],
+    "playable_positions": [
+      "CF",
+      "CAM"
+    ],
     "attributes": {
       "technical": {
         "passing": 110,
@@ -7719,7 +8182,10 @@
     "age": 26,
     "nationality": "France",
     "best_position": "CAM",
-    "playable_positions": ["CAM", "RW"],
+    "playable_positions": [
+      "CAM",
+      "RW"
+    ],
     "attributes": {
       "technical": {
         "passing": 97,
@@ -7777,7 +8243,9 @@
     "age": 29,
     "nationality": "Russia",
     "best_position": "GK",
-    "playable_positions": ["GK"],
+    "playable_positions": [
+      "GK"
+    ],
     "attributes": {
       "technical": {
         "passing": 101,
@@ -7835,7 +8303,10 @@
     "age": 24,
     "nationality": "Portugal",
     "best_position": "ST",
-    "playable_positions": ["ST", "CF"],
+    "playable_positions": [
+      "ST",
+      "CF"
+    ],
     "attributes": {
       "technical": {
         "passing": 98,
@@ -7893,7 +8364,10 @@
     "age": 24,
     "nationality": "Scotland",
     "best_position": "ST",
-    "playable_positions": ["ST", "CF"],
+    "playable_positions": [
+      "ST",
+      "CF"
+    ],
     "attributes": {
       "technical": {
         "passing": 105,
@@ -7951,7 +8425,10 @@
     "age": 24,
     "nationality": "Hungary",
     "best_position": "CF",
-    "playable_positions": ["CF", "ST"],
+    "playable_positions": [
+      "CF",
+      "ST"
+    ],
     "attributes": {
       "technical": {
         "passing": 101,
@@ -8009,7 +8486,10 @@
     "age": 28,
     "nationality": "Italy",
     "best_position": "CAM",
-    "playable_positions": ["CAM", "CM"],
+    "playable_positions": [
+      "CAM",
+      "CM"
+    ],
     "attributes": {
       "technical": {
         "passing": 105,
@@ -8067,7 +8547,10 @@
     "age": 26,
     "nationality": "Germany",
     "best_position": "ST",
-    "playable_positions": ["ST", "CF"],
+    "playable_positions": [
+      "ST",
+      "CF"
+    ],
     "attributes": {
       "technical": {
         "passing": 105,
@@ -8125,7 +8608,10 @@
     "age": 27,
     "nationality": "Germany",
     "best_position": "CB",
-    "playable_positions": ["CB", "CDM"],
+    "playable_positions": [
+      "CB",
+      "CDM"
+    ],
     "attributes": {
       "technical": {
         "passing": 107,
@@ -8183,7 +8669,10 @@
     "age": 26,
     "nationality": "Ukraine",
     "best_position": "LW",
-    "playable_positions": ["LW", "ST"],
+    "playable_positions": [
+      "LW",
+      "ST"
+    ],
     "attributes": {
       "technical": {
         "passing": 102,
@@ -8241,7 +8730,10 @@
     "age": 26,
     "nationality": "Italy",
     "best_position": "ST",
-    "playable_positions": ["ST", "CF"],
+    "playable_positions": [
+      "ST",
+      "CF"
+    ],
     "attributes": {
       "technical": {
         "passing": 103,
@@ -8299,7 +8791,10 @@
     "age": 26,
     "nationality": "Denmark",
     "best_position": "RW",
-    "playable_positions": ["RW", "CF"],
+    "playable_positions": [
+      "RW",
+      "CF"
+    ],
     "attributes": {
       "technical": {
         "passing": 110,
@@ -8357,7 +8852,10 @@
     "age": 28,
     "nationality": "England",
     "best_position": "ST",
-    "playable_positions": ["ST", "RW"],
+    "playable_positions": [
+      "ST",
+      "RW"
+    ],
     "attributes": {
       "technical": {
         "passing": 108,
@@ -8415,7 +8913,11 @@
     "age": 26,
     "nationality": "Netherlands",
     "best_position": "CAM",
-    "playable_positions": ["CAM", "CF", "LW"],
+    "playable_positions": [
+      "CAM",
+      "CF",
+      "LW"
+    ],
     "attributes": {
       "technical": {
         "passing": 107,
@@ -8473,7 +8975,10 @@
     "age": 29,
     "nationality": "France",
     "best_position": "CAM",
-    "playable_positions": ["CAM", "CM"],
+    "playable_positions": [
+      "CAM",
+      "CM"
+    ],
     "attributes": {
       "technical": {
         "passing": 98,
@@ -8531,7 +9036,11 @@
     "age": 26,
     "nationality": "Netherlands",
     "best_position": "CAM",
-    "playable_positions": ["CAM", "CM", "CF"],
+    "playable_positions": [
+      "CAM",
+      "CM",
+      "CF"
+    ],
     "attributes": {
       "technical": {
         "passing": 108,
@@ -8589,7 +9098,10 @@
     "age": 25,
     "nationality": "Netherlands",
     "best_position": "ST",
-    "playable_positions": ["ST", "CF"],
+    "playable_positions": [
+      "ST",
+      "CF"
+    ],
     "attributes": {
       "technical": {
         "passing": 101,
@@ -8647,7 +9159,10 @@
     "age": 28,
     "nationality": "Bulgaria",
     "best_position": "ST",
-    "playable_positions": ["ST", "LW"],
+    "playable_positions": [
+      "ST",
+      "LW"
+    ],
     "attributes": {
       "technical": {
         "passing": 106,
@@ -8705,7 +9220,11 @@
     "age": 29,
     "nationality": "Liberia",
     "best_position": "ST",
-    "playable_positions": ["ST", "CF", "RW"],
+    "playable_positions": [
+      "ST",
+      "CF",
+      "RW"
+    ],
     "attributes": {
       "technical": {
         "passing": 102,
@@ -8763,7 +9282,10 @@
     "age": 28,
     "nationality": "France",
     "best_position": "CAM",
-    "playable_positions": ["CAM", "CM"],
+    "playable_positions": [
+      "CAM",
+      "CM"
+    ],
     "attributes": {
       "technical": {
         "passing": 103,
@@ -8821,7 +9343,11 @@
     "age": 28,
     "nationality": "Portugal",
     "best_position": "RW",
-    "playable_positions": ["RW", "CAM", "LW"],
+    "playable_positions": [
+      "RW",
+      "CAM",
+      "LW"
+    ],
     "attributes": {
       "technical": {
         "passing": 98,
@@ -8879,7 +9405,10 @@
     "age": 22,
     "nationality": "England",
     "best_position": "ST",
-    "playable_positions": ["ST", "CF"],
+    "playable_positions": [
+      "ST",
+      "CF"
+    ],
     "attributes": {
       "technical": {
         "passing": 108,
@@ -8937,7 +9466,10 @@
     "age": 26,
     "nationality": "Brazil",
     "best_position": "ST",
-    "playable_positions": ["ST", "CF"],
+    "playable_positions": [
+      "ST",
+      "CF"
+    ],
     "attributes": {
       "technical": {
         "passing": 110,
@@ -8995,7 +9527,11 @@
     "age": 31,
     "nationality": "Czech Republic",
     "best_position": "CAM",
-    "playable_positions": ["CAM", "CM", "LM"],
+    "playable_positions": [
+      "CAM",
+      "CM",
+      "LM"
+    ],
     "attributes": {
       "technical": {
         "passing": 102,
@@ -9053,7 +9589,10 @@
     "age": 28,
     "nationality": "Ukraine",
     "best_position": "ST",
-    "playable_positions": ["ST", "CF"],
+    "playable_positions": [
+      "ST",
+      "CF"
+    ],
     "attributes": {
       "technical": {
         "passing": 110,
@@ -9111,7 +9650,11 @@
     "age": 25,
     "nationality": "Brazil",
     "best_position": "CAM",
-    "playable_positions": ["CAM", "LW", "RW"],
+    "playable_positions": [
+      "CAM",
+      "LW",
+      "RW"
+    ],
     "attributes": {
       "technical": {
         "passing": 106,
@@ -9169,7 +9712,10 @@
     "age": 33,
     "nationality": "Italy",
     "best_position": "CB",
-    "playable_positions": ["CB", "SW"],
+    "playable_positions": [
+      "CB",
+      "SW"
+    ],
     "attributes": {
       "technical": {
         "passing": 106,
@@ -9227,7 +9773,10 @@
     "age": 25,
     "nationality": "Brazil",
     "best_position": "CAM",
-    "playable_positions": ["CAM", "CM"],
+    "playable_positions": [
+      "CAM",
+      "CM"
+    ],
     "attributes": {
       "technical": {
         "passing": 102,
@@ -9285,7 +9834,10 @@
     "age": 22,
     "nationality": "Uruguay",
     "best_position": "CB",
-    "playable_positions": ["CB", "RB"],
+    "playable_positions": [
+      "CB",
+      "RB"
+    ],
     "attributes": {
       "technical": {
         "passing": 67,
@@ -9343,7 +9895,10 @@
     "age": 35,
     "nationality": "Argentina",
     "best_position": "LM",
-    "playable_positions": ["LM", "AMC"],
+    "playable_positions": [
+      "LM",
+      "CAM"
+    ],
     "attributes": {
       "technical": {
         "passing": 59,
@@ -9400,8 +9955,13 @@
     "name": "Filip Tomic",
     "age": 27,
     "nationality": "Croatia",
-    "best_position": "AMC",
-    "playable_positions": ["AMC", "RM", "CM", "DM"],
+    "best_position": "CAM",
+    "playable_positions": [
+      "CAM",
+      "RM",
+      "CM",
+      "CDM"
+    ],
     "attributes": {
       "technical": {
         "passing": 74,
@@ -9459,7 +10019,11 @@
     "age": 27,
     "nationality": "Switzerland",
     "best_position": "CF",
-    "playable_positions": ["CF", "RW", "LW"],
+    "playable_positions": [
+      "CF",
+      "RW",
+      "LW"
+    ],
     "attributes": {
       "technical": {
         "passing": 55,
@@ -9517,7 +10081,12 @@
     "age": 31,
     "nationality": "Croatia",
     "best_position": "CM",
-    "playable_positions": ["DM", "LM", "AMC", "RM"],
+    "playable_positions": [
+      "CDM",
+      "LM",
+      "CAM",
+      "RM"
+    ],
     "attributes": {
       "technical": {
         "passing": 60,
@@ -9575,7 +10144,11 @@
     "age": 22,
     "nationality": "Egypt",
     "best_position": "LW",
-    "playable_positions": ["LW", "RW", "CF"],
+    "playable_positions": [
+      "LW",
+      "RW",
+      "CF"
+    ],
     "attributes": {
       "technical": {
         "passing": 85,
@@ -9633,7 +10206,11 @@
     "age": 28,
     "nationality": "Serbia",
     "best_position": "CB",
-    "playable_positions": ["CB", "LB", "RB"],
+    "playable_positions": [
+      "CB",
+      "LB",
+      "RB"
+    ],
     "attributes": {
       "technical": {
         "passing": 48,
@@ -9691,7 +10268,10 @@
     "age": 28,
     "nationality": "Belgium",
     "best_position": "CF",
-    "playable_positions": ["CF", "LW"],
+    "playable_positions": [
+      "CF",
+      "LW"
+    ],
     "attributes": {
       "technical": {
         "passing": 87,
@@ -9749,7 +10329,11 @@
     "age": 19,
     "nationality": "Italy",
     "best_position": "LB",
-    "playable_positions": ["CB", "LB", "RB"],
+    "playable_positions": [
+      "CB",
+      "LB",
+      "RB"
+    ],
     "attributes": {
       "technical": {
         "passing": 82,
@@ -9807,7 +10391,12 @@
     "age": 21,
     "nationality": "Nigeria",
     "best_position": "LM",
-    "playable_positions": ["DM", "RM", "AMC", "LM"],
+    "playable_positions": [
+      "CDM",
+      "RM",
+      "CAM",
+      "LM"
+    ],
     "attributes": {
       "technical": {
         "passing": 84,
@@ -9865,7 +10454,12 @@
     "age": 35,
     "nationality": "Spain",
     "best_position": "RW",
-    "playable_positions": ["RW", "LW", "ST", "CF"],
+    "playable_positions": [
+      "RW",
+      "LW",
+      "ST",
+      "CF"
+    ],
     "attributes": {
       "technical": {
         "passing": 68,
@@ -9923,7 +10517,9 @@
     "age": 31,
     "nationality": "Chile",
     "best_position": "GK",
-    "playable_positions": ["GK"],
+    "playable_positions": [
+      "GK"
+    ],
     "attributes": {
       "technical": {
         "passing": 82,
@@ -9981,7 +10577,10 @@
     "age": 26,
     "nationality": "Germany",
     "best_position": "CB",
-    "playable_positions": ["CB", "RB"],
+    "playable_positions": [
+      "CB",
+      "RB"
+    ],
     "attributes": {
       "technical": {
         "passing": 83,
@@ -10039,7 +10638,10 @@
     "age": 33,
     "nationality": "Egypt",
     "best_position": "ST",
-    "playable_positions": ["ST", "LW"],
+    "playable_positions": [
+      "ST",
+      "LW"
+    ],
     "attributes": {
       "technical": {
         "passing": 46,
@@ -10097,7 +10699,11 @@
     "age": 29,
     "nationality": "Senegal",
     "best_position": "ST",
-    "playable_positions": ["LW", "ST", "CF"],
+    "playable_positions": [
+      "LW",
+      "ST",
+      "CF"
+    ],
     "attributes": {
       "technical": {
         "passing": 73,
@@ -10155,7 +10761,11 @@
     "age": 28,
     "nationality": "Switzerland",
     "best_position": "RW",
-    "playable_positions": ["RW", "LW", "CF"],
+    "playable_positions": [
+      "RW",
+      "LW",
+      "CF"
+    ],
     "attributes": {
       "technical": {
         "passing": 54,
@@ -10213,7 +10823,11 @@
     "age": 19,
     "nationality": "Argentina",
     "best_position": "LM",
-    "playable_positions": ["LM", "RM", "AMC"],
+    "playable_positions": [
+      "LM",
+      "RM",
+      "CAM"
+    ],
     "attributes": {
       "technical": {
         "passing": 60,
@@ -10271,7 +10885,12 @@
     "age": 22,
     "nationality": "Brazil",
     "best_position": "CM",
-    "playable_positions": ["RM", "DM", "CM", "LM"],
+    "playable_positions": [
+      "RM",
+      "CDM",
+      "CM",
+      "LM"
+    ],
     "attributes": {
       "technical": {
         "passing": 79,
@@ -10329,7 +10948,11 @@
     "age": 25,
     "nationality": "Uruguay",
     "best_position": "RM",
-    "playable_positions": ["RM", "CM", "DM"],
+    "playable_positions": [
+      "RM",
+      "CM",
+      "CDM"
+    ],
     "attributes": {
       "technical": {
         "passing": 53,
@@ -10387,7 +11010,9 @@
     "age": 18,
     "nationality": "Switzerland",
     "best_position": "GK",
-    "playable_positions": ["GK"],
+    "playable_positions": [
+      "GK"
+    ],
     "attributes": {
       "technical": {
         "passing": 62,
@@ -10445,7 +11070,11 @@
     "age": 24,
     "nationality": "Switzerland",
     "best_position": "RB",
-    "playable_positions": ["RB", "CB", "LB"],
+    "playable_positions": [
+      "RB",
+      "CB",
+      "LB"
+    ],
     "attributes": {
       "technical": {
         "passing": 77,
@@ -10503,7 +11132,9 @@
     "age": 29,
     "nationality": "Netherlands",
     "best_position": "GK",
-    "playable_positions": ["GK"],
+    "playable_positions": [
+      "GK"
+    ],
     "attributes": {
       "technical": {
         "passing": 70,
@@ -10561,7 +11192,9 @@
     "age": 23,
     "nationality": "Germany",
     "best_position": "GK",
-    "playable_positions": ["GK"],
+    "playable_positions": [
+      "GK"
+    ],
     "attributes": {
       "technical": {
         "passing": 60,
@@ -10619,7 +11252,10 @@
     "age": 20,
     "nationality": "Portugal",
     "best_position": "CB",
-    "playable_positions": ["CB", "RB"],
+    "playable_positions": [
+      "CB",
+      "RB"
+    ],
     "attributes": {
       "technical": {
         "passing": 83,
@@ -10677,7 +11313,10 @@
     "age": 33,
     "nationality": "Argentina",
     "best_position": "CF",
-    "playable_positions": ["CF", "RW"],
+    "playable_positions": [
+      "CF",
+      "RW"
+    ],
     "attributes": {
       "technical": {
         "passing": 83,
@@ -10735,7 +11374,11 @@
     "age": 26,
     "nationality": "Belgium",
     "best_position": "LB",
-    "playable_positions": ["RB", "CB", "LB"],
+    "playable_positions": [
+      "RB",
+      "CB",
+      "LB"
+    ],
     "attributes": {
       "technical": {
         "passing": 81,
@@ -10793,7 +11436,12 @@
     "age": 34,
     "nationality": "Brazil",
     "best_position": "LM",
-    "playable_positions": ["CM", "AMC", "DM", "RM"],
+    "playable_positions": [
+      "CM",
+      "CAM",
+      "CDM",
+      "RM"
+    ],
     "attributes": {
       "technical": {
         "passing": 48,
@@ -10851,7 +11499,12 @@
     "age": 30,
     "nationality": "Croatia",
     "best_position": "ST",
-    "playable_positions": ["LW", "CF", "ST", "RW"],
+    "playable_positions": [
+      "LW",
+      "CF",
+      "ST",
+      "RW"
+    ],
     "attributes": {
       "technical": {
         "passing": 74,
@@ -10909,7 +11562,12 @@
     "age": 19,
     "nationality": "France",
     "best_position": "LM",
-    "playable_positions": ["LM", "RM", "CM", "AMC"],
+    "playable_positions": [
+      "LM",
+      "RM",
+      "CM",
+      "CAM"
+    ],
     "attributes": {
       "technical": {
         "passing": 72,
@@ -10967,7 +11625,12 @@
     "age": 27,
     "nationality": "Germany",
     "best_position": "RW",
-    "playable_positions": ["RW", "CF", "ST", "LW"],
+    "playable_positions": [
+      "RW",
+      "CF",
+      "ST",
+      "LW"
+    ],
     "attributes": {
       "technical": {
         "passing": 58,
@@ -11025,7 +11688,11 @@
     "age": 24,
     "nationality": "Saudi Arabia",
     "best_position": "RB",
-    "playable_positions": ["CB", "RB", "LB"],
+    "playable_positions": [
+      "CB",
+      "RB",
+      "LB"
+    ],
     "attributes": {
       "technical": {
         "passing": 84,
@@ -11082,8 +11749,13 @@
     "name": "Emma Fournier",
     "age": 31,
     "nationality": "France",
-    "best_position": "DM",
-    "playable_positions": ["AMC", "RM", "LM", "CM"],
+    "best_position": "CDM",
+    "playable_positions": [
+      "CAM",
+      "RM",
+      "LM",
+      "CM"
+    ],
     "attributes": {
       "technical": {
         "passing": 78,
@@ -11141,7 +11813,12 @@
     "age": 24,
     "nationality": "Belgium",
     "best_position": "CF",
-    "playable_positions": ["RW", "CF", "LW", "ST"],
+    "playable_positions": [
+      "RW",
+      "CF",
+      "LW",
+      "ST"
+    ],
     "attributes": {
       "technical": {
         "passing": 53,
@@ -11199,7 +11876,11 @@
     "age": 35,
     "nationality": "Peru",
     "best_position": "RM",
-    "playable_positions": ["DM", "CM", "RM"],
+    "playable_positions": [
+      "CDM",
+      "CM",
+      "RM"
+    ],
     "attributes": {
       "technical": {
         "passing": 53,
@@ -11257,7 +11938,10 @@
     "age": 26,
     "nationality": "Peru",
     "best_position": "CB",
-    "playable_positions": ["RB", "CB"],
+    "playable_positions": [
+      "RB",
+      "CB"
+    ],
     "attributes": {
       "technical": {
         "passing": 74,
@@ -11315,7 +11999,12 @@
     "age": 29,
     "nationality": "Croatia",
     "best_position": "RW",
-    "playable_positions": ["LW", "ST", "CF", "RW"],
+    "playable_positions": [
+      "LW",
+      "ST",
+      "CF",
+      "RW"
+    ],
     "attributes": {
       "technical": {
         "passing": 67,
@@ -11372,8 +12061,12 @@
     "name": "Liam Smith",
     "age": 28,
     "nationality": "Australia",
-    "best_position": "AMC",
-    "playable_positions": ["AMC", "RM", "DM"],
+    "best_position": "CAM",
+    "playable_positions": [
+      "CAM",
+      "RM",
+      "CDM"
+    ],
     "attributes": {
       "technical": {
         "passing": 81,
@@ -11431,7 +12124,11 @@
     "age": 25,
     "nationality": "Morocco",
     "best_position": "CM",
-    "playable_positions": ["CM", "LM", "DM"],
+    "playable_positions": [
+      "CM",
+      "LM",
+      "CDM"
+    ],
     "attributes": {
       "technical": {
         "passing": 86,
@@ -11488,8 +12185,13 @@
     "name": "Sara Rasouli",
     "age": 34,
     "nationality": "Iran",
-    "best_position": "DM",
-    "playable_positions": ["RM", "CM", "DM", "AMC"],
+    "best_position": "CDM",
+    "playable_positions": [
+      "RM",
+      "CM",
+      "CDM",
+      "CAM"
+    ],
     "attributes": {
       "technical": {
         "passing": 51,
@@ -11547,7 +12249,10 @@
     "age": 28,
     "nationality": "Argentina",
     "best_position": "ST",
-    "playable_positions": ["ST", "CF"],
+    "playable_positions": [
+      "ST",
+      "CF"
+    ],
     "attributes": {
       "technical": {
         "passing": 91,
@@ -11605,7 +12310,10 @@
     "age": 23,
     "nationality": "Brazil",
     "best_position": "ST",
-    "playable_positions": ["ST", "CF"],
+    "playable_positions": [
+      "ST",
+      "CF"
+    ],
     "attributes": {
       "technical": {
         "passing": 92,
@@ -11663,7 +12371,10 @@
     "age": 30,
     "nationality": "Argentina",
     "best_position": "ST",
-    "playable_positions": ["ST", "CF"],
+    "playable_positions": [
+      "ST",
+      "CF"
+    ],
     "attributes": {
       "technical": {
         "passing": 94,
@@ -11721,7 +12432,11 @@
     "age": 26,
     "nationality": "Netherlands",
     "best_position": "CAM",
-    "playable_positions": ["CAM", "CM", "LM"],
+    "playable_positions": [
+      "CAM",
+      "CM",
+      "LM"
+    ],
     "attributes": {
       "technical": {
         "passing": 92,
@@ -11779,7 +12494,10 @@
     "age": 29,
     "nationality": "Romania",
     "best_position": "LB",
-    "playable_positions": ["LB", "CB"],
+    "playable_positions": [
+      "LB",
+      "CB"
+    ],
     "attributes": {
       "technical": {
         "passing": 97,
@@ -11837,7 +12555,9 @@
     "age": 29,
     "nationality": "Brazil",
     "best_position": "GK",
-    "playable_positions": ["GK"],
+    "playable_positions": [
+      "GK"
+    ],
     "attributes": {
       "technical": {
         "passing": 96,
@@ -11895,7 +12615,10 @@
     "age": 30,
     "nationality": "Argentina",
     "best_position": "CB",
-    "playable_positions": ["CB", "LB"],
+    "playable_positions": [
+      "CB",
+      "LB"
+    ],
     "attributes": {
       "technical": {
         "passing": 93,
@@ -11953,7 +12676,10 @@
     "age": 30,
     "nationality": "Sweden",
     "best_position": "ST",
-    "playable_positions": ["ST", "CF"],
+    "playable_positions": [
+      "ST",
+      "CF"
+    ],
     "attributes": {
       "technical": {
         "passing": 89,
@@ -12011,7 +12737,9 @@
     "age": 29,
     "nationality": "England",
     "best_position": "CB",
-    "playable_positions": ["CB"],
+    "playable_positions": [
+      "CB"
+    ],
     "attributes": {
       "technical": {
         "passing": 95,
@@ -12069,7 +12797,10 @@
     "age": 29,
     "nationality": "England",
     "best_position": "LB",
-    "playable_positions": ["LB", "LWB"],
+    "playable_positions": [
+      "LB",
+      "LWB"
+    ],
     "attributes": {
       "technical": {
         "passing": 95,
@@ -12127,7 +12858,11 @@
     "age": 27,
     "nationality": "Brazil",
     "best_position": "CAM",
-    "playable_positions": ["CAM", "LW", "SS"],
+    "playable_positions": [
+      "CAM",
+      "LW",
+      "SS"
+    ],
     "attributes": {
       "technical": {
         "passing": 97,
@@ -12185,7 +12920,10 @@
     "age": 28,
     "nationality": "Netherlands",
     "best_position": "ST",
-    "playable_positions": ["ST", "CF"],
+    "playable_positions": [
+      "ST",
+      "CF"
+    ],
     "attributes": {
       "technical": {
         "passing": 97,
@@ -12243,7 +12981,10 @@
     "age": 30,
     "nationality": "Sweden",
     "best_position": "ST",
-    "playable_positions": ["ST", "CF"],
+    "playable_positions": [
+      "ST",
+      "CF"
+    ],
     "attributes": {
       "technical": {
         "passing": 89,
@@ -12301,7 +13042,9 @@
     "age": 28,
     "nationality": "Czech Republic",
     "best_position": "GK",
-    "playable_positions": ["GK"],
+    "playable_positions": [
+      "GK"
+    ],
     "attributes": {
       "technical": {
         "passing": 94,

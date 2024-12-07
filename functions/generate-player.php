@@ -91,7 +91,8 @@ function calculatePlayerWage(
     string $season,
     int    $overallAbility,
     string $type
-): float {
+): float
+{
     // Define base nation multipliers
     global $popularNations, $semiPopularNations;
     $nationMultipliers = [
@@ -115,8 +116,8 @@ function calculatePlayerWage(
         'LB' => 1.0,
         'RB' => 1.0,
         'CM' => 1.2,
-        'DM' => 1.1,
-        'AMC' => 1.2,
+        'CDM' => 1.1,
+        'CAM' => 1.2,
         'ST' => 1.3,
         'CF' => 1.3,
         'RW' => 1.2,
@@ -160,7 +161,8 @@ function calculateMarketValue(
     string $season,
     int    $overallAbility,
     string $type
-): float {
+): float
+{
     // Step 1: Define the base salary depending on the nation
     global $popularNations, $semiPopularNations;
     $baseSalaries = [
@@ -186,8 +188,8 @@ function calculateMarketValue(
         'LB' => 1.1,
         'RB' => 1.1,
         'CM' => 1.2,
-        'DM' => 1.1,
-        'AMC' => 1.3,
+        'CDM' => 1.1,
+        'CAM' => 1.3,
         'ST' => 1.5,
         'CF' => 1.5,
         'RW' => 1.3,
@@ -456,7 +458,7 @@ function generateRandomPlayers($type = '', $playerData = []): array
                 'stamina' => 0.4,
             ],
         ],
-        'DM' => [ // Defensive Midfielder
+        'CDM' => [ // Defensive Midfielder
             'technical' => [
                 'passing' => 0.3,
                 'tackling' => 0.3,
@@ -470,7 +472,7 @@ function generateRandomPlayers($type = '', $playerData = []): array
                 'stamina' => 0.3,
             ],
         ],
-        'AMC' => [ // Attacking Midfielder
+        'CAM' => [ // Attacking Midfielder
             'technical' => [
                 'dribbling' => 0.5,
                 'first_touch' => 0.4,
@@ -695,18 +697,31 @@ function getTeamPlayerData($teamPlayers): array
 
 function getBackgroundColor($ability): string
 {
-    if ($ability < 50 || $ability > 120) {
-        throw new InvalidArgumentException("Ability must be between 50 and 120.");
+    if ($ability < 50) {
+        throw new InvalidArgumentException("Ability must be greater than 50.");
     }
 
     // Assign colors based on ability ranges
-    if ($ability <= 70) {
+    if ($ability <= 71) {
         return "rgba(255, 255, 255, 0)"; // Transparent
-    } elseif ($ability <= 90) {
+    } elseif ($ability <= 96) {
         return "rgba(255, 255, 150, 0.5)"; // Soft Yellow
     } elseif ($ability <= 110) {
-        return "rgba(255, 100, 100, 0.75)"; // Soft Red
+        return "rgba(255, 100, 100, 0.6)"; // Soft Red
     } else {
         return "rgba(200, 100, 255, 1)"; // Soft Violet
     }
+}
+
+function getPositionColor($position)
+{
+    global $positionColors, $positionGroupsExtra;
+
+    foreach ($positionGroupsExtra as $group => $positions) {
+        if (in_array($position, $positions)) {
+            return $positionColors[$group];
+        }
+    }
+
+    return "gray"; // Default color if position is not found
 }

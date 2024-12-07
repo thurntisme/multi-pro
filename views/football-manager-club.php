@@ -175,38 +175,40 @@ ob_start();
                                                 </tr>
                                                 </thead>
                                             </table>
-                                            <div>
-                                                <?php if (count($lineupPlayers) > 0) { ?>
-                                                    <table class="table align-middle table-nowrap mb-0">
-                                                        <tbody class="list form-check-all">
-                                                        <?php foreach ($lineupPlayers as $item) { ?>
-                                                            <tr style="background-color: <?= getBackgroundColor($item['ability']) ?>">
-                                                                <td class="text-center"
-                                                                    style="width: 10%;"><?= $item['best_position'] ?></td>
-                                                                <td><?= $item['name'] ?></td>
-                                                                <td class="text-center"><?= $item['ability'] ?></td>
-                                                                <td class="text-center" style="width: 15%;">
-                                                                    <div class="progress">
-                                                                        <div class="progress-bar bg-success"
-                                                                             role="progressbar"
-                                                                             style="width: 25%" aria-valuenow="25"
-                                                                             aria-valuemin="0"
-                                                                             aria-valuemax="100"></div>
-                                                                    </div>
-                                                                </td>
-                                                            </tr>
-                                                        <?php } ?>
-                                                        </tbody>
-                                                    </table>
-                                                <?php } else { ?>
+                                            <?php if (count($lineupPlayers) > 0) { ?>
+                                                <table class="table align-middle table-nowrap mb-0">
+                                                    <tbody class="list form-check-all">
+                                                    <?php foreach ($lineupPlayers as $item) { ?>
+                                                        <tr style="background-color: <?= getBackgroundColor($item['ability']) ?>">
+                                                            <td style="width: 10%;">
+                                                                <span class="ps-2"
+                                                                      style="border-left: solid 4px <?= getPositionColor($item['best_position']) ?>"> <?= $item['best_position'] ?></span>
+                                                            </td>
+                                                            <td><?= $item['name'] ?></td>
+                                                            <td class="text-center"><?= $item['ability'] ?></td>
+                                                            <td class="text-center" style="width: 15%;">
+                                                                <div class="progress">
+                                                                    <div class="progress-bar bg-success"
+                                                                         role="progressbar"
+                                                                         style="width: 25%" aria-valuenow="25"
+                                                                         aria-valuemin="0"
+                                                                         aria-valuemax="100"></div>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                    <?php } ?>
+                                                    </tbody>
+                                                </table>
+                                            <?php } else { ?>
+                                                <div class="p-3">
                                                     <div class="text-muted">Find player and register they into your
                                                         team
                                                     </div>
                                                     <a href="<?= home_url('football-manager/transfer') ?>"
                                                        class="btn btn-soft-primary mt-2">Go to Market <i
                                                                 class="ri-arrow-right-line ms-1 align-middle"></i></a>
-                                                <?php } ?>
-                                            </div>
+                                                </div>
+                                            <?php } ?>
                                         </div>
                                     </div>
                                 </div>
@@ -229,8 +231,10 @@ ob_start();
                                                         <tbody class="list form-check-all">
                                                         <?php foreach ($subPlayers as $index => $item) { ?>
                                                             <tr style="background-color: <?= getBackgroundColor($item['ability']) ?>">
-                                                                <td class="text-center"
-                                                                    style="width: 10%;"><?= $item['best_position'] ?></td>
+                                                                <td style="width: 10%;">
+                                                                <span class="ps-2"
+                                                                      style="border-left: solid 4px <?= getPositionColor($item['best_position']) ?>"> <?= $item['best_position'] ?></span>
+                                                                </td>
                                                                 <td><?= $item['name'] ?></td>
                                                                 <td class="text-center"><?= $item['ability'] ?></td>
                                                                 <td class="text-center" style="width: 20%;">

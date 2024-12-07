@@ -61,7 +61,7 @@ class FootballTeamController
         foreach (DEFAULT_FOOTBALL_TEAM as $index => $team) {
             $randomFormation = $formation[array_rand($formation)];
             $teamId = $this->footballTeamService->createTeam($team['name'], $systemUser['id'], $index + 2, $randomFormation);
-            $this->initializeTeamPlayers($teamId);
+//            $this->initializeTeamPlayers($teamId);
         }
     }
 
