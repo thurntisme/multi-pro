@@ -54,6 +54,19 @@ $projectStatus = array(
 );
 define('DEFAULT_PROJECT_STATUS', $projectStatus);
 
+$priorities = [
+    'low' => 'Low',
+    'medium' => 'Medium',
+    'high' => 'High'
+];
+$status = [
+    'not_started' => 'Not Started',
+    'in_progress' => 'Inprogress',
+    'completed' => 'Completed',
+    'on_hold' => 'On Hold',
+    'cancelled' => 'Cancelled',
+];
+
 $projectTypes = array(
     array('owner', 'Owner'),
     array('freelancer', 'Freelancer'),

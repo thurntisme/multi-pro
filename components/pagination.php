@@ -1,7 +1,7 @@
 <?php
 
 if ($count > 0) {
-    $itemsPerPage = $perPage ?? 12; // Number of results per page
+    $itemsPerPage = $perPage ?? 10; // Number of results per page
     $totalItems = $count; // Total number of items
     $currentPage = isset($_GET['page']) ? (int)$_GET['page'] : 1; // Current page from the query string
     $totalPages = ceil($totalItems / $itemsPerPage); // Calculate total pages
