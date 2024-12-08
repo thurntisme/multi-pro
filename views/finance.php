@@ -17,7 +17,7 @@ $direction = $percentageChange > 0 ? 'up' : ($percentageChange < 0 ? 'down' : 'n
 $balance = [
     'expense' => $total_expense - $monthlyExpenses['expense'],
     'lastExpense' => $total_expense - $monthlyExpenses['lastExpense'],
-    'percentageChange' => $percentageChange,
+    'percentageChange' => abs($percentageChange),
     'direction' => $direction
 ];
 

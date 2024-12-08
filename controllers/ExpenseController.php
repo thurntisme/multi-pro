@@ -247,7 +247,7 @@ class ExpenseController
         return [
             'expense' => $thisMonthExpense,
             'lastExpense' => $lastMonthExpense,
-            'percentageChange' => round($percentageChange, 2),
+            'percentageChange' => round(abs($percentageChange), 2),
             'direction' => $direction
         ];
     }
@@ -300,7 +300,7 @@ class ExpenseController
         return [
             'expense' => $todayExpense,
             'lastExpense' => $yesterdayExpense,
-            'percentageChange' => round($percentageChange, 2),
+            'percentageChange' => round(abs($percentageChange), 2),
             'direction' => $direction
         ];
     }
