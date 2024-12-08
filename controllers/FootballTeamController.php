@@ -55,14 +55,15 @@ class FootballTeamController
     public function initializeSystemTeams()
     {
         $systemUser = $this->userController->getSystemUser();
-        $formation = array_map(function ($formation) {
-            return $formation['slug'];
-        }, DEFAULT_FOOTBALL_FORMATION);
         foreach (DEFAULT_FOOTBALL_TEAM as $index => $team) {
-            $randomFormation = $formation[array_rand($formation)];
-            $teamId = $this->footballTeamService->createTeam($team['name'], $systemUser['id'], $index + 2, $randomFormation);
+            $teamId = $this->footballTeamService->createTeam($team['name'], $systemUser['id'], $index + 2, $this->randFormation()['slug']);
 //            $this->initializeTeamPlayers($teamId);
         }
+    }
+
+    function randFormation()
+    {
+        return DEFAULT_FOOTBALL_FORMATION[array_rand(DEFAULT_FOOTBALL_FORMATION)];
     }
 
     public function updateBudget($amount)
@@ -72,10 +73,41 @@ class FootballTeamController
         }
     }
 
-    // Get all teams
     public function listTeams()
     {
         return $this->footballTeamService->getAllTeams();
+    }
+
+    // Get all teams
+
+    public function getMyTeamInMatch($teamId): array
+    {
+        $myTeamId = $this->getMyTeam()['id'];
+        $team = $this->footballTeamService->getTeamById($teamId);
+        if (!empty($myTeamId) && $myTeamId == $teamId) {
+            $lineupPlayers = array_slice($team['players'], 0, 11);
+            $subPlayers = array_slice($team['players'], 11);
+
+            return [
+                'team_id' => $team['id'],
+                'team_name' => $team['team_name'],
+                'formation' => $team['formation'],
+                'lineup' => $lineupPlayers,
+                'bench' => $subPlayers
+            ];
+        } else {
+            $formation = $this->randFormation();
+            $players = $this->randomTeamPlayers($formation);
+            $lineupPlayers = array_slice($players, 0, 11);
+            $subPlayers = array_slice($players, 11);
+            return [
+                'team_id' => $teamId,
+                'team_name' => $team['team_name'],
+                'formation' => $formation['slug'],
+                'lineup' => $lineupPlayers,
+                'bench' => $subPlayers
+            ];
+        }
     }
 
     public function getMyTeam()
@@ -83,18 +115,53 @@ class FootballTeamController
         return $this->footballTeamService->getTeamByUserId();
     }
 
-    public function getMyTeamInMatch($teamId)
+    function randomTeamPlayers($formation)
     {
-        $team = $this->footballTeamService->getTeamById($teamId);
-        $lineupPlayers = array_slice($team['players'], 0, 11);
-        $subPlayers = array_slice($team['players'], 11, 17);
+        $players = getPlayersJson();
 
-        return [
-            'team_id' => $team['id'],
-            'team_name' => $team['team_name'],
-            'formation' => $team['formation'],
-            'lineup' => $lineupPlayers,
-            'bench' => $subPlayers
-        ];
+        // Assign players to the formation
+        return $this->assignPlayersToFormation($players, $formation);
+    }
+
+    function assignPlayersToFormation($players, $formation): array
+    {
+        $assignedPlayers = []; // Store assigned players
+        $usedPlayers = [];     // Track already assigned players
+
+        $lineup = ['GK'];
+        $substitutes = ['GK'];
+        foreach ($formation['player_positions'] as $positions) {
+            $lineup = array_merge($lineup, $positions);
+            $substitutes = array_merge($substitutes, $positions);
+        }
+        $positionsArr = array_merge($lineup, $substitutes);
+
+        foreach ($positionsArr as $position) {
+            $eligiblePlayers = []; // Collect players eligible for the current position
+
+            foreach ($players as $player) {
+                // Skip if the player is already used
+                if (in_array($player['uuid'], $usedPlayers)) {
+                    continue;
+                }
+
+                // Check if the player matches the position (best_position or playable_positions)
+                if ($player['best_position'] === $position || in_array($position, $player['playable_positions'])) {
+                    $eligiblePlayers[] = $player;
+                }
+            }
+
+            // Randomly select a player for the position if there are eligible players
+            if (!empty($eligiblePlayers)) {
+                $randomPlayer = $eligiblePlayers[array_rand($eligiblePlayers)];
+                $assignedPlayers[] = $randomPlayer;
+                $usedPlayers[] = $randomPlayer['uuid']; // Mark the player as used
+            } else {
+                // If no eligible players, assign null or indicate unfilled position
+                $assignedPlayers[] = [];
+            }
+        }
+        
+        return $assignedPlayers;
     }
 }

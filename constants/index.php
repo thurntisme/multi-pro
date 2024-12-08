@@ -361,9 +361,9 @@ $nations = [
 define("DEFAULT_NATIONALITY", $nations);
 
 $player_cards = [
+    'legend',
     'normal',
     'young',
-    'legend',
     'demand'
 ];
 define('DEFAULT_PLAYER_CARD', $player_cards);

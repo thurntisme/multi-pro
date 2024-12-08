@@ -616,21 +616,21 @@ const DEFAULT_FOOTBALL_TEAM = [
 
 $formations = [
     [
-        "slug" => "433",
-        "name" => "4-3-3",
-        "player_positions" => [
-            "defenders" => ["LB", "CB", "CB", "RB"],
-            "midfielders" => ["LCM", "CM", "RCM"],
-            "forwards" => ["LW", "CF", "RW"]
-        ]
-    ],
-    [
         "slug" => "442",
         "name" => "4-4-2",
         "player_positions" => [
             "defenders" => ["LB", "CB", "CB", "RB"],
-            "midfielders" => ["LM", "CM", "CM", "RM"],
-            "forwards" => ["ST", "ST"]
+            "midfielders" => ["LM", "CDM", "CDM", "RM"],
+            "forwards" => ["LF", "RF"]
+        ]
+    ],
+    [
+        "slug" => "433",
+        "name" => "4-3-3",
+        "player_positions" => [
+            "defenders" => ["LB", "CB", "CB", "RB"],
+            "midfielders" => ["LCM", "CDM", "RCM"],
+            "forwards" => ["LW", "ST", "RW"]
         ]
     ],
     [
@@ -638,8 +638,8 @@ $formations = [
         "name" => "3-5-2",
         "player_positions" => [
             "defenders" => ["CB", "CB", "CB"],
-            "midfielders" => ["LM", "LCM", "CM", "RCM", "RM"],
-            "forwards" => ["ST", "ST"]
+            "midfielders" => ["LM", "CDM", "CAM", "CDM", "RM"],
+            "forwards" => ["LF", "RF"]
         ]
     ],
     [
@@ -647,7 +647,7 @@ $formations = [
         "name" => "4-2-3-1",
         "player_positions" => [
             "defenders" => ["LB", "CB", "CB", "RB"],
-            "midfielders" => ["CDM", "CDM", "CAM", "LW", "RW"],
+            "midfielders" => ["CDM", "CDM", "CAM", "LM", "RM"],
             "forwards" => ["ST"]
         ]
     ],
@@ -664,8 +664,8 @@ $formations = [
         "slug" => "541",
         "name" => "5-4-1",
         "player_positions" => [
-            "defenders" => ["LWB", "CB", "CB", "CB", "RWB"],
-            "midfielders" => ["LM", "CM", "CM", "RM"],
+            "defenders" => ["LB", "CB", "CB", "CB", "RB"],
+            "midfielders" => ["LM", "CDM", "CDM", "RM"],
             "forwards" => ["ST"]
         ]
     ],
@@ -674,8 +674,8 @@ $formations = [
         "name" => "4-3-1-2",
         "player_positions" => [
             "defenders" => ["LB", "CB", "CB", "RB"],
-            "midfielders" => ["LCM", "CM", "RCM", "CAM"],
-            "forwards" => ["ST", "ST"]
+            "midfielders" => ["CM", "CDM", "CM"],
+            "forwards" => ["CF", "LF", "RF"]
         ]
     ],
     [
@@ -683,8 +683,8 @@ $formations = [
         "name" => "3-4-3",
         "player_positions" => [
             "defenders" => ["CB", "CB", "CB"],
-            "midfielders" => ["LM", "CM", "CM", "RM"],
-            "forwards" => ["LW", "CF", "RW"]
+            "midfielders" => ["LM", "CDM", "CDM", "RM"],
+            "forwards" => ["LW", "ST", "RW"]
         ]
     ],
     [
@@ -692,8 +692,8 @@ $formations = [
         "name" => "4-2-2-2",
         "player_positions" => [
             "defenders" => ["LB", "CB", "CB", "RB"],
-            "midfielders" => ["CDM", "CDM", "CAM", "CAM"],
-            "forwards" => ["ST", "ST"]
+            "midfielders" => ["LW", "CDM", "CDM", "RW"],
+            "forwards" => ["LF", "RF"]
         ]
     ]
 ];

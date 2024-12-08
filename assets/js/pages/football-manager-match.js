@@ -1,375 +1,35 @@
-const canvas = document.getElementById("footballPitch");
-const ctx = canvas.getContext("2d");
-// Pitch Dimensions
-const width = canvas.width;
-const height = canvas.height;
+renderTeamInFitch(groupTeams, {circleRadius: 8});
 
-// Colors
-const pitchColor = "#4CAF50";
-const lineColor = "#FFFFFF";
-const team1Color = "#FF0000"; // Red
-const team2Color = "#0000FF"; // Blue
-const playerScore = 5;
-
-// Formations
-const pitchX = 100;
-
-// Player Positions for the 4-4-2 Formation
-const GK = {posName: "GK", x: (width * 4) / pitchX, y: height / 2};
-const LB = {posName: "LB", x: (width * 18) / pitchX, y: height / 6};
-const RB = {posName: "RB", x: (width * 18) / pitchX, y: (height * 5) / 6};
-const LCB = {posName: "CB", x: (width * 12) / pitchX, y: height / 3};
-const RCB = {posName: "CB", x: (width * 12) / pitchX, y: (height * 2) / 3};
-const LCM = {posName: "CM", x: (width * 30) / pitchX, y: height / 3};
-const RCM = {posName: "CM", x: (width * 30) / pitchX, y: (height * 2) / 3};
-const LM = {posName: "LM", x: (width * 30) / pitchX, y: height / 6};
-const RM = {posName: "RM", x: (width * 30) / pitchX, y: (height * 5) / 6};
-const RF = {posName: "RF", x: (width * 45) / pitchX, y: (height * 5) / 8};
-
-// Player Positions for the 4-3-3 Formation
-const LW = {posName: "LW", x: (width * 40) / pitchX, y: height / 6};
-const RW = {posName: "RW", x: (width * 40) / pitchX, y: (height * 5) / 6};
-const CF = {posName: "CF", x: (width * 40) / pitchX, y: height / 2};
-const ST = {posName: "ST", x: (width * 45) / pitchX, y: height / 2};
-
-// Player Positions for the 3-5-2 Formation
-const LCB_3_5_2 = {
-    posName: "CB",
-    x: (width * 12) / pitchX,
-    y: (height * 1) / 3 - 12,
-};
-const CB_3_5_2 = {posName: "CB", x: (width * 12) / pitchX, y: height / 2};
-const RCB_3_5_2 = {
-    posName: "CB",
-    x: (width * 12) / pitchX,
-    y: height - (height * 1) / 3 + 12,
-};
-const LM_3_5_2 = {posName: "LM", x: (width * 36) / pitchX, y: height / 6};
-const RM_3_5_2 = {
-    posName: "RM",
-    x: (width * 36) / pitchX,
-    y: (height * 5) / 6,
-};
-const CAM_3_5_2 = {posName: "CAM", x: (width * 36) / pitchX, y: height / 2};
-const CDM1_4_2_3_1 = {
-    posName: "DM",
-    x: (width * 25) / pitchX,
-    y: height / 3,
-};
-const CDM2_4_2_3_1 = {
-    posName: "DM",
-    x: (width * 25) / pitchX,
-    y: (height * 2) / 3,
-};
-const CAM = {posName: "CAM", x: (width * 35) / pitchX, y: height / 2};
-const LW_4_2_3_1 = {posName: "LW", x: (width * 40) / pitchX, y: height / 4};
-const RW_4_2_3_1 = {
-    posName: "RW",
-    x: (width * 40) / pitchX,
-    y: (height * 3) / 4,
-};
-const DM = {posName: "DM", x: (width * 24) / pitchX, y: height / 2};
-const LCM_4_1_4_1 = {posName: "CM", x: (width * 28) / pitchX, y: height / 3};
-const RCM_4_1_4_1 = {
-    posName: "CM",
-    x: (width * 28) / pitchX,
-    y: (height * 2) / 3,
-};
-const LWB = {posName: "LB", x: (width * 20) / pitchX, y: height / 6};
-const RWB = {
-    posName: "RB",
-    x: (width * 20) / pitchX,
-    y: (height * 5) / 6,
-};
-
-// Function to generate player positions for various formations
-function generateFormation(formation) {
-    switch (formation) {
-        case "433":
-            return [GK, LB, LCB, RCB, RB, LCM, RCM, LW, CF, RW];
-        case "442":
-            return [GK, LB, LCB, RCB, RB, LM, LCM, RCM, RM, LF, RF];
-        case "352":
-            return [
-                GK,
-                LCB_3_5_2,
-                CB_3_5_2,
-                RCB_3_5_2,
-                {...CDM1_4_2_3_1, y: CDM1_4_2_3_1.y + 12},
-                {...CDM2_4_2_3_1, y: CDM2_4_2_3_1.y - 12},
-                LM_3_5_2,
-                RM_3_5_2,
-                CAM_3_5_2,
-                LF,
-                RF,
-            ];
-        case "4231":
-            return [
-                GK,
-                LB,
-                LCB,
-                RCB,
-                RB,
-                CDM1_4_2_3_1,
-                CDM2_4_2_3_1,
-                CAM,
-                LM,
-                RM,
-                CF,
-            ];
-        case "4141":
-            return [
-                GK,
-                LB,
-                LCB,
-                RCB,
-                RB,
-                {...DM, x: DM.x - 12},
-                {...LCM, x: LCM.x + 16},
-                {...RCM, x: RCM.x + 16},
-                LM,
-                RM,
-                ST,
-            ];
-        case "541":
-            return [
-                GK,
-                LWB,
-                LCB_3_5_2,
-                CB_3_5_2,
-                RCB_3_5_2,
-                RWB,
-                LCM_4_1_4_1,
-                RCM_4_1_4_1,
-                LM_3_5_2,
-                RM_3_5_2,
-                ST,
-            ];
-        case "4312":
-            return [GK, LB, LCB, RCB, RB, DM, LCM, RCM, CF, LF, RF];
-        case "343":
-            return [
-                GK,
-                LCB_3_5_2,
-                CB_3_5_2,
-                RCB_3_5_2,
-                LM,
-                LCM_4_1_4_1,
-                RCM_4_1_4_1,
-                RM,
-                LW_4_2_3_1,
-                ST,
-                RW_4_2_3_1,
-            ];
-        case "4222":
-            return [GK, LB, LCB, RCB, RB, LCM, RCM, LF, RF, LM_3_5_2, RM_3_5_2];
-        default:
-            console.error("Invalid formation");
-            return [];
-    }
-}
-
-let team1InMatch = {
-    name: team1.name,
-    score: 0,
-    players: generateFormation(team1.formation).map((pos, idx) => {
-        return {
-            ...pos,
-            ...team1.players[idx],
-            score: playerScore,
-        };
-    }),
-    bench: team1.bench,
-};
-let team2InMatch = {
-    name: team2.name,
-    score: 0,
-    players: generateFormation(team2.formation).map((pos, idx) => {
-        return {
-            ...pos,
-            x: width - pos.x,
-            ...team2.players[idx],
-            score: playerScore,
-        };
-    }),
-    bench: team2.bench,
-};
-
-function getPositionColor(position) {
-    const positionColors = {
-        Goalkeepers: "#ff8811",
-        Defenders: "#3ec300",
-        Midfielders: "#337ca0",
-        Attackers: "#ff1d15",
-    };
-
-    for (const [group, positions] of Object.entries(positionGroups)) {
-        if (positions.includes(position)) {
-            return positionColors[group];
-        }
-    }
-
-    return "gray"; // Default color if position is not found
-}
-
-// Football Pitch
-const drawFootballPitch = () => {
-    // Helper function to draw lines
-    function drawLine(x1, y1, x2, y2) {
-        ctx.beginPath();
-        ctx.moveTo(x1, y1);
-        ctx.lineTo(x2, y2);
-        ctx.strokeStyle = lineColor;
-        ctx.lineWidth = 2;
-        ctx.stroke();
-    }
-
-    // Helper function to draw circles
-    function drawCircle(x, y, color, isFilled = true) {
-        ctx.beginPath();
-        ctx.arc(x, y, 10, 0, Math.PI * 2);
-        if (isFilled) {
-            ctx.fillStyle = color;
-            ctx.fill();
-        } else {
-            ctx.strokeStyle = color;
-            ctx.lineWidth = 2;
-            ctx.stroke();
-        }
-    }
-
-    // Draw penalty and goal areas (simplified for brevity)
-    function drawRect(x, y, w, h) {
-        ctx.strokeStyle = lineColor;
-        ctx.lineWidth = 2;
-        ctx.strokeRect(x, y, w, h);
-    }
-
-    // Function to draw player numbers
-    function drawPlayerNumber(x, y, number) {
-        ctx.font = "10px Arial";
-        ctx.fillStyle = "#FFFFFF";
-        ctx.textAlign = "center";
-        ctx.textBaseline = "middle";
-        ctx.fillText(number, x, y);
-    }
-
-    // Function to draw player names
-    function drawPlayerName(x, y, name) {
-        ctx.font = "10px Arial";
-        ctx.fillStyle = "#FFFFFF";
-        ctx.textAlign = "center";
-        ctx.textBaseline = "middle";
-        ctx.fillText(name, x, y + 20);
-    }
-
-    // Draw a ball at a specific position
-    function drawBall() {
-        ctx.beginPath();
-        ctx.arc(width / 2, height / 2, 5, 0, Math.PI * 2); // Ball with radius 5
-        ctx.fillStyle = "white";
-        ctx.fill();
-        ctx.strokeStyle = "black";
-        ctx.stroke();
-    }
-
-    // Draw Team
-    const drawPlayerPositions = () => {
-        team1InMatch.players.forEach((pos, index) => {
-            drawCircle(pos.x, pos.y, getPositionColor(pos.posName));
-            drawPlayerNumber(pos.x, pos.y, index + 1);
-            drawPlayerName(pos.x, pos.y, pos.name);
-            drawPlayerScore(pos);
-        });
-        team2InMatch.players.forEach((pos, index) => {
-            drawCircle(pos.x, pos.y, getPositionColor(pos.posName));
-            drawPlayerNumber(pos.x, pos.y, index + 1);
-            drawPlayerName(pos.x, pos.y, pos.name);
-            drawPlayerScore(pos);
-        });
-    };
-
-    // Function to redraw the pitch and players
-    function redraw() {
-        // Redraw pitch
-        ctx.fillStyle = pitchColor;
-        ctx.fillRect(0, 0, width, height);
-
-        // Redraw lines
-        drawLine(10, 10, width - 10, 10);
-        drawLine(width - 10, 10, width - 10, height - 10);
-        drawLine(width - 10, height - 10, 10, height - 10);
-        drawLine(10, height - 10, 10, 10);
-        drawLine(width / 2, 10, width / 2, height - 10);
-
-        // Redraw center circle and other elements
-        drawCircle(width / 2, height / 2, 40, lineColor, false);
-        drawCircle(width / 2, height / 2, 2, lineColor, true);
-        drawRect(10, height / 2 - 40, 30, 80);
-        drawRect(width - 40, height / 2 - 40, 30, 80);
-        drawCircle(20, height / 2, 2, lineColor, true);
-        drawCircle(width - 20, height / 2, 2, lineColor, true);
-
-        // Redraw players
-        drawPlayerPositions();
-        drawBall();
-    }
-
-    // Initial draw
-    redraw();
-};
-drawFootballPitch();
-
-// Function to draw a rounded rectangle
-function drawRoundedRect(x, y, width, height, radius, fillStyle, strokeStyle) {
-    ctx.beginPath();
-    ctx.moveTo(x + radius, y);
-    ctx.lineTo(x + width - radius, y);
-    ctx.quadraticCurveTo(x + width, y, x + width, y + radius);
-    ctx.lineTo(x + width, y + height - radius);
-    ctx.quadraticCurveTo(x + width, y + height, x + width - radius, y + height);
-    ctx.lineTo(x + radius, y + height);
-    ctx.quadraticCurveTo(x, y + height, x, y + height - radius);
-    ctx.lineTo(x, y + radius);
-    ctx.quadraticCurveTo(x, y, x + radius, y);
-    ctx.closePath();
-
-    if (fillStyle) {
-        ctx.fillStyle = fillStyle;
-        ctx.fill();
-    }
-}
-
-function drawPlayerScore(player) {
-    const {x, y, score} = player;
-    // Draw circle around the score
-    const scoreX = x;
-    const scoreY = y + 28;
-    const maxScore = 10; // Maximum score
-    const normalizedScore = score / maxScore; // Normalize score between 0 and 1
-
-    // Use normalizedScore to create a gradient from blue -> green -> yellow -> red
-    const red = Math.min(255, Math.floor(normalizedScore * 255));
-    const green = Math.min(
-        255,
-        Math.floor((1 - Math.abs(normalizedScore - 0.5) * 2) * 255)
-    ); // Peaks in the middle
-    const blue = Math.min(255, Math.floor((1 - normalizedScore) * 255));
-
-    const backgroundColor = `rgb(${red}, ${green}, ${blue})`;
-
-    // Calculate luminance for dynamic text color
-    const luminance = (0.299 * red + 0.587 * green + 0.114 * blue) / 255;
-    const textColor = luminance > 0.5 ? "#000000" : "#ffffff";
-
-    drawRoundedRect(scoreX - 11, scoreY, 22, 14, 5, backgroundColor);
-
-    // Add player score
-    ctx.fillStyle = textColor;
-    ctx.font = "10px Arial";
-    ctx.textAlign = "center";
-    ctx.fillText(score.toFixed(1), scoreX, scoreY + 7);
-}
+// function drawPlayerScore(player) {
+//     const {x, y, score} = player;
+//     // Draw circle around the score
+//     const scoreX = x;
+//     const scoreY = y + 28;
+//     const maxScore = 10; // Maximum score
+//     const normalizedScore = score / maxScore; // Normalize score between 0 and 1
+//
+//     // Use normalizedScore to create a gradient from blue -> green -> yellow -> red
+//     const red = Math.min(255, Math.floor(normalizedScore * 255));
+//     const green = Math.min(
+//         255,
+//         Math.floor((1 - Math.abs(normalizedScore - 0.5) * 2) * 255)
+//     ); // Peaks in the middle
+//     const blue = Math.min(255, Math.floor((1 - normalizedScore) * 255));
+//
+//     const backgroundColor = `rgb(${red}, ${green}, ${blue})`;
+//
+//     // Calculate luminance for dynamic text color
+//     const luminance = (0.299 * red + 0.587 * green + 0.114 * blue) / 255;
+//     const textColor = luminance > 0.5 ? "#000000" : "#ffffff";
+//
+//     drawRoundedRect(scoreX - 11, scoreY, 22, 14, 5, backgroundColor);
+//
+//     // Add player score
+//     ctx.fillStyle = textColor;
+//     ctx.font = "10px Arial";
+//     ctx.textAlign = "center";
+//     ctx.fillText(score.toFixed(1), scoreX, scoreY + 7);
+// }
 
 function simulateMatch(team1, team2) {
     const matchTime = 90 * 60; // Total match duration in minutes
@@ -445,6 +105,14 @@ function simulateMatch(team1, team2) {
                 const player =
                     team.players[Math.floor(Math.random() * team.players.length)];
                 let previousAction = null; // Initially, no previous action
+                console.log(
+                    team,
+                    player,
+                    team1,
+                    team2,
+                    currentTimeInSeconds,
+                    previousAction
+                );
                 simulateAction(
                     team,
                     player,
@@ -835,4 +503,4 @@ function logEvent(time, action, message) {
 }
 
 // Start the match simulation
-simulateMatch(team1InMatch, team2InMatch);
+// simulateMatch(team1, team2);

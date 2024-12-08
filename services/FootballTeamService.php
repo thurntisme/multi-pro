@@ -154,6 +154,7 @@ class FootballTeamService
     public function getTeamById($teamId)
     {
         $team = $this->getTeamData($teamId);
+
         if (!empty($team)) {
             $players = array_map(function ($player) {
                 return $this->footballPlayerController->viewPlayer($player['id']);

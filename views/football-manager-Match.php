@@ -75,6 +75,13 @@ $pageContent = ob_get_clean();
 ob_start();
 echo "
     <script type='text/javascript'>
+        const canvas = document.getElementById('footballPitch');
+        const ctx = canvas.getContext('2d');
+
+        // Pitch Dimensions
+        const width = canvas.width;
+        const height = canvas.height;
+
         const team1 = {
             name: '" . $home_team['team_name'] . "',
             formation: '" . $home_team['formation'] . "',
@@ -90,9 +97,13 @@ echo "
             players: " . json_encode($away_team['lineup']) . ",
             bench: " . json_encode($away_team['bench']) . ",
         }
+        const groupTeams = [team1, team2];
+        const pitchX = 50 * groupTeams.length;
 
-        const positionGroups = " . json_encode($positionGroupsExtra) . ";
+        const positionGroups = " . json_encode($positionGroupsExtra) . "; 
     </script>
+    <script src='" . home_url("/assets/js/pages/football-manager-formation.js") . "'></script>
+    <script src='" . home_url("/assets/js/pages/football-manager.js") . "'></script>
     <script src='" . home_url("/assets/js/pages/football-manager-match.js") . "'></script>
 ";
 $additionJs = ob_get_clean();

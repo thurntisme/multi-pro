@@ -71,10 +71,10 @@ class FootballLeagueService
             // Prepare the SQL insert statement
             $stmt = $this->pdo->prepare("
                 INSERT INTO football_match (
-                    team_home_id, team_away_id, home_score, away_score, league_id, match_uuid, home_score, away_score, 
+                    team_home_id, team_away_id, home_score, away_score, league_id, match_uuid, 
                     match_date, status, created_at, updated_at
                 ) VALUES (
-                    :team_home_id, :team_away_id, :home_score, :away_score, :league_id, :match_uuid, 0, 0, 
+                    :team_home_id, :team_away_id, :home_score, :away_score, :league_id, :match_uuid,
                     :match_date, :status, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP
                 )
             ");
@@ -121,19 +121,35 @@ class FootballLeagueService
 
     public function getMatch($uuid, $currLeagueId, $myTeamId)
     {
+        // Corrected: use prepare instead of query
         $sql = "SELECT * FROM football_match WHERE match_uuid = :uuid AND league_id = :league_id AND (team_home_id = :team_id OR team_away_id = :team_id)";
-        $stmt = $this->pdo->query($sql);
-        $stmt->execute([':uuid' => $uuid, 'league_id' => $currLeagueId, ':team_id' => $myTeamId]);
 
+        // Prepare the statement
+        $stmt = $this->pdo->prepare($sql);
+
+        // Execute the statement with bound parameters
+        $stmt->execute([
+            ':uuid' => $uuid,
+            ':league_id' => $currLeagueId,
+            ':team_id' => $myTeamId
+        ]);
+
+        // Fetch the result
         $match = $stmt->fetch(PDO::FETCH_ASSOC);
+
         if (!empty($match)) {
+            // Extract team IDs
             $team_home_id = $match['team_home_id'];
             $team_away_id = $match['team_away_id'];
+
+            // Return details about home and away teams
             return [
                 'home' => $this->footballTeamController->getMyTeamInMatch($team_home_id),
                 'away' => $this->footballTeamController->getMyTeamInMatch($team_away_id),
             ];
         }
+
+        // Return null if no match is found
         return null;
     }
 }
