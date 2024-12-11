@@ -1,9 +1,22 @@
+const teamsInMatch = groupTeams.map(team => {
+    const players = generateFormation(team.formation).map((pos, idx) => {
+        return {
+            position_in_match: pos.posName,
+            score: 5,
+            ...team.players[idx],
+        };
+    });
+    return {...team, players};
+})
+
 const redraw = () => {
-    renderTeamInFitch(groupTeams, {circleRadius: 8, isDisplayScore: true});
+    renderTeamInFitch(teamsInMatch, {circleRadius: 8, isDisplayScore: true});
 }
 redraw();
 
-function simulateMatch(team1, team2) {
+function simulateMatch(groupTeams) {
+    const team1 = groupTeams[0];
+    const team2 = groupTeams[1];
     const matchTime = 90 * 60; // Total match duration in minutes
     const maxHalfTime = 45 * 60; // Total match duration in minutes
     const maxExtraTime = 10; // Maximum possible extra time in minutes
@@ -142,9 +155,9 @@ function simulateAction(team, player, team1, team2, currentTime) {
         LM: ["shoot", "dribble", "foul", "ownGoal", "cross"],
         RM: ["shoot", "dribble", "foul", "ownGoal", "cross"],
     };
-    const {best_position} = player;
+    const {position_in_match} = player;
     // Randomly select a valid action for the chosen position
-    let actions = validActionsByPosition[best_position];
+    let actions = validActionsByPosition[position_in_match];
     const action = actions[Math.floor(Math.random() * actions.length)];
 
     const team1score = document.getElementById("team-1-score");
@@ -159,7 +172,7 @@ function simulateAction(team, player, team1, team2, currentTime) {
             );
             if (scored) {
                 const filterPlayers = team.players.filter(p => {
-                    return p.uuid !== player.uuid && p.best_position !== 'Gk'
+                    return p.uuid !== player.uuid && p.position_in_match !== 'Gk'
                 })
                 const assistPlayer =
                     filterPlayers[Math.floor(Math.random() * filterPlayers.length)];
@@ -268,7 +281,7 @@ function simulateAction(team, player, team1, team2, currentTime) {
 
 function attemptOutcome(type, attacker, defendingTeam) {
     const goalkeeper = defendingTeam.players.find(
-        (p) => p.best_position === "GK"
+        (p) => p.position_in_match === "GK"
     );
     // Forward attributes
     const {finishing, heading} = attacker.attributes.technical;
@@ -387,4 +400,4 @@ function logEvent(time, action, message) {
 }
 
 // Start the match simulation
-simulateMatch(team1, team2);
+simulateMatch(teamsInMatch);
