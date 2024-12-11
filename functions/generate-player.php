@@ -91,8 +91,7 @@ function calculatePlayerWage(
     string $season,
     int    $overallAbility,
     string $type
-): float
-{
+): float {
     // Define base nation multipliers
     global $popularNations, $semiPopularNations;
     $nationMultipliers = [
@@ -161,8 +160,7 @@ function calculateMarketValue(
     string $season,
     int    $overallAbility,
     string $type
-): float
-{
+): float {
     // Step 1: Define the base salary depending on the nation
     global $popularNations, $semiPopularNations;
     $baseSalaries = [
@@ -703,13 +701,13 @@ function getBackgroundColor($ability): string
 
     // Assign colors based on ability ranges
     if ($ability <= 71) {
-        return "rgba(255, 255, 255, 0)"; // Transparent
+        return "rgba(245, 245, 245, 0.5)"; // Transparent
     } elseif ($ability <= 96) {
         return "rgba(255, 255, 150, 0.5)"; // Soft Yellow
     } elseif ($ability <= 110) {
-        return "rgba(255, 100, 100, 0.6)"; // Soft Red
+        return "rgba(255, 100, 100, 0.5)"; // Soft Red
     } else {
-        return "rgba(200, 100, 255, 1)"; // Soft Violet
+        return "rgba(200, 100, 255, 0.5)"; // Soft Violet
     }
 }
 

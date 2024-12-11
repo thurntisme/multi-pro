@@ -621,7 +621,7 @@ $formations = [
         "player_positions" => [
             "defenders" => ["LB", "CB", "CB", "RB"],
             "midfielders" => ["LM", "CDM", "CDM", "RM"],
-            "forwards" => ["LF", "RF"]
+            "forwards" => ["ST", "ST"]
         ]
     ],
     [
@@ -639,7 +639,7 @@ $formations = [
         "player_positions" => [
             "defenders" => ["CB", "CB", "CB"],
             "midfielders" => ["LM", "CDM", "CAM", "CDM", "RM"],
-            "forwards" => ["LF", "RF"]
+            "forwards" => ["ST", "ST"]
         ]
     ],
     [
@@ -675,7 +675,7 @@ $formations = [
         "player_positions" => [
             "defenders" => ["LB", "CB", "CB", "RB"],
             "midfielders" => ["CM", "CDM", "CM"],
-            "forwards" => ["CF", "LF", "RF"]
+            "forwards" => ["CF", "ST", "ST"]
         ]
     ],
     [
@@ -693,7 +693,7 @@ $formations = [
         "player_positions" => [
             "defenders" => ["LB", "CB", "CB", "RB"],
             "midfielders" => ["LW", "CDM", "CDM", "RW"],
-            "forwards" => ["LF", "RF"]
+            "forwards" => ["ST", "ST"]
         ]
     ]
 ];

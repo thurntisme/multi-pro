@@ -14,4 +14,4 @@ if (!empty($additionCss)) {
 ?>
 
 <!-- custom Css-->
-<link href="<?= home_url("assets/css/custom.min.css") ?>" rel="stylesheet" type="text/css" />
+<link href="<?= home_url("assets/css/custom.css") ?>" rel="stylesheet" type="text/css" /> 
