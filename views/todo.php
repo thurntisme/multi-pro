@@ -47,8 +47,9 @@ include_once DIR . '/components/alert.php';
                             <select class="form-control" data-choices data-choices-search-false
                                     name="priority">
                                 <?php
+                                echo '<option value="" ' . (!empty($_GET['priority']) ? 'selected' : "") . '>Select Priority</option>';
                                 foreach ($priorities as $value => $label) {
-                                    $selected = (!empty($_GET['priority']) ? $value === $_GET['priority'] : $value === 'medium') ? 'selected' : '';
+                                    $selected = (!empty($_GET['priority']) && $value === $_GET['priority']) ? 'selected' : '';
                                     echo "<option value=\"$value\" $selected>$label</option>";
                                 }
                                 ?>
@@ -60,8 +61,9 @@ include_once DIR . '/components/alert.php';
                             <select class="form-control" data-choices data-choices-search-false
                                     name="status">
                                 <?php
+                                echo '<option value="" ' . (!empty($_GET['status']) ? 'selected' : "") . '>Select Status</option>';
                                 foreach ($status as $value => $label) {
-                                    $selected = (!empty($_GET['status']) ? $value === $_GET['status'] : $value === 'not_started') ? 'selected' : '';
+                                    $selected = (!empty($_GET['status']) && $value === $_GET['status']) ? 'selected' : '';
                                     echo "<option value=\"$value\" $selected>$label</option>";
                                 }
                                 ?>
@@ -90,8 +92,8 @@ include_once DIR . '/components/alert.php';
                     <tr>
                         <th>Title</th>
                         <th class="text-center">Tags</th>
-                        <th class="text-center">Priority</th>
                         <th class="text-center">Due Date</th>
+                        <th class="text-center">Priority</th>
                         <th class="text-center">Status</th>
                         <th class="text-end">Created At</th>
                         <th class="text-end">Updated At</th>
@@ -114,8 +116,8 @@ include_once DIR . '/components/alert.php';
                                     </div>
                                 </td>
                                 <td class="text-center"><?= $item['tags'] ?></td>
-                                <td class="text-center"><?= $item['priority'] ?></td>
                                 <td class="text-center"><?= !empty($item['due_date']) && $item['due_date'] != '0000-00-00' ? $item['due_date'] : '' ?></td>
+                                <td class="text-center"><?= $item['priority'] ?></td>
                                 <td class="text-center"><?= $item['status'] ?></td>
                                 <td class="text-end"><?= $commonController->convertDateTime($item['created_at']) ?></td>
                                 <td class="text-end"><?= $commonController->convertDateTime($item['updated_at']) ?></td>

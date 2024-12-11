@@ -40,7 +40,7 @@ ob_start();
                                             </div>
                                         <?php } ?>
 
-                                        <?php if (!empty($postData['due_date'])) { ?>
+                                        <?php if (!empty($postData['due_date']) && $postData['due_date'] != '0000-00-00') { ?>
                                             <h6 class="mb-3 fw-semibold text-uppercase">Due Date </h6>
                                             <div class="mb-3">
                                                 <?= $postData['due_date'] ?>
