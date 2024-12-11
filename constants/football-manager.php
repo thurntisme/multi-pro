@@ -629,7 +629,7 @@ $formations = [
         "name" => "4-3-3",
         "player_positions" => [
             "defenders" => ["LB", "CB", "CB", "RB"],
-            "midfielders" => ["LCM", "CDM", "RCM"],
+            "midfielders" => ["CM", "CDM", "CM"],
             "forwards" => ["LW", "ST", "RW"]
         ]
     ],

@@ -154,14 +154,14 @@ class FootballTeamController
             // Randomly select a player for the position if there are eligible players
             if (!empty($eligiblePlayers)) {
                 $randomPlayer = $eligiblePlayers[array_rand($eligiblePlayers)];
-                $assignedPlayers[] = $randomPlayer;
+                $assignedPlayers[] = array_merge($randomPlayer, ['score' => 5]);
                 $usedPlayers[] = $randomPlayer['uuid']; // Mark the player as used
             } else {
                 // If no eligible players, assign null or indicate unfilled position
                 $assignedPlayers[] = [];
             }
         }
-        
+
         return $assignedPlayers;
     }
 }

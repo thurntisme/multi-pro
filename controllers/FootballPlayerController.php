@@ -183,7 +183,7 @@ class FootballPlayerController
             if ($player) {
                 $player_uuid = $player['player_uuid'];
                 $playerJsonData = getPlayerJsonByUuid($player_uuid);
-                return array_merge($playerJsonData, $player);
+                return array_merge($playerJsonData, $player, ['score' => 5]);
             } else {
                 return null;
             }
