@@ -16,14 +16,36 @@ let playerSelected, changePlayer;
 const playerRowEl =
   "#lineup .my-club-player-row, #subtitle .my-club-player-row";
 $(document).on("click", playerRowEl, (e) => {
+  $(".my-club-player-row").each((idx, item) => {
+    $(item).removeClass("selected");
+  });
   if (!$(e.currentTarget).find(".btn-group")[0].contains(e.target)) {
-    $(e.currentTarget).siblings().removeClass("selected");
     $(e.currentTarget).addClass("selected");
     playerSelected = $(e.currentTarget);
     renderPlayerSelected(playerSelected);
   } else {
     if ($(e.currentTarget).find(".btn-change")[0].contains(e.target)) {
       changePlayer = $(e.currentTarget);
+
+      const playerSelectedUuid = playerSelected.attr("data-player-uuid");
+      const playerSelectedIndex = allPlayers.findIndex(
+        (p) => p.uuid === playerSelectedUuid
+      );
+      const changePlayerUuid = changePlayer.attr("data-player-uuid");
+      const changePlayerIndex = allPlayers.findIndex(
+        (p) => p.uuid === changePlayerUuid
+      );
+
+      if (playerSelectedIndex !== -1 && changePlayerIndex !== -1) {
+        [allPlayers[playerSelectedIndex], allPlayers[changePlayerIndex]] = [
+          allPlayers[changePlayerIndex],
+          allPlayers[playerSelectedIndex],
+        ];
+      }
+      const newLineUpPlayers = allPlayers.slice(0, 11);
+      groupTeams[0].players = newLineUpPlayers;
+      const formation = $("[name='team_formation']").val();
+      redraw(formation);
 
       const cloneRow1 = playerSelected.clone(true);
       const cloneRow2 = changePlayer.clone(true);
@@ -41,7 +63,6 @@ const renderPlayerSelected = (player) => {
   const player_uuid = player.attr("data-player-uuid");
   const player_data = allPlayers.find((p) => p.player_uuid === player_uuid);
   if (player_data) {
-    console.log(player_data);
     $("#player-info #player-name").text(player_data.name || "");
     $("#player-info #player-nationality").text(player_data.nationality || "");
     $("#player-info #player-best_position").text(

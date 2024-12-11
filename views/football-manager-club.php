@@ -340,7 +340,7 @@ echo "
             bench: " . json_encode($subPlayers) . ",
         }
         const groupTeams = [team1];
-        const pitchX = 50 * groupTeams.length;
+        const pitchX = 50;
 
         const positionGroups = " . json_encode($positionGroupsExtra) . ";
         const allPlayers = " . json_encode($myTeam['players']) . ";
