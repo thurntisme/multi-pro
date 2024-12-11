@@ -183,6 +183,7 @@ function renderTeamInFitch(
         return {
           ...pos,
           x: teamIdx === 0 ? pos.x : width - pos.x,
+          y: teamIdx === 0 ? pos.y : height - pos.y,
           ...team.players[idx],
           score: playerScore,
         };
@@ -197,7 +198,7 @@ function renderTeamInFitch(
         getPositionColor(pos.posName),
         conditions?.circleRadius
       );
-      if (team?.playerSelected == pos.uuid) {
+      if (team?.playerSelected && team?.playerSelected == pos.uuid) {
         drawCircle(pos.x, pos.y, "#fff", 12, false);
       }
       drawPlayerNumber(pos.x, pos.y, index + 1);
