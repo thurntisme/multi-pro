@@ -19,10 +19,13 @@ $(document).on("click", playerRowEl, (e) => {
   $(".my-club-player-row").each((idx, item) => {
     $(item).removeClass("selected");
   });
+  const formation = $("[name='team_formation']").val();
   if (!$(e.currentTarget).find(".btn-group")[0].contains(e.target)) {
     $(e.currentTarget).addClass("selected");
     playerSelected = $(e.currentTarget);
     renderPlayerSelected(playerSelected);
+    groupTeams[0].playerSelected = playerSelected.attr("data-player-uuid");
+    redraw(formation);
   } else {
     if ($(e.currentTarget).find(".btn-change")[0].contains(e.target)) {
       changePlayer = $(e.currentTarget);
@@ -44,7 +47,6 @@ $(document).on("click", playerRowEl, (e) => {
       }
       const newLineUpPlayers = allPlayers.slice(0, 11);
       groupTeams[0].players = newLineUpPlayers;
-      const formation = $("[name='team_formation']").val();
       redraw(formation);
 
       const cloneRow1 = playerSelected.clone(true);
@@ -55,6 +57,7 @@ $(document).on("click", playerRowEl, (e) => {
 
       playerSelected = null;
       changePlayer = null;
+      groupTeams[0].playerSelected = null;
     }
   }
 });

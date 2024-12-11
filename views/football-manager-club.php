@@ -338,6 +338,7 @@ echo "
             score: 0,
             players: " . json_encode($lineupPlayers) . ",
             bench: " . json_encode($subPlayers) . ",
+            playerSelected: null,
         }
         const groupTeams = [team1];
         const pitchX = 50;
