@@ -303,10 +303,10 @@ function simulateAction(team, player, team1, team2, currentTime) {
     const team1score = document.getElementById("team-1-score");
     const team2score = document.getElementById("team-2-score");
 
-    const lowPlayerScore = Math.random() * 0.5; // Range: 0 to 0.5
-    const mediumPlayerScore = Math.random() * (1.0 - 0.5) + 0.5; // Range: 0.5 to 1.0
-    const highPlayerScore = Math.random() * (1.5 - 1.0) + 1.0; // Range: 1.0 to 1.5
-    const veryHighPlayerScore = Math.random() * (3.5 - 2.5) + 1.5; // Range: 1.5 to 3.5
+    const lowPlayerScore = Math.random() * 1.0; // Range: 0 to 1.0
+    const mediumPlayerScore = Math.random() * (2.0 - 1.0) + 1.0; // Range: 1.0 to 2.0
+    const highPlayerScore = Math.random() * (2.5 - 2.0) + 2.0; // Range: 2.0 to 2.5
+    const veryHighPlayerScore = Math.random() * (3.0 - 2.5) + 2.5; // Range: 2.5 to 3.0
 
     switch (action) {
         case "block":
