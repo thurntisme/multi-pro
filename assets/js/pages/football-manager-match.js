@@ -78,6 +78,17 @@ function simulateMatch(teamsInMatch) {
                 "end",
                 `Match Over! Final Score: ${team1.name} ${team1.score} - ${team2.score} ${team2.name}`
             );
+            $("#btn-accept-match").removeAttr("disabled");
+            $(document).on("click",function() {
+                const result = teamsInMatch.map(team => {
+                    return {
+                        name: team.name,
+                        score: team.score,
+                        players: [...team.players, ...team.bench].map(player => {return {name: player.name, position: player.position_in_match, score: player.score.toFixed(1)}})
+                    }
+                });
+                console.log(result);
+            });
             return;
         }
 

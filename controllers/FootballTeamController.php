@@ -93,7 +93,8 @@ class FootballTeamController
                 'team_name' => $team['team_name'],
                 'formation' => $team['formation'],
                 'lineup' => $lineupPlayers,
-                'bench' => $subPlayers
+                'bench' => $subPlayers,
+                'myTeam' => true
             ];
         } else {
             $formation = $this->randFormation();
@@ -105,7 +106,8 @@ class FootballTeamController
                 'team_name' => $team['team_name'],
                 'formation' => $formation['slug'],
                 'lineup' => $lineupPlayers,
-                'bench' => $subPlayers
+                'bench' => $subPlayers,
+                'myTeam' => true
             ];
         }
     }

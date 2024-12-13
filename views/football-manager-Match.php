@@ -26,7 +26,7 @@ ob_start();
         </div>
         <!--end col-->
         <div class="col-lg-12">
-            <div class="row">
+            <div class="row d-none" id="match-progress">
                 <div class="col-8">
                     <div class="card">
                         <div class="card-header align-items-center justify-content-center d-flex">
@@ -62,6 +62,98 @@ ob_start();
                                 </div>
                             </div>
                         </div><!-- end card body -->
+                    </div>
+                </div>
+            </div>
+            <div class="row" id="match-result">
+                <div class="col-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="table-responsive table-card">
+                                <table class="table align-middle table-nowrap mb-0">
+                                    <thead class="table-light">
+                                    <tr>
+                                        <th colspan="4">My Team</th>
+                                    </tr>
+                                    </thead>
+                                </table>
+                                <table class="table align-middle table-nowrap mb-0">
+                                    <tbody class="list form-check-all">
+                                    <?php foreach (array_merge($home_team['lineup'], $home_team['bench']) as $item) { ?>
+                                        <tr data-player-uuid="<?= $item['player_uuid'] ?>">
+                                            <td style="width: 10%;">
+                                                <span class="ps-2"
+                                                        style="border-left: solid 4px <?= getPositionColor($item['best_position']) ?>"> <?= $item['best_position'] ?></span>
+                                            </td>
+                                            <td><?= $item['name'] ?></td>
+                                            <td class="text-center player-score"><?= $item['score'] ?></td>
+                                        </tr>
+                                    <?php } ?>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-8">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="table-responsive table-card">
+                                <table class="table align-middle table-nowrap mb-0">
+                                    <thead class="table-light">
+                                    <tr>
+                                        <th colspan="4" class="text-center">Result</th>
+                                    </tr>
+                                    </thead>
+                                </table>
+                                <div class="p-5 border-bottom-dashed border-1" style="border-color: var(--vz-border-color);">
+                                    <div class="row">
+                                        <div class="col-5">
+                                            <div class="d-flex align-items-center justify-content-end">
+                                                <div class="avatar-md me-3">
+                                                    <img src="<?= home_url("assets/images/users/avatar-1.jpg") ?>" alt="" id="candidate-img" class="img-thumbnail rounded-circle shadow-none">
+                                                </div>
+                                                <h5 id="candidate-name" class="mb-0">Anna Adame</h5>
+                                            </div>
+                                        </div>
+                                        <div class="col-2">
+                                            <div class="d-flex align-items-center justify-content-center h-100">
+                                                <h1 class="mb-0 d-flex align-items-baseline"><span>0</span><small class="fs-14 px-2">:</small><span>0</span></h1>
+                                            </div>
+                                        </div>
+                                        <div class="col-5">
+                                            <div class="d-flex align-items-center justify-content-start">
+                                                <h5 id="candidate-name" class="mb-0">Anna Adame</h5>
+                                                <div class="avatar-md me-3">
+                                                    <img src="<?= home_url("assets/images/users/avatar-1.jpg") ?>" alt="" id="candidate-img" class="img-thumbnail rounded-circle shadow-none">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="p-5 border-bottom-dashed border-1" style="border-color: var(--vz-border-color);">
+                                    <h4>Best player: aaa</h4>
+                                    <h4>Best player: aaa</h4>
+                                </div>
+                                <div class="p-5">
+                                    <div class="row">
+                                        <?php foreach ([1,2,3] as $idx){ ?>
+                                            <div class="col-4">
+                                                <div class="text-center">
+                                                    <div class="avatar-xl mb-3 mx-auto rounded-circle d-flex justify-content-center align-items-center bg-success-subtle bg-opacity-10">
+                                                        <i class="ri ri-gift-line fs-40" style="font-size: 44px!important;"></i>
+                                                    </div>
+                            
+                                                    <div>
+                                                        <button type="button" class="btn btn-success rounded-pill w-sm" data-gift-idx="<?= $idx ?>">Open Gift</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        <?php } ?>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
