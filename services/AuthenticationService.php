@@ -49,7 +49,7 @@ class AuthenticationService
 
             // Generate a token
             $token = bin2hex(random_bytes(16)); // 32-character token
-            $expires_at = date('Y-m-d H:i:s', strtotime('+1 hour')); // Token expiration time
+            $expires_at = date('Y-m-d H:i:s', strtotime('+1 day')); // Token expiration time
             $deviceDetails = $commonController->getDeviceDetails();
             $ipAddress = $_SERVER['REMOTE_ADDR'];
             $lastTimeLogin = date('Y-m-d H:i:s');
