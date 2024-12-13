@@ -6,7 +6,8 @@ const teamsInMatch = groupTeams.map((team) => {
             ...team.players[idx],
         };
     });
-    return {...team, players};
+    const bench = team.bench.map((player) => {return {...player, position_in_match: player.best_position}});
+    return {...team, players, bench};
 });
 
 const redraw = () => {
@@ -14,9 +15,9 @@ const redraw = () => {
 };
 redraw();
 
-function simulateMatch(groupTeams) {
-    const team1 = groupTeams[0];
-    const team2 = groupTeams[1];
+function simulateMatch(teamsInMatch) {
+    const team1 = teamsInMatch[0];
+    const team2 = teamsInMatch[1];
     const matchTime = 90 * 60; // Total match duration in minutes
     const maxHalfTime = 45 * 60; // Total match duration in minutes
     const maxExtraTime = 10; // Maximum possible extra time in minutes
@@ -114,23 +115,33 @@ function formatTime(time) {
 }
 
 function getRandPlayerFromTeam(action = "", team, player = "") {
-    const filterPlayers = team.players.filter((p) => {
-        let condition = true;
+    let players = team.players;
+    let condition = true;
+    if (action === "exit") {
+        players = team.bench;
+    }
+    const filterPlayers = players.filter((p) => {
+        if (action === "save") {
+            condition = ["GK"].includes(p.position_in_match);
+        } else {
+            condition = !["GK"].includes(p.position_in_match);
+        }
         if (player) {
-            condition = condition && p.uuid !== player.uuid;
+            return condition && (p.uuid !== player.uuid);
         }
         if (action === "block") {
-            condition = condition && !["GK", "CB"].includes(p.position_in_match);
-        }
-        if (action === "save") {
-            condition = condition && ["GK"].includes(p.position_in_match);
+            return condition && (p.position_in_match !== "GK" || p.position_in_match !== "CB");
         }
         if (action === "intercept") {
-            condition = condition && !["GK", "CB"].includes(p.position_in_match);
+            return condition && (p.position_in_match !== "GK" || p.position_in_match !== "CB");
+        }
+        if (action === "exit") {
+            return condition && !p.isExit;
         }
         return condition;
     });
-    return filterPlayers[Math.floor(Math.random() * filterPlayers.length)];
+    const randPlayer = filterPlayers[Math.floor(Math.random() * filterPlayers.length)];
+    return randPlayer;
 }
 
 function simulateAction(team, player, team1, team2, currentTime) {
@@ -142,7 +153,6 @@ function simulateAction(team, player, team1, team2, currentTime) {
             "punch",
             "goalKick",
             "ownGoal",
-            "foul",
             "penaltySave",
         ],
         LB: [
@@ -151,7 +161,6 @@ function simulateAction(team, player, team1, team2, currentTime) {
             "clearance",
             "heading",
             "cross",
-            "foul",
             "ownGoal",
             "shoot",
             "longShot",
@@ -164,7 +173,6 @@ function simulateAction(team, player, team1, team2, currentTime) {
             "clearance",
             "heading",
             "block",
-            "foul",
             "intercept",
             "ownGoal",
         ],
@@ -174,7 +182,6 @@ function simulateAction(team, player, team1, team2, currentTime) {
             "clearance",
             "heading",
             "cross",
-            "foul",
             "ownGoal",
             "longShot",
             "freeKick",
@@ -184,7 +191,6 @@ function simulateAction(team, player, team1, team2, currentTime) {
         LM: [
             "cutInside",
             "dribble",
-            "foul",
             "ownGoal",
             "cross",
             "longShot",
@@ -197,7 +203,6 @@ function simulateAction(team, player, team1, team2, currentTime) {
             "intercept",
             "shieldBall",
             "tackle",
-            "foul",
             "ownGoal",
             "longShot",
             "freeKick",
@@ -207,7 +212,6 @@ function simulateAction(team, player, team1, team2, currentTime) {
             "dribble",
             "keyPass",
             "longShot",
-            "foul",
             "tackle",
             "intercept",
             "clearance",
@@ -216,7 +220,6 @@ function simulateAction(team, player, team1, team2, currentTime) {
         CAM: [
             "keyPass",
             "shoot",
-            "foul",
             "offside",
             "longShot",
             "chipShot",
@@ -227,7 +230,6 @@ function simulateAction(team, player, team1, team2, currentTime) {
             "shoot",
             "cutInside",
             "dribble",
-            "foul",
             "ownGoal",
             "cross",
             "chipShot",
@@ -283,7 +285,19 @@ function simulateAction(team, player, team1, team2, currentTime) {
     const goalkeeper = getRandPlayerFromTeam("save", opposingTeam);
     // Randomly select a valid action for the chosen position
     let actions = validActionsByPosition[position_in_match];
-    let action = Math.random() > 0.2 ? actions[Math.floor(Math.random() * actions.length)] : "foul";
+    const randAction = Math.random();
+    let action = actions[Math.floor(randAction * actions.length)];
+    const isPossibleSub = currentTime > 45 * 60;
+    if (randAction < 0.2){
+        if (randAction < 0.01){
+            action = "injury";
+        } else if (randAction < 0.1 && isPossibleSub) {
+            action = "substitute";
+        } else {
+            action = "foul";
+        }
+    }
+
     const randTime = Math.round(Math.random() * (10 - 1) + 1);
 
     const team1score = document.getElementById("team-1-score");
@@ -328,7 +342,7 @@ function simulateAction(team, player, team1, team2, currentTime) {
                 .replace(/([a-z])([A-Z])/g, "$1 $2")
                 .toLowerCase();
             if (action !== "freeKick" && Math.random() < 0.3) {
-                if (["shoot", "longShot"].includes(action)) {
+                if (["shoot"].includes(action)) {
                     logEvent(
                         currentTime - randTime,
                         "cutInside",
@@ -394,22 +408,24 @@ function simulateAction(team, player, team1, team2, currentTime) {
             break;
 
         case "foul":
-            const randFoul = Math.random();
             if (player.foul) {
                 player.foul++;
             } else {
                 player.foul = 1;
             }
-            if (randFoul < 0.5) {
-                if (Math.random() < 0.1) {
+            if (randAction < 0.1) {
+                if (randAction < 0.01){
                     player.foul_card = "red";
-                } else if (Math.random() < 0.3) {
-                    player.foul_card = "yellow";
                 } else {
+                    player.foul_card = "yellow";
+                }
+            } else {
+                if (player.foul / 3 === 1) {
+                    player.foul_card = "yellow";
                 }
             }
             if (player.foul_card === "yellow") {
-                if (player.foul > 2) {
+                if (player.foul / 3 >= 2) {
                     player.foul_card = "red";
                 }
             }
@@ -417,10 +433,10 @@ function simulateAction(team, player, team1, team2, currentTime) {
             if (player.foul_card === 'yellow') {
                 foulCardText = `, got a yellow card`;
             }
-            if (player.foul_card === 'red') {
-                foulCardText = `, has been sent off with a red card`;
-            }
             logEvent(currentTime, "foul", `${player.name} commits a foul${foulCardText}.`);
+            if (player.foul_card === 'red') {
+                handlePlayerExit(team, currentTime + randTime, {...player, isExit: true}, "red_card");
+            }
             player.score = Math.max(player.score - lowPlayerScore, 1);
             redraw();
             break;
@@ -459,12 +475,14 @@ function simulateAction(team, player, team1, team2, currentTime) {
             redraw();
             break;
 
-        case "card":
-            handleCard(player, team, currentTime);
+        case "injury":
+            logEvent(currentTime, "injury", `${player.name} sustained an injury and required assistance.`);
+            handlePlayerExit(team, currentTime + randTime, {...player, isExit: true}, "injury");
             break;
 
-        case "injury":
-            handlePlayerExit(currentTime, team, player, "injury");
+        case "substitute ":
+            logEvent(currentTime, "substitute ", `${player.name} was substituted.`);
+            handlePlayerExit(team, currentTime + randTime, {...player, isExit: true}, "substitute ");
             break;
 
         case "tackle":
@@ -520,7 +538,7 @@ function simulateAction(team, player, team1, team2, currentTime) {
                     `${gkOpposingPlayer["name"]} saved a penalty kick.`
                 );
                 gkOpposingPlayer.score = Math.min(gkOpposingPlayer.score + mediumPlayerScore, 10);
-                player.score = Math.max(player.score - highPlayerScore, 1);
+                player.score = Math.max(player.score - lowPlayerScore, 1);
             }
             redraw();
             break;
@@ -740,42 +758,36 @@ function attemptOutcome(action, attacker, defendingTeam) {
     return randomChance < finalChance;
 }
 
-function handleCard(player, team, currentTime) {
-    const cardType = Math.random() < 0.5 ? "yellow" : "red";
-    logEvent(
-        currentTime,
-        `${cardType} card`,
-        `${player.name} receives a ${cardType} card.`
-    );
-
-    if (cardType === "red") {
-        handlePlayerExit(currentTime, team, player, "red card");
-    }
-}
-
-function handlePlayerExit(currentTime, team, player, reason) {
-    logEvent(
-        currentTime,
-        "player-out",
-        `${player.name} exits the match (${reason}).`
-    );
-    const substitute = team.bench.shift(); // Get the next substitute
-
-    if (substitute) {
-        logEvent(
-            currentTime,
-            "player-in",
-            `${substitute.name} enters the field as a substitute.`
-        );
-        team.players = team.players.filter((p) => p !== player); // Remove the player
-        team.players.push(substitute); // Add the substitute
-    } else {
-        logEvent(
-            currentTime,
-            "player-empty",
-            `${team.name} has no substitutes left!`
-        );
-        team.players = team.players.filter((p) => p !== player); // Remove the player
+function handlePlayerExit(team, currentTime, player, reason) {
+    if (team.bench.length){
+        // Attempt to get a substitute from the team's bench
+        const substitute = getRandPlayerFromTeam("exit", team, player);
+    
+        if (substitute && (reason !== "red_card")) {
+            // Find the index of the exiting player
+            const playerIndex = team.players.findIndex(p => p.uuid === player.uuid);
+    
+            if (playerIndex !== -1) {
+                // Replace the exiting player at the same index
+                team.players[playerIndex] = substitute;
+    
+                // Remove the substitute from the bench
+                team.bench = team.bench.filter((p) => p !== substitute);
+    
+                // Log the substitution event
+                logEvent(currentTime, "player-in", `${substitute.name} enters the field, replacing ${player.name}.`);
+            } else {
+                console.error(`Player ${player.name} not found in team.players.`);
+            }
+        } else {
+            if (reason !== "red_card"){
+                // Handle the scenario when no substitutes are available
+                logEvent(currentTime, "player-empty", `${team.name} has no substitutes left!`);
+            }
+    
+            // Remove the exiting player from the active players list
+            team.players = team.players.filter((p) => p !== player);
+        }
     }
 }
 
