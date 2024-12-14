@@ -7,18 +7,26 @@ File: Custom Css File
 */
 
 tr.my-club-player-row {
-  opacity: 0.75;
-  cursor: pointer;
-  transition: all 0.5s ease;
+    opacity: 0.75;
+    cursor: pointer;
+    transition: all 0.5s ease;
 }
+
 tr.my-club-player-row:hover,
 tr.my-club-player-row.selected {
-  opacity: 1;
+    opacity: 1;
 }
+
 tr.my-club-player-row :is(.btn-search, .btn-change) {
-  visibility: hidden;
+    visibility: hidden;
 }
+
 tr.my-club-player-row:hover :is(.btn-search, .btn-change),
 tr.my-club-player-row.selected :is(.btn-search, .btn-change) {
-  visibility: visible;
+    visibility: visible;
+}
+
+#inventoryItemModal #player-info .progress-bar {
+    /*transition-duration: 2s;*/
+    transition-timing-function: linear;
 }

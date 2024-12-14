@@ -26,7 +26,7 @@ ob_start();
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link active" href="#">
+                            <a class="nav-link active" href="<?= home_url('football-manager/store/inventory') ?>">
                                 My Inventory
                             </a>
                         </li>
@@ -360,9 +360,12 @@ ob_start();
                                             </div>
                                             <div class="col-sm-auto">
                                                 <div class="d-flex align-items-center gap-2 text-muted">
-                                                    <a href="<?= $index === 0 ? home_url("football-manager/store/item?id=" . uniqid()) : '#' ?>"
+                                                    <a href="#"
                                                        data-item-uuid="<?= uniqid() ?>"
-                                                       class="btn btn-<?= $index === 0 ? 'danger' : 'success' ?> btn-label right ms-auto <?= $index !== 0 ? 'btn-take-inventory-item' : '' ?>"><i
+                                                       data-item-slug="<?= $item['slug'] ?>"
+                                                       data-item-type="<?= $item['type'] ?>"
+                                                       data-bs-toggle="modal" data-bs-target="#inventoryItemModal"
+                                                       class="btn btn-success btn-label right ms-auto btn-take-inventory-item"><i
                                                                 class="ri-arrow-right-line label-icon align-bottom fs-16 ms-2"></i>
                                                         Take it</a>
                                                 </div>
@@ -377,6 +380,93 @@ ob_start();
                     <?php
                     includeFileWithVariables('components/pagination.php', array("count" => $list['total_items'], "perPage" => $list['per_page']));
                     ?>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- staticBackdrop Modal -->
+    <div class="modal fade" id="inventoryItemModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+         role="dialog" aria-labelledby="inventoryItemModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-body p-5">
+                    <div class="mt-4">
+                        <div class="text-center">
+                            <h4 class="mb-3">Your Player</h4>
+                            <p class="text-muted mb-0"> The transfer was not successfully received by us. the email of
+                                the
+                                recipient wasn't correct.</p>
+                        </div>
+                        <div class="card-body py-5" id="player-info">
+                            <div class="row">
+                                <div class="col-3 text-center">
+                                    <div class="profile-user position-relative d-inline-block mx-auto">
+                                        <img src="<?= home_url('assets/images/users/avatar-1.jpg') ?>"
+                                             class="rounded-circle avatar-md img-thumbnail user-profile-image"
+                                             alt="user-profile-image">
+                                    </div>
+                                </div>
+                                <div class="col-9">
+                                    <h5 class="fs-16 mb-1"
+                                        id="player-name"></h5>
+                                    <p class="text-muted mb-0 fs-14"
+                                       id="player-nationality"></p>
+                                    <p class="text-muted mb-0 mt-2"><span
+                                                id="player-best_position"></span>
+                                        <span id="player-ability"></span>
+                                        <span id="player-playable_positions"></span>
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="px-2 py-2 mt-4">
+                                <p class="mb-1 fs-12">Mental <span class="float-end"><span
+                                                id="mental-label">0</span></span>
+                                </p>
+                                <div class="progress mt-2" style="height: 6px;">
+                                    <div class="progress-bar progress-bar-striped bg-primary" role="progressbar"
+                                         style="width: 0"
+                                         aria-valuenow="0"
+                                         aria-valuemin="0"
+                                         aria-valuemax="0"
+                                         id="mental-value"></div>
+                                </div>
+
+                                <p class="mt-3 mb-1 fs-12">Physical <span class="float-end"><span
+                                                id="physical-label">0</span></span>
+                                </p>
+                                <div class="progress mt-2" style="height: 6px;">
+                                    <div class="progress-bar progress-bar-striped bg-primary" role="progressbar"
+                                         style="width: 0"
+                                         aria-valuenow="0"
+                                         aria-valuemin="0"
+                                         aria-valuemax="0"
+                                         id="physical-value"></div>
+                                </div>
+
+                                <p class="mt-3 mb-1 fs-12">Technical <span class="float-end"><span
+                                                id="technical-label">0</span></span>
+                                </p>
+                                <div class="progress mt-2" style="height: 6px;">
+                                    <div class="progress-bar progress-bar-striped bg-primary" role="progressbar"
+                                         style="width: 0"
+                                         aria-valuenow="0"
+                                         aria-valuemin="0"
+                                         aria-valuemax="0"
+                                         id="technical-value"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <form action="">
+                            <div class="hstack gap-2 justify-content-center">
+                                <a href="javascript:void(0);" class="btn btn-link link-success fw-medium"
+                                   data-bs-dismiss="modal"><i class="ri-close-line me-1 align-middle"></i> Close</a>
+                                <button type="submit" class="btn btn-success" data-bs-dismiss="modal">Join My Team
+                                </button>
+                            </div>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>

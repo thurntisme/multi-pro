@@ -91,7 +91,8 @@ function calculatePlayerWage(
     string $season,
     int    $overallAbility,
     string $type
-): float {
+): float
+{
     // Define base nation multipliers
     global $popularNations, $semiPopularNations;
     $nationMultipliers = [
@@ -160,7 +161,8 @@ function calculateMarketValue(
     string $season,
     int    $overallAbility,
     string $type
-): float {
+): float
+{
     // Step 1: Define the base salary depending on the nation
     global $popularNations, $semiPopularNations;
     $baseSalaries = [
@@ -268,7 +270,7 @@ function generateRandomPlayers($type = '', $playerData = []): array
     global $positions;
     $players = [];
     $minAttr = 44;
-    $maxAttr = 87;
+    $maxAttr = 77;
 
     if (!empty($type)) {
         if ($type == 'legend') {
@@ -521,7 +523,7 @@ function generateRandomPlayers($type = '', $playerData = []): array
     $height = rand(165, 195); // in cm
     $weight = rand($height - 105, $height - 85); // Proportional weight
 
-    if (!empty($type)) {
+    if (!empty($type) && count($playerData) > 0) {
         $nationality = $playerData['nationality'];
         $name = $playerData['name'];
         $bestPosition = $playerData['best_position'];
@@ -722,4 +724,42 @@ function getPositionColor($position)
     }
 
     return "gray"; // Default color if position is not found
+}
+
+function filterPlayers($item_slug, $playerData)
+{
+    $players = getPlayersJson();
+    $seasonArr = [
+        "ballon-dor" => "Ballon d'Or",
+        "legend" => "Legend",
+        "the-best" => "The Best",
+        "superstar" => "Superstar",
+        "rising-star" => "Rising Star",
+        "normal" => "Normal"
+    ];
+    $by_season = false;
+    if (array_key_exists($item_slug, $seasonArr)) {
+        $by_season = true;
+    }
+    $levelArr = [
+        "level-1" => 60,
+        "level-2" => 70,
+        "level-3" => 80,
+        "level-4" => 90,
+        "level-5" => 100,
+    ];
+    $by_level = false;
+    if (array_key_exists($item_slug, $levelArr)) {
+        $by_level = true;
+    }
+
+    $filteredPlayers = array_filter($players, function ($item) use ($levelArr, $by_level, $seasonArr, $by_season, $item_slug, $playerData) {
+        return
+            (!$by_season || $item['season'] === $seasonArr[$item_slug]) &&
+            (!$by_level || ($item['ability'] >= $levelArr[$item_slug]) && ($item['ability'] < $levelArr[$item_slug] + 10)) &&
+            ($item_slug === "mystery-pack" && $item['ability'] < 100);
+    });
+    // Pick a random item
+    $randomKey = array_rand($filteredPlayers); // Get a random key
+    return $filteredPlayers[$randomKey]; // Get the player
 }
