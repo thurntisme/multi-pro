@@ -753,12 +753,16 @@ function filterPlayers($item_slug, $playerData)
     if (array_key_exists($item_slug, $levelArr)) {
         $by_level = true;
     }
+    $is_mystery_pack = false;
+    if ($item_slug === "mystery-pack") {
+        $is_mystery_pack = true;
+    }
 
-    $filteredPlayers = array_filter($players, function ($item) use ($levelArr, $by_level, $seasonArr, $by_season, $item_slug, $playerData) {
+    $filteredPlayers = array_filter($players, function ($item) use ($is_mystery_pack, $levelArr, $by_level, $seasonArr, $by_season, $item_slug, $playerData) {
         return
             (!$by_season || $item['season'] === $seasonArr[$item_slug]) &&
             (!$by_level || ($item['ability'] >= $levelArr[$item_slug]) && ($item['ability'] < $levelArr[$item_slug] + 10)) &&
-            ($item_slug === "mystery-pack" && $item['ability'] < 100);
+            (!$is_mystery_pack || $item['ability'] < 100);
     });
     // Pick a random item
     $randomKey = array_rand($filteredPlayers); // Get a random key
