@@ -45,9 +45,11 @@ $(document).on("click", playerRowEl, (e) => {
                     allPlayers[playerSelectedIndex],
                 ];
             }
-            const newLineUpPlayers = allPlayers.slice(0, 11);
-            groupTeams[0].players = newLineUpPlayers;
+            groupTeams[0].players = allPlayers.slice(0, 11);
+            groupTeams[0].bench = allPlayers.slice(11);
             redraw(formation);
+            const newPlayers = [...groupTeams[0].players, ...groupTeams[0].bench];
+            $("[name='team_players']").val(JSON.stringify(updateArraysAndGetResult(allBasePlayers, newPlayers)));
 
             const cloneRow1 = playerSelected.clone(true);
             const cloneRow2 = changePlayer.clone(true);
@@ -93,3 +95,16 @@ const renderPlayerSelected = (player) => {
         });
     }
 };
+
+const updateArraysAndGetResult = (baseArray, updatedArray) => {
+    const result = [];
+
+    // Iterate over the updated array and compare with the base array
+    for (let i = 0; i < updatedArray.length; i++) {
+        if (JSON.stringify(baseArray[i]) !== JSON.stringify(updatedArray[i])) {
+            result.push({...updatedArray[i], new_starting_order: i});
+        }
+    }
+
+    return result;
+}

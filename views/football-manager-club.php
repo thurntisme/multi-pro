@@ -17,6 +17,14 @@ if ($myTeam['players']) {
     $subPlayers = array_slice($myTeam['players'], 11);
 }
 
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    if (isset($_POST['action_name'])) {
+        if ($_POST['action_name'] === 'update_my_club') {
+            $footballTeamController->updateMyClub();
+        }
+    }
+}
+
 ob_start();
 ?>
 
@@ -28,6 +36,11 @@ ob_start();
                 </div>
             </div>
         </div>
+
+        <?php
+        include_once DIR . '/components/alert.php';
+        ?>
+
         <!--end col-->
         <div class="col-lg-12">
             <?php if ($myTeam) { ?>
@@ -58,7 +71,6 @@ ob_start();
                                 </table>
                                 <div class="p-3 d-flex align-items-center justify-content-center">
                                     <canvas id="footballPitch" width="320" height="160"></canvas>
-                                    <input type="hidden" name="team_formation" value="<?= $myTeam['formation'] ?>">
                                 </div>
                             </div>
                         </div>
@@ -219,7 +231,7 @@ ob_start();
                                                             </td>
                                                             <td>
                                                                 <div class="d-flex align-items-center">
-                                                                    <span class="me-auto"><?= $item['name'] ?></span>
+                                                                    <span class="me-auto"><?= $item['name'] . ' ' . $item['id'] ?></span>
                                                                     <div class="btn-group">
                                                                         <button class="btn btn-info btn-sm btn-search ms-1">
                                                                             <i class="las la-search fs-14"></i>
@@ -322,7 +334,12 @@ ob_start();
                                 </div>
                                 <div class="d-flex justify-center">
                                     <button class="btn btn-light me-2">Reset</button>
-                                    <button class="btn btn-success">Save</button>
+                                    <form action="<?= $_SERVER['REQUEST_URI'] ?>" method="post" id="my-club-form">
+                                        <input type="hidden" name="action_name" value="update_my_club">
+                                        <input type="hidden" name="team_formation" value="<?= $myTeam['formation'] ?>">
+                                        <input type="hidden" name="team_players" value="">
+                                        <button class="btn btn-success" type="submit">Save</button>
+                                    </form>
                                 </div>
                             </div>
                         </div>
@@ -348,6 +365,7 @@ $pageContent = ob_get_clean();
 ob_start();
 echo "
     <script type='text/javascript'>
+        let apiUrl = '" . home_url("/api") . "';
         const canvas = document.getElementById('footballPitch');
         const ctx = canvas.getContext('2d');
 
@@ -367,6 +385,7 @@ echo "
         const pitchX = 50;
 
         const positionGroups = " . json_encode($positionGroupsExtra) . ";
+        const allBasePlayers = " . json_encode($myTeam['players']) . ";
         const allPlayers = " . json_encode($myTeam['players']) . ";
     </script>
     <script src='" . home_url("/assets/js/pages/football-manager-formation.js") . "'></script>

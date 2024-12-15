@@ -666,6 +666,7 @@ function getTeamPlayerData($teamPlayers): array
     $firstEleven = array_slice($teamPlayers, 0, 11);
     // Initialize the analytics array
     $analytics = [
+        'Goalkeepers' => ['totalRating' => 0, 'count' => 0],
         'Defenders' => ['totalRating' => 0, 'count' => 0],
         'Midfielders' => ['totalRating' => 0, 'count' => 0],
         'Attackers' => ['totalRating' => 0, 'count' => 0]

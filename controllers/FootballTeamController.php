@@ -166,4 +166,47 @@ class FootballTeamController
 
         return $assignedPlayers;
     }
+
+    function updateMyClub()
+    {
+        $myTeam = $this->getMyTeam();
+        $formation = $_POST['team_formation'] ?? '';
+        $players = $_POST['team_players'] ? json_decode($_POST['team_players'], true) : '';
+        $isSuccess = null;
+        if ($formation !== $myTeam['formation']) {
+            try {
+                $rowsAffectedFormation = $this->footballTeamService->updateMyClubFormation($formation);
+                if ($rowsAffectedFormation) {
+                    $isSuccess = true;
+                } else {
+                    $isSuccess = false;
+                }
+            } catch (Throwable $th) {
+                $isSuccess = true;
+            }
+        }
+        if ($players && count($players) > 0) {
+            try {
+                foreach ($players as $player) {
+                    $this->footballTeamService->updateMyClubPlayer($player);
+                }
+                $isSuccess = true;
+            } catch (Throwable $th) {
+                $isSuccess = false;
+            }
+        }
+
+        if ($isSuccess !== null) {
+            if ($isSuccess) {
+                $_SESSION['message_type'] = 'success';
+                $_SESSION['message'] = "Your club updated successfully.";
+            } else {
+                $_SESSION['message_type'] = 'danger';
+                $_SESSION['message'] = "Failed to update your club.";
+            }
+        }
+
+        header("Location: " . home_url("football-manager/my-club"));
+        exit;
+    }
 }

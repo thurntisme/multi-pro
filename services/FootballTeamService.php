@@ -100,19 +100,6 @@ class FootballTeamService
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
-    // Delete a code
-
-    public function deleteCode($id)
-    {
-        $sql = "DELETE FROM codes WHERE id = :id AND user_id = :user_id";
-        $stmt = $this->pdo->prepare($sql);
-        $stmt->execute([':id' => $id, ':user_id' => $this->user_id]);
-
-        return $stmt->rowCount();
-    }
-
-    // Get all codes
-
     public function getAllTeams()
     {
         $sql = "SELECT * FROM football_team ORDER BY league_position ASC ";
@@ -162,5 +149,55 @@ class FootballTeamService
             $team['players'] = $players;
         }
         return $team;
+    }
+
+    public function updateMyClubFormation($formation)
+    {
+        $sql = "UPDATE football_team SET formation = :formation, updated_at = CURRENT_TIMESTAMP WHERE manager_id = :manager_id";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute([':formation' => $formation, ':manager_id' => $this->user_id]);
+
+        return $stmt->rowCount();
+    }
+
+    function updateMyClubPlayers($index, $players)
+    {
+        $myTeam = $this->getMyTeamData();
+        try {
+            // Start transaction
+            $this->pdo->beginTransaction();
+
+            // Prepare the SQL statement
+            $stmt = $this->pdo->prepare("UPDATE football_player SET starting_order = :starting_order, updated_at = CURRENT_TIMESTAMP WHERE team_id = :team_id AND player_uuid = :player_uuid");
+
+            // Execute the update for each player
+            foreach ($players as $index => $player) {
+                $stmt->execute([
+                    ':starting_order' => $index,
+                    ':team_id' => $myTeam['id'],
+                    ':player_uuid' => $player['uuid'],
+                ]);
+            }
+
+            // Commit the transaction
+            $this->pdo->commit();
+        } catch (Exception $e) {
+            // Roll back if something fails
+            if ($this->pdo->inTransaction()) {
+                $this->pdo->rollBack();
+            }
+        }
+    }
+
+    function updateMyClubPlayer($player)
+    {
+        $sql = "UPDATE football_player SET starting_order = :starting_order, updated_at = CURRENT_TIMESTAMP WHERE id = :id";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute([
+            ':starting_order' => $player['new_starting_order'],
+            ':id' => $player['id']
+        ]);
+
+        return $stmt->rowCount();
     }
 }
