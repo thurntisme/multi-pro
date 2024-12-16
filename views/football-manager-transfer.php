@@ -3,11 +3,24 @@ $pageTitle = "Football Manager Transfer";
 
 require_once DIR . '/functions/generate-player.php';
 
-$players = getPlayersJson();
+$players = getTransferPlayerJson();
 $commonController = new CommonController();
 $list = $commonController->convertResources($players);
 
 $sort_order = !empty($_GET['sort_order']) && $_GET['sort_order'] === 'asc' ? 'desc' : 'asc';
+
+function isFilter($array) {
+    $result = [];
+    
+    foreach ($array as $key => $value) {
+        // Check if the key matches "player_*" and the value is not empty
+        if (preg_match('/^player_/', $key) && !empty($value)) {
+            $result[$key] = $value;
+        }
+    }
+    
+    return $result;
+}
 
 ob_start();
 ?>
@@ -35,7 +48,7 @@ ob_start();
                                     <i class="ri-search-line search-icon"></i>
                                 </div>
                             </div>
-                            <button class="btn btn-light w-auto ms-2" type="button" data-bs-toggle="collapse"
+                            <button class="btn btn-<?= isFilter($_GET) ? 'primary' : 'light' ?> w-auto ms-2" type="button" data-bs-toggle="collapse"
                                 data-bs-target="#advancedFilter" aria-expanded="true"
                                 aria-controls="advancedFilter">
                                 <i class="ri-filter-2-line"></i>
@@ -48,9 +61,61 @@ ob_start();
                                     class="ri-refresh-line me-1 align-bottom"></i>Reset</a>
                         </div>
                         <div class="collapse" id="advancedFilter">
-                            <div class="card mb-0">
-                                <div class="card-body">
-                                    Advanced filter here
+                            <div class="row g-4 mt-0 mb-4">
+                                <div class="col-lg-4">
+                                    <div>
+                                        <label for="player_season" class="form-label">Season</label>
+                                        <select class="form-control" data-choices data-choices-sorting-false name="player_season">
+                                            <option value="">Select Season</option>
+                                            <?php foreach ($seasons as $season => $threshold): ?>
+                                                <option value="<?= $season ?>" <?= !empty($_GET['player_season']) && $_GET['player_season'] === $season ? 'selected' : '' ?>><?= ucfirst($season) ?></option>
+                                            <?php endforeach; ?>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div>
+                                        <label for="player_nationality" class="form-label">Nationality</label>
+                                        <select class="form-control" data-choices name="player_nationality">
+                                            <option value="">Select Nationality</option>
+                                            <?php foreach (DEFAULT_NATIONALITY as $index => $nation): ?>
+                                                <option value="<?= $nation ?>"  <?= !empty($_GET['player_nationality']) && $_GET['player_nationality'] === $nation ? 'selected' : '' ?>><?= $nation ?></option>
+                                            <?php endforeach; ?>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-4">
+                                    <div>
+                                        <label for="player_age" class="form-label">Age</label>
+                                        <input type="number" class="form-control" name="player_age" id="player_age" min="18" max="35" placeholder="Age" value="<?= $_GET['player_age'] ?? '' ?>"/>
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-4">
+                                    <div>
+                                        <label for="player_weight" class="form-label">Weight (kg)</label>
+                                        <input type="number" class="form-control" name="player_weight" id="player_weight" min="60" max="110" placeholder="Weight (kg)"  value="<?= $_GET['player_weight'] ?? '' ?>"/>
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-4">
+                                    <div>
+                                        <label for="player_height" class="form-label">Height (cm)</label>
+                                        <input type="number" class="form-control" name="player_height" id="player_height" min="165" max="195" placeholder="Height (cm)"  value="<?= $_GET['player_height'] ?? '' ?>"/>
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-4">
+                                    <div>
+                                        <label for="player_position" class="form-label">Position</label>
+                                        <select class="form-control" data-choices name="player_position">
+                                            <option value="">Select Position</option>
+                                            <?php foreach ($positions as $position): ?>
+                                                <option value="<?= $position ?>" <?= !empty($_GET['player_position']) && $_GET['player_position'] === $position ? 'selected' : '' ?>><?= $position ?></option>
+                                            <?php endforeach; ?>
+                                        </select>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -70,11 +135,11 @@ ob_start();
                                         <th class="sort text-center" scope="col">Playable</th>
                                         <th class="sort text-center" scope="col">Season</th>
                                         <th class="sort text-center" scope="col"><a
-                                                href="?sort_by=ability&sort_order=<?= $sort_order ?>">Ability</a></th>
+                                                href="<?= generatePageUrl(['sort_by' => 'ability', 'sort_order' => $sort_order]) ?>">Ability</a></th>
                                         <th class="sort text-center" scope="col"><a
-                                                href="?sort_by=contract_wage&sort_order=<?= $sort_order ?>">Contract Wage</a></th>
+                                                href="<?= generatePageUrl(['sort_by' => 'contract_wage', 'sort_order' => $sort_order]) ?>">Contract Wage</a></th>
                                         <th class="sort text-center" scope="col"><a
-                                                href="?sort_by=market_value&sort_order=<?= $sort_order ?>">Price</a></th>
+                                                href="<?= generatePageUrl(['sort_by' => 'market_value', 'sort_order' => $sort_order]) ?>">Price</a></th>
                                         <th class="text-center" scope="col"></th>
                                     </tr>
                                 </thead>

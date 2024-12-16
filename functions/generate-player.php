@@ -600,6 +600,59 @@ function getPlayersJson($fileName = '')
     return array_reverse($oldData);
 }
 
+function getTransferPlayerJson(){
+    $players = getPlayersJson();
+    $player_season = $_GET['player_season'] ?? '';
+    $player_nationality = $_GET['player_nationality'] ?? '';
+    $player_age = $_GET['player_age'] ?? '';
+    $player_weight = $_GET['player_weight'] ?? '';
+    $player_height = $_GET['player_height'] ?? '';
+    $player_position = $_GET['player_position'] ?? '';
+    
+    $filteredPlayers = array_filter($players, function ($player) use (
+        $player_season,
+        $player_nationality,
+        $player_age,
+        $player_weight,
+        $player_height,
+        $player_position
+    ) {
+        // Filter by player_season if specified
+        if ($player_season && $player['season'] !== $player_season) {
+            return false;
+        }
+
+        // Filter by player_nationality if specified
+        if ($player_nationality && $player['nationality'] !== $player_nationality) {
+            return false;
+        }
+
+        // Filter by player_age if specified
+        if ($player_age && $player['age'] != $player_age) {
+            return false;
+        }
+
+        // Filter by player_weight if specified
+        if ($player_weight && $player['weight'] != $player_weight) {
+            return false;
+        }
+
+        // Filter by player_height if specified
+        if ($player_height && $player['height'] != $player_height) {
+            return false;
+        }
+
+        // Filter by player_position if specified
+        if ($player_position && !($player['best_position'] === $player_position || in_array($player_position, $player['playable_positions']))) {
+            return false;
+        }
+
+        return true; // Include the player if all checks pass
+    });
+
+    return $filteredPlayers;
+}
+
 function getPlayerJsonByUuid($targetUuid)
 {
     // Set the file name
