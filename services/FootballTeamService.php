@@ -91,11 +91,11 @@ class FootballTeamService
 
     // Delete a code
 
-    public function getTeamData($teamId)
+    public function getMyTeamData()
     {
-        $sql = "SELECT * FROM football_team WHERE id = :team_id";
+        $sql = "SELECT * FROM football_team WHERE manager_id = :manager_id";
         $stmt = $this->pdo->prepare($sql);
-        $stmt->execute([':team_id' => $teamId]);
+        $stmt->execute([':manager_id' => $this->user_id]);
 
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
@@ -120,27 +120,6 @@ class FootballTeamService
         return $team;
     }
 
-    public function getTeamPlayersByUserId()
-    {
-        $team = $this->getMyTeamData();
-        if (!empty($team)) {
-            $players = array_map(function ($player) {
-                return $this->footballPlayerController->viewPlayer($player['id']);
-            }, $this->getTeamPlayers($team['id'], 'players'));
-            $team['players'] = $players;
-        }
-        return $team;
-    }
-
-    public function getMyTeamData()
-    {
-        $sql = "SELECT * FROM football_team WHERE manager_id = :manager_id";
-        $stmt = $this->pdo->prepare($sql);
-        $stmt->execute([':manager_id' => $this->user_id]);
-
-        return $stmt->fetch(PDO::FETCH_ASSOC);
-    }
-
     public function getTeamPlayers($team_id, $type = '')
     {
         $query = "";
@@ -157,13 +136,38 @@ class FootballTeamService
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
+    public function getTeamPlayersByUserId()
+    {
+        $team = $this->getMyTeamData();
+        if (!empty($team)) {
+            $players = array_map(function ($player) {
+                return $this->footballPlayerController->viewPlayer($player['id']);
+            }, $this->getTeamPlayers($team['id'], 'players'));
+            $team['players'] = $players;
+        }
+        return $team;
+    }
+
     public function assignPlayerToTeam($teamId, $playerId)
     {
         $joining_date = date('Y-m-d H:i:s');
         $contract_end_date = date('Y-m-d H:i:s', strtotime('+7 days'));
-        $sql = "UPDATE football_player SET joining_date = :joining_date, contract_end_date = :contract_end_date, status = 'club', updated_at = CURRENT_TIMESTAMP WHERE team_id = :team_id AND id = :player_id";
+        $sql = "UPDATE football_player SET joining_date = :joining_date, contract_end_date = :contract_end_date, status = :status, updated_at = CURRENT_TIMESTAMP WHERE team_id = :team_id AND id = :player_id";
         $stmt = $this->pdo->prepare($sql);
-        $stmt->execute([':joining_date' => $joining_date, ':contract_end_date' => $contract_end_date, ':team_id' => $teamId, ':player_id' => $playerId]);
+        $stmt->execute([':joining_date' => $joining_date, ':contract_end_date' => $contract_end_date, ':status' => 'club', ':team_id' => $teamId, ':player_id' => $playerId]);
+
+        return $stmt->rowCount();
+    }
+
+    public function movePlayerToTeam($teamId, $playerId, $transferId)
+    {
+        $sql = "UPDATE football_player SET status = :status, updated_at = CURRENT_TIMESTAMP WHERE team_id = :team_id AND id = :player_id";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute([':status' => 'players', ':team_id' => $teamId, ':player_id' => $playerId]);
+
+        $sql = "DELETE FROM football_transfer WHERE id = :id";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute([':id' => $transferId]);
 
         return $stmt->rowCount();
     }
@@ -179,6 +183,15 @@ class FootballTeamService
             $team['players'] = $players;
         }
         return $team;
+    }
+
+    public function getTeamData($teamId)
+    {
+        $sql = "SELECT * FROM football_team WHERE id = :team_id";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute([':team_id' => $teamId]);
+
+        return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
     public function updateMyClubFormation($formation)
@@ -229,5 +242,34 @@ class FootballTeamService
         ]);
 
         return $stmt->rowCount();
+    }
+
+    public function getRefundFromPlayer($playerId, $transfer_id)
+    {
+        $team = $this->getMyTeamData();
+        $playerData = $this->footballPlayerController->viewPlayer($playerId);
+        $budget = $team['budget'] + $playerData['market_value'];
+
+        try {
+            $teamSql = "UPDATE football_team SET budget = :budget, updated_at = CURRENT_TIMESTAMP WHERE manager_id = :manager_id";
+            $teamStmt = $this->pdo->prepare($teamSql);
+            $teamStmt->execute([':budget' => $budget, ':manager_id' => $this->user_id]);
+
+            $sql = "DELETE FROM football_transfer WHERE id = :id";
+            $stmt = $this->pdo->prepare($sql);
+            $stmt->execute([':id' => $transfer_id]);
+
+            $playerSql = "DELETE FROM football_player WHERE id = :id";
+            $playerStmt = $this->pdo->prepare($playerSql);
+            $playerStmt->execute([':id' => $playerId]);
+
+            if ($teamStmt->rowCount()) {
+                return $playerData['market_value'];
+            } else {
+                return 0;
+            }
+        } catch (Exception $e) {
+            return 0;
+        }
     }
 }

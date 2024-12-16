@@ -117,11 +117,6 @@ class FootballTeamController
         return $this->footballTeamService->getTeamByUserId();
     }
 
-    public function getMyTeamPlayers()
-    {
-        return $this->footballTeamService->getTeamPlayersByUserId();
-    }
-
     function randomTeamPlayers($formation)
     {
         $players = getPlayersJson();
@@ -170,6 +165,11 @@ class FootballTeamController
         }
 
         return $assignedPlayers;
+    }
+
+    public function getMyTeamPlayers()
+    {
+        return $this->footballTeamService->getTeamPlayersByUserId();
     }
 
     function updateMyClub()
@@ -226,7 +226,36 @@ class FootballTeamController
             $_SESSION['message'] = "Failed to assign $playerName to your team.";
         }
 
-        header("Location: " . home_url("football-manager/my-players"));
+        header("Location: " . $_SERVER['REQUEST_URI']);
+        exit;
+    }
+
+    function movePlayerToTeam($teamId, $playerId, $playerName, $transferId)
+    {
+        $rowsAffected = $this->footballTeamService->movePlayerToTeam($teamId, $playerId, $transferId);
+        if ($rowsAffected) {
+            $_SESSION['message_type'] = 'success';
+            $_SESSION['message'] = $playerName . " has been move successfully to your players.";
+        } else {
+            $_SESSION['message_type'] = 'danger';
+            $_SESSION['message'] = "Failed to assign $playerName to your players.";
+        }
+
+        header("Location: " . $_SERVER['REQUEST_URI']);
+        exit;
+    }
+
+    function getRefundFromPlayer($playerId, $playerName, $transferId)
+    {
+        $budget = $this->footballTeamService->getRefundFromPlayer($playerId, $transferId);
+        if ($budget) {
+            $_SESSION['message_type'] = 'success';
+            $_SESSION['message'] = 'An amount of $' . convertAmount($budget) . " has been successfully added to your team's budget.";
+        } else {
+            $_SESSION['message_type'] = 'danger';
+            $_SESSION['message'] = "Failed to refund from player $playerName.";
+        }
+        header("Location: " . home_url("football-manager/transfer/buy-list"));
         exit;
     }
 }

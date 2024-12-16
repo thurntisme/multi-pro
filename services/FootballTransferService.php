@@ -75,22 +75,13 @@ class FootballTransferService
     }
 
     // Delete a code
-    public function deleteCode($id)
+    public function deleteTransfer($transferId)
     {
-        $sql = "DELETE FROM codes WHERE id = :id AND user_id = :user_id";
+        $sql = "DELETE FROM football_transfer WHERE id = :id AND manager_id = :manager_id";
         $stmt = $this->pdo->prepare($sql);
-        $stmt->execute([':id' => $id, ':user_id' => $this->user_id]);
+        $stmt->execute([':id' => $transferId, ':manager_id' => $this->user_id]);
 
         return $stmt->rowCount();
-    }
-
-    // Get all codes
-    public function getAllTeams()
-    {
-        $sql = "SELECT * FROM football_team ORDER BY league_position ASC ";
-        $stmt = $this->pdo->query($sql);
-
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
     public function getTeamData()
@@ -109,14 +100,5 @@ class FootballTransferService
         $stmt->execute([':team_id' => $this->user_id]);
 
         return $stmt->fetch(PDO::FETCH_ASSOC);
-    }
-
-    public function getTeamByUserId()
-    {
-        $team = $this->getTeamData();
-        if (!empty($team)) {
-            $team['players'] = $this->getTeamPlayers($team['id']);
-        }
-        return $team;
     }
 }

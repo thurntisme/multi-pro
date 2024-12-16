@@ -119,7 +119,7 @@ ob_start();
                 <div class="col-xxl-9">
                     <div class="card card-height-100">
                         <div class="card-header border-0 align-items-center d-flex">
-                            <h4 class="card-title mb-0 flex-grow-1">Player Data</h4>
+                            <h4 class="card-title mb-0 flex-grow-1"><?= $player['name'] ?></h4>
                         </div><!-- end card header -->
                         <div class="card-body p-0">
                             <div class="bg-light-subtle border-top-dashed border border-start-0 border-end-0 border-bottom-dashed py-3 px-4">

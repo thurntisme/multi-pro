@@ -103,24 +103,23 @@ class FootballTransferController
     }
 
     // Handle deleting a code
-    public function deleteCode()
+    public function deleteTransfer($transferId, $playerName)
     {
-        $id = $_POST['post_id'] ?? null;
-        if ($id) {
-            $rowsAffected = $this->footballTransferService->deleteCode($id);
+        if ($transferId) {
+            $rowsAffected = $this->footballTransferService->deleteTransfer($transferId);
             if ($rowsAffected) {
                 $_SESSION['message_type'] = 'success';
                 $_SESSION['message'] = "Code deleted successfully.";
             } else {
                 $_SESSION['message_type'] = 'danger';
-                $_SESSION['message'] = "Failed to delete code.";
+                $_SESSION['message'] = "Failed to delete transfer .";
             }
         } else {
             $_SESSION['message_type'] = 'danger';
-            $_SESSION['message'] = "Failed to delete code.";
+            $_SESSION['message'] = "Failed to delete transfer .";
         }
 
-        header("Location: " . home_url("code"));
+        header("Location: " . $_SERVER['REQUEST_URI']);
         exit;
     }
 
@@ -128,7 +127,7 @@ class FootballTransferController
 
     public function listTransferPlayers($transferType)
     {
-        
+
         $list = array_map(function ($player) {
             $player_data = $this->footballPlayerController->viewPlayer($player['player_id']);
             return array_merge($player_data, $player);

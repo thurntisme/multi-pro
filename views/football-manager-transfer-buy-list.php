@@ -3,10 +3,27 @@ $pageTitle = "Football Manager Transfer";
 
 require_once DIR . '/controllers/FootballTransferController.php';
 require_once DIR . '/controllers/FootballPlayerController.php';
+require_once DIR . '/controllers/FootballTeamController.php';
 
 $footballTransferController = new FootballTransferController();
 $footballPlayerController = new FootballPlayerController();
+$footballTeamController = new FootballTeamController();
 $buyList = $footballTransferController->listTransferPlayers('buy');
+$myTeam = $footballTeamController->getMyTeamPlayers();
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    if (isset($_POST['action_name']) && isset($_POST['player_id'])) {
+        if ($_POST['action_name'] === 'player_join_team') {
+            $footballTeamController->movePlayerToTeam($myTeam['id'], $_POST['player_id'], $_POST['player_name'], $_POST['transfer_id']);
+        }
+        if ($_POST['action_name'] === 'get_refund') {
+            $footballTeamController->getRefundFromPlayer($_POST['player_id'], $_POST['player_name'], $_POST['transfer_id']);
+        }
+        if ($_POST['action_name'] === 'delete_transfer') {
+            $footballTransferController->deleteTransfer($_POST['transfer_id'], $_POST['player_name']);
+        }
+    }
+}
 
 ob_start();
 ?>
@@ -58,23 +75,90 @@ ob_start();
                                                 <td class="text-center"><?= $item['ability'] ?? '' ?></td>
                                                 <td class="text-center"><?= formatCurrency($item['contract_wage'] ?? 0) ?></td>
                                                 <td class="text-center"><?= formatCurrency($item['market_value'] ?? 0) ?></td>
-                                                <td class="text-center">
+                                                <td class="text-center hstack gap-1 justify-content-center">
                                                     <?php
-                                                        $response_at = new DateTime($item['response_at']);
-                                                        if ($now < $response_at) {
-                                                            echo '<button class="btn btn-light btn-sm"><i class="ri ri-close-line"></i> Cancel</button>';
-                                                        } else {
-                                                            if ($item['is_success']){
-                                                                echo '<button class="btn btn-soft-success btn-sm"><i class="ri ri-user-received-2-line"></i> Join</button>
-                                                                    <button class="btn btn-soft-danger btn-sm"><i class="ri ri-user-shared-2-line"></i> Sell</button>
-                                                                    <button class="btn btn-light btn-sm"><i class="ri ri-close-line"></i></button>';
-                                                            } else {
-                                                                echo '<button class="btn btn-soft-warning btn-sm"><i class="ri ri-money-dollar-circle-line"></i> Get a refund</button>
-                                                                    <button class="btn btn-light btn-sm"><i class="ri ri-close-line"></i></button>';
-                                                            }
-                                                        }
+                                                    $response_at = new DateTime($item['response_at']);
+                                                    if ($now < $response_at) { ?>
+                                                        <form method="POST" action="<?= $_SERVER['REQUEST_URI'] ?>">
+                                                            <input type="hidden" name="action_name"
+                                                                   value="delete_transfer">
+                                                            <input type="hidden" name="transfer_id"
+                                                                   value="<?= $item['id'] ?>">
+                                                            <input type="hidden" name="player_id"
+                                                                   value="<?= $item['player_id'] ?>">
+                                                            <input type="hidden" name="player_name"
+                                                                   value="<?= $item['name'] ?>">
+                                                            <button class="btn btn-light btn-sm" type="submit"><i
+                                                                        class="ri ri-close-line"></i> Cancel
+                                                            </button>
+                                                        </form>
+                                                    <?php } else {
+                                                        if ($item['is_success']) { ?>
+                                                            <form method="POST" action="<?= $_SERVER['REQUEST_URI'] ?>">
+                                                                <input type="hidden" name="action_name"
+                                                                       value="player_join_team">
+                                                                <input type="hidden" name="transfer_id"
+                                                                       value="<?= $item['id'] ?>">
+                                                                <input type="hidden" name="player_id"
+                                                                       value="<?= $item['player_id'] ?>">
+                                                                <input type="hidden" name="player_name"
+                                                                       value="<?= $item['name'] ?>">
+                                                                <button type="submit"
+                                                                        class="btn btn-soft-success btn-sm"><i
+                                                                            class="ri ri-user-received-2-line"></i> Move
+                                                                </button>
+                                                            </form>
+                                                            <form method="POST" action="<?= $_SERVER['REQUEST_URI'] ?>">
+                                                                <input type="hidden" name="action_name"
+                                                                       value="player_in_market">
+                                                                <input type="hidden" name="player_id"
+                                                                       value="<?= $item['id'] ?>">
+                                                                <button class="btn btn-soft-danger btn-sm"><i
+                                                                            class="ri ri-user-shared-2-line"></i> Sell
+                                                                </button>
+                                                            </form>
+                                                            <form method="POST" action="<?= $_SERVER['REQUEST_URI'] ?>">
+                                                                <input type="hidden" name="action_name"
+                                                                       value="delete_player">
+                                                                <input type="hidden" name="player_id"
+                                                                       value="<?= $item['player_id'] ?>">
+                                                                <input type="hidden" name="player_name"
+                                                                       value="<?= $item['name'] ?>">
+                                                                <button class="btn btn-light btn-sm"><i
+                                                                            class="ri ri-close-line"></i></button>
+                                                            </form>
+                                                        <?php } else { ?>
+                                                            <form method="POST" action="<?= $_SERVER['REQUEST_URI'] ?>">
+                                                                <input type="hidden" name="action_name"
+                                                                       value="get_refund">
+                                                                <input type="hidden" name="transfer_id"
+                                                                       value="<?= $item['id'] ?>">
+                                                                <input type="hidden" name="player_id"
+                                                                       value="<?= $item['player_id'] ?>">
+                                                                <input type="hidden" name="player_name"
+                                                                       value="<?= $item['name'] ?>">
+                                                                <button class="btn btn-soft-warning btn-sm"
+                                                                        type="submit"><i
+                                                                            class="ri ri-money-dollar-circle-line"></i>
+                                                                    Get
+                                                                    a refund
+                                                                </button>
+                                                            </form>
+
+                                                            <form method="POST" action="<?= $_SERVER['REQUEST_URI'] ?>">
+                                                                <input type="hidden" name="action_name"
+                                                                       value="delete_transfer">
+                                                                <input type="hidden" name="player_id"
+                                                                       value="<?= $item['player_id'] ?>">
+                                                                <input type="hidden" name="player_name"
+                                                                       value="<?= $item['name'] ?>">
+                                                                <button class="btn btn-light btn-sm" type="submit"><i
+                                                                            class="ri ri-close-line"></i></button>
+                                                            </form>
+                                                        <?php }
+                                                    }
                                                     ?>
-                                                    
+
                                                 </td>
                                             </tr>
                                         <?php }
