@@ -80,7 +80,7 @@ class FootballTeamService
 
     public function updateBudget($amount)
     {
-        $team = $this->getTeamData();
+        $team = $this->getMyTeamData();
         $remainingBudget = $team['budget'] - $amount;
         $sql = "UPDATE football_team SET budget = :budget, updated_at = CURRENT_TIMESTAMP WHERE manager_id = :manager_id";
         $stmt = $this->pdo->prepare($sql);

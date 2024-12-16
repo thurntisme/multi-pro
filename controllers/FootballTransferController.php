@@ -128,8 +128,13 @@ class FootballTransferController
 
     public function listTransferPlayers($transferType)
     {
+        
+        $list = array_map(function ($player) {
+            $player_data = $this->footballPlayerController->viewPlayer($player['player_id']);
+            return array_merge($player_data, $player);
+        }, $this->getTransferSQL("result", $transferType));
         return [
-            'list' => $this->getTransferSQL("result", $transferType),
+            'list' => $list,
             'count' => $this->getTransferSQL("count", $transferType),
         ];
     }

@@ -51,7 +51,7 @@ class FootballTransferService
         $is_success = rand(0, 1);  // Random boolean (0 or 1)
         $current_time = time();  // Current timestamp (now)
         $min_time = 4 * 60 * 60;  // 4 hours in seconds
-        $max_time = 7 * 24 * 60 * 60;  // 7 days in seconds
+        $max_time = 2 * 24 * 60 * 60;  // 2 days in seconds
 
         // Random time between 4 hours and 7 days from now
         $random_time_in_seconds = rand($min_time, $max_time);

@@ -231,7 +231,7 @@ ob_start();
                                                             </td>
                                                             <td>
                                                                 <div class="d-flex align-items-center">
-                                                                    <span class="me-auto"><?= $item['name'] . ' ' . $item['id'] ?></span>
+                                                                    <span class="me-auto"><?= $item['name'] ?></span>
                                                                     <div class="btn-group">
                                                                         <button class="btn btn-info btn-sm btn-search ms-1">
                                                                             <i class="las la-search fs-14"></i>

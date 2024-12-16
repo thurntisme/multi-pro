@@ -46,20 +46,33 @@ ob_start();
                                     </thead>
                                     <tbody class="list form-check-all">
                                     <?php if (count($buyList['list']) > 0) {
+                                        $now = new DateTime();
                                         foreach ($buyList['list'] as $item) {
-                                            // $playerData = $footballPlayerController->viewPlayer($item['player_id']);
                                             ?>
                                             <tr>
-                                                <td><?= $playerData['name'] ?? '' ?></td>
-                                                <td class="text-center"><?= $playerData['nationality'] ?? '' ?></td>
-                                                <td class="text-center"><?= $playerData['best_position'] ?? '' ?></td>
-                                                <td class="text-center"><?= !empty($playerData['playable_positions']) ? implode(", ", $playerData['playable_positions']) : '' ?></td>
-                                                <td class="text-center"><?= $playerData['season'] ?? '' ?></td>
-                                                <td class="text-center"><?= $playerData['ability'] ?? '' ?></td>
-                                                <td class="text-center"><?= formatCurrency($playerData['contract_wage'] ?? 0) ?></td>
-                                                <td class="text-center"><?= formatCurrency($playerData['market_value'] ?? 0) ?></td>
+                                                <td><?= $item['name'] ?? '' ?></td>
+                                                <td class="text-center"><?= $item['nationality'] ?? '' ?></td>
+                                                <td class="text-center"><?= $item['best_position'] ?? '' ?></td>
+                                                <td class="text-center"><?= !empty($item['playable_positions']) ? implode(", ", $item['playable_positions']) : '' ?></td>
+                                                <td class="text-center"><?= $item['season'] ?? '' ?></td>
+                                                <td class="text-center"><?= $item['ability'] ?? '' ?></td>
+                                                <td class="text-center"><?= formatCurrency($item['contract_wage'] ?? 0) ?></td>
+                                                <td class="text-center"><?= formatCurrency($item['market_value'] ?? 0) ?></td>
                                                 <td class="text-center">
-                                                    <button class="btn btn-soft-primary btn-sm">Cancel</button>
+                                                    <?php
+                                                        $response_at = new DateTime($item['response_at']);
+                                                        if ($now < $response_at) {
+                                                            echo 'Processing';
+                                                        } else {
+                                                            if ($item['is_success']){
+                                                                echo '<button class="btn btn-soft-success btn-sm"><i class="ri ri-user-received-2-line"></i> Join</button>
+                                                                    <button class="btn btn-soft-danger btn-sm"><i class="ri ri-user-shared-2-line"></i> Sell</button>';
+                                                            } else {
+                                                                echo '<button class="btn btn-soft-warning btn-sm"><i class="ri ri-money-dollar-circle-line"></i> Get a refund</button>';
+                                                            }
+                                                        }
+                                                    ?>
+                                                    
                                                 </td>
                                             </tr>
                                         <?php }
