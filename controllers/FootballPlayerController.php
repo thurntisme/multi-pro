@@ -17,8 +17,8 @@ class FootballPlayerController
         $this->footballPlayerService = new FootballPlayerService($pdo);
     }
 
-    // Handle creating a new code
-    public function createPlayer($teamId, $uuid)
+    // Handle creating a new player
+    public function createPlayer($teamId, $uuid, $status = '')
     {
         $data = getPlayerJsonByUuid($uuid);
         // Prepare player data for insertion
@@ -62,7 +62,7 @@ class FootballPlayerController
         ];
 
         if ($player) {
-            return $this->footballPlayerService->createPlayer($teamId, $player);
+            return $this->footballPlayerService->createPlayer($teamId, $player, $status);
         } else {
             return null;
         }

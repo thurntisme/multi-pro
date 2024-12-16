@@ -145,16 +145,27 @@ class FootballTeamService
     {
         $query = "";
         if ($type === 'club') {
-            $query = "AND (joining_date >= CURRENT_TIMESTAMP) AND (contract_end_date <= CURRENT_TIMESTAMP)";
+            $query = "AND (joining_date >= CURRENT_TIMESTAMP) AND (contract_end_date > CURRENT_TIMESTAMP) AND status LIKE 'club'";
         }
         if ($type === 'players') {
-            $query = "AND (joining_date < CURRENT_TIMESTAMP) AND (contract_end_date < CURRENT_TIMESTAMP)";
+            $query = "AND (joining_date < CURRENT_TIMESTAMP) AND (contract_end_date < CURRENT_TIMESTAMP) AND status LIKE 'players'";
         }
         $sql = "SELECT * FROM football_player WHERE team_id = :team_id $query ORDER BY starting_order ASC";
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute([':team_id' => $team_id]);
 
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function assignPlayerToTeam($teamId, $playerId)
+    {
+        $joining_date = date('Y-m-d H:i:s');
+        $contract_end_date = date('Y-m-d H:i:s', strtotime('+7 days'));
+        $sql = "UPDATE football_player SET joining_date = :joining_date, contract_end_date = :contract_end_date, status = 'club', updated_at = CURRENT_TIMESTAMP WHERE team_id = :team_id AND id = :player_id";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute([':joining_date' => $joining_date, ':contract_end_date' => $contract_end_date, ':team_id' => $teamId, ':player_id' => $playerId]);
+
+        return $stmt->rowCount();
     }
 
     public function getTeamById($teamId)

@@ -8,6 +8,18 @@ $myTeam = $footballTeamController->getMyTeamPlayers();
 
 $list = $commonController->convertResources($myTeam['players']);
 
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    if (isset($_POST['action_name']) && isset($_POST['player_id'])) {
+        if ($_POST['action_name'] === 'player_join_team' ) {
+            $footballTeamController->assignPlayerToTeam($myTeam['id'], $_POST['player_id'], $_POST['player_name']);
+        }
+        // if ($_POST['action_name'] === 'player_in_market' ) {
+        // }
+        // if ($_POST['action_name'] === 'delete_player' ) {
+        // }
+    }
+}
+
 ob_start();
 ?>
 
@@ -19,6 +31,11 @@ ob_start();
                 </div>
             </div>
         </div>
+
+        <?php
+        include_once DIR . '/components/alert.php';
+        ?>
+
         <!--end col-->
         <div class="col-lg-12">
             <div class="card">
@@ -84,10 +101,23 @@ ob_start();
                                                     <td class="text-center"><?= $item['weight'] ?> kg</td>
                                                     <td class="text-center"><?= formatCurrency($item['contract_wage']) ?></td>
                                                     <td class="text-center"><?= formatCurrency($item['market_value']) ?></td>
-                                                    <td class="text-center">
-                                                        <button class="btn btn-soft-success btn-sm"><i class="ri ri-user-received-2-line"></i> Join</button>
-                                                        <button class="btn btn-soft-danger btn-sm"><i class="ri ri-user-shared-2-line"></i> Sell</button>
-                                                        <button class="btn btn-light btn-sm"><i class="ri ri-close-line"></i></button>
+                                                    <td class="text-center hstack gap-1">
+                                                        <form method="POST" action="<?= $_SERVER['REQUEST_URI'] ?>">
+                                                            <input type="hidden" name="action_name" value="player_join_team">
+                                                            <input type="hidden" name="player_id" value="<?= $item['id'] ?>">
+                                                            <input type="hidden" name="player_name" value="<?= $item['name'] ?>">
+                                                            <button type="submit" class="btn btn-soft-success btn-sm"><i class="ri ri-user-received-2-line"></i> Join</button>
+                                                        </form>
+                                                        <form method="POST" action="<?= $_SERVER['REQUEST_URI'] ?>">
+                                                            <input type="hidden" name="action_name" value="player_in_market">
+                                                            <input type="hidden" name="player_id" value="<?= $item['id'] ?>">
+                                                            <button class="btn btn-soft-danger btn-sm"><i class="ri ri-user-shared-2-line"></i> Sell</button>
+                                                        </form>
+                                                        <form method="POST" action="<?= $_SERVER['REQUEST_URI'] ?>">
+                                                            <input type="hidden" name="action_name" value="delete_player">
+                                                            <input type="hidden" name="player_id" value="<?= $item['id'] ?>">
+                                                            <button class="btn btn-light btn-sm"><i class="ri ri-close-line"></i></button>
+                                                        </form>
                                                     </td>
                                                 </tr>
                                             <?php }

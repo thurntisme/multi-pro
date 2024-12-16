@@ -214,4 +214,19 @@ class FootballTeamController
         header("Location: " . home_url("football-manager/my-club"));
         exit;
     }
+
+    function assignPlayerToTeam($teamId, $playerId, $playerName)
+    {
+        $rowsAffected = $this->footballTeamService->assignPlayerToTeam($teamId, $playerId);
+        if ($rowsAffected) {
+            $_SESSION['message_type'] = 'success';
+            $_SESSION['message'] = $playerName . " has been assigned successfully to your team.";
+        } else {
+            $_SESSION['message_type'] = 'danger';
+            $_SESSION['message'] = "Failed to assign $playerName to your team.";
+        }
+
+        header("Location: " . home_url("football-manager/my-players"));
+        exit;
+    }
 }

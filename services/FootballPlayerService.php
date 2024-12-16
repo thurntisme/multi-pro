@@ -13,7 +13,7 @@ class FootballPlayerService
     }
 
     // Create a new code
-    public function createPlayer($team_id, $player)
+    public function createPlayer($team_id, $player, $status)
     {
         try {
             // List all the fields that are allowed in the database schema
@@ -64,6 +64,12 @@ class FootballPlayerService
             // Add team_id to the fields and values
             $fields = ['team_id'];
             $values = [':team_id' => $team_id];
+            $fields[] = 'status';
+            if (!empty($status)) {
+                $values[':status'] = $status;
+            } else {
+                $values[':status'] = 'players';
+            }
 
             // Dynamically add provided fields from the $player array
             foreach ($allowedFields as $field) {
