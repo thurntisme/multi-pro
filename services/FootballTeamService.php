@@ -114,7 +114,19 @@ class FootballTeamService
         if (!empty($team)) {
             $players = array_map(function ($player) {
                 return $this->footballPlayerController->viewPlayer($player['id']);
-            }, $this->getTeamPlayers($team['id']));
+            }, $this->getTeamPlayers($team['id'], 'club'));
+            $team['players'] = $players;
+        }
+        return $team;
+    }
+
+    public function getTeamPlayersByUserId()
+    {
+        $team = $this->getMyTeamData();
+        if (!empty($team)) {
+            $players = array_map(function ($player) {
+                return $this->footballPlayerController->viewPlayer($player['id']);
+            }, $this->getTeamPlayers($team['id'], 'players'));
             $team['players'] = $players;
         }
         return $team;
@@ -129,9 +141,16 @@ class FootballTeamService
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
-    public function getTeamPlayers($team_id)
+    public function getTeamPlayers($team_id, $type = '')
     {
-        $sql = "SELECT * FROM football_player WHERE team_id = :team_id ORDER BY starting_order ASC";
+        $query = "";
+        if ($type === 'club') {
+            $query = "AND (joining_date >= CURRENT_TIMESTAMP) AND (contract_end_date <= CURRENT_TIMESTAMP)";
+        }
+        if ($type === 'players') {
+            $query = "AND (joining_date < CURRENT_TIMESTAMP) AND (contract_end_date < CURRENT_TIMESTAMP)";
+        }
+        $sql = "SELECT * FROM football_player WHERE team_id = :team_id $query ORDER BY starting_order ASC";
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute([':team_id' => $team_id]);
 
@@ -145,7 +164,7 @@ class FootballTeamService
         if (!empty($team)) {
             $players = array_map(function ($player) {
                 return $this->footballPlayerController->viewPlayer($player['id']);
-            }, $this->getTeamPlayers($teamId));
+            }, $this->getTeamPlayers($teamId, 'club'));
             $team['players'] = $players;
         }
         return $team;

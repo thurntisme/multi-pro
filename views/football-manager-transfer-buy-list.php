@@ -62,13 +62,15 @@ ob_start();
                                                     <?php
                                                         $response_at = new DateTime($item['response_at']);
                                                         if ($now < $response_at) {
-                                                            echo 'Processing';
+                                                            echo '<button class="btn btn-light btn-sm"><i class="ri ri-close-line"></i> Cancel</button>';
                                                         } else {
                                                             if ($item['is_success']){
                                                                 echo '<button class="btn btn-soft-success btn-sm"><i class="ri ri-user-received-2-line"></i> Join</button>
-                                                                    <button class="btn btn-soft-danger btn-sm"><i class="ri ri-user-shared-2-line"></i> Sell</button>';
+                                                                    <button class="btn btn-soft-danger btn-sm"><i class="ri ri-user-shared-2-line"></i> Sell</button>
+                                                                    <button class="btn btn-light btn-sm"><i class="ri ri-close-line"></i></button>';
                                                             } else {
-                                                                echo '<button class="btn btn-soft-warning btn-sm"><i class="ri ri-money-dollar-circle-line"></i> Get a refund</button>';
+                                                                echo '<button class="btn btn-soft-warning btn-sm"><i class="ri ri-money-dollar-circle-line"></i> Get a refund</button>
+                                                                    <button class="btn btn-light btn-sm"><i class="ri ri-close-line"></i></button>';
                                                             }
                                                         }
                                                     ?>

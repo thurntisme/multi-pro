@@ -1296,7 +1296,7 @@
           }
         });
       }
-      emptyNotification();
+      // emptyNotification();
 
       Array.from(
         document.querySelectorAll(".notification-check input")

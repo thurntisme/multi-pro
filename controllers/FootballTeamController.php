@@ -117,6 +117,11 @@ class FootballTeamController
         return $this->footballTeamService->getTeamByUserId();
     }
 
+    public function getMyTeamPlayers()
+    {
+        return $this->footballTeamService->getTeamPlayersByUserId();
+    }
+
     function randomTeamPlayers($formation)
     {
         $players = getPlayersJson();

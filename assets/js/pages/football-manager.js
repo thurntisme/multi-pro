@@ -158,7 +158,7 @@ function drawPlayerScore(player) {
 
 function renderTeamInFitch(
     teams,
-    conditions = {isDisplayBall, isDisplayScore, circleRadius}
+    conditions = {isDisplayBall, isDisplayScore, circleRadius, isDisplayName}
 ) {
     drawFootballPitch();
     if (conditions?.isDisplayBall) {
@@ -190,7 +190,9 @@ function renderTeamInFitch(
                 drawCircle(pos.x, pos.y, "#fff", 12, false);
             }
             drawPlayerNumber(pos.x, pos.y, index + 1);
-            drawPlayerName(pos.x, pos.y, pos.name);
+            if (conditions?.isDisplayName) {
+                drawPlayerName(pos.x, pos.y, pos.name);
+            }
             if (conditions?.isDisplayScore) {
                 drawPlayerScore(pos);
             }

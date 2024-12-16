@@ -1,6 +1,13 @@
 <?php
 $pageTitle = "Football Manager - My Players";
 
+require_once DIR . '/controllers/FootballTeamController.php';
+$footballTeamController = new FootballTeamController();
+
+$myTeam = $footballTeamController->getMyTeamPlayers();
+
+$list = $commonController->convertResources($myTeam['players']);
+
 ob_start();
 ?>
 
@@ -19,7 +26,7 @@ ob_start();
                     <!-- Nav tabs -->
                     <ul class="nav nav-tabs nav-border-top nav-border-top-primary mb-3" role="tablist">
                         <li class="nav-item">
-                            <a class="nav-link active" data-bs-toggle="tab" href="#my-players" role="tab"
+                            <a class="nav-link active" data-bs-toggle="tab" href="<?= home_url('football-manager/my-players') ?>" role="tab"
                                aria-selected="false">
                                 All players
                             </a>
@@ -78,9 +85,9 @@ ob_start();
                                                     <td class="text-center"><?= formatCurrency($item['contract_wage']) ?></td>
                                                     <td class="text-center"><?= formatCurrency($item['market_value']) ?></td>
                                                     <td class="text-center">
-                                                        <button class="btn btn-sm btn-soft-primary">Join</button>
-                                                        <button class="btn btn-sm btn-soft-success">Sell</button>
-                                                        <button class="btn btn-sm btn-soft-danger">Delete</button>
+                                                        <button class="btn btn-soft-success btn-sm"><i class="ri ri-user-received-2-line"></i> Join</button>
+                                                        <button class="btn btn-soft-danger btn-sm"><i class="ri ri-user-shared-2-line"></i> Sell</button>
+                                                        <button class="btn btn-light btn-sm"><i class="ri ri-close-line"></i></button>
                                                     </td>
                                                 </tr>
                                             <?php }
@@ -88,17 +95,6 @@ ob_start();
 
                                         </tbody>
                                     </table>
-                                    <div class="noresult" style="display: none">
-                                        <div class="text-center">
-                                            <lord-icon src="https://cdn.lordicon.com/msoeawqm.json" trigger="loop"
-                                                       colors="primary:#121331,secondary:#08a88a"
-                                                       style="width:75px;height:75px"></lord-icon>
-                                            <h5 class="mt-2">Sorry! No Result Found</h5>
-                                            <p class="text-muted mb-0">We've searched more than 150+ companies We did
-                                                not find
-                                                any companies for you search.</p>
-                                        </div>
-                                    </div>
                                 </div>
                                 <?php
                                 includeFileWithVariables('components/pagination.php', array("count" => $list['total_items']));

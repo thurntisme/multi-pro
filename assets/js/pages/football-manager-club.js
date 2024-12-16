@@ -7,7 +7,7 @@ $("#formation").on("change", (event) => {
 const redraw = (formation) => {
     const myTeam = groupTeams[0];
     myTeam.formation = formation;
-    renderTeamInFitch([myTeam], {isDisplayScore: false, circleRadius: 8});
+    renderTeamInFitch([myTeam], {isDisplayScore: false, circleRadius: 8, isDisplayName: myTeam.players === 1 ? true : false});
 };
 
 redraw($("#formation").val());
