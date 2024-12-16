@@ -106,12 +106,12 @@ class FootballPlayerService
         return $stmt->rowCount();
     }
 
-    // Delete a code
-    public function deleteCode($id)
+    // Delete a player
+    public function deletePlayer($id)
     {
-        $sql = "DELETE FROM codes WHERE id = :id AND user_id = :user_id";
+        $sql = "DELETE FROM football_player WHERE id = :id";
         $stmt = $this->pdo->prepare($sql);
-        $stmt->execute([':id' => $id, ':user_id' => $this->user_id]);
+        $stmt->execute([':id' => $id]);
 
         return $stmt->rowCount();
     }

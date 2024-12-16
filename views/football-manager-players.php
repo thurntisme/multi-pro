@@ -2,7 +2,9 @@
 $pageTitle = "Football Manager - My Players";
 
 require_once DIR . '/controllers/FootballTeamController.php';
+require_once DIR . '/controllers/FootballPlayerController.php';
 $footballTeamController = new FootballTeamController();
+$footballPlayerController = new FootballPlayerController();
 
 $myTeam = $footballTeamController->getMyTeamPlayers();
 
@@ -15,8 +17,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
         // if ($_POST['action_name'] === 'player_in_market' ) {
         // }
-        // if ($_POST['action_name'] === 'delete_player' ) {
-        // }
+        if ($_POST['action_name'] === 'delete_player' ) {
+            $footballPlayerController->deletePlayer($myTeam['id'], $_POST['player_id'], $_POST['player_name']);
+        }
     }
 }
 
@@ -116,6 +119,7 @@ ob_start();
                                                         <form method="POST" action="<?= $_SERVER['REQUEST_URI'] ?>">
                                                             <input type="hidden" name="action_name" value="delete_player">
                                                             <input type="hidden" name="player_id" value="<?= $item['id'] ?>">
+                                                            <input type="hidden" name="player_name" value="<?= $item['name'] ?>">
                                                             <button class="btn btn-light btn-sm"><i class="ri ri-close-line"></i></button>
                                                         </form>
                                                     </td>

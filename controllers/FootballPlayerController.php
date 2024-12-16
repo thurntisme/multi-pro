@@ -103,24 +103,23 @@ class FootballPlayerController
 
     // Get all teams
 
-    public function deleteCode()
+    public function deletePlayer($teamId, $playerId, $playerName)
     {
-        $id = $_POST['post_id'] ?? null;
-        if ($id) {
-            $rowsAffected = $this->footballPlayerService->deleteCode($id);
+        if ($playerId) {
+            $rowsAffected = $this->footballPlayerService->deletePlayer($playerId);
             if ($rowsAffected) {
                 $_SESSION['message_type'] = 'success';
-                $_SESSION['message'] = "Code deleted successfully.";
+                $_SESSION['message'] = $playerName . "has been deleted successfully.";
             } else {
                 $_SESSION['message_type'] = 'danger';
-                $_SESSION['message'] = "Failed to delete code.";
+                $_SESSION['message'] = "Failed to delete $playerName from your list.";
             }
         } else {
             $_SESSION['message_type'] = 'danger';
-            $_SESSION['message'] = "Failed to delete code.";
+            $_SESSION['message'] = "Failed to delete $playerName from your list.";
         }
 
-        header("Location: " . home_url("code"));
+        header("Location: " . $_SERVER['REQUEST_URI']);
         exit;
     }
 
