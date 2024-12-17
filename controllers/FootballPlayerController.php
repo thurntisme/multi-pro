@@ -7,6 +7,7 @@ require_once DIR . '/functions/generate-player.php';
 class FootballPlayerController
 {
     private $user_id;
+    private $pdo;
     private $footballPlayerService;
 
     public function __construct()
@@ -14,6 +15,7 @@ class FootballPlayerController
         global $user_id;
         global $pdo;
         $this->user_id = $user_id;
+        $this->pdo = $pdo;
         $this->footballPlayerService = new FootballPlayerService($pdo);
     }
 
@@ -128,12 +130,46 @@ class FootballPlayerController
         return $this->footballPlayerService->getAllTeams();
     }
 
+    public function createFavoritePlayer($playerUuid, $playerName)
+    {
+        if ($playerUuid) {
+            $this->footballPlayerService->createFavoritePlayer($playerUuid);
+            $_SESSION['message_type'] = 'success';
+            $_SESSION['message'] = $playerName . " has been added successfully to your favorites list.";
+        } else {
+            $_SESSION['message_type'] = 'danger';
+            $_SESSION['message'] = "Failed to add player to your favorites list.";
+        }
+
+        header("Location: " . $_SERVER['REQUEST_URI']);
+        exit;
+    }
+
+    public function removeFavoritePlayer($playerUuid, $playerName)
+    {
+        if ($playerUuid) {
+            $this->footballPlayerService->removeFavoritePlayer($playerUuid);
+            $_SESSION['message_type'] = 'success';
+            $_SESSION['message'] = $playerName . " has been removed successfully to your favorites list.";
+        } else {
+            $_SESSION['message_type'] = 'danger';
+            $_SESSION['message'] = "Failed to remove player to your favorites list.";
+        }
+
+        header("Location: " . $_SERVER['REQUEST_URI']);
+        exit;
+    }
+
     // Get all favorite players
 
     public function listFavoritePlayers()
     {
+        $resources = array_map(function ($player) {
+            // return $this->viewPlayer($player['id']);
+            return getPlayerJsonByUuid($player['player_uuid']);
+        }, $this->getFavoritePlayerSQL("result"));
         return [
-            'list' => $this->getFavoritePlayerSQL("result"),
+            'resources' => $resources,
             'count' => $this->getFavoritePlayerSQL("count"),
         ];
     }

@@ -12,7 +12,7 @@ class FootballPlayerService
         $this->user_id = $user_id;
     }
 
-    // Create a new code
+    // Create a new player
     public function createPlayer($team_id, $player)
     {
         try {
@@ -88,6 +88,24 @@ class FootballPlayerService
             // Log or handle database errors
             throw new Exception("Error creating player: " . $e->getMessage());
         }
+    }
+
+    public function createFavoritePlayer($playerUuid)
+    {
+      $sql = "INSERT INTO football_favorite_player (player_uuid, manager_id) VALUES (:player_uuid, :manager_id)";
+      $stmt = $this->pdo->prepare($sql);
+      $stmt->execute([':player_uuid' => $playerUuid, ':manager_id' => $this->user_id]);
+  
+      return $this->pdo->lastInsertId();
+    }
+
+    public function removeFavoritePlayer($playerUuid)
+    {
+      $sql = "DELETE FROM football_favorite_player WHERE player_uuid = :player_uuid AND manager_id = :manager_id";
+      $stmt = $this->pdo->prepare($sql);
+      $stmt->execute([':player_uuid' => $playerUuid, ':manager_id' => $this->user_id]);
+  
+      return $stmt->rowCount();
     }
 
     // Update a code

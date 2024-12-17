@@ -2,9 +2,11 @@
 $pageTitle = "Football Manager Transfer";
 
 require_once DIR . '/functions/generate-player.php';
+require_once DIR . '/controllers/FootballPlayerController.php';
 
 $players = getTransferPlayerJson();
 $commonController = new CommonController();
+$footballPlayerController = new FootballPlayerController();
 $list = $commonController->convertResources($players);
 
 $sort_order = !empty($_GET['sort_order']) && $_GET['sort_order'] === 'asc' ? 'desc' : 'asc';
@@ -22,6 +24,14 @@ function isFilter($array) {
     return $result;
 }
 
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    if (isset($_POST['action_name'])) {
+        if ($_POST['action_name'] === 'add_favorite_player') {
+            $footballPlayerController->createFavoritePlayer($_POST['player_uuid'], $_POST['player_name']);
+        }
+    }
+}
+
 ob_start();
 ?>
 
@@ -35,6 +45,9 @@ ob_start();
     </div>
     <!--end col-->
     <div class="col-lg-12">
+        <?php
+        include_once DIR . '/components/alert.php';
+        ?>
         <div class="card">
             <div class="card-body">
                 <?php includeFileWithVariables('components/football-market-topbar.php'); ?>
@@ -171,14 +184,22 @@ ob_start();
                                                 <td class="text-center"><?= $item['ability'] ?></td>
                                                 <td class="text-center"><?= formatCurrency($item['contract_wage']) ?></td>
                                                 <td class="text-center"><?= formatCurrency($item['market_value']) ?></td>
-                                                <td class="text-center">
+                                                <td class="text-center hstack gap-1 justify-content-center">
                                                     <a href="<?= home_url("football-manager/transfer/buy?p_uuid=" . $item['uuid']) ?>"
                                                         class="btn btn-soft-success">
                                                         <i class="ri ri-shopping-cart-line"></i>
                                                     </a>
-                                                    <button class="btn btn-soft-danger">
-                                                        <i class="ri ri-heart-line"></i>
-                                                    </button>
+                                                    <form method="POST" action="<?= $_SERVER['REQUEST_URI'] ?>">
+                                                        <input type="hidden" name="action_name"
+                                                                value="add_favorite_player">
+                                                        <input type="hidden" name="player_uuid"
+                                                                value="<?= $item['uuid'] ?>">
+                                                        <input type="hidden" name="player_name"
+                                                                value="<?= $item['name'] ?>">
+                                                        <button class="btn btn-soft-danger" type="submit">
+                                                            <i class="ri ri-heart-line"></i>
+                                                        </button>
+                                                    </form>
                                                 </td>
                                             </tr>
                                     <?php }
