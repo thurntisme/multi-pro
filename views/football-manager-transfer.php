@@ -3,11 +3,14 @@ $pageTitle = "Football Manager Transfer";
 
 require_once DIR . '/functions/generate-player.php';
 require_once DIR . '/controllers/FootballPlayerController.php';
+require_once DIR . '/controllers/FootballTeamController.php';
 
 $players = getTransferPlayerJson();
 $commonController = new CommonController();
 $footballPlayerController = new FootballPlayerController();
+$footballTeamController = new FootballTeamController();
 $list = $commonController->convertResources($players);
+$myTeam = $footballTeamController->getMyTeam();
 
 $sort_order = !empty($_GET['sort_order']) && $_GET['sort_order'] === 'asc' ? 'desc' : 'asc';
 
@@ -185,10 +188,12 @@ ob_start();
                                                 <td class="text-center"><?= formatCurrency($item['contract_wage']) ?></td>
                                                 <td class="text-center"><?= formatCurrency($item['market_value']) ?></td>
                                                 <td class="text-center hstack gap-1 justify-content-center">
-                                                    <a href="<?= home_url("football-manager/transfer/buy?p_uuid=" . $item['uuid']) ?>"
-                                                        class="btn btn-soft-success">
-                                                        <i class="ri ri-shopping-cart-line"></i>
-                                                    </a>
+                                                    <?php if ($myTeam['budget'] >= $item['market_value']) { ?>
+                                                        <a href="<?= home_url("football-manager/transfer/buy?p_uuid=" . $item['uuid']) ?>"
+                                                            class="btn btn-soft-success">
+                                                            <i class="ri ri-shopping-cart-line"></i>
+                                                        </a>
+                                                    <?php } ?>
                                                     <form method="POST" action="<?= $_SERVER['REQUEST_URI'] ?>">
                                                         <input type="hidden" name="action_name"
                                                                 value="add_favorite_player">

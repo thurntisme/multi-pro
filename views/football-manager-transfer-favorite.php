@@ -91,10 +91,12 @@ ob_start();
                                                 <td class="text-center"><?= formatCurrency($item['contract_wage']) ?></td>
                                                 <td class="text-center"><?= formatCurrency($item['market_value']) ?></td>
                                                 <td class="text-center hstack gap-1 justify-content-center">
-                                                    <a href="<?= home_url("football-manager/transfer/buy?p_uuid=" . $item['uuid']) ?>"
-                                                        class="btn btn-soft-success">
-                                                        <i class="ri ri-shopping-cart-line"></i>
-                                                    </a>
+                                                    <?php if ($myTeam['budget'] >= $item['market_value']) { ?>
+                                                        <a href="<?= home_url("football-manager/transfer/buy?p_uuid=" . $item['uuid']) ?>"
+                                                            class="btn btn-soft-success">
+                                                            <i class="ri ri-shopping-cart-line"></i>
+                                                        </a>
+                                                    <?php } ?>
                                                     <form method="POST" action="<?= $_SERVER['REQUEST_URI'] ?>">
                                                         <input type="hidden" name="action_name"
                                                                 value="remove_favorite_player">
