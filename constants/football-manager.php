@@ -830,15 +830,6 @@ const DEFAULT_STORE_ITEMS = [
         'image' => 'images/legend-player.jpg',
     ],
     [
-        'id' => 6,
-        'name' => "Ballon d'Or Player",
-        'slug' => 'ballon-dor',
-        'price' => 10000000,
-        'description' => 'Add the prestige of a Ballon d\'Or winner to your team. This player embodies excellence, skill, and legendary status on the field.',
-        'type' => 'player',
-        'image' => 'images/ballon-dor-player.jpg',
-    ],
-    [
         'id' => 7,
         'name' => 'Young Star Player',
         'slug' => 'young-star',

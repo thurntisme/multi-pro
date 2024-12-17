@@ -142,11 +142,6 @@ function calculatePlayerWage(
 
     $seasonMultiplier = $seasonMultipliers[$season] ?? 1.0;
 
-    if ($type == 'ballon-d-or') {
-        $baseNation = 1.8;
-        $seasonMultiplier = 2.2;
-    }
-
     // Calculate wage
     $wage = $baseNation * ($positionModifier + $flexibilityBonus) * $seasonMultiplier * $overallAbility * 100;
 
@@ -216,12 +211,6 @@ function calculateMarketValue(
     // Step 5: Versatility bonus (if the player can play multiple positions)
     $versatilityBonus = count($playablePositions) > 1 ? 0.1 : 0;
 
-    if ($type == 'ballon-d-or') {
-        $baseSalary = 2000000;
-        $seasonMultiplier = 2.2;
-        $positionModifier = 1.6;
-    }
-
     // Step 6: Calculate the salary
     $salary = $baseSalary * $positionModifier * $abilityModifier * $seasonMultiplier * (1 + $versatilityBonus);
 
@@ -277,12 +266,8 @@ function generateRandomPlayers($type = '', $playerData = []): array
             $minAttr = 87;
             $maxAttr = 97;
         }
-        if ($type == 'ballon-d-or') {
-            $minAttr = 97;
-            $maxAttr = 110;
-        }
         if ($type == 'demand') {
-            $maxAttr = 77;
+            $maxAttr = 110;
         }
     }
 
@@ -563,15 +548,6 @@ function generateRandomPlayers($type = '', $playerData = []): array
     return $players;
 }
 
-function getFootballJsonData($type)
-{
-    return match ($type) {
-        'ballon-d-or' => getPlayersJson('assets/json/football-ballon-d-or-player.json'),
-        'legend' => getPlayersJson('assets/json/football-legend-player.json'),
-        default => [],
-    };
-}
-
 function getPlayersJson($fileName = '')
 {
     if (empty($fileName)) {
@@ -600,7 +576,8 @@ function getPlayersJson($fileName = '')
     return array_reverse($oldData);
 }
 
-function getTransferPlayerJson(){
+function getTransferPlayerJson()
+{
     $players = getPlayersJson();
     $player_season = $_GET['player_season'] ?? '';
     $player_nationality = $_GET['player_nationality'] ?? '';
@@ -608,7 +585,7 @@ function getTransferPlayerJson(){
     $player_weight = $_GET['player_weight'] ?? '';
     $player_height = $_GET['player_height'] ?? '';
     $player_position = $_GET['player_position'] ?? '';
-    
+
     $filteredPlayers = array_filter($players, function ($player) use (
         $player_season,
         $player_nationality,
@@ -784,7 +761,6 @@ function filterPlayers($item_slug, $playerData)
 {
     $players = getPlayersJson();
     $seasonArr = [
-        "ballon-dor" => "Ballon d'Or",
         "legend" => "Legend",
         "the-best" => "The Best",
         "superstar" => "Superstar",
