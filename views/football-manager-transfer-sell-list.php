@@ -70,7 +70,25 @@ ob_start();
                                         foreach ($buyList['list'] as $item) {
                                             ?>
                                             <tr>
-                                                <td><?= $item['name'] ?? '' ?></td>
+                                                <td>
+                                                    <div class="d-flex">
+                                                        <div class="me-2"><?= $item['name'] ?></div>
+                                                        <ul class="list-inline tasks-list-menu mb-0 pe-4">
+                                                            <li class="list-inline-item">
+                                                                <a href="#"
+                                                                   class="edit-item-btn cursor-pointer btn-player-detail"
+                                                                   data-player-uuid="<?= $item['uuid'] ?>"
+                                                                   data-player-name="<?= $item['name'] ?>"
+                                                                   data-player-nationality="<?= $item['nationality'] ?>"
+                                                                   data-player-meta="<?= $item['best_position'] . " (" . $item['ability'] . ") | " . implode(", ", $item['playable_positions']) ?>"
+                                                                   data-player-attributes="<?= htmlspecialchars(json_encode($item['attributes'])) ?>"
+                                                                   data-bs-toggle="modal"
+                                                                   data-bs-target="#playerDetailBackdrop"><i
+                                                                            class="ri-eye-fill align-bottom me-2 text-muted"></i></a>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                </td>
                                                 <td class="text-center"><?= $item['nationality'] ?? '' ?></td>
                                                 <td class="text-center"><?= $item['best_position'] ?? '' ?></td>
                                                 <td class="text-center"><?= !empty($item['playable_positions']) ? implode(", ", $item['playable_positions']) : '' ?></td>
@@ -184,7 +202,12 @@ ob_start();
         <!--end col-->
     </div>
 
+<?php include_once DIR . '/components/football-player-detail-modal.php'; ?>
 <?php
 $pageContent = ob_get_clean();
+
+ob_start();
+echo "<script src='" . home_url("/assets/js/pages/football-manager-player-detail.js") . "'></script>";
+$additionJs = ob_get_clean();
 
 include 'layout.php';

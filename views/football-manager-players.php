@@ -15,13 +15,13 @@ $list = $commonController->convertResources($myTeam['players']);
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_POST['action_name']) && isset($_POST['player_id'])) {
-        if ($_POST['action_name'] === 'player_join_team' ) {
+        if ($_POST['action_name'] === 'player_join_team') {
             $footballTeamController->assignPlayerToTeam($myTeam['id'], $_POST['player_id'], $_POST['player_name']);
         }
-        if ($_POST['action_name'] === 'player_in_market' ) {
+        if ($_POST['action_name'] === 'player_in_market') {
             $footballTransferController->createTransferSellPlayer();
         }
-        if ($_POST['action_name'] === 'delete_player' ) {
+        if ($_POST['action_name'] === 'delete_player') {
             $footballPlayerController->deletePlayer($myTeam['id'], $_POST['player_id'], $_POST['player_name']);
         }
     }
@@ -50,7 +50,8 @@ ob_start();
                     <!-- Nav tabs -->
                     <ul class="nav nav-tabs nav-border-top nav-border-top-primary mb-3" role="tablist">
                         <li class="nav-item">
-                            <a class="nav-link active" data-bs-toggle="tab" href="<?= home_url('football-manager/my-players') ?>" role="tab"
+                            <a class="nav-link active" data-bs-toggle="tab"
+                               href="<?= home_url('football-manager/my-players') ?>" role="tab"
                                aria-selected="false">
                                 All players
                             </a>
@@ -74,7 +75,8 @@ ob_start();
                                             <th class="sort text-center" scope="col">Playable</th>
                                             <th class="sort text-center" scope="col">Season</th>
                                             <th class="sort text-center" scope="col"><a
-                                                href="<?= generatePageUrl(['sort_by' => 'ability', 'sort_order' => $sort_order]) ?>">Ability</a></th>
+                                                        href="<?= generatePageUrl(['sort_by' => 'ability', 'sort_order' => $sort_order]) ?>">Ability</a>
+                                            </th>
                                             <th class="sort text-center" scope="col">Height</th>
                                             <th class="sort text-center" scope="col">Weight</th>
                                             <th class="sort text-center" scope="col">Contract Wage</th>
@@ -91,13 +93,15 @@ ob_start();
                                                             <div class="me-2"><?= $item['name'] ?></div>
                                                             <ul class="list-inline tasks-list-menu mb-0 pe-4">
                                                                 <li class="list-inline-item">
-                                                                    <a href="#" class="edit-item-btn cursor-pointer btn-player-detail"
-                                                                        data-player-uuid="<?= $item['uuid'] ?>"
-                                                                        data-player-name="<?= $item['name'] ?>"
-                                                                        data-player-nationality="<?= $item['nationality'] ?>"
-                                                                        data-player-meta="<?= $item['best_position'] . " (" . $item['ability'] . ") | " . implode(", ", $item['playable_positions']) ?>"
-                                                                        data-player-attributes="<?= htmlspecialchars(json_encode($item['attributes'])) ?>"
-                                                                        data-bs-toggle="modal" data-bs-target="#playerDetailBackdrop"><i
+                                                                    <a href="#"
+                                                                       class="edit-item-btn cursor-pointer btn-player-detail"
+                                                                       data-player-uuid="<?= $item['uuid'] ?>"
+                                                                       data-player-name="<?= $item['name'] ?>"
+                                                                       data-player-nationality="<?= $item['nationality'] ?>"
+                                                                       data-player-meta="<?= $item['best_position'] . " (" . $item['ability'] . ") | " . implode(", ", $item['playable_positions']) ?>"
+                                                                       data-player-attributes="<?= htmlspecialchars(json_encode($item['attributes'])) ?>"
+                                                                       data-bs-toggle="modal"
+                                                                       data-bs-target="#playerDetailBackdrop"><i
                                                                                 class="ri-eye-fill align-bottom me-2 text-muted"></i></a>
                                                                 </li>
                                                             </ul>
@@ -114,21 +118,34 @@ ob_start();
                                                     <td class="text-center"><?= formatCurrency($item['market_value']) ?></td>
                                                     <td class="text-center hstack gap-1">
                                                         <form method="POST" action="<?= $_SERVER['REQUEST_URI'] ?>">
-                                                            <input type="hidden" name="action_name" value="player_join_team">
-                                                            <input type="hidden" name="player_id" value="<?= $item['id'] ?>">
-                                                            <input type="hidden" name="player_name" value="<?= $item['name'] ?>">
-                                                            <button type="submit" class="btn btn-soft-success btn-sm"><i class="ri ri-user-received-2-line"></i> Join</button>
+                                                            <input type="hidden" name="action_name"
+                                                                   value="player_join_team">
+                                                            <input type="hidden" name="player_id"
+                                                                   value="<?= $item['id'] ?>">
+                                                            <input type="hidden" name="player_name"
+                                                                   value="<?= $item['name'] ?>">
+                                                            <button type="submit" class="btn btn-soft-success btn-sm"><i
+                                                                        class="ri ri-user-received-2-line"></i> Join
+                                                            </button>
                                                         </form>
                                                         <form method="POST" action="<?= $_SERVER['REQUEST_URI'] ?>">
-                                                            <input type="hidden" name="action_name" value="player_in_market">
-                                                            <input type="hidden" name="player_id" value="<?= $item['id'] ?>">
-                                                            <button class="btn btn-soft-danger btn-sm"><i class="ri ri-user-shared-2-line"></i> Sell</button>
+                                                            <input type="hidden" name="action_name"
+                                                                   value="player_in_market">
+                                                            <input type="hidden" name="player_id"
+                                                                   value="<?= $item['id'] ?>">
+                                                            <button class="btn btn-soft-danger btn-sm"><i
+                                                                        class="ri ri-user-shared-2-line"></i> Sell
+                                                            </button>
                                                         </form>
                                                         <form method="POST" action="<?= $_SERVER['REQUEST_URI'] ?>">
-                                                            <input type="hidden" name="action_name" value="delete_player">
-                                                            <input type="hidden" name="player_id" value="<?= $item['id'] ?>">
-                                                            <input type="hidden" name="player_name" value="<?= $item['name'] ?>">
-                                                            <button class="btn btn-light btn-sm"><i class="ri ri-close-line"></i></button>
+                                                            <input type="hidden" name="action_name"
+                                                                   value="delete_player">
+                                                            <input type="hidden" name="player_id"
+                                                                   value="<?= $item['id'] ?>">
+                                                            <input type="hidden" name="player_name"
+                                                                   value="<?= $item['name'] ?>">
+                                                            <button class="btn btn-light btn-sm"><i
+                                                                        class="ri ri-close-line"></i></button>
                                                         </form>
                                                     </td>
                                                 </tr>
@@ -162,7 +179,7 @@ ob_start();
             </div>
         </div>
         <!--end col-->
-        
+
         <div class="col-lg-12">
             <?php include_once DIR . '/components/football-player-detail-modal.php'; ?>
         </div>
@@ -174,44 +191,8 @@ $pageContent = ob_get_clean();
 
 ob_start(); ?>
 
-<script type="text/javascript">
-    $(document).on('click', ".btn-player-detail", function (e) {
-        e.preventDefault();
-        const playerDetailBackdrop = $("#playerDetailBackdrop");
-        const playerUuid = $(this).data('player-uuid');
-        const playerName = $(this).data('player-name');
-        const playerNationality = $(this).data('player-nationality');
-        const playerAttributes = $(this).data('player-attributes');
-        const playerMeta = $(this).data('player-meta');
-        playerDetailBackdrop.find("#playerName").empty();
-        playerDetailBackdrop.find("#playerNationality").empty();
-        playerDetailBackdrop.find("#playerMeta").empty();
-        playerDetailBackdrop.find("#playerAttributes").empty();
-        playerDetailBackdrop.find("#playerName").text(playerName);
-        playerDetailBackdrop.find("#playerNationality").text(playerNationality);
-        playerDetailBackdrop.find("#playerMeta").text(playerMeta);
-        let playerAttrContent = '';
-        Object.keys(playerAttributes).forEach(function(key) {
-            playerAttrContent += `<div class="col-4">
-                            <h6 class="card-title flex-grow-1 mb-3 fs-15 text-capitalize">${key}</h6>
-                            <table class="table table-borderless mb-0">
-                                <tbody>`;
-
-                                Object.keys(playerAttributes[key]).forEach(function(attr){
-                                    playerAttrContent += `<tr>
-                                            <th class="ps-0 text-capitalize text-start" scope="row">${attr.replace(/_/g, ' ')} :</th>
-                                            <td class="text-muted">${playerAttributes[key][attr]}</td>
-                                        </tr>`;
-                                })
-
-                                playerAttrContent += `</tbody>
-                            </table>
-                        </div>`;                 
-        })
-        const playerAttrHtml = `<div class="row">${playerAttrContent}</div>`;
-        playerDetailBackdrop.find("#playerAttributes").html(playerAttrHtml);
-    });
-</script>
+    <script type="text/javascript">
+    </script>
 
 <?php
 $additionJs = ob_get_clean();
