@@ -3,11 +3,14 @@ $pageTitle = "Football Manager - My Players";
 
 require_once DIR . '/controllers/FootballTeamController.php';
 require_once DIR . '/controllers/FootballPlayerController.php';
+require_once DIR . '/controllers/FootballTransferController.php';
 $footballTeamController = new FootballTeamController();
 $footballPlayerController = new FootballPlayerController();
+$footballTransferController = new FootballTransferController();
 
 $myTeam = $footballTeamController->getMyTeamPlayers();
 
+$sort_order = !empty($_GET['sort_order']) && $_GET['sort_order'] === 'asc' ? 'desc' : 'asc';
 $list = $commonController->convertResources($myTeam['players']);
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -15,8 +18,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($_POST['action_name'] === 'player_join_team' ) {
             $footballTeamController->assignPlayerToTeam($myTeam['id'], $_POST['player_id'], $_POST['player_name']);
         }
-        // if ($_POST['action_name'] === 'player_in_market' ) {
-        // }
+        if ($_POST['action_name'] === 'player_in_market' ) {
+            $footballTransferController->createTransferSellPlayer();
+        }
         if ($_POST['action_name'] === 'delete_player' ) {
             $footballPlayerController->deletePlayer($myTeam['id'], $_POST['player_id'], $_POST['player_name']);
         }
@@ -35,9 +39,9 @@ ob_start();
             </div>
         </div>
 
-        <?php
-        include_once DIR . '/components/alert.php';
-        ?>
+        <div class="col-lg-12">
+            <?php include_once DIR . '/components/alert.php'; ?>
+        </div>
 
         <!--end col-->
         <div class="col-lg-12">
@@ -69,11 +73,12 @@ ob_start();
                                             <th class="sort text-center" scope="col">Position</th>
                                             <th class="sort text-center" scope="col">Playable</th>
                                             <th class="sort text-center" scope="col">Season</th>
-                                            <th class="sort text-center" scope="col">Rating</th>
+                                            <th class="sort text-center" scope="col"><a
+                                                href="<?= generatePageUrl(['sort_by' => 'ability', 'sort_order' => $sort_order]) ?>">Ability</a></th>
                                             <th class="sort text-center" scope="col">Height</th>
                                             <th class="sort text-center" scope="col">Weight</th>
                                             <th class="sort text-center" scope="col">Contract Wage</th>
-                                            <th class="sort text-center" scope="col">Price</th>
+                                            <th class="sort text-center" scope="col">Market Price</th>
                                             <th class="text-center" scope="col"></th>
                                         </tr>
                                         </thead>

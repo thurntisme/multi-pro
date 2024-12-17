@@ -139,7 +139,7 @@ ob_start();
                                         <th class="sort text-center" scope="col"><a
                                                 href="<?= generatePageUrl(['sort_by' => 'contract_wage', 'sort_order' => $sort_order]) ?>">Contract Wage</a></th>
                                         <th class="sort text-center" scope="col"><a
-                                                href="<?= generatePageUrl(['sort_by' => 'market_value', 'sort_order' => $sort_order]) ?>">Price</a></th>
+                                                href="<?= generatePageUrl(['sort_by' => 'market_value', 'sort_order' => $sort_order]) ?>">Market Value</a></th>
                                         <th class="text-center" scope="col"></th>
                                     </tr>
                                 </thead>

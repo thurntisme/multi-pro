@@ -20,7 +20,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $footballTeamController->getRefundFromPlayer($_POST['player_id'], $_POST['player_name'], $_POST['transfer_id']);
         }
         if ($_POST['action_name'] === 'delete_transfer') {
-            $footballTransferController->deleteTransfer($_POST['transfer_id'], $_POST['player_name']);
+            $footballTransferController->deleteTransfer($_POST['transfer_id'], $_POST['player_id'], $_POST['player_name']);
         }
     }
 }
@@ -55,9 +55,9 @@ ob_start();
                                         <th class="sort text-center" scope="col">Position</th>
                                         <th class="sort text-center" scope="col">Playable</th>
                                         <th class="sort text-center" scope="col">Season</th>
-                                        <th class="sort text-center" scope="col">Rating</th>
+                                        <th class="sort text-center" scope="col">Ability</th>
                                         <th class="sort text-center" scope="col">Contract Wage</th>
-                                        <th class="sort text-center" scope="col">Price</th>
+                                        <th class="sort text-center" scope="col">Market Value</th>
                                         <th class="text-center" scope="col"></th>
                                     </tr>
                                     </thead>
@@ -112,7 +112,7 @@ ob_start();
                                                                 <input type="hidden" name="action_name"
                                                                        value="player_in_market">
                                                                 <input type="hidden" name="player_id"
-                                                                       value="<?= $item['id'] ?>">
+                                                                       value="<?= $item['player_id'] ?>">
                                                                 <button class="btn btn-soft-danger btn-sm"><i
                                                                             class="ri ri-user-shared-2-line"></i> Sell
                                                                 </button>
@@ -148,6 +148,8 @@ ob_start();
                                                             <form method="POST" action="<?= $_SERVER['REQUEST_URI'] ?>">
                                                                 <input type="hidden" name="action_name"
                                                                        value="delete_transfer">
+                                                                <input type="hidden" name="transfer_id"
+                                                                    value="<?= $item['id'] ?>">
                                                                 <input type="hidden" name="player_id"
                                                                        value="<?= $item['player_id'] ?>">
                                                                 <input type="hidden" name="player_name"

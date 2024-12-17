@@ -13,7 +13,7 @@ class FootballPlayerService
     }
 
     // Create a new code
-    public function createPlayer($team_id, $player, $status)
+    public function createPlayer($team_id, $player)
     {
         try {
             // List all the fields that are allowed in the database schema
@@ -64,12 +64,6 @@ class FootballPlayerService
             // Add team_id to the fields and values
             $fields = ['team_id'];
             $values = [':team_id' => $team_id];
-            $fields[] = 'status';
-            if (!empty($status)) {
-                $values[':status'] = $status;
-            } else {
-                $values[':status'] = 'players';
-            }
 
             // Dynamically add provided fields from the $player array
             foreach ($allowedFields as $field) {
@@ -99,7 +93,7 @@ class FootballPlayerService
     // Update a code
     public function updateCode($id, $title, $content, $tags, $url)
     {
-        $sql = "UPDATE codes SET title = :title, content = :content, tags = :tags, url = :url, updated_at = CURRENT_TIMESTAMP WHERE user_id = :user_id AND id = :id";
+        $sql = "UPDATE football_player SET title = :title, content = :content, tags = :tags, url = :url, updated_at = CURRENT_TIMESTAMP WHERE user_id = :user_id AND id = :id";
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute([':title' => $title, ':content' => $content, ':tags' => $tags, ':url' => $url, ':id' => $id, ':user_id' => $this->user_id]);
 

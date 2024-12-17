@@ -1,11 +1,13 @@
 <?php
 require_once DIR . '/controllers/FootballPlayerController.php';
+require_once DIR . '/services/FootballTransferService.php';
 
 class FootballTeamService
 {
     private $pdo;
     private $user_id;
     private $footballPlayerController;
+    private $footballTransferService;
 
     public function __construct($pdo)
     {
@@ -13,6 +15,7 @@ class FootballTeamService
         $this->pdo = $pdo;
         $this->user_id = $user_id;
         $this->footballPlayerController = new FootballPlayerController();
+        $this->footballTransferService = new FootballTransferService($this->pdo);
     }
 
     public function initializeTeams(array $teams, $systemUserId)
@@ -244,11 +247,12 @@ class FootballTeamService
         return $stmt->rowCount();
     }
 
-    public function getRefundFromPlayer($playerId, $transfer_id)
+    public function getRefundFromPlayer($playerId, $transferId)
     {
         $team = $this->getMyTeamData();
         $playerData = $this->footballPlayerController->viewPlayer($playerId);
-        $budget = $team['budget'] + $playerData['market_value'];
+        $transferData = $this->footballTransferService->getTransferById($transferId);
+        $budget = $team['budget'] + $transferData['amount'];
 
         try {
             $teamSql = "UPDATE football_team SET budget = :budget, updated_at = CURRENT_TIMESTAMP WHERE manager_id = :manager_id";
@@ -257,7 +261,7 @@ class FootballTeamService
 
             $sql = "DELETE FROM football_transfer WHERE id = :id";
             $stmt = $this->pdo->prepare($sql);
-            $stmt->execute([':id' => $transfer_id]);
+            $stmt->execute([':id' => $transferId]);
 
             $playerSql = "DELETE FROM football_player WHERE id = :id";
             $playerStmt = $this->pdo->prepare($playerSql);

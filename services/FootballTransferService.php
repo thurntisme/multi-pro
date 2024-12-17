@@ -45,7 +45,6 @@ class FootballTransferService
         }
     }
 
-    // Create a new code
     public function createTransfer($type, $player_id, $amount)
     {
         $is_success = rand(0, 1);  // Random boolean (0 or 1)
@@ -53,35 +52,54 @@ class FootballTransferService
         $min_time = 4 * 60 * 60;  // 4 hours in seconds
         $max_time = 2 * 24 * 60 * 60;  // 2 days in seconds
 
-        // Random time between 4 hours and 7 days from now
+        // Random time between 4 hours and 2 days from now
         $random_time_in_seconds = rand($min_time, $max_time);
         $response_at = date('Y-m-d H:i:s', $current_time + $random_time_in_seconds);  // Format as MySQL datetime
 
-        $sql = "INSERT INTO football_transfer (type, player_id, amount, manager_id, is_success, response_at) VALUES (:type, :player_id, :amount, :manager_id, :is_success, :response_at)";
-        $stmt = $this->pdo->prepare($sql);
-        $stmt->execute([':type' => $type, ':player_id' => $player_id, ':amount' => $amount, ':is_success' => $is_success, ':response_at' => $response_at, ':manager_id' => $this->user_id]);
+        // Insert into football_transfer
+        $transferSql = "INSERT INTO football_transfer (type, player_id, amount, manager_id, is_success, response_at) 
+                        VALUES (:type, :player_id, :amount, :manager_id, :is_success, :response_at)";
+        $transferStmt = $this->pdo->prepare($transferSql);
+        $transferStmt->execute([
+            ':type' => $type,
+            ':player_id' => $player_id,
+            ':amount' => $amount,
+            ':is_success' => $is_success,
+            ':response_at' => $response_at,
+            ':manager_id' => $this->user_id,
+        ]);
 
-        return $this->pdo->lastInsertId();
+        // Update football_player status
+        $playerSql = "UPDATE football_player SET status = :status, updated_at = CURRENT_TIMESTAMP WHERE id = :id";
+        $playerStmt = $this->pdo->prepare($playerSql);
+        $playerStmt->execute([':status' => $type, ':id' => $player_id]);
+        return $playerStmt->rowCount();
     }
 
-    // Update a code
-    public function updateCode($id, $title, $content, $tags, $url)
+    public function cancelSellTransfer($transferId, $playerId)
     {
-        $sql = "UPDATE codes SET title = :title, content = :content, tags = :tags, url = :url, updated_at = CURRENT_TIMESTAMP WHERE user_id = :user_id AND id = :id";
-        $stmt = $this->pdo->prepare($sql);
-        $stmt->execute([':title' => $title, ':content' => $content, ':tags' => $tags, ':url' => $url, ':id' => $id, ':user_id' => $this->user_id]);
+        $transferSql = "DELETE FROM football_transfer WHERE id = :id AND manager_id = :manager_id";
+        $transferStmt = $this->pdo->prepare($transferSql);
+        $transferStmt->execute([':id' => $transferId, ':manager_id' => $this->user_id]);
 
-        return $stmt->rowCount();
+        $playerSql = "UPDATE football_player SET status = :status, updated_at = CURRENT_TIMESTAMP WHERE id = :id";
+        $playerStmt = $this->pdo->prepare($playerSql);
+        $playerStmt->execute([':status' => 'players', ':id' => $playerId]);
+
+        return $playerStmt->rowCount();
     }
 
-    // Delete a code
-    public function deleteTransfer($transferId)
+    public function deleteTransfer($transferId, $playerId)
     {
-        $sql = "DELETE FROM football_transfer WHERE id = :id AND manager_id = :manager_id";
-        $stmt = $this->pdo->prepare($sql);
-        $stmt->execute([':id' => $transferId, ':manager_id' => $this->user_id]);
+        $transferSql = "DELETE FROM football_transfer WHERE id = :id AND manager_id = :manager_id";
+        $transferStmt = $this->pdo->prepare($transferSql);
+        $transferStmt->execute([':id' => $transferId, ':manager_id' => $this->user_id]);
 
-        return $stmt->rowCount();
+        $playerSql = "DELETE FROM football_player WHERE id = :id";
+        $playerStmt = $this->pdo->prepare($playerSql);
+        $playerStmt->execute([':id' => $playerId]);
+
+        return $playerStmt->rowCount();
     }
 
     public function getTeamData()
@@ -98,6 +116,15 @@ class FootballTransferService
         $sql = "SELECT * FROM football_player WHERE team_id = :team_id ORDER BY starting_order ASC";
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute([':team_id' => $this->user_id]);
+
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+
+    public function getTransferById($id)
+    {
+        $sql = "SELECT * FROM football_transfer WHERE manager_id = :manager_id AND id = :id";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute([':manager_id' => $this->user_id, ':id' => $id]);
 
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }

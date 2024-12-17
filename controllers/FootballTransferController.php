@@ -24,11 +24,14 @@ class FootballTransferController
         $this->footballTransferService = new FootballTransferService($pdo);
     }
 
-    // Handle creating a new code
-
     public function createTransferBuyPlayer()
     {
         $this->createTransfer('buy');
+    }
+
+    public function createTransferSellPlayer()
+    {
+        $this->createTransfer('sell');
     }
 
     public function createTransfer($type)
@@ -47,27 +50,34 @@ class FootballTransferController
                         $this->footballTeamController->updateBudget((int)$amount);
                     } catch (Throwable $th) {
                         $_SESSION['message_type'] = 'danger';
-                        $_SESSION['message'] = "Failed to create transfer. " . $th->getMessage();
+                        $_SESSION['message'] = "Failed to create transfer " . $th->getMessage();
                         header("Location: " . $_SERVER['REQUEST_URI']);
                         exit;
                     }
                 }
             }
+            if ($type == 'sell') {
+                $player_id = $_POST['player_id'];
+                $player = $this->footballPlayerController->viewPlayer($player_id);
+                $amount = $player['market_value'] * 80 / 100;
+                try {
+                    $this->footballTransferService->createTransfer($type, $player_id, (int)$amount);
+                } catch (Throwable $th) {
+                    $_SESSION['message_type'] = 'danger';
+                    $_SESSION['message'] = "Failed to create transfer. " . $th->getMessage();
+                    header("Location: " . $_SERVER['REQUEST_URI']);
+                    exit;
+                }
+            }
             $_SESSION['message_type'] = 'success';
             $_SESSION['message'] = "Your transfer is processing";
-            header("Location: " . home_url("football-manager/transfer/buy-list"));
         } else {
             $_SESSION['message_type'] = 'danger';
             $_SESSION['message'] = "Failed to create transfer";
-            header("Location: " . $_SERVER['REQUEST_URI']);
         }
 
+        header("Location: " . home_url('football-manager/transfer/'.$type.'-list'));
         exit;
-    }
-
-    public function createTransferSellPlayer()
-    {
-        $this->createTransfer('sell');
     }
 
     public function initializeTeams($teams)
@@ -75,48 +85,41 @@ class FootballTransferController
         $this->footballTransferService->initializeTeams($teams);
     }
 
-    // Handle updating a code
-    public function updateCode()
+    public function cancelSellTransfer($transferId, $playerId, $playerName)
     {
-        $id = $_POST['code_id'] ?? '';
-        $title = $_POST['title'] ?? '';
-        $content = $_POST['content'] ?? '';
-        $tags = $_POST['tags'] ?? '';
-        $url = $_POST['url'] ?? '';
-
-        if ($id && $title) {
-            $rowsAffected = $this->footballTransferService->updateCode($id, $title, $content, $tags, $url);
+        if ($transferId && $playerId) {
+            $rowsAffected = $this->footballTransferService->cancelSellTransfer($transferId, $playerId);
             if ($rowsAffected) {
                 $_SESSION['message_type'] = 'success';
-                $_SESSION['message'] = "Code updated successfully.";
+                $_SESSION['message'] = "Transfer of $playerName has been successfully cancel.";
             } else {
                 $_SESSION['message_type'] = 'danger';
-                $_SESSION['message'] = "Failed to update code.";
+                $_SESSION['message'] = "Failed to cancel Transfer.";
             }
         } else {
             $_SESSION['message_type'] = 'danger';
-            $_SESSION['message'] = "Code ID and service name are required.";
+            $_SESSION['message'] = "Transfer ID and player ID are required.";
         }
 
-        header("Location: " . home_url("code/edit") . '?id=' . $id);
+        header("Location: " . $_SERVER['REQUEST_URI']);
         exit;
     }
 
     // Handle deleting a code
-    public function deleteTransfer($transferId, $playerName)
+    public function deleteTransfer($transferId, $playerId, $playerName)
     {
-        if ($transferId) {
-            $rowsAffected = $this->footballTransferService->deleteTransfer($transferId);
+        if ($transferId && $playerId) {
+            $rowsAffected = $this->footballTransferService->deleteTransfer($transferId, $playerId);
             if ($rowsAffected) {
                 $_SESSION['message_type'] = 'success';
-                $_SESSION['message'] = "Code deleted successfully.";
+                $_SESSION['message'] = "Transfer of $playerName has been successfully deleted.";
             } else {
                 $_SESSION['message_type'] = 'danger';
-                $_SESSION['message'] = "Failed to delete transfer .";
+                $_SESSION['message'] = "Failed to delete transfer.";
             }
         } else {
             $_SESSION['message_type'] = 'danger';
-            $_SESSION['message'] = "Failed to delete transfer .";
+            $_SESSION['message'] = "Transfer ID and player ID are required.";
         }
 
         header("Location: " . $_SERVER['REQUEST_URI']);

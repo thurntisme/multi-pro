@@ -45,11 +45,10 @@ class FootballTeamController
             throw new Exception("The player array must contain at least 22 items.");
         }
         // Shuffle the array
-        shuffle($playerArr);
+        // shuffle($playerArr);
         // Get the first 22 players
-        $players = array_slice($playerArr, 0, 22);
-
-        $this->footballTeamService->initializeTeamPlayers($teamId, $players);
+        // $players = array_slice($playerArr, 0, 22);
+        // $this->footballTeamService->initializeTeamPlayers($teamId, $players);
     }
 
     public function initializeSystemTeams()
@@ -255,7 +254,7 @@ class FootballTeamController
             $_SESSION['message_type'] = 'danger';
             $_SESSION['message'] = "Failed to refund from player $playerName.";
         }
-        header("Location: " . home_url("football-manager/transfer/buy-list"));
+        header("Location: " . $_SERVER['REQUEST_URI']);
         exit;
     }
 }
