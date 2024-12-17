@@ -88,16 +88,19 @@ ob_start();
                                                 <tr>
                                                     <td>
                                                         <div class="d-flex">
-                                                            <div class="flex-grow-1"><?= $item['name'] ?></div>
-                                                            <div class="flex-shrink-0 ms-4">
-                                                                <ul class="list-inline tasks-list-menu mb-0 pe-4">
-                                                                    <li class="list-inline-item">
-                                                                        <a class="edit-item-btn"
-                                                                           href="#<?= $item['uuid'] ?>"><i
-                                                                                    class="ri-eye-fill align-bottom me-2 text-muted"></i></a>
-                                                                    </li>
-                                                                </ul>
-                                                            </div>
+                                                            <div class="me-2"><?= $item['name'] ?></div>
+                                                            <ul class="list-inline tasks-list-menu mb-0 pe-4">
+                                                                <li class="list-inline-item">
+                                                                    <a href="#" class="edit-item-btn cursor-pointer btn-player-detail"
+                                                                        data-player-uuid="<?= $item['uuid'] ?>"
+                                                                        data-player-name="<?= $item['name'] ?>"
+                                                                        data-player-nationality="<?= $item['nationality'] ?>"
+                                                                        data-player-meta="<?= $item['best_position'] . " (" . $item['ability'] . ") | " . implode(", ", $item['playable_positions']) ?>"
+                                                                        data-player-attributes="<?= htmlspecialchars(json_encode($item['attributes'])) ?>"
+                                                                        data-bs-toggle="modal" data-bs-target="#playerDetailBackdrop"><i
+                                                                                class="ri-eye-fill align-bottom me-2 text-muted"></i></a>
+                                                                </li>
+                                                            </ul>
                                                         </div>
                                                     </td>
                                                     <td class="text-center"><?= $item['nationality'] ?></td>
@@ -159,9 +162,58 @@ ob_start();
             </div>
         </div>
         <!--end col-->
+        
+        <div class="col-lg-12">
+            <?php include_once DIR . '/components/football-player-detail-modal.php'; ?>
+        </div>
+
     </div>
 
 <?php
 $pageContent = ob_get_clean();
+
+ob_start(); ?>
+
+<script type="text/javascript">
+    $(document).on('click', ".btn-player-detail", function (e) {
+        e.preventDefault();
+        const playerDetailBackdrop = $("#playerDetailBackdrop");
+        const playerUuid = $(this).data('player-uuid');
+        const playerName = $(this).data('player-name');
+        const playerNationality = $(this).data('player-nationality');
+        const playerAttributes = $(this).data('player-attributes');
+        const playerMeta = $(this).data('player-meta');
+        playerDetailBackdrop.find("#playerName").empty();
+        playerDetailBackdrop.find("#playerNationality").empty();
+        playerDetailBackdrop.find("#playerMeta").empty();
+        playerDetailBackdrop.find("#playerAttributes").empty();
+        playerDetailBackdrop.find("#playerName").text(playerName);
+        playerDetailBackdrop.find("#playerNationality").text(playerNationality);
+        playerDetailBackdrop.find("#playerMeta").text(playerMeta);
+        let playerAttrContent = '';
+        Object.keys(playerAttributes).forEach(function(key) {
+            playerAttrContent += `<div class="col-4">
+                            <h6 class="card-title flex-grow-1 mb-3 fs-15 text-capitalize">${key}</h6>
+                            <table class="table table-borderless mb-0">
+                                <tbody>`;
+
+                                Object.keys(playerAttributes[key]).forEach(function(attr){
+                                    playerAttrContent += `<tr>
+                                            <th class="ps-0 text-capitalize text-start" scope="row">${attr.replace(/_/g, ' ')} :</th>
+                                            <td class="text-muted">${playerAttributes[key][attr]}</td>
+                                        </tr>`;
+                                })
+
+                                playerAttrContent += `</tbody>
+                            </table>
+                        </div>`;                 
+        })
+        const playerAttrHtml = `<div class="row">${playerAttrContent}</div>`;
+        playerDetailBackdrop.find("#playerAttributes").html(playerAttrHtml);
+    });
+</script>
+
+<?php
+$additionJs = ob_get_clean();
 
 include 'layout.php';
