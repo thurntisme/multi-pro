@@ -137,7 +137,9 @@ ob_start();
                                                             </form>
                                                             <form method="POST" action="<?= $_SERVER['REQUEST_URI'] ?>">
                                                                 <input type="hidden" name="action_name"
-                                                                       value="delete_player">
+                                                                       value="delete_transfer">
+                                                                <input type="hidden" name="transfer_id"
+                                                                       value="<?= $item['id'] ?>">
                                                                 <input type="hidden" name="player_id"
                                                                        value="<?= $item['player_id'] ?>">
                                                                 <input type="hidden" name="player_name"

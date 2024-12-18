@@ -57,62 +57,26 @@ function getSeason(int $overallAbility): string
 
 function getPlayablePosition(string $specificPosition): array
 {
-    // Define the positional groups
-    $positionGroups = [
-        'Goalkeepers' => ['GK'],
-        'Defenders' => ['CB', 'RB', 'LB'],
-        'Midfielders' => ['CM', 'CDM', 'CAM', 'LM', 'RM'],
-        'Attackers' => ['CF', 'ST', 'RW', 'LW'],
-    ];
-
-    // Define extra possible positions for versatility
     $extraPositions = [
         'GK' => [],
         'CB' => ['CDM', 'RB', 'LB'],
-        'RB' => ['CB', 'CDM', 'RM'],
-        'LB' => ['CB', 'CDM', 'LM'],
-        'CM' => ['CDM', 'CAM', 'RB', 'LB'],
+        'RB' => ['CB', 'CDM', 'RM', 'CM'],
+        'LB' => ['CB', 'CDM', 'LM', 'CM'],
+        'CM' => ['CDM', 'CAM', 'RB', 'LB', 'RM', 'LM'],
         'CDM' => ['CB', 'CM', 'RB', 'LB'],
         'CAM' => ['CM', 'LM', 'RM'],
-        'LM' => ['LB', 'CM', 'CAM'],
-        'RM' => ['RB', 'CM', 'CAM'],
+        'LM' => ['LB', 'CAM', 'CM', 'LW', 'RM', 'RW'],
+        'RM' => ['RB', 'CAM', 'CM', 'RW', 'LW', 'LM'],
         'CF' => ['ST', 'CAM', 'RW', 'LW'],
-        'ST' => ['CF', 'RW', 'LW'],
-        'RW' => ['RM', 'ST', 'LW'],
-        'LW' => ['LM', 'ST', 'RW'],
+        'ST' => ['CF', 'CAM', 'RW', 'LW'],
+        'RW' => ['RM', 'CAM', 'ST', 'LW', 'LM'],
+        'LW' => ['LM', 'CAM', 'ST', 'RW', 'RM'],
     ];
-
     $playablePositions = [];
+    $positions = $extraPositions[$specificPosition];
+    shuffle($positions);
 
-    // Find the group for the specific position
-    foreach ($positionGroups as $group => $groupPositions) {
-        if (in_array($specificPosition, $groupPositions, true)) {
-            // Add the natural group positions
-            shuffle($groupPositions);
-            $playablePositions = array_merge($playablePositions, $groupPositions);
-
-            // Add extra positions for versatility
-            if (isset($extraPositions[$specificPosition])) {
-                $playablePositions = array_merge($playablePositions, $extraPositions[$specificPosition]);
-            }
-
-            // Ensure $specificPosition is included
-            if (!in_array($specificPosition, $playablePositions, true)) {
-                array_unshift($playablePositions, $specificPosition);
-            }
-
-            // Remove duplicates and shuffle
-            $playablePositions = array_unique($playablePositions);
-            shuffle($playablePositions);
-
-            // Limit to a maximum of 3 positions
-            $playablePositions = array_slice($playablePositions, 0, rand(1, 3));
-            break;
-        }
-    }
-    $playablePositions[] = $specificPosition;
-
-    return array_unique($playablePositions);
+    return array_merge([$specificPosition], array_slice($positions, 0, rand(1, 3)));
 }
 
 function calculatePlayerWage(
@@ -121,7 +85,8 @@ function calculatePlayerWage(
     array  $playablePositions,
     string $season,
     int    $overallAbility,
-    string $type
+    string $type,
+    int    $reputation,
 ): float
 {
     // Define base nation multipliers
@@ -160,7 +125,7 @@ function calculatePlayerWage(
     $positionModifier = $positionModifiers[$position] ?? 1.0;
 
     // Add a bonus for flexible players
-    $flexibilityBonus = 0.1 * count($playablePositions);
+    $flexibilityBonus = $reputation / 10 * count($playablePositions);
 
     // Define season multipliers
     $seasonMultipliers = [
@@ -186,7 +151,8 @@ function calculateMarketValue(
     array  $playablePositions,
     string $season,
     int    $overallAbility,
-    string $type
+    string $type,
+    int    $reputation,
 ): float
 {
     // Step 1: Define the base salary depending on the nation
@@ -243,7 +209,7 @@ function calculateMarketValue(
     $versatilityBonus = count($playablePositions) > 1 ? 0.1 : 0;
 
     // Step 6: Calculate the salary
-    $salary = $baseSalary * $positionModifier * $abilityModifier * $seasonMultiplier * (1 + $versatilityBonus);
+    $salary = $baseSalary * $positionModifier * $abilityModifier * $seasonMultiplier * (1 + $versatilityBonus + $reputation / 10);
 
     // Return the calculated salary (annual salary)
     return round($salary, 2);
@@ -285,7 +251,8 @@ function getRandomNation($nations)
     return $weightedNations[array_rand($weightedNations)];
 }
 
-function checkSpecialSkills($position, $attributes) {
+function checkSpecialSkills($position, $attributes)
+{
     global $specialSkills;
 
     // Check if the position exists in the special skills array
@@ -319,7 +286,8 @@ function checkSpecialSkills($position, $attributes) {
     return !empty($playerSkills) ? $playerSkills : [];
 }
 
-function flattenAttributes($attributes) {
+function flattenAttributes($attributes)
+{
     $flattened = [];
 
     // Iterate through each category (technical, mental, physical, goalkeeping)
@@ -337,12 +305,11 @@ function generateRandomPlayers($type = '', $playerData = []): array
 {
     global $positions;
     $players = [];
-    $minAttr = 44;
+    $minAttr = 50;
     $maxAttr = 77;
 
     if (!empty($type)) {
         if ($type == 'mystery-pack') {
-            $minAttr = 50;
             $maxAttr = 84;
         }
     }
@@ -350,37 +317,42 @@ function generateRandomPlayers($type = '', $playerData = []): array
     // Randomly select or generate player data
     $uuid = uniqid();
     $age = rand(16, 35);
-    $nationality = getRandomNation(DEFAULT_NATIONALITY);
-    $name = getRandomFullName($nationality, DEFAULT_NAME_BY_NATIONALITY);
+    $player_name_nations = getJsonFileData('assets/json/football-player-name-nations.json');
+    $nations = [];
+    foreach ($player_name_nations as $item) {
+        $nations[$item['nation']] = $item['players'];
+    }
+    $nationality = getRandomNation(array_keys($nations));
+    $name = getRandomFullName($nationality, $nations);
     $bestPosition = $positions[array_rand($positions)];
-    if ($type === 'gk-pack'){
+    if ($type === 'gk-pack') {
         $bestPosition = 'GK';
     }
-    if ($type === 'cb-pack'){
+    if ($type === 'cb-pack') {
         $bestPosition = 'CB';
     }
-    if ($type === 'lb-rb-pack'){
+    if ($type === 'lb-rb-pack') {
         $bestPosition = rand(0, 1) > 0 ? 'LB' : 'RB';
     }
-    if ($type === 'cdm-pack'){
+    if ($type === 'cdm-pack') {
         $bestPosition = 'CDM';
     }
-    if ($type === 'cm-pack'){
+    if ($type === 'cm-pack') {
         $bestPosition = 'CM';
     }
-    if ($type === 'cam-pack'){
+    if ($type === 'cam-pack') {
         $bestPosition = 'CAM';
     }
-    if ($type === 'lm-rm-pack'){
+    if ($type === 'lm-rm-pack') {
         $bestPosition = rand(0, 1) > 0 ? 'LM' : 'RM';
     }
-    if ($type === 'cf-pack'){
+    if ($type === 'cf-pack') {
         $bestPosition = 'CF';
     }
-    if ($type === 'st-pack'){
+    if ($type === 'st-pack') {
         $bestPosition = 'ST';
     }
-    if ($type === 'lw-rw-pack'){
+    if ($type === 'lw-rw-pack') {
         $bestPosition = rand(0, 1) > 0 ? 'LW' : 'RW';
     }
     $playablePositions = getPlayablePosition($bestPosition);
@@ -451,7 +423,7 @@ function generateRandomPlayers($type = '', $playerData = []): array
             'penalty_saving' => rand($gkMinAttr, $gkMaxAttr),
             'shot_stopping' => rand($gkMinAttr, $gkMaxAttr),
         ],
-    ];    
+    ];
 
     // Weights for attributes by position
     $weights = [
@@ -902,6 +874,10 @@ function generateRandomPlayers($type = '', $playerData = []): array
     $ability = (int)round($overallAbility);
     $height = rand(165, 195); // in cm
     $weight = rand($height - 105, $height - 85); // Proportional weight
+    $reputation = rand(1, 5);
+    $contract_wage = calculatePlayerWage($nationality, $bestPosition, $playablePositions, $season, $overallAbility, $type, $reputation);
+    $market_value = calculateMarketValue($nationality, $bestPosition, $playablePositions, $season, $overallAbility, $type, $reputation);
+    $special_skills = checkSpecialSkills($bestPosition, flattenAttributes($attributes));
 
     if (!empty($type) && count($playerData) > 0) {
         $nationality = $playerData['nationality'];
@@ -917,27 +893,27 @@ function generateRandomPlayers($type = '', $playerData = []): array
 
     // Build player array
     $players[] = [
-        'uuid' => $uuid,
-        'name' => $name,
-        'age' => $age,
-        'nationality' => $nationality,
-        'best_position' => $bestPosition,
-        'playable_positions' => $playablePositions,
-        'attributes' => $attributes,
-        'special_skills' => checkSpecialSkills($bestPosition, flattenAttributes($attributes)),
-        'season' => $season,
-        'ability' => $ability,
-        'contract_wage' => calculatePlayerWage($nationality, $bestPosition, $playablePositions, $season, $overallAbility, $type),
-        'contract_end' => rand(7, 14),
-        'injury' => rand(1, 5),
-        'recovery_time' => rand(1, 5),
-        'market_value' => calculateMarketValue($nationality, $bestPosition, $playablePositions, $season, $overallAbility, $type),
-        'reputation' => rand(1, 10),
-        'form' => rand(1, 10),
-        'morale' => rand(1, 10),
-        'potential' => rand(1, 5),
-        'height' => $height, // Height in cm
-        'weight' => $weight, // Weight in kg
+        'uuid' => $uuid, // Unique identifier for the player.
+        'name' => $name, // Player's name.
+        'age' => $age, // Player's age.
+        'nationality' => $nationality, // Player's nationality (e.g., country).
+        'best_position' => $bestPosition, // Player's strongest position on the field (e.g., ST, CM, CB).
+        'playable_positions' => $playablePositions, // Other positions the player can play, usually as an array or comma-separated string.
+        'attributes' => $attributes, // Array of player's skills or abilities (e.g., speed, strength, dribbling).
+        'special_skills' => $special_skills, // Specific skills or traits (e.g., free-kick specialist, playmaker).
+        'season' => $season, // The current season or the season the player is associated with.
+        'ability' => $ability, // Player's overall ability rating.
+        'contract_wage' => $contract_wage, // Player's weekly wage based on various factors.
+        'contract_end' => rand(7, 14), // Number of seasons before the player's contract expires (random between 7 and 14).
+        'injury_prone' => rand(1, 5), // Likelihood of the player getting injured (1 = rarely, 5 = very often).
+        'recovery_time' => rand(1, 5), // Time required to recover from an injury (1 = quick recovery, 5 = slow recovery).
+        'market_value' => $market_value, // Player's estimated market value based on performance and attributes.
+        'reputation' => $reputation, // Player's reputation (1 = low, 5 = world-class).
+        'form' => rand(1, 5), // Player's current form (1 = poor, 5 = excellent).
+        'morale' => rand(1, 5), // Player's morale or happiness (1 = very low, 5 = very high).
+        'potential' => rand(1, 5), // Player's growth potential (1 = low, 5 = world-class potential).
+        'height' => $height, // Player's height in centimeters.
+        'weight' => $weight, // Player's weight in kilograms.
     ];
 
     return $players;
