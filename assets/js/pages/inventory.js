@@ -87,10 +87,10 @@ $(document).on("click", ".btn-take-inventory-item", function (e) {
 
         $('#inventoryItemModal').on('hidden.bs.modal', function () {
             console.log('Modal closed');
-            $("#player-info #player-nationality").text("");
-            $("#player-info #player-best_position").text("");
+            $("#player-info #player-nationality").html("&nbsp;");
+            $("#player-info #player-best_position").html("&nbsp;");
             $("#player-info #player-playable_positions").text("");
-            $("#player-info #player-name").text("");
+            $("#player-info #player-name").html("&nbsp;");
             $("#player-info #player-ability").text("");
             ["mental", "physical", "technical"].forEach((key) => {
                 $(`#${key}-label`).text(0);
