@@ -30,7 +30,7 @@ switch ($slug) {
 function getPlayerByInventory($item_uuid, $item_type, $item_slug): void
 {
     if (!empty($item_type)) {
-        if ($item_type === 'player') {
+        if ($item_type === 'new-player') {
             $playerData = [];
             $player = generateRandomPlayers($item_slug, $playerData)[0];
             // if ($item_slug === 'on-demand') {

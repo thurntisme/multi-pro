@@ -4,7 +4,7 @@ $(document).on("click", ".btn-take-inventory-item", function (e) {
     const item_type = $(this).data("item-type");
     const item_slug = $(this).data("item-slug");
 
-    if (item_type === "player") {
+    if (item_type.includes("-player")) {
         // Function to fetch data from the API
         function fetchData() {
             const payload = {

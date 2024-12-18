@@ -112,7 +112,7 @@ function getPlayablePosition(string $specificPosition): array
     }
     $playablePositions[] = $specificPosition;
 
-    return $playablePositions;
+    return array_unique($playablePositions);
 }
 
 function calculatePlayerWage(
@@ -335,7 +335,7 @@ function flattenAttributes($attributes) {
 
 function generateRandomPlayers($type = '', $playerData = []): array
 {
-    global $positions, $seasonArr;
+    global $positions;
     $players = [];
     $minAttr = 44;
     $maxAttr = 77;
@@ -349,10 +349,40 @@ function generateRandomPlayers($type = '', $playerData = []): array
 
     // Randomly select or generate player data
     $uuid = uniqid();
-    $age = rand(18, 35);
+    $age = rand(16, 35);
     $nationality = getRandomNation(DEFAULT_NATIONALITY);
     $name = getRandomFullName($nationality, DEFAULT_NAME_BY_NATIONALITY);
     $bestPosition = $positions[array_rand($positions)];
+    if ($type === 'gk-pack'){
+        $bestPosition = 'GK';
+    }
+    if ($type === 'cb-pack'){
+        $bestPosition = 'CB';
+    }
+    if ($type === 'lb-rb-pack'){
+        $bestPosition = rand(0, 1) > 0 ? 'LB' : 'RB';
+    }
+    if ($type === 'cdm-pack'){
+        $bestPosition = 'CDM';
+    }
+    if ($type === 'cm-pack'){
+        $bestPosition = 'CM';
+    }
+    if ($type === 'cam-pack'){
+        $bestPosition = 'CAM';
+    }
+    if ($type === 'lm-rm-pack'){
+        $bestPosition = rand(0, 1) > 0 ? 'LM' : 'RM';
+    }
+    if ($type === 'cf-pack'){
+        $bestPosition = 'CF';
+    }
+    if ($type === 'st-pack'){
+        $bestPosition = 'ST';
+    }
+    if ($type === 'lw-rw-pack'){
+        $bestPosition = rand(0, 1) > 0 ? 'LW' : 'RW';
+    }
     $playablePositions = getPlayablePosition($bestPosition);
 
     $gkMinAttr = $bestPosition === 'GK' ? 68 : 44;
@@ -878,12 +908,11 @@ function generateRandomPlayers($type = '', $playerData = []): array
         $name = $playerData['name'];
         $bestPosition = $playerData['best_position'];
         $playablePositions = $playerData['playable_positions'];
-        $age = $playerData['age'];
         $weight = $playerData['weight'];
         $height = $playerData['height'];
-        if ($type === 'young') {
-            $age = rand(18, 19);
-        }
+    }
+    if ($type === 'young-star') {
+        $age = rand(16, 19);
     }
 
     // Build player array
