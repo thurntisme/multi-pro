@@ -92,7 +92,7 @@ $(document).on("click", ".btn-take-inventory-item", function (e) {
             $("#player-info #player-playable_positions").text("");
             $("#player-info #player-name").html("&nbsp;");
             $("#player-info #player-ability").text("");
-            ["mental", "physical", "technical"].forEach((key) => {
+            ["mental", "physical", "technical", "goalkeeping"].forEach((key) => {
                 $(`#${key}-label`).text(0);
                 $(`#${key}-value`).attr("style", `width: ${0}%`);
                 $(`#${key}-value`).attr("aria-valuenow", 0);

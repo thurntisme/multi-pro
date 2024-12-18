@@ -453,6 +453,18 @@ ob_start();
                                         aria-valuemax="0"
                                         id="technical-value"></div>
                             </div>
+
+                            <p class="mt-3 mb-1 fs-12">Goalkeeping<span class="float-end"><span
+                                            id="goalkeeping-label">0</span></span>
+                            </p>
+                            <div class="progress mt-2" style="height: 6px;">
+                                <div class="progress-bar progress-bar-striped bg-primary" role="progressbar"
+                                        style="width: 0"
+                                        aria-valuenow="0"
+                                        aria-valuemin="0"
+                                        aria-valuemax="0"
+                                        id="goalkeeping-value"></div>
+                            </div>
                         </div>
                     </div>
                     <form action="">

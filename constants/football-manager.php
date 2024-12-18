@@ -1374,3 +1374,73 @@ const DEFAULT_STORE_ITEMS = [
         'description' => 'Change the design of your match ball for a personal touch.',
     ],
 ];
+
+// Special skills definition based on position and attributes
+$specialSkills = [
+    'GK' => [
+        'Shot Stopper' => ['reflexes', 'shot_stopping'],
+        'Sweeper Keeper' => ['rushing_out', 'command_of_area'],
+        'Penalty Saver' => ['penalty_saving'],
+        'Aerial Dominator' => ['aerial_reach', 'handling'],
+    ],
+    'LB' => [
+        'Offensive Fullback' => ['crossing', 'dribbling'],
+        'Defensive Fullback' => ['tackling', 'work_rate'],
+        'Speedy Fullback' => ['pace', 'stamina'],
+    ],
+    'CB' => [
+        'Rock Solid Defender' => ['tackling', 'strength'],
+        'Aerial Threat' => ['jumping_reach', 'heading_accuracy'],
+        'No-Nonsense Defender' => ['marking', 'positioning'],
+    ],
+    'RB' => [
+        'Offensive Fullback' => ['crossing', 'dribbling'],
+        'Defensive Fullback' => ['tackling', 'work_rate'],
+        'Speedy Fullback' => ['pace', 'stamina'],
+    ],
+    'LM' => [
+        'Wide Playmaker' => ['crossing', 'dribbling'],
+        'Fast Winger' => ['pace', 'acceleration'],
+        'Creative Winger' => ['flair', 'vision'],
+    ],
+    'CDM' => [
+        'Anchor' => ['positioning', 'tackling'],
+        'Defensive Wall' => ['strength', 'stamina'],
+        'Deep Lying Playmaker' => ['passing', 'vision'],
+    ],
+    'CM' => [
+        'Playmaker' => ['passing', 'vision', 'first_touch'],
+        'Long Range Shooter' => ['long_shots', 'shot_power'],
+        'Tackling Machine' => ['tackling', 'work_rate'],
+    ],
+    'RM' => [
+        'Wide Playmaker' => ['crossing', 'dribbling'],
+        'Fast Winger' => ['pace', 'acceleration'],
+        'Creative Winger' => ['flair', 'vision'],
+    ],
+    'CAM' => [
+        'Attacking Playmaker' => ['dribbling', 'vision'],
+        'Creative Genius' => ['flair', 'passing'],
+        'Finisher' => ['finishing', 'first_touch'],
+    ],
+    'LW' => [
+        'Winger' => ['crossing', 'dribbling'],
+        'Speedster' => ['pace', 'acceleration'],
+        'Creative Winger' => ['flair', 'vision'],
+    ],
+    'CF' => [
+        'Clinical Finisher' => ['finishing', 'composure'],
+        'Dribbler' => ['dribbling', 'first_touch'],
+        'Target Man' => ['heading_accuracy', 'strength'],
+    ],
+    'RW' => [
+        'Crossing King' => ['crossing', 'dribbling'],
+        'Speedster' => ['pace', 'acceleration'],
+        'Trickster' => ['flair', 'dribbling'],
+    ],
+    'ST' => [
+        'Poacher' => ['finishing', 'off_the_ball'],
+        'Strong Forward' => ['strength', 'heading_accuracy'],
+        'Fast Striker' => ['pace', 'acceleration'],
+    ],
+];

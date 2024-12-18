@@ -153,8 +153,9 @@ class FootballTeamService
 
     public function assignPlayerToTeam($teamId, $playerId)
     {
-        $joining_date = date('Y-m-d H:i:s');
-        $contract_end_date = date('Y-m-d H:i:s', strtotime('+7 days'));
+        $playerData = $this->footballPlayerController->viewPlayer($playerId);
+        $joining_date = date('Y-m-d H:i:s'); 
+        $contract_end_date = date('Y-m-d H:i:s', strtotime('+' . ($playerData['contract_end'] ?? 7) . ' days'));
         $sql = "UPDATE football_player SET joining_date = :joining_date, contract_end_date = :contract_end_date, status = :status, updated_at = CURRENT_TIMESTAMP WHERE team_id = :team_id AND id = :player_id";
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute([':joining_date' => $joining_date, ':contract_end_date' => $contract_end_date, ':status' => 'club', ':team_id' => $teamId, ':player_id' => $playerId]);
