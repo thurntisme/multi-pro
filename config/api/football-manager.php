@@ -32,12 +32,12 @@ function getPlayerByInventory($item_uuid, $item_type, $item_slug): void
     if (!empty($item_type)) {
         if ($item_type === 'player') {
             $playerData = [];
-            if ($item_slug === 'on-demand') {
-                $players = generateRandomPlayers($item_slug, $playerData)[0];
-            } else {
-                $players = filterPlayers($item_slug, $playerData);
-            }
-            sendResponse("success", 201, "Player created successfully. Player card: " . $item_slug, $players);
+            $player = generateRandomPlayers($item_slug, $playerData)[0];
+            // if ($item_slug === 'on-demand') {
+            // } else {
+            //     $players = filterPlayers($item_slug, $playerData);
+            // }
+            sendResponse("success", 201, "Player created successfully. Player card: " . $item_slug, $player);
             // after open item, user have 2 options to choose: receive the player or get 80% price from player's market value
         }
     }

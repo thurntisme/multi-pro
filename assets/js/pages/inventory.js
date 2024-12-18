@@ -38,17 +38,18 @@ $(document).on("click", ".btn-take-inventory-item", function (e) {
                             const playerRenderInterval = setInterval(() => {
                                 if (count <= extraMaxSum) {
                                     if (count === Math.round(maxSum / 4)) {
-                                        $("#player-info #player-nationality").text(player_data.nationality || "");
+                                        $("#player-info #player-meta").text(`${player_data.age} yrd | ${player_data.height} cm | ${player_data.weight} kg`);
                                     } else if (count === Math.round(maxSum / 2)) {
+                                        $("#player-info #player-nationality").text(player_data.nationality || "");
+                                    } else if (count === Math.round(maxSum * 3 / 4)) {
+                                        $("#player-info #player-best_position").text(
+                                            player_data.best_position ? `${player_data.best_position}` : ""
+                                        );
+                                        $("#player-info #player-ability").text(player_data.ability ? `(${player_data.ability})` : "");
                                         $("#player-info #player-playable_positions").text(
                                             player_data.playable_positions
                                                 ? player_data.playable_positions.join(", ")
                                                 : ""
-                                        );
-                                        $("#player-info #player-ability").text(player_data.ability ? `(${player_data.ability})` : "");
-                                    } else if (count === Math.round(maxSum * 3 / 4)) {
-                                        $("#player-info #player-best_position").text(
-                                            player_data.best_position ? `${player_data.best_position}` : ""
                                         );
                                     } else if (count === extraMaxSum) {
                                         $("#player-info #player-name").text(player_data.name || "");
@@ -88,6 +89,7 @@ $(document).on("click", ".btn-take-inventory-item", function (e) {
         $('#inventoryItemModal').on('hidden.bs.modal', function () {
             console.log('Modal closed');
             $("#player-info #player-nationality").html("&nbsp;");
+            $("#player-info #player-meta").html("&nbsp;");
             $("#player-info #player-best_position").html("&nbsp;");
             $("#player-info #player-playable_positions").text("");
             $("#player-info #player-name").html("&nbsp;");

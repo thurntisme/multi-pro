@@ -57,31 +57,62 @@ function getSeason(int $overallAbility): string
 
 function getPlayablePosition(string $specificPosition): array
 {
-    global $positionGroups;
-    // Find the group for the specific position
+    // Define the positional groups
+    $positionGroups = [
+        'Goalkeepers' => ['GK'],
+        'Defenders' => ['CB', 'RB', 'LB'],
+        'Midfielders' => ['CM', 'CDM', 'CAM', 'LM', 'RM'],
+        'Attackers' => ['CF', 'ST', 'RW', 'LW'],
+    ];
+
+    // Define extra possible positions for versatility
+    $extraPositions = [
+        'GK' => [],
+        'CB' => ['CDM', 'RB', 'LB'],
+        'RB' => ['CB', 'CDM', 'RM'],
+        'LB' => ['CB', 'CDM', 'LM'],
+        'CM' => ['CDM', 'CAM', 'RB', 'LB'],
+        'CDM' => ['CB', 'CM', 'RB', 'LB'],
+        'CAM' => ['CM', 'LM', 'RM'],
+        'LM' => ['LB', 'CM', 'CAM'],
+        'RM' => ['RB', 'CM', 'CAM'],
+        'CF' => ['ST', 'CAM', 'RW', 'LW'],
+        'ST' => ['CF', 'RW', 'LW'],
+        'RW' => ['RM', 'ST', 'LW'],
+        'LW' => ['LM', 'ST', 'RW'],
+    ];
+
     $playablePositions = [];
+
+    // Find the group for the specific position
     foreach ($positionGroups as $group => $groupPositions) {
         if (in_array($specificPosition, $groupPositions, true)) {
-            // Shuffle the positions
+            // Add the natural group positions
             shuffle($groupPositions);
+            $playablePositions = array_merge($playablePositions, $groupPositions);
 
-            // Get a random number of positions from the group
-            $randomCount = rand(1, count($groupPositions));
-            $playablePositions = array_slice($groupPositions, 0, $randomCount);
+            // Add extra positions for versatility
+            if (isset($extraPositions[$specificPosition])) {
+                $playablePositions = array_merge($playablePositions, $extraPositions[$specificPosition]);
+            }
 
             // Ensure $specificPosition is included
             if (!in_array($specificPosition, $playablePositions, true)) {
                 array_unshift($playablePositions, $specificPosition);
-                $playablePositions = array_unique($playablePositions); // Remove duplicates if necessary
             }
 
-            // Limit to the maximum of the group size
-            $playablePositions = array_slice($playablePositions, 0, count($groupPositions));
+            // Remove duplicates and shuffle
+            $playablePositions = array_unique($playablePositions);
+            shuffle($playablePositions);
+
+            // Limit to a maximum of 3 positions
+            $playablePositions = array_slice($playablePositions, 0, rand(1, 3));
             break;
         }
     }
+    $playablePositions[] = $specificPosition;
 
-    return array_slice($playablePositions, 0, 4);
+    return $playablePositions;
 }
 
 function calculatePlayerWage(
@@ -304,14 +335,15 @@ function flattenAttributes($attributes) {
 
 function generateRandomPlayers($type = '', $playerData = []): array
 {
-    global $positions;
+    global $positions, $seasonArr;
     $players = [];
     $minAttr = 44;
     $maxAttr = 77;
 
     if (!empty($type)) {
-        if ($type == 'on-demand') {
-            $maxAttr = 90;
+        if ($type == 'mystery-pack') {
+            $minAttr = 50;
+            $maxAttr = 84;
         }
     }
 
@@ -323,6 +355,7 @@ function generateRandomPlayers($type = '', $playerData = []): array
     $bestPosition = $positions[array_rand($positions)];
     $playablePositions = getPlayablePosition($bestPosition);
 
+    $gkMinAttr = $bestPosition === 'GK' ? 68 : 44;
     $gkMaxAttr = $bestPosition === 'GK' ? $maxAttr : 48;
 
     // Generate random attributes
@@ -376,17 +409,17 @@ function generateRandomPlayers($type = '', $playerData = []): array
             'endurance' => rand($minAttr, $maxAttr),
         ],
         'goalkeeping' => [
-            'handling' => rand($minAttr, $gkMaxAttr),
-            'reflexes' => rand($minAttr, $gkMaxAttr),
-            'kicking' => rand($minAttr, $gkMaxAttr),
-            'throwing' => rand($minAttr, $gkMaxAttr),
-            'one_on_ones' => rand($minAttr, $gkMaxAttr),
-            'aerial_reach' => rand($minAttr, $gkMaxAttr),
-            'command_of_area' => rand($minAttr, $gkMaxAttr),
-            'rushing_out' => rand($minAttr, $gkMaxAttr),
-            'communication' => rand($minAttr, $gkMaxAttr),
-            'penalty_saving' => rand($minAttr, $gkMaxAttr),
-            'shot_stopping' => rand($minAttr, $gkMaxAttr),
+            'handling' => rand($gkMinAttr, $gkMaxAttr),
+            'reflexes' => rand($gkMinAttr, $gkMaxAttr),
+            'kicking' => rand($gkMinAttr, $gkMaxAttr),
+            'throwing' => rand($gkMinAttr, $gkMaxAttr),
+            'one_on_ones' => rand($gkMinAttr, $gkMaxAttr),
+            'aerial_reach' => rand($gkMinAttr, $gkMaxAttr),
+            'command_of_area' => rand($gkMinAttr, $gkMaxAttr),
+            'rushing_out' => rand($gkMinAttr, $gkMaxAttr),
+            'communication' => rand($gkMinAttr, $gkMaxAttr),
+            'penalty_saving' => rand($gkMinAttr, $gkMaxAttr),
+            'shot_stopping' => rand($gkMinAttr, $gkMaxAttr),
         ],
     ];    
 

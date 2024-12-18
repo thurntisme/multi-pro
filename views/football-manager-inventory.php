@@ -396,25 +396,29 @@ ob_start();
                             the
                             recipient wasn't correct.</p>
                     </div>
-                    <div class="card-body py-5" id="player-info">
+                    <div class="card-body pb-5 pt-4" id="player-info">
                         <div class="row">
-                            <div class="col-3 text-center">
+                            <div class="col-4 text-center">
                                 <div class="profile-user position-relative d-inline-block mx-auto">
                                     <img src="<?= home_url('assets/images/users/avatar-1.jpg') ?>"
-                                            class="rounded-circle avatar-md img-thumbnail user-profile-image"
+                                            class="rounded-circle avatar-xl img-thumbnail user-profile-image"
                                             alt="user-profile-image">
                                 </div>
                             </div>
-                            <div class="col-9">
-                                <h5 class="fs-16 mb-1"
-                                    id="player-name">&nbsp;</h5>
-                                <p class="text-muted mb-0 fs-14"
-                                    id="player-nationality">&nbsp;</p>
-                                <p class="text-muted mb-0 mt-2"><span
-                                            id="player-best_position">&nbsp;</span>
-                                    <span id="player-ability"></span>
-                                    <span id="player-playable_positions"></span>
-                                </p>
+                            <div class="col-8">
+                                <div class="d-flex flex-column h-100 justify-content-center">
+                                    <h5 class="fs-16 mb-2"
+                                        id="player-name">&nbsp;</h5>
+                                    <p class="mb-0 fs-13"
+                                        id="player-nationality">&nbsp;</p>
+                                    <p class="text-muted mb-0 fs-12 mt-1"
+                                        id="player-meta">&nbsp;</p>
+                                    <p class="text-muted mb-0 fs-12 mt-1"><span
+                                                id="player-best_position">&nbsp;</span>
+                                        <span id="player-ability"></span>
+                                        <span id="player-playable_positions"></span>
+                                    </p>
+                                </div>
                             </div>
                         </div>
                         <div class="px-2 py-2 mt-4">

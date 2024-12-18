@@ -708,6 +708,14 @@ $seasons = [
     'Normal' => 0,
 ];
 
+$seasonArr = [
+    "legend" => "Legend",
+    "the-best" => "The Best",
+    "superstar" => "Superstar",
+    "rising-star" => "Rising Star",
+    "normal" => "Normal"
+];
+
 // Possible values for player attributes
 $positions = ['GK', 'CM', 'CF', 'ST', 'RW', 'LW', 'CB', 'RB', 'LB', 'CDM', 'CAM', 'LM', 'RM'];
 // Define position groups
@@ -777,57 +785,12 @@ $semiPopularNations = [
 const DEFAULT_STORE_ITEMS = [
     [
         'id' => 0,
-        'name' => 'Player on Demand',
-        'slug' => 'on-demand',
-        'price' => 1000000,
-        'description' => 'Submit a player for consideration. We will review your submission and publish the player once approved.',
+        'name' => 'Mystery Pack',
+        'slug' => 'mystery-pack',
+        'price' => 5500000,
+        'description' => 'Get a completely random player, ranging from Normal to Legend.',
         'type' => 'player',
-        'image' => 'images/normal-player.jpg',
-    ],
-    [
-        'id' => 1,
-        'name' => 'Normal Player',
-        'slug' => 'normal',
-        'price' => 1000000,
-        'description' => 'Get a new Normal Player with balanced stats.',
-        'type' => 'player',
-        'image' => 'images/normal-player.jpg',
-    ],
-    [
-        'id' => 2,
-        'name' => 'Rising Star Player',
-        'slug' => 'rising-star',
-        'price' => 3000000,
-        'description' => 'Get a new Rising Star Player with high potential.',
-        'type' => 'player',
-        'image' => 'images/rising-star-player.jpg',
-    ],
-    [
-        'id' => 3,
-        'name' => 'Superstar Player',
-        'slug' => 'superstar',
-        'price' => 5000000,
-        'description' => 'Get a Superstar Player with excellent stats.',
-        'type' => 'player',
-        'image' => 'images/superstar-player.jpg',
-    ],
-    [
-        'id' => 4,
-        'name' => 'The Best Player',
-        'slug' => 'the-best',
-        'price' => 8000000,
-        'description' => 'Get a top-tier player, one of the best in the world.',
-        'type' => 'player',
-        'image' => 'images/the-best-player.jpg',
-    ],
-    [
-        'id' => 5,
-        'name' => 'Legend Player',
-        'slug' => 'legend',
-        'price' => 12000000,
-        'description' => 'Get a Legendary player with unbeatable stats.',
-        'type' => 'player',
-        'image' => 'images/legend-player.jpg',
+        'image' => 'images/explosive-winger-player.jpg',
     ],
     [
         'id' => 7,
@@ -938,15 +901,6 @@ const DEFAULT_STORE_ITEMS = [
         'image' => 'images/explosive-winger-player.jpg',
     ],
     [
-        'id' => 19,
-        'name' => 'Mystery Pack',
-        'slug' => 'mystery-pack',
-        'price' => 5500000,
-        'description' => 'Get a completely random player, ranging from Normal to Legend.',
-        'type' => 'player',
-        'image' => 'images/explosive-winger-player.jpg',
-    ],
-    [
         'id' => 20,
         'name' => 'Player Level 1',
         'slug' => 'level-1',
@@ -990,6 +944,51 @@ const DEFAULT_STORE_ITEMS = [
         'description' => 'Achieve greatness with a player rated 100, delivering world-class skills, unmatched performance, and legendary status.',
         'type' => 'player',
         'image' => 'images/player-level-5.jpg',
+    ],
+    [
+        'id' => 1,
+        'name' => 'Normal Player',
+        'slug' => 'normal',
+        'price' => 1000000,
+        'description' => 'Get a new Normal Player with balanced stats.',
+        'type' => 'player',
+        'image' => 'images/normal-player.jpg',
+    ],
+    [
+        'id' => 2,
+        'name' => 'Rising Star Player',
+        'slug' => 'rising-star',
+        'price' => 3000000,
+        'description' => 'Get a new Rising Star Player with high potential.',
+        'type' => 'player',
+        'image' => 'images/rising-star-player.jpg',
+    ],
+    [
+        'id' => 3,
+        'name' => 'Superstar Player',
+        'slug' => 'superstar',
+        'price' => 5000000,
+        'description' => 'Get a Superstar Player with excellent stats.',
+        'type' => 'player',
+        'image' => 'images/superstar-player.jpg',
+    ],
+    [
+        'id' => 4,
+        'name' => 'The Best Player',
+        'slug' => 'the-best',
+        'price' => 8000000,
+        'description' => 'Get a top-tier player, one of the best in the world.',
+        'type' => 'player',
+        'image' => 'images/the-best-player.jpg',
+    ],
+    [
+        'id' => 5,
+        'name' => 'Legend Player',
+        'slug' => 'legend',
+        'price' => 12000000,
+        'description' => 'Get a Legendary player with unbeatable stats.',
+        'type' => 'player',
+        'image' => 'images/legend-player.jpg',
     ],
     [
         'name' => 'Player Upgrade Token',
