@@ -32,6 +32,6 @@ if (in_array($method, ['POST', 'PUT', 'DELETE'])) {
 }
 
 if (str_starts_with($api_url, 'football-manager')) {
-    include_once DIR . '/api/football-manager.php';
+    include_once 'football-manager.php';
 }
-sendResponse("success", 200, "Welcome to the mercufee API");
+sendResponse("success", 200, "Welcome to the mercufee API.");

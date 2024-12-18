@@ -10,7 +10,7 @@ include_once DIR . '/functions/system.php';
 $url = extractPathFromCurrentUrl();
 
 if (!empty($url) && str_starts_with($url, 'api')) {
-    include_once DIR . '/api/index.php';
+    include_once 'api/index.php';
 }
 
 $pageUrl = '';
