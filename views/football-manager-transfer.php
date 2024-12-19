@@ -5,6 +5,9 @@ require_once DIR . '/functions/generate-player.php';
 require_once DIR . '/controllers/FootballPlayerController.php';
 require_once DIR . '/controllers/FootballTeamController.php';
 
+$player = generateRandomPlayers('mystery-pack');
+exportPlayersToJson($player);
+
 $players = getTransferPlayerJson();
 $commonController = new CommonController();
 $footballPlayerController = new FootballPlayerController();

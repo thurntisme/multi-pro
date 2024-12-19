@@ -27,21 +27,94 @@ function calculateAbility($attributes, $weights): float|int
 
     return $totalWeight > 0 ? $weightedScore / $totalWeight : 0; // Normalize
 }
-function calculateAttributes($attributes, $weights, $maxAttr)
+
+function calculateAttributes($bestPosition, $weights, $minAttr, $maxAttr): array
 {
-    foreach ($weights as $category => $attrs) {
-        foreach ($attrs as $attribute => $weight) {
-            if (isset($attributes[$category][$attribute])) {
-                if (($attributes[$category][$attribute] < 70) && ($weight > 0.05)) {
-                    $attributes[$category][$attribute] += floor(rand(70, $maxAttr) * $weight);
+    // Generate random attributes
+    $playerAttributes = [
+        'technical' => [
+            'passing' => $minAttr, // Ability to pass the ball accurately to teammates
+            'dribbling' => $minAttr, // Skill in controlling and maneuvering the ball while running
+            'first_touch' => $minAttr, // The player's ability to control the ball when receiving it
+            'crossing' => $minAttr, // The accuracy and effectiveness of delivering crosses to teammates
+            'finishing' => $minAttr, // Ability to score goals when presented with an opportunity
+            'long_shots' => $minAttr, // Skill in taking shots from distance
+            'shot_power' => $minAttr, // The force behind the player's shots
+            'free_kick_accuracy' => $minAttr, // Accuracy in taking free kicks
+            'heading_accuracy' => $minAttr, // Ability to head the ball accurately
+            'tackling' => $minAttr, // The skill in challenging and taking the ball away from opponents
+            'technique' => $minAttr, // General skill and finesse in ball control and execution
+            'volleys' => $minAttr, // Skill in striking the ball while it's in the air (volley shots)
+            'penalties' => $minAttr, // Accuracy and composure when taking penalty kicks
+            'curve' => $minAttr, // Ability to curve the ball when shooting or passing
+            'ball_control' => $minAttr, // The player's ability to maintain control of the ball in different situations
+            'short_passing' => $minAttr, // Accuracy and precision in short passes
+            'long_passing' => $minAttr, // Accuracy and vision for long passes
+        ],
+        'mental' => [
+            'decision_making' => $minAttr, // The player's ability to make the right decision under pressure
+            'vision' => $minAttr, // Ability to see opportunities for passes or long shots
+            'leadership' => $minAttr, // Ability to inspire and motivate teammates
+            'work_rate' => $minAttr, // The player's overall effort on and off the ball
+            'positioning' => $minAttr, // The player's awareness of where to be on the field during play
+            'composure' => $minAttr, // Ability to stay calm in high-pressure situations
+            'aggression' => $minAttr, // The player's willingness to challenge opponents, sometimes aggressively
+            'anticipation' => $minAttr, // Ability to predict what will happen next, often to intercept passes
+            'concentration' => $minAttr, // Focus and attentiveness during the match
+            'off_the_ball' => $minAttr, // Movement and positioning when not in possession of the ball
+            'teamwork' => $minAttr, // Ability to work and communicate effectively with teammates
+            'determination' => $minAttr, // The player's persistence in overcoming challenges
+            'bravery' => $minAttr, // Willingness to take risks and confront tough situations
+            'flair' => $minAttr, // Creativity and skill for performing unexpected or stylish actions (e.g., flicks)
+        ],
+        'physical' => [
+            'pace' => $minAttr, // Speed of the player when running at full effort
+            'acceleration' => $minAttr, // How quickly the player can reach full speed
+            'strength' => $minAttr, // Physical power used to hold off opponents or win challenges
+            'stamina' => $minAttr, // Endurance to keep performing at a high level throughout the match
+            'agility' => $minAttr, // Ability to change direction quickly and maintain balance
+            'balance' => $minAttr, // The player's stability when under pressure or during physical duels
+            'jumping_reach' => $minAttr, // Ability to jump and reach for headers, especially in aerial duels
+            'natural_fitness' => $minAttr, // Overall physical condition, including flexibility and coordination
+            'reaction_time' => $minAttr, // How quickly the player responds to events in the game
+            'sprint_speed' => $minAttr, // The player's maximum speed when sprinting
+            'endurance' => $minAttr, // The player's ability to maintain effort over a long period
+        ],
+        'goalkeeping' => [
+            'handling' => $minAttr, // Goalkeeper's ability to catch or control the ball in various situations
+            'reflexes' => $minAttr, // Quick reactions to shots on goal or unpredictable situations
+            'kicking' => $minAttr, // Accuracy and power of goal kicks and other ball clearances
+            'throwing' => $minAttr, // Precision in throwing the ball to teammates for quick distribution
+            'one_on_ones' => $minAttr, // Ability to stop attackers in one-on-one situations
+            'aerial_reach' => $minAttr, // Goalkeeper's ability to jump and reach for crosses or high shots
+            'command_of_area' => $minAttr, // The goalkeeper's authority and communication in the penalty area
+            'rushing_out' => $minAttr, // Goalkeeper's ability to rush off the line to challenge attackers
+            'communication' => $minAttr, // Goalkeeper's ability to organize the defense and direct players
+            'penalty_saving' => $minAttr, // The goalkeeper's skill in saving penalty kicks
+            'shot_stopping' => $minAttr, // The goalkeeper's overall ability to stop shots on goal
+        ],
+    ];
+
+    foreach ($playerAttributes as $category => $attrs) {
+        foreach ($attrs as $attribute => $value) {
+            if (isset($weights[$category][$attribute])) {
+                $bonusMinAttr = floor($minAttr + ($maxAttr - $minAttr * $weights[$category][$attribute]) / 10);
+                $playerAttributes[$category][$attribute] = rand($bonusMinAttr, $maxAttr);
+            } else {
+                if ($category === 'goalkeeping') {
+                    if ($bestPosition === 'GK') {
+                        $playerAttributes[$category][$attribute] = rand($maxAttr - 10, $maxAttr);
+                    } else {
+                        $playerAttributes[$category][$attribute] = rand(44, 50);
+                    }
                 } else {
-                    $attributes[$category][$attribute] += floor($attributes[$category][$attribute] * $weight);
+                    $playerAttributes[$category][$attribute] = rand($playerAttributes[$category][$attribute], $maxAttr);
                 }
             }
         }
     }
 
-    return $attributes; // Normalize
+    return $playerAttributes; // Normalize
 }
 
 // Function to calculate general ability
@@ -101,7 +174,8 @@ function calculatePlayerWage(
     string $season,
     int    $overallAbility,
     int    $reputation,
-): float {
+): float
+{
     // Define base nation multipliers
     global $popularNations, $semiPopularNations;
     $nationMultipliers = [
@@ -165,7 +239,8 @@ function calculateMarketValue(
     string $season,
     int    $overallAbility,
     int    $reputation,
-): float {
+): float
+{
     // Step 1: Define the base salary depending on the nation
     global $popularNations, $semiPopularNations;
     $baseSalaries = [
@@ -337,28 +412,25 @@ function generateRandomPlayers($type = '', $playerData = []): array
     $minAttr = 50;
     $maxAttr = 80;
 
-    if (strpos($type, "-pack") !== false) {
-        if ($type !== 'mystery-pack') {
-            $maxAttr = 90;
-        } else {
-            $maxAttr = 100;
-        }
+    if (str_contains($type, "-pack")) {
+        $maxAttr = 90;
     }
 
-    if (strpos($type, "level-") !== false) {
+    if (str_contains($type, "level-")) {
         if ($type === 'level-1') {
             $maxAttr = 60;
         } elseif ($type === 'level-2') {
-            $maxAttr = 65;
+            $minAttr = 56;
+            $maxAttr = 70;
         } elseif ($type === 'level-3') {
-            $minAttr = 66;
-            $maxAttr = 74;
+            $minAttr = 64;
+            $maxAttr = 80;
         } elseif ($type === 'level-4') {
-            $minAttr = 75;
-            $maxAttr = 85;
+            $minAttr = 72;
+            $maxAttr = 90;
         } elseif ($type === 'level-5') {
-            $minAttr = 86;
-            $maxAttr = 100;
+            $minAttr = 74;
+            $maxAttr = 110;
         }
     }
 
@@ -405,74 +477,7 @@ function generateRandomPlayers($type = '', $playerData = []): array
     }
     $playablePositions = getPlayablePosition($bestPosition);
 
-    $gkMinAttr = $bestPosition === 'GK' ? $minAttr : $minAttr - 6;
-    $gkMaxAttr = $bestPosition === 'GK' ? $maxAttr : $minAttr;
-
-    // Generate random attributes
-    $playerAttributes = [
-        'technical' => [
-            'passing' => rand($minAttr, $maxAttr), // Ability to pass the ball accurately to teammates
-            'dribbling' => rand($minAttr, $maxAttr), // Skill in controlling and maneuvering the ball while running
-            'first_touch' => rand($minAttr, $maxAttr), // The player's ability to control the ball when receiving it
-            'crossing' => rand($minAttr, $maxAttr), // The accuracy and effectiveness of delivering crosses to teammates
-            'finishing' => rand($minAttr, $maxAttr), // Ability to score goals when presented with an opportunity
-            'long_shots' => rand($minAttr, $maxAttr), // Skill in taking shots from distance
-            'shot_power' => rand($minAttr, $maxAttr), // The force behind the player's shots
-            'free_kick_accuracy' => rand($minAttr, $maxAttr), // Accuracy in taking free kicks
-            'heading_accuracy' => rand($minAttr, $maxAttr), // Ability to head the ball accurately
-            'tackling' => rand($minAttr, $maxAttr), // The skill in challenging and taking the ball away from opponents
-            'technique' => rand($minAttr, $maxAttr), // General skill and finesse in ball control and execution
-            'volleys' => rand($minAttr, $maxAttr), // Skill in striking the ball while it's in the air (volley shots)
-            'penalties' => rand($minAttr, $maxAttr), // Accuracy and composure when taking penalty kicks
-            'curve' => rand($minAttr, $maxAttr), // Ability to curve the ball when shooting or passing
-            'ball_control' => rand($minAttr, $maxAttr), // The player's ability to maintain control of the ball in different situations
-            'short_passing' => rand($minAttr, $maxAttr), // Accuracy and precision in short passes
-            'long_passing' => rand($minAttr, $maxAttr), // Accuracy and vision for long passes
-        ],
-        'mental' => [
-            'decision_making' => rand($minAttr, $maxAttr), // The player's ability to make the right decision under pressure
-            'vision' => rand($minAttr, $maxAttr), // Ability to see opportunities for passes or long shots
-            'leadership' => rand($minAttr, $maxAttr), // Ability to inspire and motivate teammates
-            'work_rate' => rand($minAttr, $maxAttr), // The player's overall effort on and off the ball
-            'positioning' => rand($minAttr, $maxAttr), // The player's awareness of where to be on the field during play
-            'composure' => rand($minAttr, $maxAttr), // Ability to stay calm in high-pressure situations
-            'aggression' => rand($minAttr, $maxAttr), // The player's willingness to challenge opponents, sometimes aggressively
-            'anticipation' => rand($minAttr, $maxAttr), // Ability to predict what will happen next, often to intercept passes
-            'concentration' => rand($minAttr, $maxAttr), // Focus and attentiveness during the match
-            'off_the_ball' => rand($minAttr, $maxAttr), // Movement and positioning when not in possession of the ball
-            'teamwork' => rand($minAttr, $maxAttr), // Ability to work and communicate effectively with teammates
-            'determination' => rand($minAttr, $maxAttr), // The player's persistence in overcoming challenges
-            'bravery' => rand($minAttr, $maxAttr), // Willingness to take risks and confront tough situations
-            'flair' => rand($minAttr, $maxAttr), // Creativity and skill for performing unexpected or stylish actions (e.g., flicks)
-        ],
-        'physical' => [
-            'pace' => rand($minAttr, $maxAttr), // Speed of the player when running at full effort
-            'acceleration' => rand($minAttr, $maxAttr), // How quickly the player can reach full speed
-            'strength' => rand($minAttr, $maxAttr), // Physical power used to hold off opponents or win challenges
-            'stamina' => rand($minAttr, $maxAttr), // Endurance to keep performing at a high level throughout the match
-            'agility' => rand($minAttr, $maxAttr), // Ability to change direction quickly and maintain balance
-            'balance' => rand($minAttr, $maxAttr), // The player's stability when under pressure or during physical duels
-            'jumping_reach' => rand($minAttr, $maxAttr), // Ability to jump and reach for headers, especially in aerial duels
-            'natural_fitness' => rand($minAttr, $maxAttr), // Overall physical condition, including flexibility and coordination
-            'reaction_time' => rand($minAttr, $maxAttr), // How quickly the player responds to events in the game
-            'sprint_speed' => rand($minAttr, $maxAttr), // The player's maximum speed when sprinting
-            'endurance' => rand($minAttr, $maxAttr), // The player's ability to maintain effort over a long period
-        ],
-        'goalkeeping' => [
-            'handling' => rand($gkMinAttr, $gkMaxAttr), // Goalkeeper's ability to catch or control the ball in various situations
-            'reflexes' => rand($gkMinAttr, $gkMaxAttr), // Quick reactions to shots on goal or unpredictable situations
-            'kicking' => rand($gkMinAttr, $gkMaxAttr), // Accuracy and power of goal kicks and other ball clearances
-            'throwing' => rand($gkMinAttr, $gkMaxAttr), // Precision in throwing the ball to teammates for quick distribution
-            'one_on_ones' => rand($gkMinAttr, $gkMaxAttr), // Ability to stop attackers in one-on-one situations
-            'aerial_reach' => rand($gkMinAttr, $gkMaxAttr), // Goalkeeper's ability to jump and reach for crosses or high shots
-            'command_of_area' => rand($gkMinAttr, $gkMaxAttr), // The goalkeeper's authority and communication in the penalty area
-            'rushing_out' => rand($gkMinAttr, $gkMaxAttr), // Goalkeeper's ability to rush off the line to challenge attackers
-            'communication' => rand($gkMinAttr, $gkMaxAttr), // Goalkeeper's ability to organize the defense and direct players
-            'penalty_saving' => rand($gkMinAttr, $gkMaxAttr), // The goalkeeper's skill in saving penalty kicks
-            'shot_stopping' => rand($gkMinAttr, $gkMaxAttr), // The goalkeeper's overall ability to stop shots on goal
-        ],
-    ];
-    $attributes = calculateAttributes($playerAttributes, $positionWeights[$bestPosition], $maxAttr);
+    $attributes = calculateAttributes($bestPosition, $positionWeights[$bestPosition], $minAttr, $maxAttr);
 
     $positionAbility = calculateAbility($attributes, $positionWeights[$bestPosition]);
     $generalAbility = calculateGeneralAbility($attributes);
