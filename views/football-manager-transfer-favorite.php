@@ -79,7 +79,8 @@ ob_start();
                                                                    data-player-uuid="<?= $item['uuid'] ?>"
                                                                    data-player-name="<?= $item['name'] ?>"
                                                                    data-player-nationality="<?= $item['nationality'] ?>"
-                                                                   data-player-meta="<?= $item['best_position'] . " (" . $item['ability'] . ") | " . implode(", ", $item['playable_positions']) ?>"
+                                                                   data-player-meta="<?= $item['age'] ?> yrd | <?= $item['height'] ?> cm | <?= $item['weight'] ?> kg"
+                                                                   data-player-positions="<?= $item['best_position'] . " (" . $item['ability'] . ") | " . implode(", ", $item['playable_positions']) ?>"
                                                                    data-player-attributes="<?= htmlspecialchars(json_encode($item['attributes'])) ?>"
                                                                    data-bs-toggle="modal"
                                                                    data-bs-target="#playerDetailBackdrop"><i
