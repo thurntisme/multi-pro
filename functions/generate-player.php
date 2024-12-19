@@ -410,10 +410,11 @@ function generateRandomPlayers($type = '', $playerData = []): array
     global $positions, $positionWeights;
     $players = [];
     $minAttr = 50;
-    $maxAttr = 80;
+    $maxAttr = 78;
 
     if (str_contains($type, "-pack")) {
-        $maxAttr = 90;
+        $level = ['level-1', 'level-2', 'level-3', 'level-4'];
+        $type = $level[array_rand($level)];
     }
 
     if (str_contains($type, "level-")) {
