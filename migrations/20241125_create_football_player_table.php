@@ -6,12 +6,18 @@ return function (PDO $pdo) {
     $attributes = [
         'id INTEGER PRIMARY KEY AUTOINCREMENT',
         'player_uuid TEXT NOT NULL',
-        'starting_order INTEGER DEFAULT 0',
-        'status TEXT',
-        'level INTEGER DEFAULT 100',
-        'injury_end_date TIMESTAMP',
-        'joining_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP',
-        'contract_end_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP',
+        'starting_order INTEGER DEFAULT 0',  // Tracks the player's starting order in the lineup
+        'status TEXT DEFAULT "active"',  // Player's status (active, injured, etc.)
+        'level INTEGER DEFAULT 100',  // Player's level (default 100)
+        'card_level INTEGER DEFAULT 0',  // Player's card level (+0, +1, +2, etc.)
+        'injury_end_date TIMESTAMP NULL',  // Nullable injury end date
+        'joining_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP',  // Date the player joined
+        'contract_end_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP',  // Date the player's contract ends
+        'goals_scored INTEGER DEFAULT 0',  // Tracks goals scored
+        'assists INTEGER DEFAULT 0',  // Tracks assists
+        'yellow_cards INTEGER DEFAULT 0',  // Tracks yellow cards
+        'red_cards INTEGER DEFAULT 0',  // Tracks red cards
+        'age_in_team_days INTEGER DEFAULT 0',  // Tracks the number of days the player has been in the team
         'created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP',
         'updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP',
         'team_id INTEGER NOT NULL',

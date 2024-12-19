@@ -20,51 +20,10 @@ class FootballPlayerController
     }
 
     // Handle creating a new player
-    public function createPlayer($teamId, $uuid, $status = '')
+    public function createPlayer($teamId, $playerUuid, $status = '')
     {
-        $data = getPlayerJsonByUuid($uuid);
-        // Prepare player data for insertion
-        $player = [
-            'player_uuid' => $data['uuid'],
-            'age' => $data['age'],
-            'injury' => $data['injury'],
-            'recovery_time' => $data['recovery_time'],
-            'ability' => $data['ability'],
-            'salary' => $data['contract_wage'],
-            'market_value' => $data['market_value'],
-            'passing' => $data['attributes']['technical']['passing'],
-            'dribbling' => $data['attributes']['technical']['dribbling'],
-            'first_touch' => $data['attributes']['technical']['first_touch'],
-            'crossing' => $data['attributes']['technical']['crossing'],
-            'finishing' => $data['attributes']['technical']['finishing'],
-            'long_shots' => $data['attributes']['technical']['long_shots'],
-            'free_kick_accuracy' => $data['attributes']['technical']['free_kick_accuracy'],
-            'heading' => $data['attributes']['technical']['heading'],
-            'tackling' => $data['attributes']['technical']['tackling'],
-            'handling' => $data['attributes']['technical']['handling'],
-            'marking' => $data['attributes']['technical']['marking'],
-            'decision' => $data['attributes']['mental']['decision'],
-            'vision' => $data['attributes']['mental']['vision'],
-            'leadership' => $data['attributes']['mental']['leadership'],
-            'work_rate' => $data['attributes']['mental']['work_rate'],
-            'positioning' => $data['attributes']['mental']['positioning'],
-            'composure' => $data['attributes']['mental']['composure'],
-            'aggression' => $data['attributes']['mental']['aggression'],
-            'anticipation' => $data['attributes']['mental']['anticipation'],
-            'concentration' => $data['attributes']['mental']['concentration'],
-            'off_the_ball' => $data['attributes']['mental']['off_the_ball'],
-            'flair' => $data['attributes']['mental']['flair'],
-            'pace' => $data['attributes']['physical']['pace'],
-            'strength' => $data['attributes']['physical']['strength'],
-            'stamina' => $data['attributes']['physical']['stamina'],
-            'agility' => $data['attributes']['physical']['agility'],
-            'balance' => $data['attributes']['physical']['balance'],
-            'jumping_reach' => $data['attributes']['physical']['jumping_reach'],
-            'natural_fitness' => $data['attributes']['physical']['natural_fitness']
-        ];
-
-        if ($player) {
-            return $this->footballPlayerService->createPlayer($teamId, $player, $status);
+        if ($playerUuid) {
+            return $this->footballPlayerService->createPlayer($teamId, $playerUuid, $status);
         } else {
             return null;
         }
