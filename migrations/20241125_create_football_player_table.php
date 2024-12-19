@@ -6,7 +6,7 @@ return function (PDO $pdo) {
     $attributes = [
         'id INTEGER PRIMARY KEY AUTOINCREMENT',
         'player_uuid TEXT NOT NULL',
-        'starting_order INTEGER DEFAULT 0',  // Tracks the player's starting order in the lineup
+        'starting_order INTEGER DEFAULT 99',  // Tracks the player's starting order in the lineup
         'status TEXT DEFAULT "active"',  // Player's status (active, injured, etc.)
         'level INTEGER DEFAULT 100',  // Player's level (default 100)
         'card_level INTEGER DEFAULT 0',  // Player's card level (+0, +1, +2, etc.)
