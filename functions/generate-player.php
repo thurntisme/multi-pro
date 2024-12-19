@@ -101,8 +101,7 @@ function calculatePlayerWage(
     string $season,
     int    $overallAbility,
     int    $reputation,
-): float
-{
+): float {
     // Define base nation multipliers
     global $popularNations, $semiPopularNations;
     $nationMultipliers = [
@@ -166,8 +165,7 @@ function calculateMarketValue(
     string $season,
     int    $overallAbility,
     int    $reputation,
-): float
-{
+): float {
     // Step 1: Define the base salary depending on the nation
     global $popularNations, $semiPopularNations;
     $baseSalaries = [
@@ -314,7 +312,8 @@ function flattenAttributes($attributes): array
     return $flattened;
 }
 
-function calPlayerHeightWeight($position){
+function calPlayerHeightWeight($position)
+{
     global $positionAttributes;
 
     // Get height and weight ranges for the assigned position
@@ -337,6 +336,31 @@ function generateRandomPlayers($type = '', $playerData = []): array
     $players = [];
     $minAttr = 50;
     $maxAttr = 80;
+
+    if (strpos($type, "-pack") !== false) {
+        if ($type !== 'mystery-pack') {
+            $maxAttr = 90;
+        } else {
+            $maxAttr = 100;
+        }
+    }
+
+    if (strpos($type, "level-") !== false) {
+        if ($type === 'level-1') {
+            $maxAttr = 60;
+        } elseif ($type === 'level-2') {
+            $maxAttr = 65;
+        } elseif ($type === 'level-3') {
+            $minAttr = 66;
+            $maxAttr = 74;
+        } elseif ($type === 'level-4') {
+            $minAttr = 75;
+            $maxAttr = 85;
+        } elseif ($type === 'level-5') {
+            $minAttr = 86;
+            $maxAttr = 100;
+        }
+    }
 
     // Randomly select or generate player data
     $uuid = uniqid();
@@ -447,7 +471,7 @@ function generateRandomPlayers($type = '', $playerData = []): array
             'penalty_saving' => rand($gkMinAttr, $gkMaxAttr), // The goalkeeper's skill in saving penalty kicks
             'shot_stopping' => rand($gkMinAttr, $gkMaxAttr), // The goalkeeper's overall ability to stop shots on goal
         ],
-    ];    
+    ];
     $attributes = calculateAttributes($playerAttributes, $positionWeights[$bestPosition], $maxAttr);
 
     $positionAbility = calculateAbility($attributes, $positionWeights[$bestPosition]);

@@ -56,6 +56,10 @@ class FootballTransferService
         $random_time_in_seconds = rand($min_time, $max_time);
         $response_at = date('Y-m-d H:i:s', $current_time + $random_time_in_seconds);  // Format as MySQL datetime
 
+        // Faked response
+        $is_success = 1;
+        $response_at = date('Y-m-d H:i:s');
+
         // Insert into football_transfer
         $transferSql = "INSERT INTO football_transfer (type, player_id, amount, manager_id, is_success, response_at) 
                         VALUES (:type, :player_id, :amount, :manager_id, :is_success, :response_at)";

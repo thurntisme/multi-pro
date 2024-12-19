@@ -190,12 +190,8 @@ ob_start();
 <?php
 $pageContent = ob_get_clean();
 
-ob_start(); ?>
-
-    <script type="text/javascript">
-    </script>
-
-<?php
+ob_start();
+echo "<script src='" . home_url("/assets/js/pages/football-manager-player-detail.js") . "'></script>";
 $additionJs = ob_get_clean();
 
 include 'layout.php';
