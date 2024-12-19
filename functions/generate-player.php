@@ -27,6 +27,22 @@ function calculateAbility($attributes, $weights): float|int
 
     return $totalWeight > 0 ? $weightedScore / $totalWeight : 0; // Normalize
 }
+function calculateAttributes($attributes, $weights, $maxAttr)
+{
+    foreach ($weights as $category => $attrs) {
+        foreach ($attrs as $attribute => $weight) {
+            if (isset($attributes[$category][$attribute])) {
+                if (($attributes[$category][$attribute] < 70) && ($weight > 0.05)) {
+                    $attributes[$category][$attribute] += floor(rand(70, $maxAttr) * $weight);
+                } else {
+                    $attributes[$category][$attribute] += floor($attributes[$category][$attribute] * $weight);
+                }
+            }
+        }
+    }
+
+    return $attributes; // Normalize
+}
 
 // Function to calculate general ability
 function calculateGeneralAbility($attributes): float|int
@@ -139,7 +155,7 @@ function calculatePlayerWage(
     // Calculate wage
     $wage = $baseNation * ($positionModifier + $flexibilityBonus) * $seasonMultiplier * $overallAbility * 100;
 
-    return round($wage + rand(100, 400), 2); // Round for readability
+    return round($wage + rand(100, 400)); // Round for readability
 }
 
 
@@ -298,18 +314,29 @@ function flattenAttributes($attributes): array
     return $flattened;
 }
 
+function calPlayerHeightWeight($position){
+    global $positionAttributes;
+
+    // Get height and weight ranges for the assigned position
+    $heightRange = $positionAttributes[$position]['height'];
+    $weightRange = $positionAttributes[$position]['weight'];
+
+    // Generate random height and weight for the position
+    $height = rand($heightRange[0], $heightRange[1]);
+    $weight = rand($weightRange[0], $weightRange[1]);
+
+    return [
+        'height' => $height,
+        'weight' => $weight,
+    ];
+}
+
 function generateRandomPlayers($type = '', $playerData = []): array
 {
-    global $positions;
+    global $positions, $positionWeights;
     $players = [];
     $minAttr = 50;
-    $maxAttr = 77;
-
-    if (!empty($type)) {
-        if ($type == 'mystery-pack') {
-            $maxAttr = 84;
-        }
-    }
+    $maxAttr = 80;
 
     // Randomly select or generate player data
     $uuid = uniqid();
@@ -354,11 +381,11 @@ function generateRandomPlayers($type = '', $playerData = []): array
     }
     $playablePositions = getPlayablePosition($bestPosition);
 
-    $gkMinAttr = $bestPosition === 'GK' ? 68 : 44;
-    $gkMaxAttr = $bestPosition === 'GK' ? $maxAttr : 48;
+    $gkMinAttr = $bestPosition === 'GK' ? $minAttr : $minAttr - 6;
+    $gkMaxAttr = $bestPosition === 'GK' ? $maxAttr : $minAttr;
 
     // Generate random attributes
-    $attributes = [
+    $playerAttributes = [
         'technical' => [
             'passing' => rand($minAttr, $maxAttr),
             'dribbling' => rand($minAttr, $maxAttr),
@@ -421,456 +448,17 @@ function generateRandomPlayers($type = '', $playerData = []): array
             'shot_stopping' => rand($gkMinAttr, $gkMaxAttr),
         ],
     ];
+    $attributes = calculateAttributes($playerAttributes, $positionWeights[$bestPosition], $maxAttr);
 
-    // Weights for attributes by position
-    $weights = [
-        'GK' => [ // Goalkeeper
-            'technical' => [
-                'handling' => 0.4,
-                'passing' => 0.2,
-                'kicking' => 0.3,
-                'dribbling' => 0.1, // Goalkeepers need some dribbling skills, but it's less important
-                'first_touch' => 0.1, // Less relevant but still important
-                'crossing' => 0.1,
-                'finishing' => 0.1,
-                'long_shots' => 0.1, // Less important for goalkeepers
-                'free_kick_accuracy' => 0.1, // Rare for goalkeepers to take free kicks
-                'heading' => 0.2,
-                'marking' => 0.1, // Less important, but important in certain situations (e.g., defending corners)
-            ],
-            'mental' => [
-                'decision' => 0.3,
-                'vision' => 0.2,
-                'leadership' => 0.3,
-                'work_rate' => 0.2,
-                'positioning' => 0.4,
-                'composure' => 0.3,
-                'aggression' => 0.2,
-                'anticipation' => 0.3,
-                'concentration' => 0.4,
-                'off_the_ball' => 0.2,
-                'flair' => 0.1,
-            ],
-            'physical' => [
-                'pace' => 0.2,
-                'strength' => 0.3,
-                'stamina' => 0.3,
-                'agility' => 0.4,
-                'balance' => 0.2,
-                'jumping_reach' => 0.5,
-                'natural_fitness' => 0.3,
-            ],
-        ],
-        'LB' => [ // Left Back
-            'technical' => [
-                'crossing' => 0.4,
-                'tackling' => 0.4,
-                'passing' => 0.3,
-                'dribbling' => 0.2,
-                'first_touch' => 0.3,
-                'long_shots' => 0.1,
-                'marking' => 0.4,
-                'heading' => 0.2,
-            ],
-            'mental' => [
-                'decision' => 0.4,
-                'vision' => 0.3,
-                'leadership' => 0.2,
-                'work_rate' => 0.4,
-                'positioning' => 0.4,
-                'composure' => 0.3,
-                'aggression' => 0.3,
-                'anticipation' => 0.3,
-                'concentration' => 0.4,
-                'off_the_ball' => 0.3,
-                'flair' => 0.2,
-            ],
-            'physical' => [
-                'pace' => 0.4,
-                'strength' => 0.3,
-                'stamina' => 0.4,
-                'agility' => 0.4,
-                'balance' => 0.3,
-                'jumping_reach' => 0.3,
-                'natural_fitness' => 0.3,
-            ],
-        ],
-        'CB' => [ // Center Back
-            'technical' => [
-                'tackling' => 0.5,
-                'heading' => 0.4,
-                'marking' => 0.4,
-                'passing' => 0.3,
-                'dribbling' => 0.1,
-                'first_touch' => 0.2,
-                'long_shots' => 0.1,
-            ],
-            'mental' => [
-                'decision' => 0.3,
-                'vision' => 0.2,
-                'leadership' => 0.2,
-                'work_rate' => 0.3,
-                'positioning' => 0.5,
-                'composure' => 0.3,
-                'aggression' => 0.3,
-                'anticipation' => 0.4,
-                'concentration' => 0.4,
-                'off_the_ball' => 0.2,
-                'flair' => 0.1,
-            ],
-            'physical' => [
-                'pace' => 0.3,
-                'strength' => 0.5,
-                'stamina' => 0.3,
-                'agility' => 0.2,
-                'balance' => 0.3,
-                'jumping_reach' => 0.5,
-                'natural_fitness' => 0.3,
-            ],
-        ],
-        'RB' => [ // Right Back
-            'technical' => [
-                'crossing' => 0.4,
-                'tackling' => 0.4,
-                'passing' => 0.3,
-                'dribbling' => 0.2,
-                'first_touch' => 0.3,
-                'long_shots' => 0.1,
-                'marking' => 0.3,
-                'heading' => 0.2,
-            ],
-            'mental' => [
-                'decision' => 0.3,
-                'vision' => 0.3,
-                'leadership' => 0.1,
-                'work_rate' => 0.4,
-                'positioning' => 0.4,
-                'composure' => 0.3,
-                'aggression' => 0.4,
-                'anticipation' => 0.3,
-                'concentration' => 0.3,
-                'off_the_ball' => 0.3,
-                'flair' => 0.2,
-            ],
-            'physical' => [
-                'pace' => 0.5,
-                'strength' => 0.3,
-                'stamina' => 0.4,
-                'agility' => 0.4,
-                'balance' => 0.3,
-                'jumping_reach' => 0.3,
-                'natural_fitness' => 0.3,
-            ],
-        ],
-        'LM' => [ // Left Midfielder
-            'technical' => [
-                'crossing' => 0.4,
-                'dribbling' => 0.4,
-                'passing' => 0.3,
-                'first_touch' => 0.3,
-                'long_shots' => 0.2,
-                'finishing' => 0.2,
-                'heading' => 0.1,
-            ],
-            'mental' => [
-                'vision' => 0.3,
-                'flair' => 0.3,
-                'decision' => 0.3,
-                'work_rate' => 0.4,
-                'positioning' => 0.3,
-                'composure' => 0.3,
-                'aggression' => 0.2,
-                'anticipation' => 0.4,
-                'concentration' => 0.3,
-                'off_the_ball' => 0.4,
-            ],
-            'physical' => [
-                'pace' => 0.4,
-                'strength' => 0.2,
-                'stamina' => 0.4,
-                'agility' => 0.4,
-                'balance' => 0.3,
-                'jumping_reach' => 0.2,
-                'natural_fitness' => 0.3,
-            ],
-        ],
-        'CDM' => [ // Defensive Midfielder
-            'technical' => [
-                'passing' => 0.4,
-                'tackling' => 0.4,
-                'dribbling' => 0.2,
-                'first_touch' => 0.3,
-                'marking' => 0.3,
-                'long_shots' => 0.1,
-                'heading' => 0.2,
-            ],
-            'mental' => [
-                'decision' => 0.4,
-                'vision' => 0.3,
-                'leadership' => 0.3,
-                'work_rate' => 0.4,
-                'positioning' => 0.5,
-                'composure' => 0.3,
-                'aggression' => 0.4,
-                'anticipation' => 0.4,
-                'concentration' => 0.4,
-                'off_the_ball' => 0.3,
-                'flair' => 0.2,
-            ],
-            'physical' => [
-                'pace' => 0.3,
-                'strength' => 0.4,
-                'stamina' => 0.4,
-                'agility' => 0.3,
-                'balance' => 0.3,
-                'jumping_reach' => 0.3,
-                'natural_fitness' => 0.3,
-            ],
-        ],
-        'CM' => [ // Central Midfielder
-            'technical' => [
-                'passing' => 0.4,
-                'dribbling' => 0.3,
-                'first_touch' => 0.3,
-                'crossing' => 0.2,
-                'finishing' => 0.2,
-                'long_shots' => 0.3,
-                'free_kick_accuracy' => 0.2,
-                'heading' => 0.1,
-                'marking' => 0.1,
-            ],
-            'mental' => [
-                'decision' => 0.3,
-                'vision' => 0.5,
-                'leadership' => 0.2,
-                'work_rate' => 0.3,
-                'positioning' => 0.4,
-                'composure' => 0.2,
-                'aggression' => 0.2,
-                'anticipation' => 0.2,
-                'concentration' => 0.3,
-                'off_the_ball' => 0.2,
-                'flair' => 0.3,
-            ],
-            'physical' => [
-                'pace' => 0.3,
-                'strength' => 0.2,
-                'stamina' => 0.4,
-                'agility' => 0.3,
-                'balance' => 0.3,
-                'jumping_reach' => 0.1,
-                'natural_fitness' => 0.3,
-            ],
-        ],
-        'RM' => [ // Right Midfielder
-            'technical' => [
-                'crossing' => 0.4,
-                'dribbling' => 0.4,
-                'passing' => 0.3,
-                'first_touch' => 0.3,
-                'long_shots' => 0.2,
-                'finishing' => 0.2,
-                'heading' => 0.1,
-            ],
-            'mental' => [
-                'vision' => 0.3,
-                'flair' => 0.3,
-                'decision' => 0.3,
-                'work_rate' => 0.4,
-                'positioning' => 0.3,
-                'composure' => 0.3,
-                'aggression' => 0.2,
-                'anticipation' => 0.4,
-                'concentration' => 0.3,
-                'off_the_ball' => 0.4,
-            ],
-            'physical' => [
-                'pace' => 0.4,
-                'strength' => 0.2,
-                'stamina' => 0.4,
-                'agility' => 0.4,
-                'balance' => 0.3,
-                'jumping_reach' => 0.2,
-                'natural_fitness' => 0.3,
-            ],
-        ],
-        'CAM' => [ // Central Attacking Midfielder
-            'technical' => [
-                'dribbling' => 0.5,
-                'first_touch' => 0.4,
-                'passing' => 0.3,
-                'finishing' => 0.3,
-                'long_shots' => 0.2,
-                'crossing' => 0.2,
-                'heading' => 0.1,
-            ],
-            'mental' => [
-                'vision' => 0.5,
-                'flair' => 0.4,
-                'decision' => 0.3,
-                'work_rate' => 0.2,
-                'positioning' => 0.4,
-                'composure' => 0.3,
-                'aggression' => 0.2,
-                'anticipation' => 0.4,
-                'concentration' => 0.3,
-                'off_the_ball' => 0.5,
-            ],
-            'physical' => [
-                'pace' => 0.3,
-                'strength' => 0.2,
-                'stamina' => 0.3,
-                'agility' => 0.4,
-                'balance' => 0.4,
-                'jumping_reach' => 0.2,
-                'natural_fitness' => 0.3,
-            ],
-        ],
-        'CF' => [ // Center Forward
-            'technical' => [
-                'finishing' => 0.5,
-                'dribbling' => 0.3,
-                'first_touch' => 0.2,
-                'crossing' => 0.1,
-                'long_shots' => 0.3,
-                'free_kick_accuracy' => 0.1,
-                'heading' => 0.3,
-                'marking' => 0.1,
-            ],
-            'mental' => [
-                'decision' => 0.3,
-                'vision' => 0.2,
-                'leadership' => 0.1,
-                'work_rate' => 0.3,
-                'positioning' => 0.4,
-                'composure' => 0.4,
-                'aggression' => 0.2,
-                'anticipation' => 0.4,
-                'concentration' => 0.3,
-                'off_the_ball' => 0.5,
-                'flair' => 0.3,
-            ],
-            'physical' => [
-                'pace' => 0.4,
-                'strength' => 0.3,
-                'stamina' => 0.3,
-                'agility' => 0.3,
-                'balance' => 0.2,
-                'jumping_reach' => 0.3,
-                'natural_fitness' => 0.2,
-            ],
-        ],
-        'LW' => [ // Left Winger
-            'technical' => [
-                'crossing' => 0.5,
-                'dribbling' => 0.4,
-                'first_touch' => 0.3,
-                'long_shots' => 0.3,
-                'free_kick_accuracy' => 0.2,
-                'heading' => 0.2,
-                'marking' => 0.1,
-            ],
-            'mental' => [
-                'decision' => 0.3,
-                'vision' => 0.4,
-                'leadership' => 0.1,
-                'work_rate' => 0.3,
-                'positioning' => 0.3,
-                'composure' => 0.2,
-                'aggression' => 0.2,
-                'anticipation' => 0.3,
-                'concentration' => 0.2,
-                'off_the_ball' => 0.4,
-                'flair' => 0.3,
-            ],
-            'physical' => [
-                'pace' => 0.5,
-                'strength' => 0.3,
-                'stamina' => 0.4,
-                'agility' => 0.4,
-                'balance' => 0.3,
-                'jumping_reach' => 0.2,
-                'natural_fitness' => 0.3,
-            ],
-        ],
-        'ST' => [ // Striker
-            'technical' => [
-                'finishing' => 0.5,
-                'dribbling' => 0.3,
-                'first_touch' => 0.3,
-                'crossing' => 0.1,
-                'long_shots' => 0.3,
-                'free_kick_accuracy' => 0.1,
-                'heading' => 0.4,
-                'marking' => 0.1,
-            ],
-            'mental' => [
-                'decision' => 0.3,
-                'vision' => 0.2,
-                'leadership' => 0.1,
-                'work_rate' => 0.3,
-                'positioning' => 0.4,
-                'composure' => 0.4,
-                'aggression' => 0.3,
-                'anticipation' => 0.4,
-                'concentration' => 0.3,
-                'off_the_ball' => 0.5,
-                'flair' => 0.3,
-            ],
-            'physical' => [
-                'pace' => 0.4,
-                'strength' => 0.4,
-                'stamina' => 0.3,
-                'agility' => 0.3,
-                'balance' => 0.3,
-                'jumping_reach' => 0.3,
-                'natural_fitness' => 0.2,
-            ],
-        ],
-        'RW' => [ // Right Winger
-            'technical' => [
-                'crossing' => 0.5,
-                'dribbling' => 0.4,
-                'first_touch' => 0.3,
-                'long_shots' => 0.3,
-                'free_kick_accuracy' => 0.2,
-                'heading' => 0.2,
-                'marking' => 0.1,
-            ],
-            'mental' => [
-                'decision' => 0.3,
-                'vision' => 0.4,
-                'leadership' => 0.1,
-                'work_rate' => 0.3,
-                'positioning' => 0.3,
-                'composure' => 0.2,
-                'aggression' => 0.2,
-                'anticipation' => 0.3,
-                'concentration' => 0.2,
-                'off_the_ball' => 0.4,
-                'flair' => 0.3,
-            ],
-            'physical' => [
-                'pace' => 0.5,
-                'strength' => 0.3,
-                'stamina' => 0.4,
-                'agility' => 0.4,
-                'balance' => 0.3,
-                'jumping_reach' => 0.2,
-                'natural_fitness' => 0.3,
-            ],
-        ],
-    ];
-
-    $positionAbility = calculateAbility($attributes, $weights[$bestPosition]);
+    $positionAbility = calculateAbility($attributes, $positionWeights[$bestPosition]);
     $generalAbility = calculateGeneralAbility($attributes);
     $overallAbility = (int)round(($positionAbility * 0.7) + ($generalAbility * 0.3));
 
     // Generate abilities with seasons
     $season = getSeason($overallAbility);
     $ability = (int)round($overallAbility);
-    $height = rand(165, 195); // in cm
-    $weight = rand($height - 105, $height - 85); // Proportional weight
+    $height = calPlayerHeightWeight($bestPosition)['height']; // in cm
+    $weight = calPlayerHeightWeight($bestPosition)['weight']; // Proportional weight
     $reputation = rand(1, 5);
     $contract_wage = calculatePlayerWage($nationality, $bestPosition, $playablePositions, $season, $overallAbility, $reputation);
     $market_value = calculateMarketValue($nationality, $bestPosition, $playablePositions, $season, $overallAbility, $reputation);
