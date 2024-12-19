@@ -264,7 +264,6 @@ $formations = [
 define("DEFAULT_FOOTBALL_FORMATION", $formations);
 
 $seasons = [
-    "Ballon d'Or" => 100,
     'Legend' => 90,
     'The Best' => 80,
     'Superstar' => 70,
@@ -733,7 +732,6 @@ $positionColors = [
     'Attackers' => "#ff1d15",
 ];
 $seasonsRate = [
-    "Ballon d'Or" => 1.8,
     'Legend' => 1.5,
     'The Best' => 1.3,
     'Superstar' => 1.2,
@@ -1363,69 +1361,69 @@ const DEFAULT_STORE_ITEMS = [
 // Special skills definition based on position and attributes
 $specialSkills = [
     'GK' => [
-        'Shot Stopper' => ['reflexes', 'shot_stopping'],
-        'Sweeper Keeper' => ['rushing_out', 'command_of_area'],
-        'Penalty Saver' => ['penalty_saving'],
-        'Aerial Dominator' => ['aerial_reach', 'handling'],
+        'Shot Stopper' => ['reflexes', 'shot_stopping'], // Focuses on reflexes and shot-stopping abilities to save shots (Goalkeeping)
+        'Sweeper Keeper' => ['rushing_out', 'command_of_area'], // Emphasizes a goalkeeper's ability to rush out and command the area (Goalkeeping)
+        'Penalty Saver' => ['penalty_saving'], // Specializes in saving penalties (Goalkeeping)
+        'Aerial Dominator' => ['aerial_reach', 'handling'], // Dominates aerial situations with strong reach and handling (Goalkeeping)
     ],
     'LB' => [
-        'Offensive Fullback' => ['crossing', 'dribbling'],
-        'Defensive Fullback' => ['tackling', 'work_rate'],
-        'Speedy Fullback' => ['pace', 'stamina'],
+        'Offensive Fullback' => ['crossing', 'dribbling'], // Focuses on creating chances with crosses and dribbling forward (Technical)
+        'Defensive Fullback' => ['tackling', 'work_rate'], // A solid defensive fullback with good tackling and work rate (Technical, Mental)
+        'Speedy Fullback' => ['pace', 'stamina'], // Quick and energetic, perfect for covering the whole flank (Physical)
     ],
     'CB' => [
-        'Rock Solid Defender' => ['tackling', 'strength'],
-        'Aerial Threat' => ['jumping_reach', 'heading_accuracy'],
-        'No-Nonsense Defender' => ['marking', 'positioning'],
+        'Rock Solid Defender' => ['tackling', 'strength'], // Strong and reliable in defensive situations, with excellent tackling and strength (Technical, Physical)
+        'Aerial Threat' => ['jumping_reach', 'heading_accuracy'], // Dominates in the air, both in defensive and attacking set pieces (Physical, Technical)
+        'No-Nonsense Defender' => ['marking', 'positioning'], // Focuses on solid positioning and marking to prevent goal-scoring opportunities (Mental, Technical)
     ],
     'RB' => [
-        'Offensive Fullback' => ['crossing', 'dribbling'],
-        'Defensive Fullback' => ['tackling', 'work_rate'],
-        'Speedy Fullback' => ['pace', 'stamina'],
+        'Offensive Fullback' => ['crossing', 'dribbling'], // Similar to LB, focused on attacking with dribbling and crossing abilities (Technical)
+        'Defensive Fullback' => ['tackling', 'work_rate'], // A defensive-oriented fullback with a strong work ethic and tackling ability (Technical, Mental)
+        'Speedy Fullback' => ['pace', 'stamina'], // Fast and tireless, ideal for covering ground on the right flank (Physical)
     ],
     'LM' => [
-        'Wide Playmaker' => ['crossing', 'dribbling'],
-        'Fast Winger' => ['pace', 'acceleration'],
-        'Creative Winger' => ['flair', 'vision'],
+        'Wide Playmaker' => ['crossing', 'dribbling'], // A creative winger who provides quality crosses and dribbles past defenders (Technical)
+        'Fast Winger' => ['pace', 'acceleration'], // A quick winger who uses speed to get past defenders and create opportunities (Physical)
+        'Creative Winger' => ['flair', 'vision'], // A winger with exceptional flair and vision to create chances for teammates (Mental, Technical)
     ],
     'CDM' => [
-        'Anchor' => ['positioning', 'tackling'],
-        'Defensive Wall' => ['strength', 'stamina'],
-        'Deep Lying Playmaker' => ['passing', 'vision'],
+        'Anchor' => ['positioning', 'tackling'], // A disciplined defensive midfielder with great positioning and tackling skills (Technical, Mental)
+        'Defensive Wall' => ['strength', 'stamina'], // A physical and robust defensive midfielder, able to withstand pressure and cover ground (Physical)
+        'Deep Lying Playmaker' => ['passing', 'vision'], // A midfield general who dictates play with excellent passing and vision (Technical, Mental)
     ],
     'CM' => [
-        'Playmaker' => ['passing', 'vision', 'first_touch'],
-        'Long Range Shooter' => ['long_shots', 'shot_power'],
-        'Tackling Machine' => ['tackling', 'work_rate'],
+        'Playmaker' => ['passing', 'vision', 'first_touch'], // A creative central midfielder who controls the game with passing, vision, and first touch (Technical, Mental)
+        'Long Range Shooter' => ['long_shots', 'shot_power'], // A midfielder with the ability to score from distance (Technical)
+        'Tackling Machine' => ['tackling', 'work_rate'], // A hard-working central midfielder who wins tackles and covers the field (Technical, Mental)
     ],
     'RM' => [
-        'Wide Playmaker' => ['crossing', 'dribbling'],
-        'Fast Winger' => ['pace', 'acceleration'],
-        'Creative Winger' => ['flair', 'vision'],
+        'Wide Playmaker' => ['crossing', 'dribbling'], // A winger who creates opportunities with crosses and dribbling skills (Technical)
+        'Fast Winger' => ['pace', 'acceleration'], // Quick and agile, ideal for explosive runs down the right wing (Physical)
+        'Creative Winger' => ['flair', 'vision'], // A winger with creativity and vision to deliver innovative passes and assists (Mental, Technical)
     ],
     'CAM' => [
-        'Attacking Playmaker' => ['dribbling', 'vision'],
-        'Creative Genius' => ['flair', 'passing'],
-        'Finisher' => ['finishing', 'first_touch'],
+        'Attacking Playmaker' => ['dribbling', 'vision'], // A creative force in attack with dribbling and the ability to spot key passes (Technical, Mental)
+        'Creative Genius' => ['flair', 'passing'], // An inventive player who uses flair and vision to create magical plays (Technical, Mental)
+        'Finisher' => ['finishing', 'first_touch'], // A clinical attacking midfielder who excels in finishing chances (Technical)
     ],
     'LW' => [
-        'Winger' => ['crossing', 'dribbling'],
-        'Speedster' => ['pace', 'acceleration'],
-        'Creative Winger' => ['flair', 'vision'],
+        'Winger' => ['crossing', 'dribbling'], // A traditional winger focused on creating chances with crosses and dribbling (Technical)
+        'Speedster' => ['pace', 'acceleration'], // A winger who uses their speed to break past defenders and make runs behind the defense (Physical)
+        'Creative Winger' => ['flair', 'vision'], // A creative winger with flair and vision to generate attacking opportunities (Mental, Technical)
     ],
     'CF' => [
-        'Clinical Finisher' => ['finishing', 'composure'],
-        'Dribbler' => ['dribbling', 'first_touch'],
-        'Target Man' => ['heading_accuracy', 'strength'],
+        'Clinical Finisher' => ['finishing', 'composure'], // A striker with deadly finishing and the composure to stay calm in front of goal (Technical, Mental)
+        'Dribbler' => ['dribbling', 'first_touch'], // A forward with excellent dribbling and control to maneuver around defenders (Technical)
+        'Target Man' => ['heading_accuracy', 'strength'], // A physically strong forward who excels in aerial duels and holds up the ball (Technical, Physical)
     ],
     'RW' => [
-        'Crossing King' => ['crossing', 'dribbling'],
-        'Speedster' => ['pace', 'acceleration'],
-        'Trickster' => ['flair', 'dribbling'],
+        'Crossing King' => ['crossing', 'dribbling'], // A winger known for accurate and dangerous crosses, along with dribbling ability (Technical)
+        'Speedster' => ['pace', 'acceleration'], // A quick winger who uses their speed to beat defenders (Physical)
+        'Trickster' => ['flair', 'dribbling'], // A winger with flair and dribbling skill to take on defenders and create space (Technical)
     ],
     'ST' => [
-        'Poacher' => ['finishing', 'off_the_ball'],
-        'Strong Forward' => ['strength', 'heading_accuracy'],
-        'Fast Striker' => ['pace', 'acceleration'],
+        'Poacher' => ['finishing', 'off_the_ball'], // A striker who is always in the right place to score goals and has great off-the-ball movement (Technical, Mental)
+        'Strong Forward' => ['strength', 'heading_accuracy'], // A powerful forward with excellent physical attributes and heading ability (Physical, Technical)
+        'Fast Striker' => ['pace', 'acceleration'], // A fast forward who uses their speed to outrun defenders and create goal-scoring opportunities (Physical)
     ],
 ];
