@@ -97,12 +97,15 @@ function calculateAttributes($bestPosition, $weights, $minAttr, $maxAttr): array
 
     foreach ($playerAttributes as $category => $attrs) {
         foreach ($attrs as $attribute => $value) {
-            if (isset($weights[$category][$attribute])) {
-                $bonusMinAttr = floor($minAttr + ($maxAttr - $minAttr * $weights[$category][$attribute]) / 10);
-                $playerAttributes[$category][$attribute] = rand($bonusMinAttr, $maxAttr);
+            if ($category === 'goalkeeping') {
+                if ($bestPosition === 'GK') {
+                    $playerAttributes[$category][$attribute] = rand($maxAttr - 10, $maxAttr);
+                } else {
+                    $playerAttributes[$category][$attribute] = rand(44, 50);
+                }
             } else {
-                if ($category === 'goalkeeping') {
-                    if ($bestPosition === 'GK') {
+                if ($bestPosition === 'GK') {
+                    if ($weights[$category][$attribute]) {
                         $playerAttributes[$category][$attribute] = rand($maxAttr - 10, $maxAttr);
                     } else {
                         $playerAttributes[$category][$attribute] = rand(44, 50);
@@ -227,7 +230,7 @@ function calculateMarketValue(
     $rate = ($positionModifier + $abilityModifier + $versatilityBonus);
     $marketValue = $basePrice * $rate;
 
-    return $marketValue;
+    return round($marketValue, 2);
 }
 
 function formatCurrency(float $value, bool $displaySymbol = true): string
