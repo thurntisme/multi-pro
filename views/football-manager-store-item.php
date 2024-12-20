@@ -17,7 +17,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 "best_position" => $_POST['best_position'],
                 "playable_positions" => $_POST['playable_positions'],
             ];
-            $players = generateRandomPlayers($_POST['player_card'], $playerData);
+            $players = generateRandomPlayers('young-star', $playerData);
             try {
                 exportPlayersToJson($players);
                 $_SESSION['message_type'] = 'success';
@@ -102,16 +102,6 @@ include_once DIR . '/components/alert.php';
                             </div>
                             <div class="col-lg-6">
                                 <div>
-                                    <label for="player_card" class="form-label">Card <span class="text-danger">*</span></label>
-                                    <select class="form-control" data-choices name="player_card" required>
-                                        <?php foreach (DEFAULT_PLAYER_CARD as $index => $card): ?>
-                                            <option value="<?= $card ?>" <?= $index == 0 ? 'selected' : '' ?>><?= ucfirst($card) ?></option>
-                                        <?php endforeach; ?>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-lg-6">
-                                <div>
                                     <label for="player_nationality" class="form-label">Nationality <span class="text-danger">*</span></label>
                                     <select class="form-control" data-choices name="player_nationality" required>
                                         <option value="">Select Nationality</option>
@@ -119,27 +109,6 @@ include_once DIR . '/components/alert.php';
                                             <option value="<?= $nation ?>"><?= $nation ?></option>
                                         <?php endforeach; ?>
                                     </select>
-                                </div>
-                            </div>
-
-                            <div class="col-md-6">
-                                <div>
-                                    <label for="player_age" class="form-label">Age<span class="text-danger">*</span></label>
-                                    <input type="number" class="form-control" name="player_age" id="player_age" min="18" max="35" placeholder="Age" required />
-                                </div>
-                            </div>
-
-                            <div class="col-md-6">
-                                <div>
-                                    <label for="player_weight" class="form-label">Weight (kg)<span class="text-danger">*</span></label>
-                                    <input type="number" class="form-control" name="player_weight" id="player_weight" min="60" max="110" placeholder="Weight (kg)" required />
-                                </div>
-                            </div>
-
-                            <div class="col-md-6">
-                                <div>
-                                    <label for="player_height" class="form-label">Height (cm)<span class="text-danger">*</span></label>
-                                    <input type="number" class="form-control" name="player_height" id="player_height" min="165" max="195" placeholder="Height (cm)" required />
                                 </div>
                             </div>
 
@@ -163,6 +132,20 @@ include_once DIR . '/components/alert.php';
                                             <option value="<?= $position ?>"><?= $position ?></option>
                                         <?php endforeach; ?>
                                     </select>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div>
+                                    <label for="player_weight" class="form-label">Weight (kg)<span class="text-danger">*</span></label>
+                                    <input type="number" class="form-control" name="player_weight" id="player_weight" min="60" max="110" placeholder="Weight (kg)" required />
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div>
+                                    <label for="player_height" class="form-label">Height (cm)<span class="text-danger">*</span></label>
+                                    <input type="number" class="form-control" name="player_height" id="player_height" min="165" max="195" placeholder="Height (cm)" required />
                                 </div>
                             </div>
                         </div>

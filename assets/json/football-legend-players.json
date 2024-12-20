@@ -1,0 +1,194 @@
+[
+  {
+    "name": "Franz Beckenbauer",
+    "nationality": "Germany",
+    "weight": "85",
+    "height": "1.80",
+    "best_position": "CB",
+    "playable_positions": ["CB", "CDM"]
+  },
+  {
+    "name": "Gerd Müller",
+    "nationality": "Germany",
+    "weight": "74",
+    "height": "1.76",
+    "best_position": "ST",
+    "playable_positions": ["ST"]
+  },
+  {
+    "name": "Lothar Matthäus",
+    "nationality": "Germany",
+    "weight": "80",
+    "height": "1.74",
+    "best_position": "CM",
+    "playable_positions": ["CM", "CDM"]
+  },
+  {
+    "name": "Uwe Seeler",
+    "nationality": "Germany",
+    "weight": "75",
+    "height": "1.75",
+    "best_position": "CF",
+    "playable_positions": ["CF", "ST"]
+  },
+  {
+    "name": "Miroslav Klose",
+    "nationality": "Germany",
+    "weight": "83",
+    "height": "1.82",
+    "best_position": "ST",
+    "playable_positions": ["ST"]
+  },
+  {
+    "name": "Oliver Kahn",
+    "nationality": "Germany",
+    "weight": "92",
+    "height": "1.88",
+    "best_position": "GK",
+    "playable_positions": ["GK"]
+  },
+  {
+    "name": "Bastian Schweinsteiger",
+    "nationality": "Germany",
+    "weight": "80",
+    "height": "1.83",
+    "best_position": "CM",
+    "playable_positions": ["CM", "CDM"]
+  },
+  {
+    "name": "Philipp Lahm",
+    "nationality": "Germany",
+    "weight": "70",
+    "height": "1.70",
+    "best_position": "RB",
+    "playable_positions": ["RB", "LB"]
+  },
+  {
+    "name": "Andreas Brehme",
+    "nationality": "Germany",
+    "weight": "75",
+    "height": "1.79",
+    "best_position": "CM",
+    "playable_positions": ["CM"]
+  },
+  {
+    "name": "Thomas Häßler",
+    "nationality": "Germany",
+    "weight": "70",
+    "height": "1.74",
+    "best_position": "CM",
+    "playable_positions": ["CM"]
+  },
+  {
+    "name": "Karl-Heinz Rummenigge",
+    "nationality": "Germany",
+    "weight": "80",
+    "height": "1.83",
+    "best_position": "CF",
+    "playable_positions": ["CF"]
+  },
+  {
+    "name": "Jürgen Klinsmann",
+    "nationality": "Germany",
+    "weight": "80",
+    "height": "1.82",
+    "best_position": "ST",
+    "playable_positions": ["ST"]
+  },
+  {
+    "name": "Michael Ballack",
+    "nationality": "Germany",
+    "weight": "90",
+    "height": "1.92",
+    "best_position": "CM",
+    "playable_positions": ["CM", "CDM"]
+  },
+  {
+    "name": "Rudi Völler",
+    "nationality": "Germany",
+    "weight": "80",
+    "height": "1.86",
+    "best_position": "ST",
+    "playable_positions": ["ST"]
+  },
+  {
+    "name": "Jens Lehmann",
+    "nationality": "Germany",
+    "weight": "92",
+    "height": "1.92",
+    "best_position": "GK",
+    "playable_positions": ["GK"]
+  },
+  {
+    "name": "Oliver Bierhoff",
+    "nationality": "Germany",
+    "weight": "84",
+    "height": "1.92",
+    "best_position": "CF",
+    "playable_positions": ["CF"]
+  },
+  {
+    "name": "Werner Liebrich",
+    "nationality": "Germany",
+    "weight": "76",
+    "height": "1.78",
+    "best_position": "ST",
+    "playable_positions": ["ST"]
+  },
+  {
+    "name": "Hans-Peter Briegel",
+    "nationality": "Germany",
+    "weight": "82",
+    "height": "1.83",
+    "best_position": "LB",
+    "playable_positions": ["LB"]
+  },
+  {
+    "name": "Bernd Schuster",
+    "nationality": "Germany",
+    "weight": "80",
+    "height": "1.82",
+    "best_position": "CM",
+    "playable_positions": ["CM"]
+  },
+  {
+    "name": "Lukas Podolski",
+    "nationality": "Germany",
+    "weight": "80",
+    "height": "1.80",
+    "best_position": "LW",
+    "playable_positions": ["LW", "ST"]
+  },
+  {
+    "name": "Toni Kroos",
+    "nationality": "Germany",
+    "weight": "76",
+    "height": "1.82",
+    "best_position": "CM",
+    "playable_positions": ["CM"]
+  },
+  {
+    "name": "Sebastian Kehl",
+    "nationality": "Germany",
+    "weight": "84",
+    "height": "1.90",
+    "best_position": "CDM",
+    "playable_positions": ["CDM"]
+  },
+  {
+    "name": "Benedikt Höwedes",
+    "nationality": "Germany",
+    "weight": "86",
+    "height": "1.88",
+    "best_position": "CB",
+    "playable_positions": ["CB"]
+  },
+  {
+    "name": "Matthias Sammer",
+    "nationality": "Germany",
+    "weight": "76",
+    "height": "1.82",
+    "best_position": "CDM",
+    "playable_positions": ["CDM"]
+  }
+]

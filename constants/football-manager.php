@@ -777,6 +777,14 @@ $semiPopularNations = [
 
 const DEFAULT_STORE_ITEMS = [
     [
+        'name' => 'Player on Demand',
+        'slug' => 'on-demand-item',
+        'price' => 5000000,
+        'description' => 'Obtain a completely random player, with a chance to get anything from a Normal player to a Legendary one!',
+        'type' => 'item',
+        'image' => 'images/explosive-winger-player.jpg',
+    ],
+    [
         'name' => 'Mystery Pack',
         'slug' => 'mystery-pack',
         'price' => 3600000,
@@ -1004,12 +1012,6 @@ const DEFAULT_STORE_ITEMS = [
         'slug' => 'xp-multiplier',
         'price' => 3000000,
         'description' => 'Double the experience points gained by your players for 5 matches.',
-    ],
-    [
-        'name' => 'Iconic Player Pack',
-        'slug' => 'iconic-player-pack',
-        'price' => 15000000,
-        'description' => 'Get a legendary player inspired by real-life football icons.',
     ],
     [
         'name' => 'Event Exclusive Player',

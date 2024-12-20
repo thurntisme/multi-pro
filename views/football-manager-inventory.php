@@ -360,14 +360,21 @@ ob_start();
                                             </div>
                                             <div class="col-sm-auto">
                                                 <div class="d-flex align-items-center gap-2 text-muted">
-                                                    <a href="#"
-                                                       data-item-uuid="<?= uniqid() ?>"
-                                                       data-item-slug="<?= $item['slug'] ?>"
-                                                       data-item-type="<?= $item['type'] ?>"
-                                                       data-bs-toggle="modal" data-bs-target="#inventoryItemModal"
-                                                       class="btn btn-success btn-label right ms-auto btn-take-inventory-item"><i
-                                                                class="ri-arrow-right-line label-icon align-bottom fs-16 ms-2"></i>
-                                                        Take it</a>
+                                                    <?php if ($item['type'] === 'item'){ ?>
+                                                        <a href="<?= home_url('/football-manager/store/item?uuid='.uniqid()) ?>"
+                                                        class="btn btn-success btn-label right ms-auto"><i
+                                                                    class="ri-arrow-right-line label-icon align-bottom fs-16 ms-2"></i>
+                                                            Take it</a>
+                                                    <?php } else { ?>
+                                                        <a href="#"
+                                                        data-item-uuid="<?= uniqid() ?>"
+                                                        data-item-slug="<?= $item['slug'] ?>"
+                                                        data-item-type="<?= $item['type'] ?>"
+                                                        data-bs-toggle="modal" data-bs-target="#inventoryItemModal"
+                                                        class="btn btn-success btn-label right ms-auto btn-take-inventory-item"><i
+                                                                    class="ri-arrow-right-line label-icon align-bottom fs-16 ms-2"></i>
+                                                            Take it</a>
+                                                    <?php } ?>
                                                 </div>
                                             </div>
                                         </div>
