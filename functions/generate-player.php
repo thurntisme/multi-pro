@@ -168,98 +168,43 @@ function getPlayablePosition(string $specificPosition): array
 }
 
 function calculatePlayerWage(
-    string $nation,
     string $position,
-    array  $playablePositions,
-    string $season,
-    int    $overallAbility,
-    int    $reputation,
-): float
-{
-    // Define base nation multipliers
-    global $popularNations, $semiPopularNations;
-    $nationMultipliers = [
-        'Tier 1' => 1.5,
-        'Tier 2' => 1.2,
-        'Tier 3' => 1.0,
-    ];
+    int    $ability,
+): float {
+    $baseWage = 10000;
 
-    // Assign tier for the nation
-    $nationTier = match (true) {
-        in_array($nation, $popularNations) => 'Tier 1',
-        in_array($nation, $semiPopularNations) => 'Tier 2',
-        default => 'Tier 3',
-    };
-    $baseNation = $nationMultipliers[$nationTier];
-
-    // Define position modifiers
     $positionModifiers = [
-        'GK' => 1.0,
+        'GK' => 0.9,
         'CB' => 1.0,
-        'LB' => 1.0,
-        'RB' => 1.0,
+        'LB' => 1.1,
+        'RB' => 1.1,
         'CM' => 1.2,
         'CDM' => 1.1,
-        'CAM' => 1.2,
-        'ST' => 1.3,
-        'CF' => 1.3,
-        'RW' => 1.2,
-        'LW' => 1.2,
-        'LM' => 1.1,
-        'RM' => 1.1,
+        'CAM' => 1.3,
+        'ST' => 1.5,
+        'CF' => 1.5,
+        'RW' => 1.3,
+        'LW' => 1.3,
+        'LM' => 1.2,
+        'RM' => 1.2,
     ];
-
     $positionModifier = $positionModifiers[$position] ?? 1.0;
 
-    // Add a bonus for flexible players
-    $flexibilityBonus = $reputation / 10 * count($playablePositions);
+    $rate = $ability / 100 + $positionModifier;
+    $wage = $baseWage * $rate;
 
-    // Define season multipliers
-    $seasonMultipliers = [
-        'Legend' => 2.0,
-        'The Best' => 1.7,
-        'Superstar' => 1.5,
-        'Rising Star' => 1.1,
-        'Normal' => 1.0,
-    ];
-
-    $seasonMultiplier = $seasonMultipliers[$season] ?? 1.0;
-
-    // Calculate wage
-    $wage = $baseNation * ($positionModifier + $flexibilityBonus) * $seasonMultiplier * $overallAbility * 100;
-
-    return round($wage + rand(100, 400)); // Round for readability
+    return round($wage, 2);
 }
 
 
 function calculateMarketValue(
-    string $nation,
     string $position,
     array  $playablePositions,
-    string $season,
-    int    $overallAbility,
+    int    $ability,
     int    $reputation,
-): float
-{
-    // Step 1: Define the base salary depending on the nation
-    global $popularNations, $semiPopularNations;
-    $baseSalaries = [
-        'Tier 1' => 1500000,
-        'Tier 2' => 1000000,
-        'Tier 3' => 500000,
-    ];
+): float {
+    $basePrice = 1000000;
 
-    // Assign tier for the nation (using the same tiering system as before)
-    $nationTier = match (true) {
-        in_array($nation, $popularNations) => 'Tier 1',
-        in_array($nation, $semiPopularNations) => 'Tier 2',
-        default => 'Tier 3',
-    };
-
-    // Get base salary from the tier
-    $baseSalary = $baseSalaries[$nationTier];
-
-    // Step 2: Position modifier
     $positionModifiers = [
         'GK' => 0.9,
         'CB' => 1.0,
@@ -277,28 +222,12 @@ function calculateMarketValue(
     ];
 
     $positionModifier = $positionModifiers[$position] ?? 1.0;
+    $abilityModifier = $ability / 100;
+    $versatilityBonus = (count($playablePositions) > 1 ? count($playablePositions) / 10 : 0.1) + $reputation / 100;
+    $rate = ($positionModifier + $abilityModifier + $versatilityBonus);
+    $marketValue = $basePrice * $rate;
 
-    // Step 3: Ability modifier (scale from 0 to 1, with 100 being the max ability)
-    $abilityModifier = $overallAbility / 100;
-
-    // Step 4: Season multiplier (affects salary depending on career stage)
-    $seasonMultipliers = [
-        'Legend' => 2.0,
-        'Superstar' => 1.8,
-        'Rising Star' => 1.2,
-        'Current Player' => 1.0,
-    ];
-
-    $seasonMultiplier = $seasonMultipliers[$season] ?? 1.0;
-
-    // Step 5: Versatility bonus (if the player can play multiple positions)
-    $versatilityBonus = count($playablePositions) > 1 ? 0.1 : 0;
-
-    // Step 6: Calculate the salary
-    $salary = $baseSalary * $positionModifier * $abilityModifier * $seasonMultiplier * (1 + $versatilityBonus + $reputation / 10);
-
-    // Return the calculated salary (annual salary)
-    return round($salary, 2);
+    return $marketValue;
 }
 
 function formatCurrency(float $value, bool $displaySymbol = true): string
@@ -490,8 +419,8 @@ function generateRandomPlayers($type = '', $playerData = []): array
     $height = calPlayerHeightWeight($bestPosition)['height']; // in cm
     $weight = calPlayerHeightWeight($bestPosition)['weight']; // Proportional weight
     $reputation = rand(1, 5);
-    $contract_wage = calculatePlayerWage($nationality, $bestPosition, $playablePositions, $season, $overallAbility, $reputation);
-    $market_value = calculateMarketValue($nationality, $bestPosition, $playablePositions, $season, $overallAbility, $reputation);
+    $contract_wage = calculatePlayerWage($bestPosition, $ability);
+    $market_value = calculateMarketValue($bestPosition, $playablePositions, $ability, $reputation);
     $special_skills = checkSpecialSkills($bestPosition, flattenAttributes($attributes));
 
     if (!empty($type) && count($playerData) > 0) {
