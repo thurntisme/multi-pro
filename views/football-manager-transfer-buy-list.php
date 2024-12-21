@@ -52,6 +52,7 @@ ob_start();
                                     <tr>
                                         <th class="sort" scope="col">Name</th>
                                         <th class="sort text-center" scope="col">Nationality</th>
+                                        <th class="sort text-center" scope="col">Age</th>
                                         <th class="sort text-center" scope="col">Position</th>
                                         <th class="sort text-center" scope="col">Playable</th>
                                         <th class="sort text-center" scope="col">Season</th>
@@ -88,6 +89,7 @@ ob_start();
                                                     </div>
                                                 </td>
                                                 <td class="text-center"><?= $item['nationality'] ?? '' ?></td>
+                                                <td class="text-center"><?= $item['age'] ?? '' ?></td>
                                                 <td class="text-center"><?= $item['best_position'] ?? '' ?></td>
                                                 <td class="text-center"><?= !empty($item['playable_positions']) ? implode(", ", $item['playable_positions']) : '' ?></td>
                                                 <td class="text-center"><?= $item['season'] ?? '' ?></td>

@@ -39,7 +39,7 @@ ob_start();
                         <div class="card-header hstack align-items-baseline d-flex">
                             <h4 class="card-title mb-0 me-2 font-weight-bold"><?= $player['name'] ?></h4>
                             <p class="text-muted mb-0 flex-grow-1"
-                                id="player-nationality"><?= $player['nationality'] ?></p>
+                               id="player-nationality"><?= $player['nationality'] ?></p>
                             <p class="text-muted mb-0"><span
                                         id="player-best_position"><?= $player['best_position'] ?></span>
                                 (<span id="player-ability"><?= $player['ability'] ?></span>)
@@ -50,23 +50,25 @@ ob_start();
                         <div class="card-body">
                             <div class="row">
                                 <?php
-                                    if (count($player['attributes']) > 0) {
-                                        foreach ($player['attributes'] as $key => $attributes){ ?>
-                                            <div class="col-4">
-                                                <h6 class="card-title flex-grow-1 mb-3 fs-15"><?= ucfirst($key) ?></h6>
-                                                <table class="table table-borderless mb-0">
-                                                    <tbody>
-                                                        <?php foreach ($attributes as $key => $val) { ?>
-                                                            <tr>
-                                                                <th class="ps-0" scope="row"><?= ucwords(str_replace('_', ' ', $key)) ?> :</th>
-                                                                <td class="text-muted"><?= $val ?></td>
-                                                            </tr>
-                                                        <?php } ?>
-                                                    </tbody>
-                                                </table>
-                                            </div>
+                                if (count($player['attributes']) > 0) {
+                                    foreach ($player['attributes'] as $key => $attributes) { ?>
+                                        <div class="col-3">
+                                            <h6 class="card-title flex-grow-1 mb-3 fs-15"><?= ucfirst($key) ?></h6>
+                                            <table class="table table-borderless mb-0">
+                                                <tbody>
+                                                <?php foreach ($attributes as $key => $val) { ?>
+                                                    <tr>
+                                                        <th class="ps-0"
+                                                            scope="row"><?= ucwords(str_replace('_', ' ', $key)) ?> :
+                                                        </th>
+                                                        <td class="text-muted"><?= $val ?></td>
+                                                    </tr>
+                                                <?php } ?>
+                                                </tbody>
+                                            </table>
+                                        </div>
                                     <?php }
-                                    }
+                                }
                                 ?>
                             </div>
                         </div>
@@ -141,10 +143,13 @@ ob_start();
                                         </div>
                                         <div class="mt-3 pt-2">
                                             <?php if ($myTeam['budget'] >= $player['market_value']) { ?>
-                                                <button type="submit" class="btn btn-primary w-100">Enter Auction</button>
+                                                <button type="submit" class="btn btn-primary w-100">Enter Auction
+                                                </button>
                                             <?php } else { ?>
                                                 <div class="alert alert-danger" role="alert">
-                                                    Insufficient budget! You need <b><?= formatCurrency($total_amount - $myTeam['budget']) ?></b> more to complete this transfer.
+                                                    Insufficient budget! You need
+                                                    <b><?= formatCurrency($total_amount - $myTeam['budget']) ?></b> more
+                                                    to complete this transfer.
                                                 </div>
                                             <?php } ?>
                                         </div>

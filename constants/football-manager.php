@@ -711,19 +711,19 @@ $positionWeights = [
 ];
 // Define height and weight ranges by position
 $positionAttributes = [
-    'GK'  => ['height' => [180, 205], 'weight' => [75, 100]],
-    'CB'  => ['height' => [180, 200], 'weight' => [70, 90]],
-    'RB'  => ['height' => [170, 190], 'weight' => [65, 90]],
-    'LB'  => ['height' => [170, 190], 'weight' => [65, 90]],
+    'GK' => ['height' => [180, 199], 'weight' => [75, 99]],
+    'CB' => ['height' => [180, 199], 'weight' => [70, 90]],
+    'RB' => ['height' => [170, 190], 'weight' => [65, 90]],
+    'LB' => ['height' => [170, 190], 'weight' => [65, 90]],
     'CDM' => ['height' => [175, 190], 'weight' => [70, 90]],
-    'CM'  => ['height' => [170, 190], 'weight' => [65, 90]],
+    'CM' => ['height' => [170, 190], 'weight' => [65, 90]],
     'CAM' => ['height' => [170, 190], 'weight' => [65, 90]],
-    'LM'  => ['height' => [165, 190], 'weight' => [60, 90]],
-    'RM'  => ['height' => [165, 190], 'weight' => [60, 90]],
-    'RW'  => ['height' => [170, 190], 'weight' => [65, 90]],
-    'LW'  => ['height' => [170, 190], 'weight' => [65, 90]],
-    'CF'  => ['height' => [175, 195], 'weight' => [70, 90]],
-    'ST'  => ['height' => [175, 195], 'weight' => [70, 90]],
+    'LM' => ['height' => [165, 190], 'weight' => [60, 90]],
+    'RM' => ['height' => [165, 190], 'weight' => [60, 90]],
+    'RW' => ['height' => [170, 190], 'weight' => [65, 90]],
+    'LW' => ['height' => [170, 190], 'weight' => [65, 90]],
+    'CF' => ['height' => [175, 195], 'weight' => [70, 90]],
+    'ST' => ['height' => [175, 195], 'weight' => [70, 90]],
 ];
 $positionColors = [
     'Goalkeepers' => "#ff8811",

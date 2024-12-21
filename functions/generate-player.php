@@ -99,14 +99,14 @@ function calculateAttributes($bestPosition, $weights, $minAttr, $maxAttr): array
         foreach ($attrs as $attribute => $value) {
             if ($category === 'goalkeeping') {
                 if ($bestPosition === 'GK') {
-                    $playerAttributes[$category][$attribute] = rand($maxAttr - 10, $maxAttr);
+                    $playerAttributes[$category][$attribute] = rand(min($maxAttr - 10, $minAttr), $maxAttr);
                 } else {
                     $playerAttributes[$category][$attribute] = rand(44, 50);
                 }
             } else {
                 if ($bestPosition === 'GK') {
                     if ($weights[$category][$attribute]) {
-                        $playerAttributes[$category][$attribute] = rand($maxAttr - 10, $maxAttr);
+                        $playerAttributes[$category][$attribute] = rand(min($maxAttr - 20, $minAttr), $maxAttr);
                     } else {
                         $playerAttributes[$category][$attribute] = rand(44, 50);
                     }
@@ -173,8 +173,9 @@ function getPlayablePosition(string $specificPosition): array
 function calculatePlayerWage(
     string $position,
     int    $ability,
-): float {
-    $baseWage = 10000;
+): float
+{
+    $baseWage = rand(900, 1000);
 
     $positionModifiers = [
         'GK' => 0.9,
@@ -205,7 +206,8 @@ function calculateMarketValue(
     array  $playablePositions,
     int    $ability,
     int    $reputation,
-): float {
+): float
+{
     $basePrice = 1000000;
 
     $positionModifiers = [
@@ -228,7 +230,7 @@ function calculateMarketValue(
     $abilityModifier = $ability / 100;
     $versatilityBonus = (count($playablePositions) > 1 ? count($playablePositions) / 10 : 0.1) + $reputation / 100;
     $rate = ($positionModifier + $abilityModifier + $versatilityBonus);
-    $marketValue = $basePrice * $rate;
+    $marketValue = $basePrice * $rate + rand(111, 999);
 
     return round($marketValue, 2);
 }
@@ -319,7 +321,7 @@ function flattenAttributes($attributes): array
     return $flattened;
 }
 
-function calPlayerHeightWeight($position)
+function calPlayerHeightWeight($position): array
 {
     global $positionAttributes;
 
@@ -504,7 +506,7 @@ function getTransferPlayerJson(): false|array
     $player_height = $_GET['player_height'] ?? '';
     $player_position = $_GET['player_position'] ?? '';
 
-    $filteredPlayers = array_filter($players, function ($player) use (
+    return array_filter($players, function ($player) use (
         $player_season,
         $player_nationality,
         $player_age,
@@ -538,14 +540,12 @@ function getTransferPlayerJson(): false|array
         }
 
         // Filter by player_position if specified
-        if ($player_position && !($player['best_position'] === $player_position || in_array($player_position, $player['playable_positions']))) {
+        if ($player_position && !($player['best_position'] === $player_position)) {
             return false;
         }
 
         return true; // Include the player if all checks pass
     });
-
-    return $filteredPlayers;
 }
 
 function getPlayerJsonByUuid($targetUuid)

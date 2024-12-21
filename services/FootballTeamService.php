@@ -126,15 +126,21 @@ class FootballTeamService
     public function getTeamPlayers($team_id, $type = '')
     {
         $query = "";
+        $params = [':team_id' => $team_id];
+
         if ($type === 'club') {
-            $query = "AND (joining_date >= CURRENT_TIMESTAMP) AND (contract_end_date > CURRENT_TIMESTAMP) AND status LIKE 'club'";
+            $query = "AND joining_date <= CURRENT_TIMESTAMP 
+                  AND contract_end_date > CURRENT_TIMESTAMP 
+                  AND status = 'club'";
+        } elseif ($type === 'players') {
+            $query = "AND joining_date < CURRENT_TIMESTAMP 
+                  AND contract_end_date <= CURRENT_TIMESTAMP 
+                  AND status = 'players'";
         }
-        if ($type === 'players') {
-            $query = "AND (joining_date < CURRENT_TIMESTAMP) AND (contract_end_date < CURRENT_TIMESTAMP) AND status LIKE 'players'";
-        }
+
         $sql = "SELECT * FROM football_player WHERE team_id = :team_id $query ORDER BY starting_order ASC";
         $stmt = $this->pdo->prepare($sql);
-        $stmt->execute([':team_id' => $team_id]);
+        $stmt->execute($params);
 
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
@@ -165,19 +171,6 @@ class FootballTeamService
         return $stmt->rowCount();
     }
 
-    public function movePlayerToTeam($teamId, $playerId, $transferId)
-    {
-        $sql = "UPDATE football_player SET status = :status, updated_at = CURRENT_TIMESTAMP WHERE team_id = :team_id AND id = :player_id";
-        $stmt = $this->pdo->prepare($sql);
-        $stmt->execute([':status' => 'players', ':team_id' => $teamId, ':player_id' => $playerId]);
-
-        $sql = "DELETE FROM football_transfer WHERE id = :id";
-        $stmt = $this->pdo->prepare($sql);
-        $stmt->execute([':id' => $transferId]);
-
-        return $stmt->rowCount();
-    }
-
     public function getTeamById($teamId)
     {
         $team = $this->getTeamData($teamId);
@@ -198,6 +191,19 @@ class FootballTeamService
         $stmt->execute([':team_id' => $teamId]);
 
         return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+
+    public function movePlayerToTeam($teamId, $playerId, $transferId)
+    {
+        $sql = "UPDATE football_player SET status = :status, updated_at = CURRENT_TIMESTAMP WHERE team_id = :team_id AND id = :player_id";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute([':status' => 'players', ':team_id' => $teamId, ':player_id' => $playerId]);
+
+        $sql = "DELETE FROM football_transfer WHERE id = :id";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute([':id' => $transferId]);
+
+        return $stmt->rowCount();
     }
 
     public function updateMyClubFormation($formation)
