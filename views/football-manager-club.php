@@ -35,11 +35,11 @@ ob_start();
                     <?php includeFileWithVariables('components/football-player-topbar.php'); ?>
                 </div>
             </div>
-        </div>
 
-        <?php
-        include_once DIR . '/components/alert.php';
-        ?>
+            <?php
+            include_once DIR . '/components/alert.php';
+            ?>
+        </div>
 
         <!--end col-->
         <div class="col-lg-12">
@@ -78,19 +78,23 @@ ob_start();
                             <div class="card">
                                 <div class="card-body p-4" id="player-info">
                                     <div class="row">
-                                        <div class="col-4 text-center">
-                                            <div class="profile-user position-relative d-inline-block mx-auto">
-                                                <img src="<?= home_url('assets/images/users/avatar-1.jpg') ?>"
-                                                     class="rounded-circle avatar-md img-thumbnail user-profile-image"
-                                                     alt="user-profile-image">
+                                        <div class="col-6 text-center">
+                                            <div class="d-flex align-items-center justify-content-center mb-3">
+                                                <span class="text-muted fs-12 me-1">Level: </span>
+                                                <span class="fs-24"><?= $lineupPlayers[0]['level'] / 100 ?></span>
+                                            </div>
+                                            <div class="progress progress-sm mb-4 w-75 mx-auto">
+                                                <div class="progress-bar bg-warning" role="progressbar"
+                                                     style="width: 75%" aria-valuenow="75" aria-valuemin="0"
+                                                     aria-valuemax="100"></div>
                                             </div>
                                         </div>
-                                        <div class="col-8">
-                                            <h5 class="fs-16 mb-1"
+                                        <div class="col-6 text-center">
+                                            <h5 class="fs-14 mb-1"
                                                 id="player-name"><?= $lineupPlayers[0]['name'] ?></h5>
-                                            <p class="text-muted mb-0 fs-14"
+                                            <p class="text-muted mb-0 fs-12 mb-1"
                                                id="player-nationality"><?= $lineupPlayers[0]['nationality'] ?></p>
-                                            <p class="text-muted mb-0 mt-2"><span
+                                            <p class="text-muted mb-0 fs-12"><span
                                                         id="player-best_position"><?= $lineupPlayers[0]['best_position'] ?></span>
                                                 (<span id="player-ability"><?= $lineupPlayers[0]['ability'] ?></span>)
                                                 |
@@ -98,19 +102,19 @@ ob_start();
                                             </p>
                                         </div>
                                     </div>
-                                    <?php
-                                    $results = [];
-                                    foreach ($lineupPlayers[0]['attributes'] as $category => $attributes) {
-                                        $sum = array_sum($attributes); 
-                                        $maxPossible = 120 * count($attributes); 
-                                        $percentage = ($sum / $maxPossible) * 100; 
-                                        $results[$category] = [
-                                            'sum' => $sum,
-                                            'percentage' => round($percentage, 2),
-                                        ];
-                                    }
-                                    ?>
-                                    <div class="px-2 py-2 mt-4">
+                                    <div class="px-2 py-2 mt-2">
+                                        <?php
+                                        $results = [];
+                                        foreach ($lineupPlayers[0]['attributes'] as $category => $attributes) {
+                                            $sum = array_sum($attributes);
+                                            $maxPossible = 120 * count($attributes);
+                                            $percentage = ($sum / $maxPossible) * 100;
+                                            $results[$category] = [
+                                                'sum' => $sum,
+                                                'percentage' => round($percentage, 2),
+                                            ];
+                                        }
+                                        ?>
                                         <p class="mb-1 fs-12">Mental <span class="float-end"><span
                                                         id="mental-label"><?= $results['mental']['sum'] ?></span></span>
                                         </p>
@@ -146,6 +150,62 @@ ob_start();
                                                  aria-valuemax="<?= $results['technical']['percentage'] ?>"
                                                  id="technical-value"></div>
                                         </div>
+                                    </div>
+                                    <div class="row mt-4">
+                                        <ul class="list-group px-3">
+                                            <li class="list-group-item hstack gap-2">
+                                                <div class="w-50 d-flex justify-content-between">
+                                                    <span class="fs-12">Age</span>
+                                                    <span class="fs-12"><?= $lineupPlayers[0]['age'] ?></span>
+                                                </div>
+                                                |
+                                                <div class="w-50 d-flex justify-content-between">
+                                                    <span class="fs-12">Nationality</span>
+                                                    <span class="fs-12"><?= $lineupPlayers[0]['nationality'] ?></span>
+                                                </div>
+                                            </li>
+                                            <li class="list-group-item hstack gap-2">
+                                                <div class="w-50 d-flex justify-content-between">
+                                                    <span class="fs-12">Height</span>
+                                                    <span class="fs-12"><?= $lineupPlayers[0]['height'] ?> cm</span>
+                                                </div>
+                                                |
+                                                <div class="w-50 d-flex justify-content-between">
+                                                    <span class="fs-12">Weight</span>
+                                                    <span class="fs-12"><?= $lineupPlayers[0]['weight'] ?> kg</span>
+                                                </div>
+                                            </li>
+                                            <li class="list-group-item hstack gap-2">
+                                                <div class="w-100 d-flex justify-content-between">
+                                                    <span class="fs-12">Market Value</span>
+                                                    <span class="fs-12"><?= formatCurrency($lineupPlayers[0]['market_value']) ?></span>
+                                                </div>
+                                            </li>
+                                            <li class="list-group-item hstack gap-2">
+                                                <div class="w-100 d-flex justify-content-between">
+                                                    <span class="fs-12">Contract Wage</span>
+                                                    <span class="fs-12"><?= formatCurrency($lineupPlayers[0]['contract_wage']) ?></span>
+                                                </div>
+                                            </li>
+                                            <li class="list-group-item hstack gap-2">
+                                                <div class="w-100 d-flex justify-content-between">
+                                                    <span class="fs-12">Contract End Date</span>
+                                                    <span class="fs-12"><?= $commonController->convertDate($lineupPlayers[0]['contract_end_date']) ?></span>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div class="mt-3 hstack gap-2 justify-content-between px-1">
+                                        <button type="button"
+                                                class="btn btn-info btn-sm btn-label waves-effect waves-light"><i
+                                                    class="ri-check-double-line label-icon align-middle fs-16 me-2"></i>
+                                            Renew Contract
+                                        </button>
+                                        <button type="button"
+                                                class="btn btn-danger btn-sm btn-label waves-effect waves-light"><i
+                                                    class="ri-check-double-line label-icon align-middle fs-16 me-2"></i>
+                                            Terminate Contract
+                                        </button>
                                     </div>
                                 </div>
                             </div>

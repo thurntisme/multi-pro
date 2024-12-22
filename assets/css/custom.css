@@ -30,3 +30,11 @@ tr.my-club-player-row.selected :is(.btn-search, .btn-change) {
     /*transition-duration: 2s;*/
     transition-timing-function: linear;
 }
+
+.player-dot {
+    width: 6px;
+    height: 6px;
+    display: inline-block;
+    margin-left: 4px;
+    border-radius: 50%;
+}

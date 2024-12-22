@@ -2,6 +2,8 @@
 const pitchColor = "#4CAF50";
 const lineColor = "#FFFFFF";
 const playerScore = 5;
+const homeTeamColor = "#337ca0";
+const awayTeamColor = "#ff1d15";
 
 // Helper function to draw circles
 function drawCircle(x, y, color, radius = 10, isFilled = true) {
@@ -158,7 +160,7 @@ function drawPlayerScore(player) {
 
 function renderTeamInFitch(
     teams,
-    conditions = {isDisplayBall, isDisplayScore, circleRadius, isDisplayName}
+    conditions = {isDisplayBall, isDisplayScore, circleRadius, isDisplayName, isTeamInMatch}
 ) {
     drawFootballPitch();
     if (conditions?.isDisplayBall) {
@@ -180,10 +182,14 @@ function renderTeamInFitch(
             playerSelected: team?.playerSelected,
         };
         teamData.players.forEach((pos, index) => {
+            let playerColor = getPositionColor(pos.posName);
+            if (conditions?.isTeamInMatch) {
+                playerColor = pos.playerColor ?? 'gray';
+            }
             drawCircle(
                 pos.x,
                 pos.y,
-                getPositionColor(pos.posName),
+                playerColor,
                 conditions?.circleRadius
             );
             if (team?.playerSelected && team?.playerSelected === pos.uuid) {
