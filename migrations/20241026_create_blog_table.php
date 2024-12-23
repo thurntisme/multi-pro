@@ -9,6 +9,7 @@ return function (PDO $pdo) {
         'content TEXT',
         'tags TEXT',
         'category TEXT',
+        'ref_url TEXT',
         'created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP',
         'updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP',
         'user_id INTEGER NOT NULL',
