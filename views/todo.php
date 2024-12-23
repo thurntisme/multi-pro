@@ -7,6 +7,14 @@ $pageTitle = "Todos";
 $todoController = new TodoController();
 $list = $todoController->listTodos();
 
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    if (isset($_POST['action_name'])) {
+        if ($_POST['action_name'] === 'delete_record' && isset($_POST['post_id'])) {
+            $todoController->deleteTodo();
+        }
+    }
+}
+
 ob_start();
 ?>
 
@@ -104,13 +112,21 @@ include_once DIR . '/components/alert.php';
                         foreach ($list['list'] as $item) { ?>
                             <tr>
                                 <td>
-                                    <div class="d-flex">
+                                    <div class="d-flex align-items-baseline">
                                         <a class="text-black"
                                             href="<?= home_url('app/todo/detail?id=' . $item['id']) ?>"><?= truncateString($item['title'], 50) ?></a>
-                                        <ul class="list-inline tasks-list-menu mb-0 ms-1">
-                                            <li class="list-inline-item"><a class="edit-item-btn"
+                                        <ul class="list-inline tasks-list-menu mb-0 ms-3">
+                                            <li class="list-inline-item m-0"><a class="edit-item-btn btn btn-link btn-sm"
                                                     href="<?= home_url('app/todo/edit?id=' . $item['id']) ?>"><i
-                                                        class="ri-pencil-fill align-bottom me-2 text-muted"></i></a>
+                                                        class="ri-pencil-fill align-bottom text-muted"></i></a>
+                                            </li>
+                                            <li class="list-inline-item m-0">
+                                                <form method="POST" action="<?= $_SERVER['REQUEST_URI'] ?>">
+                                                    <input type="hidden" name="action_name" value="delete_record">
+                                                    <input type="hidden" name="post_id" value="<?= $item['id'] ?>">
+                                                    <button type="submit" class="btn btn-link btn-sm"><i
+                                                            class="ri-delete-bin-2-line align-bottom text-muted"></i></button>
+                                                </form>
                                             </li>
                                         </ul>
                                     </div>
