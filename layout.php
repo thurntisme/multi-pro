@@ -10,41 +10,42 @@
 
 <body>
 
-    <!-- Begin page -->
-    <div id="layout-wrapper">
+<!-- Begin page -->
+<div id="layout-wrapper">
 
-        <?php include 'layouts/menu.php'; ?>
+    <?php include 'layouts/menu.php'; ?>
 
-        <!-- ============================================================== -->
-        <!-- Start right Content here -->
-        <!-- ============================================================== -->
-        <div class="main-content">
+    <!-- ============================================================== -->
+    <!-- Start right Content here -->
+    <!-- ============================================================== -->
+    <div class="main-content">
 
-            <div class="page-content">
-                <div class="container-fluid">
+        <div class="page-content">
+            <div class="container-fluid">
 
-                    <?php includeFileWithVariables('layouts/page-title.php', array('title' => $pageTitle ?? "")); ?>
-                    <?php echo $pageContent ?? '<p>Welcome to the main content area.</p>'; ?>
+                <?php includeFileWithVariables('layouts/page-title.php', array('title' => $pageTitle ?? "")); ?>
+                <?php echo $pageContent ?? '<p>Welcome to the main content area.</p>'; ?>
 
-                </div>
-                <!-- container-fluid -->
             </div>
-            <!-- End Page-content -->
-
-            <?php include 'layouts/footer.php'; ?>
+            <!-- container-fluid -->
         </div>
-        <!-- end main content-->
+        <!-- End Page-content -->
 
+        <?php include 'layouts/footer.php'; ?>
     </div>
-    <!-- END layout-wrapper -->
+    <!-- end main content-->
 
-    <?php //include 'layouts/customizer.php'; 
-    ?>
+</div>
+<!-- END layout-wrapper -->
 
-    <?php include 'layouts/vendor-scripts.php'; ?>
+<?php //include 'layouts/customizer.php';
+?>
 
-    <!-- App js -->
-    <script src="<?= home_url("assets/js/app.js") ?>"></script>
+<?php include 'layouts/vendor-scripts.php'; ?>
+
+<!-- App js -->
+<script src="<?= home_url("assets/js/app.js") ?>"></script>
+<script src="<?= home_url("assets/js/custom.js") ?>"></script>
 </body>
 
 </html>
