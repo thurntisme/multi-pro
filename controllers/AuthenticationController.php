@@ -118,6 +118,8 @@ class AuthenticationController
     {
         $email = $_POST['email'] ?? '';
         $password = $_POST['password'] ?? '';
+        $previous_path = $_POST['previous_path'] ?? '';
+        $previous_query = $_POST['previous_query'] ?? '';
 
         $errors = $this->validateUserData($email, $password);
 
@@ -131,13 +133,16 @@ class AuthenticationController
             $token = $this->authenticationService->loginUser($email, $password);
             if (!empty($token)) {
                 $_SESSION['token'] = $token;
+
+                header("Location: " . home_url($previous_path . $previous_query));
+                exit;
             } else {
                 $_SESSION['message_type'] = 'danger';
                 $_SESSION['message'] = 'Invalid username or password.';
             }
         }
 
-        header("Location: " . home_url("login"));
+        header("Location: " . home_url("login?path=" . $previous_path . "&query=" . $previous_query));
         exit;
     }
 

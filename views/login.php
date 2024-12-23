@@ -9,6 +9,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $authenticationController->login();
 }
 
+// Get the 'path' and 'query' parameters from the URL
+$path = isset($_GET['path']) ? $_GET['path'] : '';
+$query = isset($_GET['query']) ? $_GET['query'] : '';
+
 ob_start();
 
 $alert = '';
@@ -53,6 +57,8 @@ echo '<div class="row justify-content-center">
                     </div>
                     <div class="p-2 mt-4">
                         <form action="' . home_url("login") . '" method="POST">
+                            <input type="hidden" name="previous_path" value="' . htmlspecialchars($path) . '">
+                            <input type="hidden" name="previous_query" value="' . htmlspecialchars($query) . '">
 
                             <div class="mb-3 ' . ((!empty($email_err)) ? 'has-error' : '') . '">
                                 <label for="email" class="form-label">Email</label>

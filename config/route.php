@@ -8,7 +8,6 @@ include_once 'auth-route.php';
 include_once DIR . '/functions/system.php';
 
 $url = extractPathFromCurrentUrl();
-
 if ($url === '') {
     include_once DIR . '/views/landing.php';
     exit;

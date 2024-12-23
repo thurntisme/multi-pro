@@ -4,6 +4,7 @@ function getPageData($slug)
 {
     $routes = [
         '' => ['url' => DIR . '/views/dashboard.php', 'title' => 'Dashboard'],
+        'app' => ['url' => DIR . '/views/dashboard.php', 'title' => 'Dashboard'],
         'profile' => ['url' => DIR . '/views/profile.php', 'title' => 'Profile'],
         'settings' => ['url' => DIR . '/views/settings.php', 'title' => 'Settings'],
         'devices' => ['url' => DIR . '/views/devices.php', 'title' => 'Devices'],
