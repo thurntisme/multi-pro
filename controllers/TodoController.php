@@ -25,7 +25,7 @@ class TodoController
         $tags = $_POST['tags'] ?? '';
         $status = $_POST['status'] ?? '';
         $priority = $_POST['priority'] ?? '';
-//        $due_date = !empty($_POST['due_date']) ? $_POST['due_date'] : date('Y-m-d');
+        //        $due_date = !empty($_POST['due_date']) ? $_POST['due_date'] : date('Y-m-d');
         $due_date = $_POST['due_date'] ?? '';
 
         if ($title) {
@@ -50,7 +50,7 @@ class TodoController
         $tags = $_POST['tags'] ?? '';
         $status = $_POST['status'] ?? '';
         $priority = $_POST['priority'] ?? '';
-//        $due_date = !empty($_POST['due_date']) ? $_POST['due_date'] : date('Y-m-d');
+        //        $due_date = !empty($_POST['due_date']) ? $_POST['due_date'] : date('Y-m-d');
         $due_date = $_POST['due_date'] ?? '';
 
         if ($id && $title) {
@@ -115,7 +115,6 @@ class TodoController
 
         // Search keyword
         $keyword = isset($_GET['s']) ? $_GET['s'] : '';
-        $keyword = '%' . $keyword . '%'; // Prepare for LIKE search
 
         // Filter last updated
         $due_date = isset($_GET['due_date']) ? $_GET['due_date'] : '';
@@ -128,6 +127,7 @@ class TodoController
         $sql = $selectSql . " WHERE user_id = $this->user_id ";
 
         if ($keyword !== '') {
+            $keyword = '%' . $keyword . '%'; // Prepare for LIKE search
             $sql .= " AND (title LIKE :keyword OR tags LIKE :keyword OR content LIKE :keyword)";
         }
 

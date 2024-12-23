@@ -57,10 +57,13 @@ define('DEFAULT_PROJECT_STATUS', $projectStatus);
 $priorities = [
     'low' => 'Low',
     'medium' => 'Medium',
-    'high' => 'High'
+    'high' => 'High',
+    'critical' => 'Critical',
 ];
 $status = [
     'not_started' => 'Not Started',
+    'todo' => 'Todo',
+    'backlog' => 'Backlog',
     'in_progress' => 'Inprogress',
     'completed' => 'Completed',
     'on_hold' => 'On Hold',
@@ -440,37 +443,44 @@ $finance_categories = [
         'icon' => '🎓',
         'title' => 'Education',
         'amount' => 0,
-    ], [
+    ],
+    [
         'slug' => 'gifts',
         'icon' => '🎁',
         'title' => 'Gifts',
         'amount' => 0,
-    ], [
+    ],
+    [
         'slug' => 'charity',
         'icon' => '🤝',
         'title' => 'Charity',
         'amount' => 0,
-    ], [
+    ],
+    [
         'slug' => 'clothing',
         'icon' => '👗',
         'title' => 'Clothing',
         'amount' => 0,
-    ], [
+    ],
+    [
         'slug' => 'home_improvement',
         'icon' => '🔨',
         'title' => 'Home Improvement',
         'amount' => 0,
-    ], [
+    ],
+    [
         'slug' => 'hobbies',
         'icon' => '🎨',
         'title' => 'Hobbies',
         'amount' => 0,
-    ], [
+    ],
+    [
         'slug' => 'personal_care',
         'icon' => '💅',
         'title' => 'Personal Care',
         'amount' => 0,
-    ], [
+    ],
+    [
         'slug' => 'other',
         'icon' => '❓',
         'title' => 'Other',

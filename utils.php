@@ -163,18 +163,35 @@ $badgeClasses = [
     'backlog' => 'dark',
     'complete' => 'success',
     'in_progress' => 'primary',
-    'processing' => 'primary',
-    'blocked' => 'danger',
     'on_hold' => 'warning',
+    'cancelled' => 'danger',
 ];
-function renderStatusBadge($status)
+function renderStatusBadge($status, $element = 'span', $fontSize = '10')
 {
     global $badgeClasses;
     // Default badge class if status is not found
     $badgeClass = isset($badgeClasses[$status]) ? $badgeClasses[$status] : 'secondary';
 
     // Return the badge HTML
-    return "<span class='badge bg-$badgeClass'>" . ucfirst(str_replace("_", " ", $status)) . "</span>";
+    return "<$element class='badge bg-$badgeClass fs-$fontSize'>" . ucfirst(str_replace("_", " ", $status)) . "</$element>";
+}
+
+// Define the badge classes based on priority levels
+$priorityClasses = [
+    'low' => 'success',
+    'medium' => 'warning',
+    'high' => 'danger',
+    'critical' => 'dark',
+];
+// Function to render priority badge
+function renderPriorityBadge($priority, $element = 'span', $fontSize = '10')
+{
+    global $priorityClasses;
+    // Default badge class if priority is not found
+    $badgeClass = isset($priorityClasses[$priority]) ? $priorityClasses[$priority] : 'secondary';
+
+    // Return the badge HTML
+    return "<$element class='badge bg-$badgeClass fs-$fontSize'>" . ucfirst($priority) . "</$element>";
 }
 
 function getStatusBadge($status)
