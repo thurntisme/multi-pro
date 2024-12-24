@@ -88,7 +88,7 @@ include_once DIR . '/components/alert.php';
                                     class="ri-equalizer-fill me-1 align-bottom"></i>
                             Filters
                         </button>
-                        <a href="<?= home_url("todo") ?>" class="btn btn-danger ms-1"><i
+                        <a href="<?= home_url("app/todo") ?>" class="btn btn-danger ms-1"><i
                                     class="ri-delete-bin-2-fill me-1 align-bottom"></i>Reset</a>
                     </div>
                     <!--end col-->
@@ -107,8 +107,8 @@ include_once DIR . '/components/alert.php';
                         <th class="text-center">Due Date</th>
                         <th class="text-center">Priority</th>
                         <th class="text-center">Status</th>
-                        <th class="text-end">Created At</th>
-                        <th class="text-end">Updated At</th>
+                        <th class="text-end">Created Date</th>
+                        <th class="text-end">Updated Date</th>
                     </tr>
                     </thead>
                     <tbody class="list form-check-all">
@@ -142,8 +142,8 @@ include_once DIR . '/components/alert.php';
                                 <td class="text-center"><?= !empty($item['due_date']) && $item['due_date'] != '0000-00-00' ? $item['due_date'] : '' ?></td>
                                 <td class="text-center"><?= renderPriorityBadge($item['priority']) ?></td>
                                 <td class="text-center"><?= renderStatusBadge($item['status']) ?></td>
-                                <td class="text-end"><?= $commonController->convertDateTime($item['created_at']) ?></td>
-                                <td class="text-end"><?= $commonController->convertDateTime($item['updated_at']) ?></td>
+                                <td class="text-end"><?= $commonController->convertDate($item['created_at']) ?></td>
+                                <td class="text-end"><?= $commonController->convertDate($item['updated_at']) ?></td>
                             </tr>
                         <?php }
                     } ?>
