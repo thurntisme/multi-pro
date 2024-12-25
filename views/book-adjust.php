@@ -19,7 +19,7 @@ if (!empty($modify_type)) {
     }
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (isset($_POST['action_name'])) {
-            if ($_POST['action_name'] === 'delete_record' && isset($_GET['id'])) {
+            if ($_POST['action_name'] === 'delete_record') {
                 $bookController->deleteBook();
             }
         } else {
@@ -35,12 +35,12 @@ if (!empty($modify_type)) {
 
 ob_start();
 ?>
-<form method="POST" action="<?= $_SERVER['REQUEST_URI'] ?>" id="book">
-    <div class="row">
-        <div class="col-xl-8 col-md-10 offset-xl-2 offset-md-1">
-            <?php
-            includeFileWithVariables('components/single-button-group.php', array("slug" => "book", "post_id" => $postData['id'], 'modify_type' => $modify_type));
-            ?>
+<div class="row">
+    <div class="col-xl-8 col-md-10 offset-xl-2 offset-md-1">
+        <?php
+        includeFileWithVariables('components/single-button-group.php', array("slug" => "book", "post_id" => $postData['id'], 'modify_type' => $modify_type));
+        ?>
+        <form method="POST" action="<?= $_SERVER['REQUEST_URI'] ?>" id="book">
             <div class="card">
                 <div class="card-body">
                     <div class="mb-3">
@@ -97,10 +97,10 @@ ob_start();
                 <button type="submit"
                     class="btn btn-success w-sm"><?= $modify_type === "new" ? "Create" : "Save" ?></button>
             </div>
-        </div>
-        <!-- end col -->
+        </form>
     </div>
-</form>
+    <!-- end col -->
+</div>
 
 <?php
 include_once DIR . '/components/modal-delete.php';

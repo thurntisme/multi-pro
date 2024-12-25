@@ -9,9 +9,13 @@
       <a href="<?= home_url('app/' . $slug . '/edit?id=' . $post_id) ?>"
         class="btn btn-info w-sm me-1"><i class="ri-pencil-fill align-bottom me-1"></i> Edit</a>
     <?php } ?>
-    <button type="button" class="btn btn-danger w-sm btn-delete-record"><i
-        class="ri-delete-bin-5-fill align-bottom me-1"></i> Delete
-    </button>
+    <form method="POST" action="<?= $_SERVER['REQUEST_URI'] ?>">
+      <input type="hidden" name="action_name" value="delete_record">
+      <input type="hidden" name="post_id" value="<?= $post_id ?>">
+      <button type="submit" class="btn btn-danger w-sm btn-delete-record"><i
+          class="ri-delete-bin-5-fill align-bottom me-1"></i> Delete
+      </button>
+    </form>
   <?php } ?>
 </div>
 
