@@ -22,10 +22,12 @@ $pageUrl = '';
 
 $user_id = '';
 if (!empty($token)) {
-    $user_id = $authenticationController->getCurrentUserId();
+    $curr_data = $authenticationController->getCurrentUser();
+    $user_id = $curr_data['id'];
+    $user_role = $curr_data['role'];
     if (!empty($user_id)) {
         $app_url = str_replace('app/', '', $url);
-        $pageUrl = getPageData($app_url)['url'];
+        $pageUrl = getPageData($app_url, $user_role)['url'];
     } else {
         $commonController->removeToken();
         $pageUrl = DIR . '/functions/redirectUser.php';

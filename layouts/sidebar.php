@@ -1,3 +1,198 @@
+<?php
+$menu_items = [
+    [
+        'title' => 'Personal',
+        'sub_items' => [
+            [
+                'name' => 'Dashboard',
+                'icon' => 'ri-dashboard-2-line',
+                'slug' => ''
+            ],
+            [
+                'name' => 'To Do',
+                'icon' => 'ri-task-line',
+                'slug' => 'todo'
+            ],
+            [
+                'name' => 'Note',
+                'icon' => 'ri-sticky-note-line',
+                'slug' => 'note'
+            ],
+            [
+                'name' => 'Daily Checklist',
+                'icon' => 'ri-calendar-check-line',
+                'slug' => 'daily-checklist'
+            ],
+            [
+                'name' => 'Finance',
+                'icon' => 'ri-wallet-3-line',
+                'slug' => 'finance'
+            ],
+            [
+                'name' => 'Subscription',
+                'icon' => 'ri-calendar-check-line',
+                'slug' => 'subscription'
+            ],
+        ]
+    ],
+    [
+        'title' => 'Tech Stack',
+        'sub_items' => [
+            [
+                'name' => 'Wordpress',
+                'icon' => 'mdi mdi-wordpress',
+                'slug' => 'wordpress'
+            ],
+            [
+                'name' => 'ReactJS',
+                'icon' => 'mdi mdi-react',
+                'slug' => 'reactjs'
+            ],
+            [
+                'name' => 'Salesforce',
+                'icon' => 'mdi mdi-salesforce',
+                'slug' => 'salesforce'
+            ],
+            [
+                'name' => 'PHP',
+                'icon' => 'mdi mdi-language-php',
+                'slug' => 'php'
+            ],
+            [
+                'name' => 'MySql',
+                'icon' => 'mdi mdi-database-outline',
+                'slug' => 'mysql'
+            ],
+            [
+                'name' => 'English',
+                'icon' => 'mdi mdi-google-translate',
+                'slug' => 'english'
+            ],
+        ]
+    ],
+    [
+        'title' => 'App',
+        'sub_items' => [
+            [
+                'name' => 'Bookmark',
+                'icon' => 'ri-bookmark-line',
+                'slug' => 'bookmark'
+            ],
+            [
+                'name' => 'Short Link',
+                'icon' => 'ri-link-m',
+                'slug' => 'short-link'
+            ],
+            [
+                'name' => 'Generate QR',
+                'icon' => 'ri-qr-code-line',
+                'slug' => 'generate-qr'
+            ],
+            [
+                'name' => 'AI Chat',
+                'icon' => 'ri-chat-3-line',
+                'slug' => 'ai-chat'
+            ]
+        ]
+    ],
+    [
+        'title' => 'Work',
+        'sub_items' => [
+            [
+                'name' => 'Projects',
+                'icon' => 'ri-folder-5-line',
+                'slug' => 'projects'
+            ],
+            [
+                'name' => 'Report Working',
+                'icon' => 'ri-clipboard-line',
+                'slug' => 'report-working'
+            ],
+            [
+                'name' => 'Maintain Web',
+                'icon' => 'ri-global-line',
+                'slug' => 'maintain-web'
+            ],
+            [
+                'name' => 'SEO Checklist',
+                'icon' => 'ri-search-line',
+                'slug' => 'seo-checklist'
+            ],
+            [
+                'name' => 'Web Dev Checklist',
+                'icon' => 'ri-tools-line',
+                'slug' => 'web-dev-checklist'
+            ],
+            [
+                'name' => 'Web Secure Checklist',
+                'icon' => 'ri-shield-line',
+                'slug' => 'web-secure-checklist'
+            ]
+        ]
+    ],
+    [
+        'title' => 'Development',
+        'sub_items' => [
+            [
+                'name' => 'Code',
+                'icon' => 'ri-code-line',
+                'slug' => 'code'
+            ],
+            [
+                'name' => 'Tip',
+                'icon' => 'ri-lightbulb-line',
+                'slug' => 'tip'
+            ],
+            [
+                'name' => 'Book',
+                'icon' => 'ri-book-open-line',
+                'slug' => 'book'
+            ],
+            [
+                'name' => 'Git',
+                'icon' => 'ri-git-merge-line',
+                'slug' => 'git'
+            ],
+            [
+                'name' => 'Course',
+                'icon' => 'ri-graduation-cap-line',
+                'slug' => 'course'
+            ],
+            [
+                'name' => 'Blog',
+                'icon' => 'ri-article-line',
+                'slug' => 'blog'
+            ]
+        ]
+    ],
+    [
+        'title' => 'Network',
+        'sub_items' => [
+            [
+                'name' => 'Lead',
+                'icon' => 'ri-file-user-line',
+                'slug' => 'lead'
+            ],
+            [
+                'name' => 'Website',
+                'icon' => 'ri-links-line',
+                'slug' => 'website'
+            ]
+        ]
+    ],
+    [
+        'title' => 'Game',
+        'sub_items' => [
+            [
+                'name' => 'Football Manager',
+                'icon' => 'ri-football-line',
+                'slug' => 'football-manager'
+            ]
+        ]
+    ]
+];
+?>
+
 <!-- ========== App Menu ========== -->
 <div class="app-menu navbar-menu">
     <!-- LOGO -->
@@ -21,7 +216,7 @@
             </span>
         </a>
         <button type="button" class="btn btn-sm p-0 fs-20 header-item float-end btn-vertical-sm-hover"
-                id="vertical-hover">
+            id="vertical-hover">
             <i class="ri-record-circle-line"></i>
         </button>
     </div>
@@ -32,180 +227,27 @@
             <div id="two-column-menu">
             </div>
             <ul class="navbar-nav" id="navbar-nav">
-                <li class="menu-title"><span data-key="t-personal">Personal</span></li>
-                <li class="nav-item">
-                    <a class="nav-link menu-link <?= activeClassName("") ?>" href="<?= home_url("app/") ?>">
-                        <i class="ri-dashboard-2-line"></i> <span data-key="t-dashboard">Dashboard</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link menu-link <?= activeClassName("todo") ?>" href="<?= home_url("app/todo") ?>">
-                        <i class="ri-task-line"></i> <span data-key="t-todo">To Do</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link menu-link <?= activeClassName("note") ?>" href="<?= home_url("app/note") ?>">
-                        <i class="ri-sticky-note-line"></i> <span data-key="t-note">Note</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link menu-link <?= activeClassName("daily-checklist") ?>"
-                       href="<?= home_url("app/daily-checklist") ?>">
-                        <i class="ri-calendar-check-line"></i> <span data-key="t-daily-checklist">Daily Checklist</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link menu-link <?= activeClassName("finance") ?>"
-                       href="<?= home_url("app/finance") ?>">
-                        <i class="ri-wallet-3-line"></i> <span data-key="t-finance">Finance</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link menu-link <?= activeClassName("subscription") ?>"
-                       href="<?= home_url("app/subscription") ?>">
-                        <i class="ri-calendar-check-line"></i> <span data-key="t-subscription">Subscription</span>
-                    </a>
-                </li>
-                <li class="menu-title"><span data-key="t-tech-stack">Tech Stack</span></li>
-                <li class="nav-item">
-                    <a class="nav-link menu-link <?= activeClassName("wordpress") ?>"
-                       href="<?= home_url("app/wordpress") ?>">
-                        <i class="mdi mdi-wordpress"></i> <span data-key="t-wordpress">Wordpress</span>
-                    </a>
-                    <a class="nav-link menu-link <?= activeClassName("reactjs") ?>"
-                       href="<?= home_url("app/reactjs") ?>">
-                        <i class="mdi mdi-react"></i> <span>ReactJS</span>
-                    </a>
-                    <a class="nav-link menu-link <?= activeClassName("salesforce") ?>"
-                       href="<?= home_url("app/salesforce") ?>">
-                        <i class="mdi mdi-salesforce"></i> <span>Salesforce</span>
-                    </a>
-                    <a class="nav-link menu-link <?= activeClassName("php") ?>"
-                       href="<?= home_url("app/php") ?>">
-                        <i class="mdi mdi-language-php"></i> <span>PHP</span>
-                    </a>
-                    <a class="nav-link menu-link <?= activeClassName("mysql") ?>"
-                       href="<?= home_url("app/mysql") ?>">
-                        <i class="mdi mdi-database-outline"></i> <span>MySql</span>
-                    </a>
-                    <a class="nav-link menu-link <?= activeClassName("english") ?>"
-                       href="<?= home_url("app/english") ?>">
-                        <i class="mdi mdi-google-translate"></i> <span>English</span>
-                    </a>
-                </li>
-                <li class="menu-title"><span data-key="t-app">App</span></li>
-                <li class="nav-item">
-                    <a class="nav-link menu-link <?= activeClassName("bookmark") ?>"
-                       href="<?= home_url("app/bookmark") ?>">
-                        <i class="ri-bookmark-line"></i> <span data-key="t-bookmark">Bookmark</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link menu-link <?= activeClassName("short-link") ?>"
-                       href="<?= home_url("app/short-link") ?>">
-                        <i class="ri-link-m"></i> <span data-key="t-short-link">Short Link</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link menu-link <?= activeClassName("generate-qr") ?>"
-                       href="<?= home_url("app/generate-qr") ?>">
-                        <i class="ri-qr-code-line"></i> <span data-key="t-generate-qr">Generate QR</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link menu-link <?= activeClassName("ai-chat") ?>"
-                       href="<?= home_url("app/ai-chat") ?>">
-                        <i class="ri-chat-3-line"></i> <span data-key="t-ai-chat">AI Chat</span>
-                    </a>
-                </li>
-                <li class="menu-title"><span data-key="t-work">Work</span></li>
-                <li class="nav-item">
-                    <a class="nav-link menu-link <?= activeClassName("projects") ?>"
-                       href="<?= home_url("app/projects") ?>">
-                        <i class="ri-folder-5-line"></i> <span data-key="t-projects">Projects</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link menu-link <?= activeClassName("report-working") ?>"
-                       href="<?= home_url("app/report-working") ?>">
-                        <i class="ri-clipboard-line"></i> <span data-key="t-report-working">Report Working</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link menu-link <?= activeClassName("maintain-web") ?>"
-                       href="<?= home_url("app/maintain-web") ?>">
-                        <i class="ri-global-line"></i> <span data-key="t-maintain-web">Maintain Web</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link menu-link <?= activeClassName("seo-checklist") ?>"
-                       href="<?= home_url("app/seo-checklist") ?>">
-                        <i class="ri-search-line"></i> <span data-key="t-seo-checklist">SEO Checklist</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link menu-link <?= activeClassName("web-dev-checklist") ?>"
-                       href="<?= home_url("app/web-dev-checklist") ?>">
-                        <i class="ri-tools-line"></i> <span data-key="t-web-dev-checklist">Web Dev Checklist</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link menu-link <?= activeClassName("web-secure-checklist") ?>"
-                       href="<?= home_url("app/web-secure-checklist") ?>">
-                        <i class="ri-shield-line"></i> <span data-key="t-web-secure-checklist">Web Secure
-                            Checklist</span>
-                    </a>
-                </li>
-                <li class="menu-title"><span data-key="t-development">Development</span></li>
-                <li class="nav-item">
-                    <a class="nav-link menu-link <?= activeClassName("code") ?>" href="<?= home_url("app/code") ?>">
-                        <i class="ri-code-line"></i> <span data-key="t-code">Code</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link menu-link <?= activeClassName("tip") ?>" href="<?= home_url("app/tip") ?>">
-                        <i class="ri-lightbulb-line"></i> <span data-key="t-tip">Tip</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link menu-link <?= activeClassName("book") ?>" href="<?= home_url("app/book") ?>">
-                        <i class="ri-book-open-line"></i> <span data-key="t-book">Book</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link menu-link <?= activeClassName("git") ?>" href="<?= home_url("app/git") ?>">
-                        <i class="ri-git-merge-line"></i> <span data-key="t-git">Git</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link menu-link <?= activeClassName("course") ?>" href="<?= home_url("app/course") ?>">
-                        <i class="ri-graduation-cap-line"></i> <span data-key="t-course">Course</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link menu-link <?= activeClassName("blog") ?>" href="<?= home_url("app/blog") ?>">
-                        <i class="ri-article-line"></i> <span data-key="t-blog">Blog</span>
-                    </a>
-                </li>
-                <li class="menu-title"><span data-key="t-network">Network</span></li>
-                <li class="nav-item">
-                    <a class="nav-link menu-link <?= activeClassName("lead") ?>" href="<?= home_url("app/lead") ?>">
-                        <i class="ri-file-user-line"></i> <span data-key="t-lead">Lead</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link menu-link <?= activeClassName("website") ?>"
-                       href="<?= home_url("app/website") ?>">
-                        <i class="ri-links-line"></i> <span data-key="t-website">Website</span>
-                    </a>
-                </li>
-                <li class="menu-title"><span data-key="t-network">Game</span></li>
-                <li class="nav-item">
-                    <a class="nav-link menu-link <?= activeClassName("football-manager") ?>"
-                       href="<?= home_url("app/football-manager") ?>">
-                        <i class="ri-football-line"></i> <span data-key="t-football-manager">Football Manager</span>
-                    </a>
-                </li>
+                <?php
+                foreach ($menu_items as $category) {
+                    echo '<li class="menu-title"><span>' . $category['title'] . '</span></li>';
+
+                    foreach ($category['sub_items'] as $item) {
+                        $pageData = getPageData($item['slug'], $user_role);
+                        // Generate active class based on the slug
+                        $active_class = activeClassName($item['slug']);
+
+                        // Generate the URL dynamically based on the slug
+                        $url = home_url("app/{$item['slug']}");
+
+                        echo '<li class="nav-item">
+                                    <a class="nav-link menu-link ' . $active_class . '" href="' . $url . '">
+                                        <i class="' . $item['icon'] . '"></i> <span>' . $item['name'] . '</span>
+                                        ' . (empty($pageData['isAccessible']) ? '<i class="mdi mdi-account-lock-outline ms-auto"></i>' : '') . '
+                                    </a>
+                                  </li>';
+                    }
+                }
+                ?>
             </ul>
         </div>
         <!-- Sidebar -->
