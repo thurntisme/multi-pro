@@ -33,7 +33,7 @@
   <div class="layout-wrapper landing">
     <nav class="navbar navbar-expand-lg navbar-landing fixed-top" id="navbar">
       <div class="container">
-        <a class="navbar-brand" href="index.html">
+        <a class="navbar-brand" href="<?= home_url('') ?>">
           <img src="assets/images/logo-dark.png" class="card-logo card-logo-dark" alt="logo dark" height="17">
           <img src="assets/images/logo-light.png" class="card-logo card-logo-light" alt="logo light" height="17">
         </a>
@@ -67,8 +67,12 @@
           </ul>
 
           <div class="">
-            <a href="<?= home_url('login') ?>" class="btn btn-link fw-medium text-decoration-none text-body">Sign in</a>
-            <a href="<?= home_url('register') ?>" class="btn btn-primary">Sign Up</a>
+            <?php if (empty($token)) { ?>
+              <a href="<?= home_url('login') ?>" class="btn btn-link fw-medium text-decoration-none text-body">Sign in</a>
+              <a href="<?= home_url('register') ?>" class="btn btn-primary">Sign Up</a>
+            <?php } else { ?>
+              <a href="<?= home_url('app') ?>" class="btn btn-primary">Dashboard</a>
+            <?php } ?>
           </div>
         </div>
 
@@ -546,7 +550,7 @@
               </div>
 
               <div class="mt-4">
-                <a href="index.html" class="btn btn-primary">Learn More <i class="ri-arrow-right-line align-middle ms-1"></i></a>
+                <a href="<?= home_url('') ?>" class="btn btn-primary">Learn More <i class="ri-arrow-right-line align-middle ms-1"></i></a>
               </div>
             </div>
           </div>

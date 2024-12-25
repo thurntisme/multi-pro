@@ -1,5 +1,6 @@
 <?php
 
+$token = $commonController->getToken();
 
 // Define the layout file
 $layout = DIR . '/layout.php';
@@ -19,7 +20,6 @@ if (!empty($url) && str_starts_with($url, 'api')) {
 
 $pageUrl = '';
 
-$token = $commonController->getToken();
 $user_id = '';
 if (!empty($token)) {
     $user_id = $authenticationController->getCurrentUserId();
