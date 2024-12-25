@@ -35,73 +35,72 @@ if (!empty($modify_type)) {
 
 ob_start();
 ?>
-    <form method="POST" action="<?= $_SERVER['REQUEST_URI'] ?>" id="book">
-        <div class="row">
-            <div class="col-xl-8 col-md-10 offset-xl-2 offset-md-1">
-                <div class="mb-3 d-flex justify-content-between align-items-center">
-                    <a href="<?= home_url('app/book') ?>"
-                       class="btn btn-soft-primary btn-label waves-effect waves-light me-auto"><i
-                                class="ri-arrow-left-line label-icon align-middle fs-16 me-2"></i>Back to List</a>
-                    <a href="<?= home_url('app/book/detail?id=' . $postData['id']) ?>"
-                       class="btn btn-secondary w-sm me-1"><i class="ri-eye-fill align-bottom me-1"></i> View</a>
-                    <?php if (!empty($post_id)) { ?>
-                        <button type="button" class="btn btn-danger w-sm" data-bs-toggle="modal"
-                                data-bs-target="#deleteRecordModal"><i
-                                    class="ri-delete-bin-5-fill align-bottom me-1"></i> Delete
-                        </button>
-                    <?php } ?>
-                </div>
+<form method="POST" action="<?= $_SERVER['REQUEST_URI'] ?>" id="book">
+    <div class="row">
+        <div class="col-xl-8 col-md-10 offset-xl-2 offset-md-1">
+            <?php
+            includeFileWithVariables('components/single-button-group.php', array("slug" => "book", "post_id" => $postData['id'], 'modify_type' => $modify_type));
+            ?>
+            <div class="card">
+                <div class="card-body">
+                    <div class="mb-3">
+                        <label class="form-label" for="book-title-input">Title</label>
+                        <input type="text" class="form-control" id="book-title-input" name="title"
+                            placeholder="Enter title" value="<?= $postData['title'] ?? '' ?>">
+                        <?php if (!empty($post_id)) { ?>
+                            <input type="hidden" name="book_id" value="<?= $post_id ?>">
+                        <?php } ?>
+                    </div>
 
-                <?php
-                include_once DIR . '/components/alert.php';
-                ?>
-
-                <div class="card">
-                    <div class="card-body">
-                        <div class="mb-3">
-                            <label class="form-label" for="book-title-input">Title</label>
-                            <input type="text" class="form-control" id="book-title-input" name="title"
-                                   placeholder="Enter title" value="<?= $postData['title'] ?? '' ?>">
-                            <?php if (!empty($post_id)) { ?>
-                                <input type="hidden" name="book_id" value="<?= $post_id ?>">
-                            <?php } ?>
-                        </div>
-
-                        <div class="mb-3">
-                            <label class="form-label">Content</label>
-                            <textarea name="content" class="ckeditor-classic">
+                    <div class="mb-3">
+                        <label class="form-label">Content</label>
+                        <textarea name="content" class="ckeditor-classic">
                             <?= $postData['content'] ?? '' ?>
                         </textarea>
-                        </div>
-
-                        <div class="mb-3">
-                            <label class="form-label" for="book-url-input">Url</label>
-                            <input type="text" class="form-control" id="book-url-input" name="url"
-                                   placeholder="Enter url"
-                                   value="<?= $postData['url'] ?? '' ?>">
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="choices-text-input" class="form-label">Tags</label>
-                            <input class="form-control" id="choices-text-input" data-choices
-                                   data-choices-limit="Required Limit" placeholder="Enter Skills" type="text"
-                                   name="tags"
-                                   value="<?= $postData['tags'] ?? '' ?>"/>
-                        </div>
                     </div>
-                    <!-- end card body -->
-                </div>
-                <!-- end card -->
 
-                <!-- end card -->
-                <div class="text-center mb-4">
-                    <button type="submit"
-                            class="btn btn-success w-sm"><?= $modify_type === "new" ? "Create" : "Save" ?></button>
+                    <div class="mb-3">
+                        <label class="form-label" for="book-url-input">Url</label>
+                        <input type="text" class="form-control" id="book-url-input" name="url"
+                            placeholder="Enter url"
+                            value="<?= $postData['url'] ?? '' ?>">
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="choices-status-input" class="form-label">Status</label>
+                        <select class="form-select" data-choices data-choices-search-false
+                            data-choices-sorting-false
+                            id="choices-status-input" name="status">
+                            <?php
+                            foreach ($status as $value => $label) {
+                                $selected = (!empty($postData['status']) ? $value === $postData['status'] : $value === 'not_started') ? 'selected' : '';
+                                echo "<option value=\"$value\" $selected>$label</option>";
+                            }
+                            ?>
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="choices-text-input" class="form-label">Tags</label>
+                        <input class="form-control" id="choices-text-input" data-choices
+                            data-choices-limit="Required Limit" placeholder="Enter Skills" type="text"
+                            name="tags"
+                            value="<?= $postData['tags'] ?? '' ?>" />
+                    </div>
                 </div>
+                <!-- end card body -->
             </div>
-            <!-- end col -->
+            <!-- end card -->
+
+            <!-- end card -->
+            <div class="text-center mb-4">
+                <button type="submit"
+                    class="btn btn-success w-sm"><?= $modify_type === "new" ? "Create" : "Save" ?></button>
+            </div>
         </div>
-    </form>
+        <!-- end col -->
+    </div>
+</form>
 
 <?php
 include_once DIR . '/components/modal-delete.php';

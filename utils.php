@@ -326,7 +326,7 @@ function getFirstParamInUrl()
     $uriParts = explode('/', trim($cleanUri, '/'));
 
     // Get specific parts of the URI
-    $firstPart = $uriParts[0] ?? null;
+    $firstPart = $uriParts[1] ?? null;
     return $firstPart;
 }
 

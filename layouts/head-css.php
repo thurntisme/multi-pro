@@ -6,6 +6,7 @@
 <link href="<?= home_url("assets/css/icons.min.css") ?>" rel="stylesheet" type="text/css" />
 <!-- App Css-->
 <link href="<?= home_url("assets/css/app.min.css") ?>" rel="stylesheet" type="text/css" />
+<link href="<?= home_url('assets/libs/sweetalert2/sweetalert2.min.css') ?>" rel="stylesheet" />
 
 <?php
 if (!empty($additionCss)) {
@@ -14,4 +15,4 @@ if (!empty($additionCss)) {
 ?>
 
 <!-- custom Css-->
-<link href="<?= home_url("assets/css/custom.css") ?>" rel="stylesheet" type="text/css" /> 
+<link href="<?= home_url("assets/css/custom.css") ?>" rel="stylesheet" type="text/css" />

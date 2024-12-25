@@ -17,77 +17,74 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
 ob_start();
 ?>
 
-    <div class="row">
-        <div class="col-xl-8 col-md-10 offset-xl-2 offset-md-1">
-            <div class="mb-3 d-flex justify-content-between align-items-center">
-                <a href="<?= home_url('app/book') ?>" class="btn btn-soft-primary btn-label waves-effect waves-light"><i
-                            class="ri-arrow-left-line label-icon align-middle fs-16 me-2"></i>Back to List</a>
-                <a href="<?= home_url('app/book/edit?id=' . $postData['id']) ?>"
-                   class="btn btn-info w-sm"><i class="ri-pencil-fill align-bottom me-1"></i> Edit</a>
+<div class="row">
+    <div class="col-xl-8 col-md-10 offset-xl-2 offset-md-1">
+        <?php
+        includeFileWithVariables('components/single-button-group.php', array("slug" => "book", "post_id" => $postData['id'], 'modify_type' => $modify_type));
+        ?>
+        <div class="card">
+            <div class="card-header">
+                <h4 class="card-title mb-0"><?= $postData['title'] ?></h4>
             </div>
-            <div class="card">
-                <div class="card-header">
-                    <h4 class="card-title mb-0"><?= $postData['title'] ?></h4>
-                </div>
-                <div class="card-body">
-                    <div class="text-muted">
-                        <h6 class="mb-3 fw-semibold text-uppercase">Content</h6>
-                        <div class="mb-3">
-                            <?= $postData['content'] ?>
-                        </div>
+            <div class="card-body">
+                <div class="text-muted">
+                    <h6 class="mb-3 fw-semibold text-uppercase">Content</h6>
+                    <div class="mb-3">
+                        <?= $postData['content'] ?>
+                    </div>
 
-                        <h6 class=" mb-3 fw-semibold text-uppercase">Url</h6>
-                        <a href="<?= $postData['url'] ?? '#' ?>" target="_blank"
-                           rel="noopener noreferrer"><?= $postData['url'] ?? '#' ?></a>
+                    <h6 class=" mb-3 fw-semibold text-uppercase">Url</h6>
+                    <a href="<?= $postData['url'] ?? '#' ?>" target="_blank"
+                        rel="noopener noreferrer"><?= $postData['url'] ?? '#' ?></a>
 
-                        <div class="pt-3 border-top border-top-dashed mt-4">
-                            <div class="row">
-                                <div class="col-lg-3 col-sm-6">
-                                    <div>
-                                        <p class="mb-2 text-uppercase fw-medium">Created At :</p>
-                                        <h5 class="fs-15 mb-0">
-                                            <?= $commonController->convertDate($postData['created_at']) ?>
-                                        </h5>
-                                    </div>
+                    <div class="pt-3 border-top border-top-dashed mt-4">
+                        <div class="row">
+                            <div class="col-lg-3 col-sm-6">
+                                <div>
+                                    <p class="mb-2 text-uppercase fw-medium">Created At :</p>
+                                    <h5 class="fs-15 mb-0">
+                                        <?= $commonController->convertDate($postData['created_at']) ?>
+                                    </h5>
                                 </div>
-                                <div class="col-lg-3 col-sm-6">
-                                    <div>
-                                        <p class="mb-2 text-uppercase fw-medium">Updated At :</p>
-                                        <h5 class="fs-15 mb-0">
-                                            <?= $commonController->convertDate($postData['updated_at']) ?>
-                                        </h5>
-                                    </div>
+                            </div>
+                            <div class="col-lg-3 col-sm-6">
+                                <div>
+                                    <p class="mb-2 text-uppercase fw-medium">Updated At :</p>
+                                    <h5 class="fs-15 mb-0">
+                                        <?= $commonController->convertDate($postData['updated_at']) ?>
+                                    </h5>
                                 </div>
-                                <div class="col-lg-3 col-sm-6">
-                                    <div>
-                                        <p class="mb-2 text-uppercase fw-medium">Status :</p>
-                                        <div class="badge bg-light fs-12 text-black">
-                                            <?= $postData['status'] ? renderStatusBadge($postData['status']) : '' ?>
-                                        </div>
+                            </div>
+                            <div class="col-lg-3 col-sm-6">
+                                <div>
+                                    <p class="mb-2 text-uppercase fw-medium">Status :</p>
+                                    <div class="badge bg-light fs-12 text-black">
+                                        <?= $postData['status'] ? renderStatusBadge($postData['status']) : '' ?>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <!-- end card body -->
             </div>
-            <?php if ($tags && count($tags) > 0) : ?>
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title mb-4">Tags</h5>
-                        <div class="d-flex flex-wrap gap-2 fs-16">
-                            <?php foreach ($tags as $key => $value) { ?>
-                                <div class="badge fw-medium bg-secondary-subtle text-secondary"><?= $value ?>
-                                </div>
-                            <?php } ?>
-                        </div>
+            <!-- end card body -->
+        </div>
+        <?php if ($tags && count($tags) > 0) : ?>
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title mb-4">Tags</h5>
+                    <div class="d-flex flex-wrap gap-2 fs-16">
+                        <?php foreach ($tags as $key => $value) { ?>
+                            <div class="badge fw-medium bg-secondary-subtle text-secondary"><?= $value ?>
+                            </div>
+                        <?php } ?>
                     </div>
                 </div>
-            <?php endif; ?>
-        </div>
-        <!-- end col -->
+            </div>
+        <?php endif; ?>
     </div>
+    <!-- end col -->
+</div>
 
 <?php
 $pageContent = ob_get_clean();
