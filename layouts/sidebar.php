@@ -242,7 +242,7 @@ $menu_items = [
                         echo '<li class="nav-item">
                                     <a class="nav-link menu-link ' . $active_class . '" href="' . $url . '">
                                         <i class="' . $item['icon'] . '"></i> <span>' . $item['name'] . '</span>
-                                        ' . (empty($pageData['isAccessible']) ? '<i class="mdi mdi-account-lock-outline ms-auto"></i>' : '') . '
+                                        ' . (empty($pageData['isAccessible']) ? '<i class="mdi mdi-lock ms-auto"></i>' : '') . '
                                     </a>
                                   </li>';
                     }

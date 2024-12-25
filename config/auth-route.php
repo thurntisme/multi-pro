@@ -94,10 +94,10 @@ function getPageData($slug, $role)
         'wallet' => ['url' => DIR . '/views/wallet.php', 'title' => 'My Wallet', 'role' => 0],
         'pricing' => ['url' => DIR . '/views/pricing.php', 'title' => 'Upgrade Account', 'role' => 3],
         // redirectUser
-        'dashboard' => ['url' => DIR . '/functions/redirectUser.php', 'title' => 'Redirect', 'role' => 0],
-        'login' => ['url' => DIR . '/functions/redirectUser.php', 'title' => 'Redirect', 'role' => 0],
-        'register' => ['url' => DIR . '/functions/redirectUser.php', 'title' => 'Redirect', 'role' => 0],
-        'forgot-password' => ['url' => DIR . '/functions/redirectUser.php', 'title' => 'Redirect']
+        'dashboard' => ['url' => DIR . '/functions/redirectUser.php', 'title' => 'Redirect', 'role' => 3],
+        'login' => ['url' => DIR . '/functions/redirectUser.php', 'title' => 'Redirect', 'role' => 3],
+        'register' => ['url' => DIR . '/functions/redirectUser.php', 'title' => 'Redirect', 'role' => 3],
+        'forgot-password' => ['url' => DIR . '/functions/redirectUser.php', 'title' => 'Redirect', 'role' => 3],
     ];
 
     $role_levels = [
