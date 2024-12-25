@@ -12,6 +12,7 @@ include "bookmarks.php";
 include "network.php";
 include "dashboard.php";
 include "football-manager.php";
+include "user.php";
 
 $months = [
     '01' => 'January',

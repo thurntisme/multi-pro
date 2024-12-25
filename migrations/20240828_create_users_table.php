@@ -10,6 +10,7 @@ return function (PDO $pdo) {
         'username TEXT NOT NULL',
         'email TEXT NOT NULL UNIQUE',
         'password TEXT NOT NULL',
+        "role TEXT DEFAULT 'guest'",
         'created_at DATETIME DEFAULT CURRENT_TIMESTAMP',
         'updated_at DATETIME DEFAULT CURRENT_TIMESTAMP',
     ];
