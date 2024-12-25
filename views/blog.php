@@ -8,17 +8,10 @@ $pageTitle = ucfirst($firstSlug);
 
 $blogController = new BlogController();
 
-switch ($firstSlug) {
-    case 'wordpress':
-    case 'reactjs':
-    case 'salesforce':
-        $list = $blogController->listBlogsByCategory($firstSlug);
-        break;
-
-    default:
-        $list = $blogController->listBlogs();
-        break;
-}
+$list = match ($firstSlug) {
+    'wordpress', 'reactjs', 'salesforce', 'english' => $blogController->listBlogsByCategory($firstSlug),
+    default => $blogController->listBlogs(),
+};
 
 ob_start();
 ?>
@@ -31,37 +24,33 @@ include_once DIR . '/components/alert.php';
         <div class="col-xxl-3">
             <div class="card">
                 <div class="card-body p-4">
-                    <div class="search-box">
-                        <p class="text-muted">Search</p>
-                        <div class="position-relative">
-                            <input type="text" class="form-control rounded bg-light border-light"
-                                   placeholder="Search...">
-                            <i class="mdi mdi-magnify search-icon"></i>
+                    <form method="get" action="<?= home_url('app/' . $firstSlug) ?>">
+                        <div class="search-box">
+                            <p class="text-muted">Search</p>
+                            <div class="d-flex justify-content-between">
+                                <div class="position-relative flex-grow-1">
+                                    <input type="text" class="form-control rounded bg-light border-light"
+                                           placeholder="Enter keyword..." value="<?= $_GET['s'] ?? '' ?>" name="s">
+                                    <i class="mdi mdi-magnify search-icon"></i>
+                                </div>
+                                <a href="<?= home_url("app/" . $firstSlug) ?>" class="btn btn-danger ms-1"><i
+                                            class="ri-delete-bin-2-fill align-bottom"></i></a>
+                            </div>
                         </div>
-                    </div>
+                    </form>
 
                     <div class="mt-4 pt-4 border-top border-dashed border-bottom-0 border-start-0 border-end-0">
                         <p class="text-muted">Categories</p>
 
                         <ul class="list-unstyled fw-medium">
-                            <li><a href="javascript: void(0);" class="text-muted py-2 d-block"><i
-                                            class="mdi mdi-chevron-right me-1"></i> Art & Design</a></li>
-                            <li><a href="javascript: void(0);" class="text-muted py-2 d-block"><i
-                                            class="mdi mdi-chevron-right me-1"></i> Inspiration & Innovation <span
-                                            class="badge badge-soft-success rounded-pill float-end ms-1 font-size-12">04</span></a>
-                            </li>
-                            <li><a href="javascript: void(0);" class="text-muted py-2 d-block"><i
-                                            class="mdi mdi-chevron-right me-1"></i> Business</a></li>
-                            <li><a href="javascript: void(0);" class="text-muted py-2 d-block"><i
-                                            class="mdi mdi-chevron-right me-1"></i> Project</a></li>
-                            <li><a href="javascript: void(0);" class="text-muted py-2 d-block"><i
-                                            class="mdi mdi-chevron-right me-1"></i> Lifestyle</a></li>
-                            <li><a href="javascript: void(0);" class="text-muted py-2 d-block"><i
-                                            class="mdi mdi-chevron-right me-1"></i> Design Resources & Tools</a></li>
-                            <li><a href="javascript: void(0);" class="text-muted py-2 d-block"><i
-                                            class="mdi mdi-chevron-right me-1"></i> Travel<span
-                                            class="badge badge-soft-success rounded-pill ms-1 float-end font-size-12">12</span></a>
-                            </li>
+                            <li><a href="<?= home_url('app/blog') ?>"
+                                   class="text-<?= $firstSlug == 'blog' ? 'link' : 'muted' ?> py-2 d-block"><i
+                                            class="mdi mdi-chevron-right me-1"></i> All</a></li>
+                            <?php foreach (DEFAULT_BLOG_CATEGORIES as $key => $value) { ?>
+                                <li><a href="<?= home_url('app/' . $key) ?>"
+                                       class="text-<?= $firstSlug == $key ? 'link' : 'muted' ?> py-2 d-block"><i
+                                                class="mdi mdi-chevron-right me-1"></i> <?= $value ?></a></li>
+                            <?php } ?>
                         </ul>
                     </div>
 
@@ -93,52 +82,6 @@ include_once DIR . '/components/alert.php';
                     </div>
 
                     <div class="mt-4 pt-4 border-top border-dashed border-bottom-0 border-start-0 border-end-0">
-                        <p class="text-muted mb-2">Popular Posts</p>
-
-                        <div class="list-group list-group-flush">
-
-                            <a href="javascript: void(0);" class="list-group-item text-muted py-3 px-2">
-                                <div class="d-flex align-items-center">
-                                    <div class="flex-shrink-0 me-3">
-                                        <img src="assets/images/small/img-7.jpg" alt=""
-                                             class="avatar-md h-auto d-block rounded">
-                                    </div>
-                                    <div class="flex-grow-1 overflow-hidden">
-                                        <h5 class="fs-15 text-truncate">Beautiful Day with Friends</h5>
-                                        <p class="mb-0 text-truncate">10 Apr, 2024</p>
-                                    </div>
-                                </div>
-                            </a>
-
-                            <a href="javascript: void(0);" class="list-group-item text-muted py-3 px-2">
-                                <div class="d-flex align-items-center">
-                                    <div class="flex-shrink-0 me-3">
-                                        <img src="assets/images/small/img-4.jpg" alt=""
-                                             class="avatar-md h-auto d-block rounded">
-                                    </div>
-                                    <div class="flex-grow-1 overflow-hidden">
-                                        <h5 class="fs-15 text-truncate">Drawing a sketch</h5>
-                                        <p class="mb-0 text-truncate">24 Mar, 2024</p>
-                                    </div>
-                                </div>
-                            </a>
-
-                            <a href="javascript: void(0);" class="list-group-item text-muted py-3 px-2">
-                                <div class="d-flex align-items-center">
-                                    <div class="flex-shrink-0 me-3">
-                                        <img src="assets/images/small/img-6.jpg" alt=""
-                                             class="avatar-md h-auto d-block rounded">
-                                    </div>
-                                    <div class="flex-grow-1 overflow-hidden">
-                                        <h5 class="fs-15 text-truncate">Project discussion with team</h5>
-                                        <p class="mb-0 text-truncate">11 Mar, 2024</p>
-                                    </div>
-                                </div>
-                            </a>
-                        </div>
-                    </div>
-
-                    <div class="mt-4 pt-4 border-top border-dashed border-bottom-0 border-start-0 border-end-0">
                         <p class="text-muted">Tags</p>
 
                         <div class="d-flex flex-wrap gap-2 widget-tag">
@@ -162,31 +105,12 @@ include_once DIR . '/components/alert.php';
             </div>
         </div>
         <div class="col-xxl-9">
-            <form method="get" action="<?= home_url('/app/' . $firstSlug) ?>">
+            <form method="get" action="<?= home_url('app/' . $firstSlug) ?>">
                 <div class="row g-4 mb-3">
                     <div class="col-sm-auto">
                         <div>
-                            <a href="<?= home_url('/app/' . $firstSlug . '/new') ?>" class="btn btn-success"><i
+                            <a href="<?= home_url('app/' . $firstSlug . '/new') ?>" class="btn btn-success"><i
                                         class="ri-add-line align-bottom me-1"></i> Add New</a>
-                        </div>
-                    </div>
-                    <div class="col-sm">
-                        <div class="d-flex justify-content-sm-end gap-2">
-                            <div class="search-box ms-2">
-                                <input type="text" name="s" class="form-control" placeholder="Search with keyword"
-                                       value="<?= $_GET['s'] ?? '' ?>">
-                                <i class="ri-search-line search-icon"></i>
-                            </div>
-
-                            <select class="form-control w-md" data-choices data-choices-search-false>
-                                <option value="All">All</option>
-                                <option value="Today">Today</option>
-                                <option value="Yesterday" selected>Yesterday</option>
-                                <option value="Last 7 Days">Last 7 Days</option>
-                                <option value="Last 30 Days">Last 30 Days</option>
-                                <option value="This Month">This Month</option>
-                                <option value="Last Year">Last Year</option>
-                            </select>
                         </div>
                     </div>
                 </div><!--end row-->
@@ -205,7 +129,7 @@ include_once DIR . '/components/alert.php';
                                         </div><!--end col-->
                                         <div class="col-xxl-9 col-lg-7">
                                             <p class="mb-2 text-primary text-uppercase"><?= $item['category'] ?? '' ?></p>
-                                            <a href="<?= home_url('/app/' . $firstSlug . '/detail?id=' . $item['id']) ?>">
+                                            <a href="<?= home_url('app/' . $firstSlug . '/detail?id=' . $item['id']) ?>">
                                                 <h5 class="fs-15 fw-semibold"><?= $item['title'] ?></h5>
                                             </a>
                                             <div class="d-flex align-items-center gap-2 mb-3 flex-wrap">
@@ -216,7 +140,7 @@ include_once DIR . '/components/alert.php';
                                                     Admin</a>
                                             </div>
                                             <p class="text-muted mb-2"><?= truncateString($item['content'], 50) ?></p>
-                                            <a href="<?= home_url('/app/' . $firstSlug . '/detail?id=' . $item['id']) ?>"
+                                            <a href="<?= home_url('app/' . $firstSlug . '/detail?id=' . $item['id']) ?>"
                                                class="text-decoration-underline">Read more <i
                                                         class="ri-arrow-right-line"></i></a>
                                             <div class="d-flex align-items-center gap-2 mt-3 flex-wrap">

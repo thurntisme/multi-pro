@@ -159,6 +159,9 @@ class BlogController
         if ($type !== '') {
             $stmt->bindParam(':type', $type, PDO::PARAM_STR);
         }
+        if ($category !== '') {
+            $stmt->bindParam(':category', $category, PDO::PARAM_STR);
+        }
         if ($startDate && $endDate) {
             $stmt->bindParam(':start_date', $startDate);
             $stmt->bindParam(':end_date', $endDate);

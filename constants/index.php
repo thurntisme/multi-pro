@@ -160,13 +160,16 @@ $Currency_symbols = [
 ];
 define("DEFAULT_CURRENCY", $Currency_symbols);
 
-define("DEFAULT_BLOG_CATEGORIES", [
+const DEFAULT_BLOG_CATEGORIES = [
     'develop' => 'Develop',
-    'design' => 'Design',
     'wordpress' => 'Wordpress',
     'reactjs' => 'ReactJS',
     'salesforce' => 'Salesforce',
-]);
+    'php' => 'PHP',
+    'mysql' => 'MySql',
+    'english' => 'English',
+    'other' => 'Other',
+];
 
 $nations = [
     "Afghanistan",

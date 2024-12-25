@@ -91,6 +91,10 @@ function getPageData($slug, $role)
         'salesforce/new' => ['url' => DIR . '/views/blog-adjust.php', 'title' => 'New Salesforce Blog', 'role' => 0],
         'salesforce/edit' => ['url' => DIR . '/views/blog-adjust.php', 'title' => 'Edit Salesforce Blog', 'role' => 0],
         'salesforce/detail' => ['url' => DIR . '/views/blog-detail.php', 'title' => 'Salesforce Blog Detail', 'role' => 0],
+        'english' => ['url' => DIR . '/views/blog.php', 'title' => 'English', 'role' => 0],
+        'english/new' => ['url' => DIR . '/views/blog-adjust.php', 'title' => 'New English Blog', 'role' => 0],
+        'english/edit' => ['url' => DIR . '/views/blog-adjust.php', 'title' => 'Edit English Blog', 'role' => 0],
+        'english/detail' => ['url' => DIR . '/views/blog-detail.php', 'title' => 'English Blog Detail', 'role' => 0],
         'wallet' => ['url' => DIR . '/views/wallet.php', 'title' => 'My Wallet', 'role' => 0],
         'pricing' => ['url' => DIR . '/views/pricing.php', 'title' => 'Upgrade Account', 'role' => 3],
         // redirectUser
