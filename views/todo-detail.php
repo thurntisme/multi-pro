@@ -77,6 +77,19 @@ ob_start();
             </div>
             <!-- end card body -->
         </div>
+        <?php if ($tags && count($tags) > 0) : ?>
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title mb-4">Tags</h5>
+                    <div class="d-flex flex-wrap gap-2 fs-16">
+                        <?php foreach ($tags as $key => $value) { ?>
+                            <div class="badge fw-medium bg-secondary-subtle text-secondary"><?= $value ?>
+                            </div>
+                        <?php } ?>
+                    </div>
+                </div>
+            </div>
+        <?php endif; ?>
     </div>
 </div>
 
