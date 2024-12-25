@@ -38,3 +38,10 @@ tr.my-club-player-row.selected :is(.btn-search, .btn-change) {
     margin-left: 4px;
     border-radius: 50%;
 }
+
+.ckeditor-advanced + .ck-editor .ck-toolbar {
+    border-left: none !important;
+    border-top: none !important;
+    border-right: none !important;
+    border-radius: 0 !important;
+}

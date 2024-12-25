@@ -73,7 +73,7 @@ ob_start();
                             <div class="row">
                                 <div class="col-6">
                                     <?php
-                                    includeFileWithVariables('components/form-control.php', array("type" => "select", "id" => "category", "name" => "category", "label" => "Category", "options" => DEFAULT_BLOG_CATEGORIES, "value" => $postData['category'] ?? ''));
+                                    includeFileWithVariables('components/form-control.php', array("type" => "select", "id" => "category", "name" => "category", "label" => "Category", "options" => DEFAULT_BLOG_CATEGORIES, "value" => $postData['category'] ?? $firstSlug));
                                     ?>
                                 </div>
                                 <div class="col-6">
