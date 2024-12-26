@@ -1,7 +1,12 @@
 <div class="mb-3 d-flex justify-content-between align-items-center">
   <a href="<?= home_url('app/' . $slug) ?>" class="btn btn-soft-primary btn-label waves-effect waves-light me-auto"><i
       class="ri-arrow-left-line label-icon align-middle fs-16 me-2"></i>Back to List</a>
-  <?php if ($modify_type !== 'new') { ?>
+  <?php
+  if (isset($additionBtn)) {
+    echo $additionBtn;
+  }
+  ?>
+  <?php if (!in_array($modify_type, ['new', 'view'])) { ?>
     <?php if ($modify_type !== 'detail') { ?>
       <a href="<?= home_url('app/' . $slug . '/detail?id=' . $post_id) ?>"
         class="btn btn-secondary w-sm me-1"><i class="ri-eye-fill align-bottom me-1"></i> View</a>

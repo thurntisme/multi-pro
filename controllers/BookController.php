@@ -35,7 +35,7 @@ class BookController
             $_SESSION['message'] = "Failed to create book";
         }
 
-        header("Location: " . home_url("book"));
+        header("Location: " . home_url("app/book"));
         exit;
     }
 
@@ -63,7 +63,32 @@ class BookController
             $_SESSION['message'] = "Book ID and service name are required.";
         }
 
-        header("Location: " . home_url("book/edit") . '?id=' . $id);
+        header("Location: " . home_url("app/book/edit") . '?id=' . $id);
+        exit;
+    }
+
+    public function saveCurrentBookPage()
+    {
+        $id = $_POST['post_id'] ?? '';
+        $view_page = $_POST['view_page'] ?? '';
+
+        if ($id && $view_page) {
+            $rowsAffected = $this->bookService->saveCurrentBookPage($id, $view_page);
+            if ($rowsAffected) {
+                $_SESSION['message_type'] = 'success';
+                $_SESSION['message'] = "Book updated successfully.";
+                header("Location: " . home_url("app/book"));
+                exit;
+            } else {
+                $_SESSION['message_type'] = 'danger';
+                $_SESSION['message'] = "Failed to update book.";
+            }
+        } else {
+            $_SESSION['message_type'] = 'danger';
+            $_SESSION['message'] = "Book ID and page index are required.";
+        }
+
+        header("Location: " . home_url("app/book/view") . '?id=' . $id);
         exit;
     }
 
@@ -85,7 +110,7 @@ class BookController
             $_SESSION['message'] = "Failed to delete book.";
         }
 
-        header("Location: " . home_url("book"));
+        header("Location: " . home_url("app/book"));
         exit;
     }
 

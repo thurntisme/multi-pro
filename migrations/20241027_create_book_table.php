@@ -9,6 +9,8 @@ return function (PDO $pdo) {
         'content TEXT',
         'tags TEXT',
         'url TEXT',
+        'view_url TEXT',
+        'view_page INTEGER DEFAULT 0',
         'status TEXT NOT NULL DEFAULT "not_started"',
         'created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP',
         'updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP',

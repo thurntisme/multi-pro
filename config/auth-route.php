@@ -43,6 +43,7 @@ function getPageData($slug, $role)
         'book/new' => ['url' => DIR . '/views/book-adjust.php', 'title' => 'New Book', 'role' => 0],
         'book/edit' => ['url' => DIR . '/views/book-adjust.php', 'title' => 'Edit Book', 'role' => 0],
         'book/detail' => ['url' => DIR . '/views/book-detail.php', 'title' => 'Book Detail', 'role' => 0],
+        'book/view' => ['url' => DIR . '/views/book-view.php', 'title' => 'Book Detail', 'role' => 0],
         'tip' => ['url' => DIR . '/views/tip.php', 'title' => 'Tip', 'role' => 0],
         'tip/new' => ['url' => DIR . '/views/tip-adjust.php', 'title' => 'New Tip', 'role' => 0],
         'tip/edit' => ['url' => DIR . '/views/tip-adjust.php', 'title' => 'Edit Tip', 'role' => 0],

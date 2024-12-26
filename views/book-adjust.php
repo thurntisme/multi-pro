@@ -66,18 +66,26 @@ ob_start();
                             value="<?= $postData['url'] ?? '' ?>">
                     </div>
 
-                    <div class="mb-3">
-                        <label for="choices-status-input" class="form-label">Status</label>
-                        <select class="form-select" data-choices data-choices-search-false
-                            data-choices-sorting-false
-                            id="choices-status-input" name="status">
-                            <?php
-                            foreach ($status as $value => $label) {
-                                $selected = (!empty($postData['status']) ? $value === $postData['status'] : $value === 'not_started') ? 'selected' : '';
-                                echo "<option value=\"$value\" $selected>$label</option>";
-                            }
-                            ?>
-                        </select>
+                    <div class="mb-3 row">
+                        <div class="col-6">
+                            <label for="choices-status-input" class="form-label">Status</label>
+                            <select class="form-select" data-choices data-choices-search-false
+                                data-choices-sorting-false
+                                id="choices-status-input" name="status">
+                                <?php
+                                foreach ($status as $value => $label) {
+                                    $selected = (!empty($postData['status']) ? $value === $postData['status'] : $value === 'not_started') ? 'selected' : '';
+                                    echo "<option value=\"$value\" $selected>$label</option>";
+                                }
+                                ?>
+                            </select>
+                        </div>
+                        <?php if (!empty($post_id)) { ?>
+                            <div class="col-6">
+                                <label for="choices-status-input" class="form-label">Current Page View</label>
+                                <input type="text" name="view_page" class="form-control" id="<?= $postData['view_page'] ?? '' ?>">
+                            </div>
+                        <?php } ?>
                     </div>
 
                     <div class="mb-3">

@@ -23,6 +23,16 @@ class BookService
   }
 
   // Update a book
+  public function saveCurrentBookPage($id, $view_page)
+  {
+    $sql = "UPDATE books SET view_page = :view_page, updated_at = CURRENT_TIMESTAMP WHERE user_id = :user_id AND id = :id";
+    $stmt = $this->pdo->prepare($sql);
+    $stmt->execute([':view_page' => $view_page, ':id' => $id, ':user_id' => $this->user_id]);
+
+    return $stmt->rowCount();
+  }
+
+  // Update a book
   public function updateBook($id, $title, $content, $tags, $status, $url)
   {
     $sql = "UPDATE books SET title = :title, content = :content, tags = :tags, status = :status, url = :url, updated_at = CURRENT_TIMESTAMP WHERE user_id = :user_id AND id = :id";
