@@ -13,6 +13,17 @@ switch ($slug) {
     }
     break;
 
+  case 'delete_file':
+    if ($method === 'GET') {
+      sendResponse("success", 200, "Item retrieved successfully");
+    } elseif ($method === 'POST') {
+      $file = $payload['file'] ?? null;
+      handleDeleteFile($file);
+    } else {
+      sendResponse("error", 405, "Method Not Allowed");
+    }
+    break;
+
   default:
     sendResponse("error", 404, "Endpoint not found");
     break;
@@ -84,6 +95,34 @@ function handleUploadFile($file)
     'file_size' => $fileSize,
     'file_type' => $fileMimeType
   ]);
+}
+
+/**
+ * Deletes a file from the specified folder.
+ * 
+ * This function checks if the file exists in the directory, then attempts to delete it.
+ * If successful, a success response is returned. If there is any error (e.g., file not found or
+ * deletion failure), an error response is returned.
+ * 
+ * @param string $file The name of the file to be deleted.
+ * @return array The result of the deletion operation, containing success status and an optional error message.
+ */
+function handleDeleteFile($file)
+{
+  $folderPath = DIR . '/assets/uploads/';
+  $filePath = $folderPath . DIRECTORY_SEPARATOR . $file;
+
+  // Check if the file exists
+  if (file_exists($filePath)) {
+    // Try to delete the file
+    if (unlink($filePath)) {
+      sendResponse("success", 200, "File deleted successfully");
+    } else {
+      sendResponse("error", 500, "Failed to delete the file");
+    }
+  } else {
+    sendResponse("error", 400, "File not found");
+  }
 }
 
 /**
