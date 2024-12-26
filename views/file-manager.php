@@ -4,15 +4,32 @@ $pageTitle = "File Manager";
 $folderPath = "assets/uploads/";
 $files = scandir($folderPath);
 $files = array_diff($files, array('.', '..'));
+// Sort files by modified time (newest first)
+usort($files, function ($a, $b) use ($folderPath) {
+    $fileA = $folderPath . DIRECTORY_SEPARATOR . $a;
+    $fileB = $folderPath . DIRECTORY_SEPARATOR . $b;
 
+    return filemtime($fileB) - filemtime($fileA); // Compare the modified times, reverse for descending order
+});
 function formatFileSize($size)
 {
-    if ($size >= 1048576) {
+    // Convert size to GB
+    if ($size >= 1073741824) { // 1 GB = 1073741824 bytes
+        return number_format($size / 1073741824, 2) . ' GB';
+    } elseif ($size >= 1048576) { // 1 MB = 1048576 bytes
         return number_format($size / 1048576, 2) . ' MB';
-    } elseif ($size >= 1024) {
+    } elseif ($size >= 1024) { // 1 KB = 1024 bytes
         return number_format($size / 1024, 2) . ' KB';
     } else {
         return $size . ' Bytes';
+    }
+}
+// Calculate total file size
+$totalSize = 0;
+foreach ($files as $file) {
+    $filePath = $folderPath . DIRECTORY_SEPARATOR . $file;
+    if (is_file($filePath)) {
+        $totalSize += filesize($filePath);
     }
 }
 
@@ -81,6 +98,18 @@ ob_start();
                     </ul>
                 </div>
 
+                <?php
+                // Assuming $totalSize is already calculated
+                $totalStorage = 10 * 1024 * 1024 * 1024; // Total storage (in bytes) - 10 GB
+                $usedStorage = $totalSize; // Total size of files in bytes
+
+                // Calculate the percentage of storage used
+                $percentageUsed = round(($usedStorage / $totalStorage) * 100, 2);
+
+                // Format the total used storage for display
+                $formattedUsedStorage = formatFileSize($usedStorage);
+                $formattedTotalStorage = formatFileSize($totalStorage);
+                ?>
 
                 <div class="mt-auto">
                     <h6 class="fs-11 text-muted text-uppercase mb-3">Storage Status</h6>
@@ -90,12 +119,15 @@ ob_start();
                         </div>
                         <div class="flex-grow-1 ms-3 overflow-hidden">
                             <div class="progress mb-2 progress-sm">
-                                <div class="progress-bar bg-success" role="progressbar" style="width: 25%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                                <div class="progress-bar bg-success" role="progressbar" style="width: <?php echo $percentageUsed; ?>%" aria-valuenow="<?php echo $percentageUsed; ?>" aria-valuemin="0" aria-valuemax="100"></div>
                             </div>
-                            <span class="text-muted fs-12 d-block text-truncate"><b>47.52</b>GB used of <b>119</b>GB</span>
+                            <span class="text-muted fs-12 d-block text-truncate">
+                                <b><?php echo $formattedUsedStorage; ?></b> used of <b><?php echo $formattedTotalStorage; ?></b>
+                            </span>
                         </div>
                     </div>
                 </div>
+
             </div>
         </div>
         <div class="file-manager-content w-100 p-3 py-0">
@@ -124,7 +156,7 @@ ob_start();
                                 $fileUrl = home_url('assets/uploads/' . urlencode($file));
                                 ?>
                                 <tr>
-                                    <td><?php echo htmlspecialchars($file); ?></td>
+                                    <td><?php echo htmlspecialchars(truncateString($file, 50)); ?></td>
                                     <td class="text-center"><?php echo $fileType; ?></td>
                                     <td><?php echo $fileSize; ?></td>
                                     <td><?php echo $fileDate; ?></td>
@@ -191,7 +223,7 @@ ob_start();
                                 <h4>Drop files here or click to upload.</h4>
                             </div>
                         </div>
-                        <ul class="list-unstyled pt-3" id="dropzone-preview"></ul>
+                        <ul class="list-unstyled" id="dropzone-preview"></ul>
                     </div>
                     <div class="hstack gap-2 justify-content-end">
                         <button type="button" class="btn btn-ghost-success" data-bs-dismiss="modal"><i class="ri-close-line align-bottom"></i> Close</button>
@@ -221,7 +253,7 @@ ob_start(); ?>
             paramName: "file",
             previewsContainer: "#dropzone-preview",
             previewTemplate: `
-        <li class="list-group-item dz-preview dz-file-preview">
+        <li class="pt-3 list-group-item dz-preview dz-file-preview">
             <div class="d-flex justify-content-between align-items-center">
                 <span class="dz-filename"><span data-dz-name></span></span>
                 <span class="dz-size" data-dz-size></span>
