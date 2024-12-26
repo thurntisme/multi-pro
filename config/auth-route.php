@@ -98,6 +98,8 @@ function getPageData($slug, $role)
         'english/detail' => ['url' => DIR . '/views/blog-detail.php', 'title' => 'English Blog Detail', 'role' => 0],
         'wallet' => ['url' => DIR . '/views/wallet.php', 'title' => 'My Wallet', 'role' => 0],
         'pricing' => ['url' => DIR . '/views/pricing.php', 'title' => 'Upgrade Account', 'role' => 3],
+        'file-manager' => ['url' => DIR . '/views/file-manager.php', 'title' => 'File Manager', 'role' => 3],
+        'file-manager/new' => ['url' => DIR . '/views/file-manager.php', 'title' => 'File Manager - New', 'role' => 3],
         // redirectUser
         'dashboard' => ['url' => DIR . '/functions/redirectUser.php', 'title' => 'Redirect', 'role' => 3],
         'login' => ['url' => DIR . '/functions/redirectUser.php', 'title' => 'Redirect', 'role' => 3],
@@ -112,7 +114,7 @@ function getPageData($slug, $role)
         3 => ['super_admin', 'standard_user', 'premium_user', 'guest'],
     ];
 
-    if (isset($routes[$slug])) {
+    if (isset($routes[$slug]) && file_exists($routes[$slug]['url'])) {
         if (isset($role) && in_array($role, $role_levels[$routes[$slug]['role']])) {
             return array_merge($routes[$slug], ['isAccessible' => true]);
         } else {

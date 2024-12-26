@@ -20,18 +20,38 @@ function sendResponse($status, $code, $message, $data = null)
     exit;
 }
 
-// Decode JSON payload if method is POST, PUT, or DELETE
+// Decode payload based on the request method and content type
 if (in_array($method, ['POST', 'PUT', 'DELETE'])) {
-    $rawPayload = file_get_contents('php://input');
-    $payload = json_decode($rawPayload, true);
+    $contentType = $_SERVER['CONTENT_TYPE'] ?? '';
 
-    // Check if JSON decoding failed
-    if (json_last_error() !== JSON_ERROR_NONE) {
-        sendResponse("error", 400, "Invalid JSON payload");
+    if (stripos($contentType, 'application/json') !== false) {
+        // Handle JSON payload
+        $rawPayload = file_get_contents('php://input');
+        $payload = json_decode($rawPayload, true);
+
+        // Check if JSON decoding failed
+        if (json_last_error() !== JSON_ERROR_NONE) {
+            sendResponse("error", 400, "Invalid JSON payload");
+        }
+    } elseif (stripos($contentType, 'multipart/form-data') !== false) {
+        // Handle form-data payload
+        $payload = $_POST; // Normal form fields
+        $payload['file'] = $_FILES['file'] ?? null; // Uploaded file(s), if any
+
+        // Check if file data exists
+        if ($_FILES && !isset($_FILES['file'])) {
+            sendResponse("error", 400, "No file provided in form data");
+        }
+    } else {
+        // Unsupported content type
+        sendResponse("error", 415, "Unsupported Media Type");
     }
 }
 
 if (str_starts_with($api_url, 'football-manager')) {
     include_once 'football-manager.php';
+}
+if (str_starts_with($api_url, 'file-manager')) {
+    include_once 'file-manager.php';
 }
 sendResponse("success", 200, "Welcome to the mercufee API.");

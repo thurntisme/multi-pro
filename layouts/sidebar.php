@@ -92,6 +92,11 @@ $menu_items = [
                 'name' => 'AI Chat',
                 'icon' => 'ri-chat-3-line',
                 'slug' => 'ai-chat'
+            ],
+            [
+                'name' => 'File Manager',
+                'icon' => 'ri-folder-5-line',
+                'slug' => 'file-manager'
             ]
         ]
     ],

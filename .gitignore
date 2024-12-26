@@ -7,3 +7,4 @@ database.sqlite
 .idea/
 sessions/
 assets/json/system_log.json
+assets/uploads/
