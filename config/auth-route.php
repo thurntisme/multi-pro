@@ -105,6 +105,7 @@ function getPageData($slug, $role)
         'settings' => ['url' => DIR . '/views/settings.php', 'title' => 'Settings', 'role' => 0],
         'mail-log' => ['url' => DIR . '/views/mail-log.php', 'title' => 'Mail', 'role' => 0],
         'database' => ['url' => DIR . '/views/database.php', 'title' => 'Database', 'role' => 0],
+        'search' => ['url' => DIR . '/views/search-results.php', 'title' => 'Database', 'role' => 3],
         // redirectUser
         'dashboard' => ['url' => DIR . '/functions/redirectUser.php', 'title' => 'Redirect', 'role' => 3],
         'login' => ['url' => DIR . '/functions/redirectUser.php', 'title' => 'Redirect', 'role' => 3],

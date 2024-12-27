@@ -39,9 +39,9 @@ $fullname = !empty(trim($user_fullName)) ? $user_fullName : 'User';
                 </button>
 
                 <!-- App Search-->
-                <form class="app-search d-none d-md-block">
+                <form class="app-search d-none d-md-block" method="get" action="<?= home_url('app/search') ?>">
                     <div class="position-relative">
-                        <input type="text" class="form-control" placeholder="Search..." autocomplete="off" id="search-options" value="">
+                        <input type="text" class="form-control" placeholder="Search..." autocomplete="off" id="search-options" name="s" value="<?= trim($_GET['s']) ?? '' ?>">
                         <span class="mdi mdi-magnify search-widget-icon"></span>
                         <span class="mdi mdi-close-circle search-widget-icon search-widget-icon-close d-none" id="search-close-options"></span>
                     </div>
