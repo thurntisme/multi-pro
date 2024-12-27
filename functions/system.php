@@ -1,4 +1,6 @@
 <?php
+$apiLogFile = "assets/logs/api_log.json";
+$systemLogFile = "assets/logs/system_log.json";
 
 function get_log_badge($level): string
 {
@@ -11,12 +13,14 @@ function get_log_badge($level): string
 
 function get_all_logs()
 {
-    $fileName = "assets/json/system_log.json";
-    if (file_exists($fileName)) {
-        return json_decode(file_get_contents($fileName), true) ?? [];
-    } else {
-        return [];
-    }
+    global $systemLogFile;
+    return getJsonFileData($systemLogFile);
+}
+
+function get_api_logs()
+{
+    global $apiLogFile;;
+    return getJsonFileData($apiLogFile);
 }
 
 function get_log_message()
@@ -56,15 +60,14 @@ function isUserCheckIn(): bool
 
 function resetLogs(): void
 {
-    global $user_id;
-    $fileName = "assets/json/system_log.json";
+    global $user_id, $systemLogFile;
     $logs = get_all_logs();
     if (count($logs) > 0) {
         $reset_data = array_filter($logs, function ($item) use ($user_id) {
             return $item['user_id'] !== $user_id;
         });
         // Save logs back to the file
-        file_put_contents($fileName, json_encode(array_values($reset_data), JSON_PRETTY_PRINT));
+        file_put_contents($systemLogFile, json_encode(array_values($reset_data), JSON_PRETTY_PRINT));
     }
 }
 
@@ -85,8 +88,7 @@ function checkOut(): void
 
 function log_message($level, $message, $context = []): void
 {
-    global $user_id;
-    $fileName = "assets/json/system_log.json";
+    global $user_id, $systemLogFile;
     $logData = [
         'level' => $level,
         'message' => $message,
@@ -95,9 +97,19 @@ function log_message($level, $message, $context = []): void
         'user_id' => $user_id,
         'budget' => rand(0, 99)
     ];
+    set_log_message($systemLogFile, $logData);
+}
 
+function log_api_message($logData): void
+{
+    global $apiLogFile;
+    set_log_message($apiLogFile, $logData);
+}
+
+function set_log_message($fileName, $logData)
+{
     // Read the existing logs
-    $logs = get_log_message();
+    $logs = getJsonFileData($fileName);
 
     // Add the new log entry
     $logs[] = $logData;

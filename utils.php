@@ -358,11 +358,12 @@ function truncateString($string, $maxLength = 30)
     return $string; // Return original string if it's within the limit
 }
 
-function getJsonFileData($filePath)
+function getJsonFileData($filePath): array
 {
-    $data = [];
     if (file_exists($filePath)) {
-        $data = json_decode(file_get_contents($filePath), true);
+        return json_decode(file_get_contents($filePath), true) ?? [];
+    } else {
+        file_put_contents($filePath, json_encode([]));
+        return [];
     }
-    return $data;
 }

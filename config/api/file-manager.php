@@ -3,9 +3,7 @@ global $api_url, $payload, $method;
 $slug = str_replace('file-manager/', '', $api_url);
 switch ($slug) {
   case 'upload':
-    if ($method === 'GET') {
-      sendResponse("success", 200, "Item retrieved successfully");
-    } elseif ($method === 'POST') {
+    if ($method === 'POST') {
       $file = $payload['file'] ?? null;
       handleUploadFile($file);
     } else {
@@ -14,9 +12,7 @@ switch ($slug) {
     break;
 
   case 'delete_file':
-    if ($method === 'GET') {
-      sendResponse("success", 200, "Item retrieved successfully");
-    } elseif ($method === 'POST') {
+    if ($method === 'POST') {
       $file = $payload['file'] ?? null;
       handleDeleteFile($file);
     } else {

@@ -10,6 +10,24 @@ $method = $_SERVER['REQUEST_METHOD'];
 // Helper function to format responses
 function sendResponse($status, $code, $message, $data = null)
 {
+    global $method, $api_url, $payload, $userData;
+    $logData = [
+        'timestamp' => date('Y-m-d H:i:s'),
+        'context' => [
+            'method' => $method,
+            'route' => $api_url,
+            'payload' => array_filter($payload, function ($key) {
+                return $key !== 'token';
+            }, ARRAY_FILTER_USE_KEY),
+            'result' => [
+                'status' => $status,
+                'code' => $code,
+                'message' => $message
+            ]
+        ],
+        'user_id' => $userData['id'],
+    ];
+    log_api_message($logData);
     echo json_encode([
         "status" => $status,
         "code" => $code,
@@ -62,7 +80,7 @@ try {
                 foreach ($apiRoutes as $route => $file) {
                     if (str_starts_with($api_url, $route) && checkUserPermission($route, $userData['role'])) {
                         include_once $file;
-                        break; // Stop further checks once a match is found
+                        break;
                     }
                 }
             }
