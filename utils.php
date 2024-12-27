@@ -361,7 +361,7 @@ function truncateString($string, $maxLength = 30)
 function getJsonFileData($filePath): array
 {
     if (file_exists($filePath)) {
-        return json_decode(file_get_contents($filePath), true) ?? [];
+        return array_reverse(json_decode(file_get_contents($filePath), true) ?? []);
     } else {
         file_put_contents($filePath, json_encode([]));
         return [];

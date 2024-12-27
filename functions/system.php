@@ -10,6 +10,15 @@ function get_log_badge($level): string
     };
     return '<span class="badge bg-primary-subtle text-' . $badge . ' badge-border me-2"><i class="mdi mdi-circle-medium"></i>' . $level . '</span>';
 }
+function get_api_log_badge($status): string
+{
+    $badge = match ($status) {
+        'success' => 'success',
+        'error' => 'danger',
+        default => 'light',
+    };
+    return '<span class="badge badge-label bg-' . $badge . ' me-2"><i class="mdi mdi-circle-medium"></i> ' . $status . '</span>';
+}
 
 function get_all_logs()
 {

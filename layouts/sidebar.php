@@ -194,7 +194,38 @@ $menu_items = [
                 'slug' => 'football-manager'
             ]
         ]
+    ],
+    [
+        'title' => 'System',
+        'sub_items' => [
+            [
+                'name' => 'API Log',
+                'icon' => 'ri-file-list-2-line',
+                'slug' => 'api-log'
+            ],
+            [
+                'name' => 'User Management',
+                'icon' => 'ri-user-line',
+                'slug' => 'user-management'
+            ],
+            [
+                'name' => 'Settings',
+                'icon' => 'ri-settings-2-line',
+                'slug' => 'settings'
+            ],
+            [
+                'name' => 'Mail',
+                'icon' => 'ri-mail-line',
+                'slug' => 'mail'
+            ],
+            [
+                'name' => 'Database',
+                'icon' => 'ri-database-2-line',
+                'slug' => 'database'
+            ]
+        ]
     ]
+
 ];
 ?>
 
