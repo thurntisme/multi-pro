@@ -174,7 +174,16 @@ class AuthenticationController
     public function getTokenData($token)
     {
         $tokenData = $this->authenticationService->getTokenData($token);
-        return $tokenData ?? false;
+        return $tokenData ?? null;
+    }
+
+    public function checkUserDataByToken($token)
+    {
+        $tokenData = $this->getTokenData($token);
+        if (isset($tokenData['user_id'])) {
+            return $this->userController->getUserById($tokenData['user_id']);
+        }
+        return null;
     }
 
     public function listDevices()

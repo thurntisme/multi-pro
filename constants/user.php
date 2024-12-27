@@ -5,4 +5,8 @@ $user_roles = [
   'premium_user' => 'Premium User',
   'super_admin' => 'Super Admin',
 ];
-define('DEFAULT_USER_ROLES', $user_roles);
+
+$super_user_pack = ['super_admin'];
+$premium_user_pack = ['super_admin', 'premium_user'];
+$standard_user_pack = ['super_admin', 'premium_user', 'standard_user'];
+$guest_user_pack = ['super_admin', 'premium_user', 'standard_user', 'guest'];

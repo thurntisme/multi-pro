@@ -2,6 +2,7 @@
 
 function getPageData($slug, $role)
 {
+    global $super_user_pack, $premium_user_pack, $standard_user_pack, $guest_user_pack;
     $routes = [
         '' => ['url' => DIR . '/views/dashboard.php', 'title' => 'Dashboard', 'role' => 3],
         'app' => ['url' => DIR . '/views/dashboard.php', 'title' => 'Dashboard', 'role' => 3],
@@ -108,10 +109,10 @@ function getPageData($slug, $role)
     ];
 
     $role_levels = [
-        0 => ['super_admin'],
-        1 => ['super_admin', 'standard_user'],
-        2 => ['super_admin', 'standard_user', 'premium_user'],
-        3 => ['super_admin', 'standard_user', 'premium_user', 'guest'],
+        0 => $super_user_pack,
+        1 => $premium_user_pack,
+        2 => $standard_user_pack,
+        3 => $guest_user_pack,
     ];
 
     if (isset($routes[$slug]) && file_exists($routes[$slug]['url'])) {
