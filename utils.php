@@ -367,3 +367,57 @@ function getJsonFileData($filePath): array
         return [];
     }
 }
+
+function generateFormControl($id, $name, $value = '', $placeholder = '', $type = 'text', $label = '', $options = [])
+{
+    // Start the label if provided
+    $labelHtml = '';
+    if ($label) {
+        $labelHtml = '<label class="form-label" for="' . htmlspecialchars($id) . '">' . htmlspecialchars($label) . '</label>';
+    }
+
+    // Handle different input types
+    switch ($type) {
+        case 'text':
+        case 'number':
+        case 'email':
+        case 'password':
+            // Generate regular input field
+            $inputHtml = '<input type="' . htmlspecialchars($type) . '" class="form-control" id="' . htmlspecialchars($id) . '" name="' . htmlspecialchars($name) . '" placeholder="' . htmlspecialchars($placeholder) . '" value="' . htmlspecialchars($value) . '">';
+            break;
+
+        case 'textarea':
+            // Generate textarea field
+            $inputHtml = '<textarea class="form-control" id="' . htmlspecialchars($id) . '" name="' . htmlspecialchars($name) . '" placeholder="' . htmlspecialchars($placeholder) . '">' . htmlspecialchars($value) . '</textarea>';
+            break;
+
+        case 'select':
+            // Generate select dropdown
+            $inputHtml = '<select class="form-control" id="' . htmlspecialchars($id) . '" name="' . htmlspecialchars($name) . '" data-choices data-choices-search-false data-choices-sorting-false>';
+            foreach ($options as $key => $optionValue) {
+                $selected = ($value == $key) ? ' selected' : ''; // Keep the selected value
+                $inputHtml .= '<option value="' . htmlspecialchars($key) . '"' . $selected . '>' . htmlspecialchars(ucwords(str_replace('_', ' ', $optionValue))) . '</option>';
+            }
+            $inputHtml .= '</select>';
+            break;
+
+        case 'checkbox':
+            // Generate checkbox input
+            $checked = ($value) ? ' checked' : '';
+            $inputHtml = '<input type="checkbox" class="form-check-input me-1" id="' . htmlspecialchars($id) . '" name="' . htmlspecialchars($name) . '" value="1"' . $checked . '>';
+            break;
+
+        case 'tags':
+            // Generate tags input (using Choices.js or similar)
+            $inputHtml = '<input class="form-control" id="' . htmlspecialchars($id) . '" name="' . htmlspecialchars($name) . '" value="' . htmlspecialchars($value) . '" placeholder="' . htmlspecialchars($placeholder) . '" type="text" data-choices data-choices-removeItem';
+            break;
+
+        default:
+            // Handle other input types or invalid ones
+            $inputHtml = '<input type="' . htmlspecialchars($type) . '" class="form-control" id="' . htmlspecialchars($id) . '" name="' . htmlspecialchars($name) . '" placeholder="' . htmlspecialchars($placeholder) . '" value="' . htmlspecialchars($value) . '">';
+            break;
+    }
+
+    // Return the full HTML
+    return $type === 'checkbox' ? $inputHtml . $labelHtml : $labelHtml . $inputHtml;
+}

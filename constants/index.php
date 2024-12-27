@@ -31,20 +31,248 @@ $months = [
 define("MONTHS", $months);
 
 $settings = [
-    'site_name' => 'My Website',
-    'admin_email' => 'admin@example.com',
-    'timezone' => 'UTC',
-    'language' => 'en'
+    // Basic Settings
+    'basic' => [
+        [
+            'field' => 'site_name',
+            'value' => 'My Website',
+            'type' => 'text',
+            'col' => 'col-12'
+        ],
+        [
+            'field' => 'admin_email',
+            'value' => 'admin@example.com',
+            'type' => 'email',
+            'col' => 'col-12'
+        ],
+        [
+            'field' => 'timezone',
+            'value' => 'UTC',
+            'type' => 'text',
+            'col' => 'col-6'
+        ],
+        [
+            'field' => 'language',
+            'value' => 'en',
+            'type' => 'text',
+            'col' => 'col-6'
+        ]
+    ],
+    // Appearance
+    'appearance' => [
+        [
+            'field' => 'theme',
+            'value' => 'default',
+            'type' => 'select', // Dropdown select for theme options
+            'col' => 'col-12',
+            'options' => ['default', 'dark', 'light'] // Dropdown options
+        ],
+        [
+            'field' => 'logo_url',
+            'value' => '/assets/images/logo.png',
+            'type' => 'text', // Text input for the URL
+            'col' => 'col-12'
+        ],
+        [
+            'field' => 'favicon_url',
+            'value' => '/assets/images/favicon.ico',
+            'type' => 'text', // Text input for the URL
+            'col' => 'col-12'
+        ]
+    ],
+    // Security
+    'security' => [
+        [
+            'field' => 'enable_https',
+            'value' => true,
+            'type' => 'checkbox', // Boolean checkbox for enable/disable
+            'col' => 'col-12'
+        ],
+        [
+            'field' => 'session_timeout',
+            'value' => 3600,
+            'type' => 'number', // Numeric input for session timeout in seconds
+            'col' => 'col-6'
+        ],
+        [
+            'field' => 'password_policy_min_length',
+            'value' => 8,
+            'type' => 'number', // Numeric input for minimum password length
+            'col' => 'col-6'
+        ],
+    ],
+    // Email Settings
+    'email' => [
+        [
+            'field' => 'smtp_host',
+            'value' => 'smtp.example.com',
+            'type' => 'text', // Text input for SMTP host
+            'col' => 'col-12'
+        ],
+        [
+            'field' => 'smtp_port',
+            'value' => 587,
+            'type' => 'number', // Numeric input for SMTP port
+            'col' => 'col-6'
+        ],
+        [
+            'field' => 'smtp_user',
+            'value' => 'smtp_user@example.com',
+            'type' => 'email', // Email input type
+            'col' => 'col-12'
+        ],
+        [
+            'field' => 'smtp_password',
+            'value' => 'secure_password',
+            'type' => 'password', // Password input field
+            'col' => 'col-12'
+        ],
+        [
+            'field' => 'smtp_encryption',
+            'value' => 'tls',
+            'type' => 'select', // Dropdown select for encryption options
+            'col' => 'col-6',
+            'options' => ['tls', 'ssl', 'none'] // Encryption options
+        ]
+    ],
+    // Performance
+    'performance' => [
+        [
+            'field' => 'cache_enabled',
+            'value' => true,
+            'type' => 'checkbox', // Boolean checkbox for enabling cache
+            'col' => 'col-12'
+        ],
+        [
+            'field' => 'cache_lifetime',
+            'value' => 86400,
+            'type' => 'number', // Numeric input for cache lifetime in seconds
+            'col' => 'col-6'
+        ],
+        [
+            'field' => 'compression',
+            'value' => true,
+            'type' => 'checkbox', // Boolean checkbox for enabling compression
+            'col' => 'col-12'
+        ]
+    ],
+    // Analytics
+    'analytics' => [
+        [
+            'field' => 'google_analytics_id',
+            'value' => 'UA-XXXXXX-X',
+            'type' => 'text', // Text input for Google Analytics ID
+            'col' => 'col-12'
+        ],
+        [
+            'field' => 'enable_tracking',
+            'value' => true,
+            'type' => 'checkbox', // Checkbox for enabling/disabling tracking
+            'col' => 'col-12'
+        ]
+    ],
+    // User Management
+    'user_management' => [
+        [
+            'field' => 'allow_user_registration',
+            'value' => true,
+            'type' => 'checkbox', // Checkbox for allowing user registration
+            'col' => 'col-12'
+        ],
+        [
+            'field' => 'default_user_role',
+            'value' => 'subscriber',
+            'type' => 'select', // Dropdown for user role selection
+            'col' => 'col-6',
+            'options' => ['admin', 'editor', 'author', 'subscriber'] // Role options
+        ],
+        [
+            'field' => 'multi_language_support',
+            'value' => false,
+            'type' => 'checkbox', // Checkbox for enabling/disabling multi-language support
+            'col' => 'col-12'
+        ]
+    ],
+    // API
+    'api' => [
+        [
+            'field' => 'api_enabled',
+            'value' => true,
+            'type' => 'checkbox', // Checkbox for enabling/disabling API
+            'col' => 'col-12'
+        ],
+        [
+            'field' => 'api_key_lifetime',
+            'value' => 3600,
+            'type' => 'number', // Numeric input for API key lifetime in seconds
+            'col' => 'col-6'
+        ],
+        [
+            'field' => 'allowed_api_origins',
+            'value' => 'https://example.com,https://api.example.com',
+            'type' => 'tags', // Text input for allowed API origins (comma-separated or array)
+            'col' => 'col-12'
+        ]
+    ],
+    // File Uploads
+    'file_uploads' => [
+        [
+            'field' => 'max_upload_size',
+            'value' => 10485760,
+            'type' => 'number', // Numeric input for max upload size in bytes
+            'col' => 'col-6'
+        ],
+        [
+            'field' => 'allowed_file_types',
+            'value' => 'jpg, png, gif, pdf, docx',
+            'type' => 'tags', // Text input for allowed file types (comma-separated or array)
+            'col' => 'col-12'
+        ]
+    ],
+    // Maintenance
+    'maintenance' => [
+        [
+            'field' => 'maintenance_mode',
+            'value' => false,
+            'type' => 'checkbox', // Checkbox for enabling/disabling maintenance mode
+            'col' => 'col-12'
+        ],
+        [
+            'field' => 'maintenance_message',
+            'value' => 'The site is currently under maintenance. Please check back later.',
+            'type' => 'textarea', // Textarea for the maintenance message
+            'col' => 'col-12'
+        ]
+    ],
+    // Advanced Features
+    'advanced' => [
+        [
+            'field' => 'enable_debug_mode',
+            'value' => false,
+            'type' => 'checkbox', // Checkbox for enabling/disabling debug mode
+            'col' => 'col-12'
+        ],
+        [
+            'field' => 'error_log_path',
+            'value' => '/var/logs/error.log',
+            'type' => 'text', // Text input for the error log path
+            'col' => 'col-12'
+        ],
+        [
+            'field' => 'custom_css',
+            'value' => '',
+            'type' => 'textarea', // Textarea for custom CSS
+            'col' => 'col-12'
+        ],
+        [
+            'field' => 'custom_js',
+            'value' => '',
+            'type' => 'textarea', // Textarea for custom JS
+            'col' => 'col-12'
+        ]
+    ],
 ];
-define("INIT_SETTINGS", $settings);
-$default_settings = [];
-foreach ($settings as $key => $value) {
-    $default_settings[] = [
-        'key' => $key,
-        'value' => $value
-    ];
-}
-define("DEFAULT_SETTINGS", $default_settings);
+define("DEFAULT_SETTINGS", $settings);
 
 $projectStatus = array(
     array('not_started', 'Not Started'),

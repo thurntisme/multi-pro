@@ -12,33 +12,15 @@ class SettingService
         $this->user_id = $user_id;
     }
 
-    // Initialize default settings if the table is empty
-    public function initialize()
-    {
-        // Check if the settings table is empty
-        $sql = "SELECT COUNT(*) FROM settings";
-        $stmt = $this->pdo->query($sql);
-        $count = $stmt->fetchColumn();
-
-        if ($count == 0) {
-            try {
-                // Insert each default setting into the settings table
-                $this->setSetting(INIT_SETTINGS);
-
-                echo "Initialized settings successfully\n";
-            } catch (Throwable $th) {
-                echo "Failed to initialize settings: " . $th->getMessage() . "\n";
-            }
-        }
-    }
-
     // Create or update a setting
     public function setSetting($postData)
     {
         $sql = "
-        INSERT INTO settings (key, value, updated_at, user_id)
-        VALUES (:key, :value, CURRENT_TIMESTAMP, :user_id)
-        ON CONFLICT(key) DO UPDATE SET value = :value, updated_at = CURRENT_TIMESTAMP";
+        INSERT INTO settings (option_key, option_value, user_id)
+        VALUES (:key, :value, :user_id)
+        ON DUPLICATE KEY UPDATE 
+            option_value = VALUES(option_value);
+        ";
 
         $stmt = $this->pdo->prepare($sql);
 
@@ -70,7 +52,7 @@ class SettingService
     public function getAllSettings()
     {
         $sql = "SELECT * FROM settings WHERE user_id = :user_id";
-        $stmt = $this->pdo->query($sql);
+        $stmt = $this->pdo->prepare($sql);
         $stmt->execute([':user_id' => $this->user_id]);
 
         return $stmt->fetchAll(PDO::FETCH_ASSOC);

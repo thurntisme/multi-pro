@@ -2,7 +2,7 @@
 
 switch ($type) {
   case 'select':
-    echo renderFormControl($id, $name, $label, $options, $value);
+    renderFormControl($id, $name, $label, $options, $value);
     break;
 
   default:

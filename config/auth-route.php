@@ -103,7 +103,7 @@ function getPageData($slug, $role)
         'api-log' => ['url' => DIR . '/views/api-log.php', 'title' => 'API Log', 'role' => 0],
         'user-management' => ['url' => DIR . '/views/user-management.php', 'title' => 'User Management', 'role' => 0],
         'settings' => ['url' => DIR . '/views/settings.php', 'title' => 'Settings', 'role' => 0],
-        'mail' => ['url' => DIR . '/views/mail.php', 'title' => 'Mail', 'role' => 0],
+        'mail-log' => ['url' => DIR . '/views/mail-log.php', 'title' => 'Mail', 'role' => 0],
         'database' => ['url' => DIR . '/views/database.php', 'title' => 'Database', 'role' => 0],
         // redirectUser
         'dashboard' => ['url' => DIR . '/functions/redirectUser.php', 'title' => 'Redirect', 'role' => 3],

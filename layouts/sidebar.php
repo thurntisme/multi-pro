@@ -214,7 +214,7 @@ $menu_items = [
                 'slug' => 'settings'
             ],
             [
-                'name' => 'Mail',
+                'name' => 'Mail Log',
                 'icon' => 'ri-mail-line',
                 'slug' => 'mail'
             ],
