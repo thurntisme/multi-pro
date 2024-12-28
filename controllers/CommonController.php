@@ -38,11 +38,14 @@ class CommonController
         return $timezone['value'] ?? DEFAULT_TIMEZONE;
     }
 
-    public function convertDate($utcTime)
+    public function convertDate($utcTime): string
     {
-        $dateTime = $this->getDateTime($utcTime);
-        // Format and display the converted time
-        return $dateTime->format('Y-m-d');
+        if ($utcTime !== '0000-00-00') {
+            $dateTime = $this->getDateTime($utcTime);
+            // Format and display the converted time
+            return $dateTime->format('Y-m-d');
+        }
+        return '';
     }
 
     public function convertTime($utcTime)

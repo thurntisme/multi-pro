@@ -33,6 +33,11 @@ $menu_items = [
                 'icon' => 'ri-calendar-check-line',
                 'slug' => 'subscription'
             ],
+            [
+                'name' => 'Plan',
+                'icon' => 'ri-file-text-line',
+                'slug' => 'plan'
+            ],
         ]
     ],
     [
@@ -252,7 +257,7 @@ $menu_items = [
             </span>
         </a>
         <button type="button" class="btn btn-sm p-0 fs-20 header-item float-end btn-vertical-sm-hover"
-            id="vertical-hover">
+                id="vertical-hover">
             <i class="ri-record-circle-line"></i>
         </button>
     </div>

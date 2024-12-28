@@ -96,6 +96,10 @@ function getPageData($slug, $role): array
         'mail-log' => ['url' => DIR . '/views/mail-log.php', 'title' => 'Mail', 'role' => 0],
         'database' => ['url' => DIR . '/views/database.php', 'title' => 'Database', 'role' => 0],
         'search' => ['url' => DIR . '/views/search-results.php', 'title' => 'Database', 'role' => 3],
+        'plan' => ['url' => DIR . '/views/plan.php', 'title' => 'Plan', 'role' => 0],
+        'plan/new' => ['url' => DIR . '/views/plan-adjust.php', 'title' => 'Add Plan', 'role' => 0],
+        'plan/edit' => ['url' => DIR . '/views/plan-adjust.php', 'title' => 'Edit Plan', 'role' => 0],
+        'plan/detail' => ['url' => DIR . '/views/plan-detail.php', 'title' => 'Detail Plan', 'role' => 0],
         // redirectUser
         'dashboard' => ['url' => DIR . '/functions/redirectUser.php', 'title' => 'Redirect', 'role' => 3],
         'login' => ['url' => DIR . '/functions/redirectUser.php', 'title' => 'Redirect', 'role' => 3],
