@@ -1,7 +1,7 @@
 <?php
 $user = new UserController();
 $user_fullName = $user->getUserFullName($user_id);
-$fullname = !empty(trim($user_fullName)) ? $user_fullName : 'User';
+$fullName = !empty(trim($user_fullName)) ? $user_fullName : 'User';
 ?>
 
 <header id="page-topbar">
@@ -43,7 +43,7 @@ $fullname = !empty(trim($user_fullName)) ? $user_fullName : 'User';
                 <form class="app-search d-none d-md-block" method="get" action="<?= home_url('app/search') ?>">
                     <div class="position-relative">
                         <input type="text" class="form-control" placeholder="Search..." autocomplete="off"
-                               id="search-options" name="s" value="<?= $_GET['s'] ? trim($_GET['s']) : '' ?>">
+                               id="search-options" name="s" value="<?= !empty($_GET['s']) ? trim($_GET['s']) : '' ?>">
                         <span class="mdi mdi-magnify search-widget-icon"></span>
                         <span class="mdi mdi-close-circle search-widget-icon search-widget-icon-close d-none"
                               id="search-close-options"></span>
@@ -789,14 +789,14 @@ $fullname = !empty(trim($user_fullName)) ? $user_fullName : 'User';
                             <img class="rounded-circle header-profile-user"
                                  src="<?= home_url("assets/images/users/avatar-1.jpg") ?>" alt="Header Avatar">
                             <span class="text-start ms-xl-2">
-                                <span class="d-none d-xl-inline-block ms-1 fw-medium user-name-text"><?= $fullname ?></span>
+                                <span class="d-none d-xl-inline-block ms-1 fw-medium user-name-text"><?= $fullName ?></span>
                                 <span class="d-none d-xl-block ms-1 fs-12 user-name-sub-text">Founder</span>
                             </span>
                         </span>
                     </button>
                     <div class="dropdown-menu dropdown-menu-end">
                         <!-- item-->
-                        <h6 class="dropdown-header">Welcome <?= $fullname ?>!</h6>
+                        <h6 class="dropdown-header">Welcome <?= $fullName ?>!</h6>
                         <a class="dropdown-item" href="<?= home_url('app/profile') ?>"><i
                                     class="mdi mdi-account-circle text-muted fs-16 align-middle me-1"></i> <span
                                     class="align-middle">Profile</span></a>

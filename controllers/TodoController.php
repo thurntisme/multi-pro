@@ -154,6 +154,8 @@ class TodoController
             $sql .= " AND status = :status";
         }
 
+        $startDate = '';
+        $endDate = '';
         if ($due_date !== '') {
             $date_array = explode('to', $due_date);
             $date_array = array_map('trim', $date_array);
