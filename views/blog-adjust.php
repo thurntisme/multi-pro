@@ -2,12 +2,12 @@
 $url = extractPathFromCurrentUrl();
 $parts = explode("/", $url);
 $firstSlug = $parts[1] ?? '';
-$pageTitle = ucfirst('/app/' . $firstSlug) . " Edit Page";
 
 require_once 'controllers/BlogController.php';
 $blogController = new BlogController();
 
 $modify_type = getLastSegmentFromUrl();
+$pageTitle = ($modify_type == 'add' ? 'Add ' : 'Edit ') . ucfirst($firstSlug) . " Page";
 
 if (!empty($modify_type)) {
     if ($modify_type == 'edit') {
