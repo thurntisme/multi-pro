@@ -20,6 +20,14 @@ class TodoController
     // Handle creating a new todo
     public function createTodo()
     {
+        // Check CSRF Token
+        if ($_POST['csrf_token'] !== $_SESSION['csrf_token']) {
+            $_SESSION['message_type'] = 'danger';
+            $_SESSION['message'] = "Failed to update todo. CSRF token mismatch";
+            header("Location: " . $_SERVER['REQUEST_URI']);
+            exit;
+        }
+
         $title = $_POST['title'] ?? '';
         $content = $_POST['content'] ?? '';
         $tags = $_POST['tags'] ?? '';
@@ -44,6 +52,14 @@ class TodoController
     // Handle updating a todo
     public function updateTodo()
     {
+        // Check CSRF Token
+        if ($_POST['csrf_token'] !== $_SESSION['csrf_token']) {
+            $_SESSION['message_type'] = 'danger';
+            $_SESSION['message'] = "Failed to update todo. CSRF token mismatch";
+            header("Location: " . $_SERVER['REQUEST_URI']);
+            exit;
+        }
+
         $id = $_POST['todo_id'] ?? '';
         $title = $_POST['title'] ?? '';
         $content = $_POST['content'] ?? '';

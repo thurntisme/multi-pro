@@ -421,3 +421,8 @@ function generateFormControl($id, $name, $value = '', $placeholder = '', $type =
     // Return the full HTML
     return $type === 'checkbox' ? $inputHtml . $labelHtml : $labelHtml . $inputHtml;
 }
+
+function csrfInput(): void
+{
+    echo '<input type="hidden" name="csrf_token" value="' . $_SESSION['csrf_token'] . '">';
+}
