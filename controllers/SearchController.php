@@ -105,7 +105,7 @@ class SearchController
 
     // Handle listing all systems
 
-    public function getSearchSQL($queryType = "result", $keyword = "")
+    public function getSearchSQL($queryType = "result", $s = "")
     {
         // Pagination parameters
         $itemsPerPage = 10; // Number of results per page
@@ -113,7 +113,7 @@ class SearchController
         $offset = ($page - 1) * $itemsPerPage; // Offset for LIMIT clause
 
         // Search keyword
-        $keyword = $keyword ?? (isset($_GET['s']) ? ('%' . $_GET['s'] . '%') : '');
+        $keyword = $s ? ('%' . $s . '%') : (isset($_GET['s']) ? ('%' . $_GET['s'] . '%') : '');
 
         $selectSql = $queryType === "result" ? "" : "SELECT COUNT(*) AS total_matches FROM ( ";
         $sql = $selectSql . "
@@ -137,7 +137,7 @@ class SearchController
             tags,
             updated_at,
             'blogs' AS table_name,
-            category AS slug
+            'blog' AS slug
         FROM blogs
         WHERE title LIKE :keyword OR content LIKE :keyword OR tags LIKE :keyword
         

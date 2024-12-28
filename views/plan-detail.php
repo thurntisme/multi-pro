@@ -72,12 +72,6 @@ ob_start();
                                         <?= $postData['status'] ? renderStatusBadge($postData['status'], 'div', 12) : '' ?>
                                     </div>
                                 </div>
-                                <div class="col-lg-3 col-sm-6">
-                                    <div>
-                                        <p class="mb-2 text-uppercase fw-medium">Priority :</p>
-                                        <?= $postData['priority'] ? renderPriorityBadge($postData['priority'], 'div', 12) : '' ?>
-                                    </div>
-                                </div>
                             </div>
                         </div>
                     </div>
