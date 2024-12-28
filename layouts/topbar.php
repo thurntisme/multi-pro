@@ -2,11 +2,6 @@
 $user = new UserController();
 $user_fullName = $user->getUserFullName($user_id);
 $fullname = !empty(trim($user_fullName)) ? $user_fullName : 'User';
-
-$url = extractPathFromCurrentUrl();
-$parts = explode("/", $url);
-$firstSlug = $parts[1] ?? '';
-$keyword = $firstSlug !== 'search' ? $firstSlug : $_GET['s'];
 ?>
 
 <header id="page-topbar">
@@ -48,7 +43,7 @@ $keyword = $firstSlug !== 'search' ? $firstSlug : $_GET['s'];
                 <form class="app-search d-none d-md-block" method="get" action="<?= home_url('app/search') ?>">
                     <div class="position-relative">
                         <input type="text" class="form-control" placeholder="Search..." autocomplete="off"
-                               id="search-options" name="s" value="<?= trim($keyword) ?? '' ?>">
+                               id="search-options" name="s" value="<?= $_GET['s'] ? trim($_GET['s']) : '' ?>">
                         <span class="mdi mdi-magnify search-widget-icon"></span>
                         <span class="mdi mdi-close-circle search-widget-icon search-widget-icon-close d-none"
                               id="search-close-options"></span>
