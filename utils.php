@@ -426,3 +426,22 @@ function csrfInput(): void
 {
     echo '<input type="hidden" name="csrf_token" value="' . $_SESSION['csrf_token'] . '">';
 }
+
+function generateShortDescription($content, $length = 200): array|string|null
+{
+    // Decode HTML entities to convert them to normal characters
+    $decodedContent = html_entity_decode($content, ENT_QUOTES | ENT_HTML5);
+
+    // Strip HTML tags
+    $plainText = strip_tags($decodedContent);
+
+    // Replace multiple spaces with a single space
+    $cleanedContent = preg_replace('/\s+/', ' ', $plainText);
+
+    // Trim content to the specified length and append ellipsis if necessary
+    if (strlen($cleanedContent) > $length) {
+        return substr($cleanedContent, 0, $length) . '...';
+    }
+
+    return $cleanedContent;
+}

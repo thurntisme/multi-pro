@@ -1,17 +1,14 @@
 <?php
 require_once 'controllers/BlogController.php';
-
-$url = extractPathFromCurrentUrl();
-$parts = explode("/", $url);
-$firstSlug = $parts[1] ?? '';
-$pageTitle = ucfirst($firstSlug);
+$pageTitle = "Blog";
 
 $blogController = new BlogController();
 
-$list = match ($firstSlug) {
-    'wordpress', 'reactjs', 'salesforce', 'english' => $blogController->listBlogsByCategory($firstSlug),
-    default => $blogController->listBlogs(),
-};
+if (!empty($_GET['cate'])) {
+    $list = $blogController->listBlogsByCategory($_GET['cate']);
+} else {
+    $list = $blogController->listBlogs();
+}
 
 ob_start();
 ?>
@@ -24,7 +21,7 @@ include_once DIR . '/components/alert.php';
         <div class="col-xxl-3">
             <div class="card">
                 <div class="card-body p-4">
-                    <form method="get" action="<?= home_url('app/' . $firstSlug) ?>">
+                    <form method="get" action="<?= home_url('app/blog') ?>">
                         <div class="search-box">
                             <p class="text-muted">Search</p>
                             <div class="d-flex justify-content-between">
@@ -33,7 +30,7 @@ include_once DIR . '/components/alert.php';
                                            placeholder="Enter keyword..." value="<?= $_GET['s'] ?? '' ?>" name="s">
                                     <i class="mdi mdi-magnify search-icon"></i>
                                 </div>
-                                <a href="<?= home_url("app/" . $firstSlug) ?>" class="btn btn-danger ms-1"><i
+                                <a href="<?= home_url("app/blog") ?>" class="btn btn-danger ms-1"><i
                                             class="ri-delete-bin-2-fill align-bottom"></i></a>
                             </div>
                         </div>
@@ -44,11 +41,11 @@ include_once DIR . '/components/alert.php';
 
                         <ul class="list-unstyled fw-medium">
                             <li><a href="<?= home_url('app/blog') ?>"
-                                   class="text-<?= $firstSlug == 'blog' ? 'link' : 'muted' ?> py-2 d-block"><i
+                                   class="text-<?= empty($_GET['cate']) ? 'link' : 'muted' ?> py-2 d-block"><i
                                             class="mdi mdi-chevron-right me-1"></i> All</a></li>
                             <?php foreach (DEFAULT_BLOG_CATEGORIES as $key => $value) { ?>
-                                <li><a href="<?= home_url('app/' . $key) ?>"
-                                       class="text-<?= $firstSlug == $key ? 'link' : 'muted' ?> py-2 d-block"><i
+                                <li><a href="<?= home_url('app/blog?cate=' . $key) ?>"
+                                       class="text-<?= !empty($_GET['cate']) && $_GET['cate'] == $key ? 'link' : 'muted' ?> py-2 d-block"><i
                                                 class="mdi mdi-chevron-right me-1"></i> <?= $value ?></a></li>
                             <?php } ?>
                         </ul>
@@ -105,11 +102,11 @@ include_once DIR . '/components/alert.php';
             </div>
         </div>
         <div class="col-xxl-9">
-            <form method="get" action="<?= home_url('app/' . $firstSlug) ?>">
+            <form method="get" action="<?= home_url('app/blog') ?>">
                 <div class="row g-4 mb-3">
                     <div class="col-sm-auto">
                         <div>
-                            <a href="<?= home_url('app/' . $firstSlug . '/new') ?>" class="btn btn-success"><i
+                            <a href="<?= home_url('app/blog' . '/new') ?>" class="btn btn-success"><i
                                         class="ri-add-line align-bottom me-1"></i> Add New</a>
                         </div>
                     </div>
@@ -129,7 +126,7 @@ include_once DIR . '/components/alert.php';
                                         </div><!--end col-->
                                         <div class="col-xxl-9 col-lg-7">
                                             <p class="mb-2 text-primary text-uppercase"><?= $item['category'] ?? '' ?></p>
-                                            <a href="<?= home_url('app/' . $firstSlug . '/detail?id=' . $item['id']) ?>">
+                                            <a href="<?= home_url('app/blog' . '/detail?id=' . $item['id']) ?>">
                                                 <h5 class="fs-15 fw-semibold"><?= $item['title'] ?></h5>
                                             </a>
                                             <div class="d-flex align-items-center gap-2 mb-3 flex-wrap">
@@ -139,8 +136,8 @@ include_once DIR . '/components/alert.php';
                                                 <a href="pages-profile.html"><i class="ri-user-3-line me-1"></i>
                                                     Admin</a>
                                             </div>
-                                            <p class="text-muted mb-2"><?= truncateString($item['content'], 50) ?></p>
-                                            <a href="<?= home_url('app/' . $firstSlug . '/detail?id=' . $item['id']) ?>"
+                                            <p class="text-muted mb-2"><?= generateShortDescription($item['content']) ?></p>
+                                            <a href="<?= home_url('app/blog' . '/detail?id=' . $item['id']) ?>"
                                                class="text-decoration-underline">Read more <i
                                                         class="ri-arrow-right-line"></i></a>
                                             <div class="d-flex align-items-center gap-2 mt-3 flex-wrap">

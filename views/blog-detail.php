@@ -17,7 +17,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         $tags = !empty($postData['tags']) ? explode(',', $postData['tags']) : [];
     }
 }
-
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    if (isset($_POST['action_name'])) {
+        if ($_POST['action_name'] === 'delete_record') {
+            $blogController->deleteBlog();
+        }
+    }
+}
 ob_start();
 ?>
     <div class="row">

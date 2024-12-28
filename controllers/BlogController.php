@@ -68,7 +68,7 @@ class BlogController
     }
 
     // Handle deleting a blog
-    public function deleteBlog($firstSlug)
+    public function deleteBlog()
     {
         $id = $_POST['post_id'] ?? null;
         if ($id) {
@@ -85,7 +85,7 @@ class BlogController
             $_SESSION['message'] = "Failed to delete blog.";
         }
 
-        header("Location: " . home_url($firstSlug));
+        header("Location: " . home_url('app/blog'));
         exit;
     }
 

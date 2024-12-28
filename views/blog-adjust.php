@@ -18,8 +18,8 @@ if (!empty($modify_type)) {
     }
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (isset($_POST['action_name'])) {
-            if ($_POST['action_name'] === 'delete_record' && isset($_GET['id'])) {
-                $blogController->deleteBlog('/app/' . $firstSlug);
+            if ($_POST['action_name'] === 'delete_record') {
+                $blogController->deleteBlog();
             }
         } else {
             if ($modify_type === "new") {
