@@ -4,6 +4,26 @@ $pageTitle = "Dashboard";
 $checklist = DEFAULT_DASHBOARD_OPTIONS['checklist'];
 $event = DEFAULT_DASHBOARD_OPTIONS['event'];
 $links = DEFAULT_DASHBOARD_OPTIONS['links'];
+$today = strtolower(date('D'));
+$current_time = time();
+$today_events = [];
+foreach ($event as $e) {
+    if (in_array($today, $e['date'])) {
+        $event_start = strtotime($e['start_time']); // Convert start time to timestamp
+        $event_end = strtotime($e['end_time']); // Convert end time to timestamp
+
+        // Check status: Passed, Upcoming, or Processing
+        if ($current_time < $event_start) {
+            $status = 'Upcoming';
+        } elseif ($current_time <= $event_end) {
+            $status = 'Processing';
+        } else {
+            $status = 'Passed';
+        }
+
+        $today_events[] = array_merge($e, ['status' => $status]);
+    }
+}
 
 $user = new UserController();
 $user_fullName = $user->getUserFullName($user_id);
@@ -176,38 +196,43 @@ ob_start();
         <div class="col-xl-6">
             <div class="card card-height-100">
                 <div class="card-header align-items-center d-flex">
-                    <h4 class="card-title mb-0 flex-grow-1">Upcoming Release</h4>
+                    <h4 class="card-title mb-0 flex-grow-1">Today Activities</h4>
                 </div><!-- end card header -->
                 <div class="card-body pt-0">
                     <ul class="list-group list-group-flush border-dashed">
-                        <?php foreach ($event as $idx => $item): ?>
+                        <?php foreach ($today_events as $item): ?>
                             <li class="list-group-item ps-0">
                                 <div class="row align-items-center g-3">
                                     <div class="col-auto">
                                         <div class="avatar-sm p-1 py-2 h-auto bg-light rounded-3">
                                             <div class="text-center">
-                                                <h5 class="mb-0"><?= date('d', strtotime($item['date']));
-                                                    ?></h5>
-                                                <div class="text-muted"><?= date('M', strtotime($item['date']));
-                                                    ?></div>
+                                                <h5 class="mb-0"><?= date('d'); ?></h5>
+                                                <div class="text-muted"><?= date('M'); ?></div>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="col">
-                                        <h4 class="text-reset fs-14 mb-0"><?= $item['title'] ?></h4>
-                                        <h5 class="text-muted mt-0 mt-1 fs-13"><?= $item['description'] ?? '' ?></h5>
+                                        <h5 class="text-muted mt-0 mb-1 fs-13"><?= $item['start_time'] . ' - ' . $item['end_time'] ?></h5>
+                                        <p class="text-reset fs-14 mb-0"><?= $item['content'] ?></p>
                                     </div>
                                     <div class="col-sm-auto">
-                                        <div class="avatar-group">
-                                            <div class="avatar-group-item">
-                                                <a href="javascript: void(0);" class="d-inline-block"
-                                                   data-bs-toggle="tooltip" data-bs-placement="top" title=""
-                                                   data-bs-original-title="Stine Nielsen">
-                                                    <img src="assets/images/users/avatar-1.jpg" alt=""
-                                                         class="rounded-circle avatar-xxs">
-                                                </a>
-                                            </div>
-                                        </div>
+                                        <?php if ($item['status'] === 'Processing') { ?>
+                                            <button class="btn btn-outline-primary btn-load border-0">
+                                                <span class="d-flex align-items-center">
+                                                    <span class="spinner-border flex-shrink-0" role="status">
+                                                        <span class="visually-hidden">Processing...</span>
+                                                    </span>
+                                                    <span class="flex-grow-1 ms-2">Processing...</span>
+                                                </span>
+                                            </button>
+                                        <?php } ?>
+                                        <?php if ($item['status'] === 'Passed') { ?>
+                                            <button type="button"
+                                                    class="btn btn-success btn-label waves-effect waves-light rounded-pill">
+                                                <i class="ri-check-double-line label-icon align-middle rounded-pill fs-16 me-2"></i>
+                                                Passed
+                                            </button>
+                                        <?php } ?>
                                     </div>
                                 </div>
                                 <!-- end row -->

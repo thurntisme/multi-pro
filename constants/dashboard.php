@@ -44,10 +44,23 @@ $checklist = array(
 );
 $event = array(
     array(
-        'date' => '2024-12-01',
-        'title' => 'Release version 1.1.0',
-        'description' => 'Release version with basic feature',
-    )
+        'date' => ['mon', 'wed', 'fri'],
+        'start_time' => '20:00',
+        'end_time' => '21:00',
+        'content' => 'Learning Wordpress',
+    ),
+    array(
+        'date' => ['tue', 'thu', 'sat',],
+        'start_time' => '20:00',
+        'end_time' => '21:00',
+        'content' => 'Learning reactjs',
+    ),
+    array(
+        'date' => ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'],
+        'start_time' => '21:00',
+        'end_time' => '22:00',
+        'content' => 'Learning English',
+    ),
 );
 $links = array(
     array(
