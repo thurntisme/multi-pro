@@ -1,6 +1,6 @@
 <?php
 
-function getPageData($slug, $role)
+function getPageData($slug, $role): array
 {
     global $super_user_pack, $premium_user_pack, $standard_user_pack, $guest_user_pack;
     $routes = [
@@ -80,22 +80,12 @@ function getPageData($slug, $role)
         'football-manager/store' => ['url' => DIR . '/views/football-manager-store.php', 'title' => 'Football Manager - Store', 'role' => 0],
         'football-manager/store/inventory' => ['url' => DIR . '/views/football-manager-inventory.php', 'title' => 'Football Manager - Store Inventory', 'role' => 0],
         'football-manager/store/item' => ['url' => DIR . '/views/football-manager-store-item.php', 'title' => 'Football Manager - Store Item', 'role' => 0],
-        'wordpress' => ['url' => DIR . '/views/blog.php', 'title' => 'Wordpress', 'role' => 0],
-        'wordpress/new' => ['url' => DIR . '/views/blog-adjust.php', 'title' => 'New Wordpress Blog', 'role' => 0],
-        'wordpress/edit' => ['url' => DIR . '/views/blog-adjust.php', 'title' => 'Edit Wordpress Blog', 'role' => 0],
-        'wordpress/detail' => ['url' => DIR . '/views/blog-detail.php', 'title' => 'Wordpress Blog Detail', 'role' => 0],
-        'reactjs' => ['url' => DIR . '/views/blog.php', 'title' => 'ReactJS', 'role' => 0],
-        'reactjs/new' => ['url' => DIR . '/views/blog-adjust.php', 'title' => 'New ReactJS Blog', 'role' => 0],
-        'reactjs/edit' => ['url' => DIR . '/views/blog-adjust.php', 'title' => 'Edit ReactJS Blog', 'role' => 0],
-        'reactjs/detail' => ['url' => DIR . '/views/blog-detail.php', 'title' => 'ReactJS Blog Detail', 'role' => 0],
-        'salesforce' => ['url' => DIR . '/views/blog.php', 'title' => 'Salesforce', 'role' => 0],
-        'salesforce/new' => ['url' => DIR . '/views/blog-adjust.php', 'title' => 'New Salesforce Blog', 'role' => 0],
-        'salesforce/edit' => ['url' => DIR . '/views/blog-adjust.php', 'title' => 'Edit Salesforce Blog', 'role' => 0],
-        'salesforce/detail' => ['url' => DIR . '/views/blog-detail.php', 'title' => 'Salesforce Blog Detail', 'role' => 0],
-        'english' => ['url' => DIR . '/views/blog.php', 'title' => 'English', 'role' => 0],
-        'english/new' => ['url' => DIR . '/views/blog-adjust.php', 'title' => 'New English Blog', 'role' => 0],
-        'english/edit' => ['url' => DIR . '/views/blog-adjust.php', 'title' => 'Edit English Blog', 'role' => 0],
-        'english/detail' => ['url' => DIR . '/views/blog-detail.php', 'title' => 'English Blog Detail', 'role' => 0],
+        'wordpress' => ['url' => DIR . '/views/search-results.php', 'title' => 'Wordpress', 'role' => 0],
+        'reactjs' => ['url' => DIR . '/views/search-results.php', 'title' => 'ReactJS', 'role' => 0],
+        'salesforce' => ['url' => DIR . '/views/search-results.php', 'title' => 'Salesforce', 'role' => 0],
+        'php' => ['url' => DIR . '/views/search-results.php', 'title' => 'PHP', 'role' => 0],
+        'mysql' => ['url' => DIR . '/views/search-results.php', 'title' => 'MySql', 'role' => 0],
+        'english' => ['url' => DIR . '/views/search-results.php', 'title' => 'English', 'role' => 0],
         'wallet' => ['url' => DIR . '/views/wallet.php', 'title' => 'My Wallet', 'role' => 0],
         'pricing' => ['url' => DIR . '/views/pricing.php', 'title' => 'Upgrade Account', 'role' => 3],
         'file-manager' => ['url' => DIR . '/views/file-manager.php', 'title' => 'File Manager', 'role' => 3],

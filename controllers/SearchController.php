@@ -95,18 +95,17 @@ class SearchController
 
     // Get all systems
 
-    public function listSearchResults()
+    public function listSearchResults($keyword): array
     {
-        // return $this->searchService->getAllSearch();
         return [
-            'list' => $this->getSearchSQL("result"),
-            'count' => $this->getSearchSQL("count"),
+            'list' => $this->getSearchSQL("result", $keyword),
+            'count' => $this->getSearchSQL("count", $keyword),
         ];
     }
 
     // Handle listing all systems
 
-    public function getSearchSQL($queryType = "result")
+    public function getSearchSQL($queryType = "result", $keyword = "")
     {
         // Pagination parameters
         $itemsPerPage = 10; // Number of results per page
@@ -114,7 +113,7 @@ class SearchController
         $offset = ($page - 1) * $itemsPerPage; // Offset for LIMIT clause
 
         // Search keyword
-        $keyword = isset($_GET['s']) ? ('%' . $_GET['s'] . '%') : '';
+        $keyword = $keyword ?? (isset($_GET['s']) ? ('%' . $_GET['s'] . '%') : '');
 
         $selectSql = $queryType === "result" ? "" : "SELECT COUNT(*) AS total_matches FROM ( ";
         $sql = $selectSql . "

@@ -1,10 +1,15 @@
 <?php
 require_once 'controllers/SearchController.php';
 
+$url = extractPathFromCurrentUrl();
+$parts = explode("/", $url);
+$firstSlug = $parts[1] ?? '';
+
 $pageTitle = "Search Results";
+$keyword = $firstSlug !== 'search' ? $firstSlug : $_GET['s'];
 
 $searchController = new SearchController();
-$result = $searchController->listSearchResults();
+$result = $searchController->listSearchResults($keyword);
 
 function generateShortDescription($content, $length = 200): array|string|null
 {
@@ -35,36 +40,6 @@ $searchCategories = [
         'name' => 'Note',
         'icon' => 'ri-sticky-note-line',
         'slug' => 'note'
-    ],
-    [
-        'name' => 'Wordpress',
-        'icon' => 'mdi mdi-wordpress',
-        'slug' => 'wordpress'
-    ],
-    [
-        'name' => 'ReactJS',
-        'icon' => 'mdi mdi-react',
-        'slug' => 'reactjs'
-    ],
-    [
-        'name' => 'Salesforce',
-        'icon' => 'mdi mdi-salesforce',
-        'slug' => 'salesforce'
-    ],
-    [
-        'name' => 'PHP',
-        'icon' => 'mdi mdi-language-php',
-        'slug' => 'php'
-    ],
-    [
-        'name' => 'MySql',
-        'icon' => 'mdi mdi-database-outline',
-        'slug' => 'mysql'
-    ],
-    [
-        'name' => 'English',
-        'icon' => 'mdi mdi-google-translate',
-        'slug' => 'english'
     ],
     [
         'name' => 'Bookmark',
@@ -109,7 +84,7 @@ ob_start();
                                             <input type="text"
                                                    class="form-control form-control-lg bg-light border-light"
                                                    placeholder="Search here.." name="s"
-                                                   value="<?= trim($_GET['s']) ?? '' ?>">
+                                                   value="<?= trim($keyword) ?? '' ?>">
                                             <a class="btn btn-link link-success btn-lg position-absolute end-0 top-0"
                                                data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample"
                                                aria-controls="offcanvasExample"><i class="ri-mic-fill"></i></a>
@@ -124,10 +99,10 @@ ob_start();
                             </form>
                         </div>
                         <!--end col-->
-                        <?php if (isset($_GET['s'])) { ?>
+                        <?php if (isset($keyword)) { ?>
                             <div class="col-lg-12">
                                 <h5 class="fs-16 fw-semibold text-center mb-0">Showing results for "<span
-                                            class="text-primary fw-medium fst-italic"><?= trim($_GET['s']) ?></span> "
+                                            class="text-primary fw-medium fst-italic"><?= trim($keyword) ?></span> "
                                 </h5>
                             </div>
                         <?php } ?>
