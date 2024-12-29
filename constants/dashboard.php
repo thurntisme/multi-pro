@@ -83,3 +83,42 @@ $dashboard = array(
     'links' => DEFAULT_BOOKMARKS[0]['links'],
 );
 define('DEFAULT_DASHBOARD_OPTIONS', $dashboard);
+
+$quickApps = array(
+    array(
+        'title' => 'To Do',
+        'slug' => 'todo',
+    ),
+    array(
+        'title' => 'Note',
+        'slug' => 'note',
+    ),
+    array(
+        'title' => 'Finance',
+        'slug' => 'finance',
+    ),
+    array(
+        'title' => 'Calendar',
+        'slug' => 'calendar',
+    ),
+    array(
+        'title' => 'Bookmark',
+        'slug' => 'bookmark',
+    ),
+    array(
+        'title' => 'Book',
+        'slug' => 'book',
+    ),
+    array(
+        'title' => 'Course',
+        'slug' => 'course',
+    ),
+    array(
+        'title' => 'Blog',
+        'slug' => 'blog',
+    ),
+    array(
+        'title' => 'Game',
+        'slug' => 'football-manager',
+    )
+);

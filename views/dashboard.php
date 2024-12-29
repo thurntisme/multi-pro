@@ -110,13 +110,10 @@ ob_start();
                                             class="fw-semibold">Free trial</span>, to ‘Premium Plan’ <i
                                             class="mdi mdi-arrow-right"></i></p>
                                 <div class="mt-3">
-                                    <form action="<?= $_SERVER['REQUEST_URI'] ?>" method="POST">
-                                        <input type="hidden" name="action_name" value="check_in_out">
-                                        <button type="submit"
-                                                class="btn btn-success btn-label right ms-auto"><i
-                                                    class="ri-arrow-right-line label-icon align-bottom fs-16 ms-2"></i>
-                                            Check <?= isUserCheckIn() ? 'Out' : 'In' ?></button>
-                                    </form>
+                                    <a href="<?= home_url('app/pricing') ?>"
+                                       class="btn btn-info btn-label right ms-auto"><i
+                                                class="ri-arrow-right-line label-icon align-bottom fs-16 ms-2"></i>
+                                        Upgrade my account</a>
                                 </div>
                             </div>
                         </div>
@@ -155,46 +152,28 @@ ob_start();
         </div>
         <div class="col-xl-4">
             <div class="card card-height-100">
-                <div class="card-body p-0 pb-2">
-                    <div class="w-100">
-                        <div id="customer_impression_charts"
-                             data-colors='["--vz-primary", "--vz-success", "--vz-danger"]' class="apex-charts"
-                             dir="ltr"></div>
+                <div class="card-header align-items-center d-flex">
+                    <h4 class="card-title mb-0 flex-grow-1">Quick Apps</h4>
+                </div><!-- end card header -->
+                <div class="card-body p-1 d-flex justify-content-center align-items-center">
+                    <div class="row g-0 flex-wrap">
+                        <?php foreach ($quickApps as $app): ?>
+                            <div class="col-4">
+                                <a class="dropdown-icon-item" href="<?= home_url('app/' . $app['slug']) ?>">
+                                    <img src="<?= home_url("assets/images/app/" . $app['slug'] . '.png') ?>"
+                                         alt="<?= $app['title'] ?> Icon">
+                                    <span><?= $app['title'] ?></span>
+                                </a>
+                            </div>
+                        <?php endforeach; ?>
                     </div>
                 </div><!-- end card body -->
             </div>
         </div>
     </div>
     <div class="row">
-        <div class="col-xl-6">
-            <div class="card card-height-100">
-                <div class="card-header align-items-center d-flex">
-                    <h4 class="card-title mb-0 flex-grow-1">My Activities</h4>
-                </div><!-- end card header -->
-
-                <div class="card-body p-0">
-
-                    <div data-simplebar style="max-height: 328px;">
-                        <ul class="list-group list-group-flush border-dashed px-3">
-                            <?php foreach (array_reverse($user_logs) as $idx => $item): ?>
-                                <li class="list-group-item ps-0">
-                                    <div class="d-flex align-items-start">
-                                        <div class="d-flex flex-grow-1 align-items-center">
-                                            <?= get_log_badge($item['level']) . $item['message'] ?>
-                                        </div>
-                                        <div class="flex-shrink-0 ms-2">
-                                            <p class="text-muted fs-12 mb-0"><?= $commonController->convertTime($item['timestamp']); ?></p>
-                                        </div>
-                                    </div>
-                                </li>
-                            <?php endforeach; ?>
-                        </ul><!-- end ul -->
-                    </div>
-                </div><!-- end card body -->
-            </div><!-- end card -->
-        </div>
-        <div class="col-xl-6">
-            <div class="card card-height-100">
+        <div class="col-xl-4">
+            <div class="card">
                 <div class="card-header align-items-center d-flex">
                     <h4 class="card-title mb-0 flex-grow-1">Today Activities</h4>
                 </div><!-- end card header -->
@@ -241,162 +220,125 @@ ob_start();
                     </ul><!-- end -->
                 </div><!-- end card body -->
             </div>
+            <div class="card">
+                <div class="card-header align-items-center d-flex">
+                    <h4 class="card-title mb-0 flex-grow-1">My Activities</h4>
+                </div><!-- end card header -->
+                <div class="card-body p-0">
+                    <?php if (!isUserCheckIn()) { ?>
+                        <div class="p-3">
+                            <p class="fs-16 lh-base">🎉 Check in now to earn points and unlock rewards! 🏆</p>
+                            <form action="<?= $_SERVER['REQUEST_URI'] ?>" method="POST">
+                                <input type="hidden" name="action_name" value="check_in_out">
+                                <button type="submit"
+                                        class="btn btn-success btn-label right ms-auto"><i
+                                            class="ri-arrow-right-line label-icon align-bottom fs-16 ms-2"></i>
+                                    Check In
+                                </button>
+                            </form>
+                        </div>
+                    <?php } else { ?>
+                        <div data-simplebar style="max-height: 328px;">
+                            <ul class="list-group list-group-flush border-dashed px-3">
+                                <?php foreach (array_reverse($user_logs) as $idx => $item): ?>
+                                    <li class="list-group-item ps-0">
+                                        <div class="d-flex align-items-start">
+                                            <div class="d-flex flex-grow-1 align-items-center">
+                                                <?= get_log_badge($item['level']) . $item['message'] ?>
+                                            </div>
+                                            <div class="flex-shrink-0 ms-2">
+                                                <p class="text-muted fs-12 mb-0"><?= $commonController->convertTime($item['timestamp']); ?></p>
+                                            </div>
+                                        </div>
+                                    </li>
+                                <?php endforeach; ?>
+                            </ul><!-- end ul -->
+                        </div>
+                    <?php } ?>
+                </div><!-- end card body -->
+            </div>
+        </div>
+        <div class="col-xl-8">
+            <div class="card">
+                <div class="card-header border-0">
+                    <h4 class="card-title mb-0">Upcoming Schedules</h4>
+                </div><!-- end cardheader -->
+                <div class="card-body pt-0">
+                    <div class="upcoming-scheduled">
+                        <input type="text" class="form-control" data-provider="flatpickr" data-date-format="d M, Y"
+                               data-deafult-date="today" data-inline-date="true">
+                    </div>
+                    <div class="event-list">
+                        <h6 class="text-uppercase fw-semibold mt-4 mb-3 text-muted">Events:</h6>
+                        <div class="mini-stats-wid d-flex align-items-center mt-3">
+                            <div class="flex-shrink-0 avatar-sm">
+                                            <span class="mini-stat-icon avatar-title rounded-circle text-success bg-success-subtle fs-4">
+                                                09
+                                            </span>
+                            </div>
+                            <div class="flex-grow-1 ms-3">
+                                <h6 class="mb-1">Development planning</h6>
+                                <p class="text-muted mb-0">iTest Factory </p>
+                            </div>
+                            <div class="flex-shrink-0">
+                                <p class="text-muted mb-0">9:20 <span class="text-uppercase">am</span></p>
+                            </div>
+                        </div><!-- end -->
+                        <div class="mini-stats-wid d-flex align-items-center mt-3">
+                            <div class="flex-shrink-0 avatar-sm">
+                                            <span class="mini-stat-icon avatar-title rounded-circle text-success bg-success-subtle fs-4">
+                                                12
+                                            </span>
+                            </div>
+                            <div class="flex-grow-1 ms-3">
+                                <h6 class="mb-1">Design new UI and check sales</h6>
+                                <p class="text-muted mb-0">Meta4Systems</p>
+                            </div>
+                            <div class="flex-shrink-0">
+                                <p class="text-muted mb-0">11:30 <span class="text-uppercase">am</span></p>
+                            </div>
+                        </div><!-- end -->
+                        <div class="mini-stats-wid d-flex align-items-center mt-3">
+                            <div class="flex-shrink-0 avatar-sm">
+                                            <span class="mini-stat-icon avatar-title rounded-circle text-success bg-success-subtle fs-4">
+                                                25
+                                            </span>
+                            </div>
+                            <div class="flex-grow-1 ms-3">
+                                <h6 class="mb-1">Weekly catch-up </h6>
+                                <p class="text-muted mb-0">Nesta Technologies</p>
+                            </div>
+                            <div class="flex-shrink-0">
+                                <p class="text-muted mb-0">02:00 <span class="text-uppercase">pm</span></p>
+                            </div>
+                        </div><!-- end -->
+                        <div class="mini-stats-wid d-flex align-items-center mt-3">
+                            <div class="flex-shrink-0 avatar-sm">
+                                            <span class="mini-stat-icon avatar-title rounded-circle text-success bg-success-subtle fs-4">
+                                                27
+                                            </span>
+                            </div>
+                            <div class="flex-grow-1 ms-3">
+                                <h6 class="mb-1">James Bangs (Client) Meeting</h6>
+                                <p class="text-muted mb-0">Nesta Technologies</p>
+                            </div>
+                            <div class="flex-shrink-0">
+                                <p class="text-muted mb-0">03:45 <span class="text-uppercase">pm</span></p>
+                            </div>
+                        </div><!-- end -->
+
+                        <div class="mt-3 text-center">
+                            <a href="<?= home_url('app/calendar') ?>>" class="text-muted text-decoration-underline">View
+                                all
+                                Events</a>
+                        </div>
+                    </div>
+                </div><!-- end cardbody -->
+            </div>
         </div>
     </div>
 
 <?php
 $pageContent = ob_get_clean();
-
-
-ob_start();
-echo '
-    <!-- apexcharts -->
-    <script src="' . home_url("/assets/libs/apexcharts/apexcharts.min.js") . '"></script>
-
-<script type="text/javascript">
-      
-var linechartcustomerColors = ["#405189", "#0ab39c", "#f06548"];
-if (linechartcustomerColors) {
-    var options = {
-        series: [{
-            name: "Orders",
-            type: "area",
-            data: [34, 65, 46, 68, 49, 61, 42, 44],
-        },
-        {
-            name: "Earnings",
-            type: "bar",
-            data: [
-                89.25, 98.58, 68.74, 108.87, 77.54, 84.03, 51.24,
-            ],
-        },
-        {
-            name: "Refunds",
-            type: "line",
-            data: [8, 12, 7, 17, 21, 11, 5],
-        },
-        ],
-        chart: {
-            height: 354,
-            type: "line",
-            toolbar: {
-                show: false,
-            },
-        },
-        stroke: {
-            curve: "straight",
-            dashArray: [0, 0, 8],
-            width: [2, 0, 2.2],
-        },
-        fill: {
-            opacity: [0.1, 0.9, 1],
-        },
-        markers: {
-            size: [0, 0, 0],
-            strokeWidth: 2,
-            hover: {
-                size: 4,
-            },
-        },
-        xaxis: {
-            categories: [
-                "Jan",
-                "Feb",
-                "Mar",
-                "Apr",
-                "May",
-                "Jun",
-                "Jul",
-            ],
-            axisTicks: {
-                show: false,
-            },
-            axisBorder: {
-                show: false,
-            },
-        },
-        grid: {
-            show: true,
-            xaxis: {
-                lines: {
-                    show: true,
-                },
-            },
-            yaxis: {
-                lines: {
-                    show: false,
-                },
-            },
-            padding: {
-                top: 0,
-                right: -2,
-                bottom: 15,
-                left: 10,
-            },
-        },
-        legend: {
-            show: true,
-            horizontalAlign: "center",
-            offsetX: 0,
-            offsetY: -5,
-            markers: {
-                width: 9,
-                height: 9,
-                radius: 6,
-            },
-            itemMargin: {
-                horizontal: 10,
-                vertical: 0,
-            },
-        },
-        plotOptions: {
-            bar: {
-                columnWidth: "30%",
-                barHeight: "70%",
-            },
-        },
-        colors: linechartcustomerColors,
-        tooltip: {
-            shared: true,
-            y: [{
-                formatter: function (y) {
-                    if (typeof y !== "undefined") {
-                        return y.toFixed(0);
-                    }
-                    return y;
-                },
-            },
-            {
-                formatter: function (y) {
-                    if (typeof y !== "undefined") {
-                        return "$" + y.toFixed(2) + "k";
-                    }
-                    return y;
-                },
-            },
-            {
-                formatter: function (y) {
-                    if (typeof y !== "undefined") {
-                        return y.toFixed(0) + " Sales";
-                    }
-                    return y;
-                },
-            },
-            ],
-        },
-    };
-    var chart = new ApexCharts(
-        document.querySelector("#customer_impression_charts"),
-        options
-    );
-    chart.render();
-}
-
-  </script>
-
-    <!-- Dashboard init -->
-  <script src="' . home_url("/assets/js/pages/finance.js") . '" type="text/javascript"></script>
-  ';
-$additionJs = ob_get_clean();
 
 include 'layout.php';

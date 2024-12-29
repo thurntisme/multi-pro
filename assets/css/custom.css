@@ -45,3 +45,7 @@ tr.my-club-player-row.selected :is(.btn-search, .btn-change) {
     border-right: none !important;
     border-radius: 0 !important;
 }
+
+.dropdown-icon-item:hover {
+    background-color: #eff2f7;
+}

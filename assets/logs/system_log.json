@@ -1,1 +1,10 @@
-[]
+[
+    {
+        "level": "INFO",
+        "message": "User checked in.",
+        "timestamp": "2024-12-29 10:41:51",
+        "context": [],
+        "user_id": 1,
+        "budget": 95
+    }
+]

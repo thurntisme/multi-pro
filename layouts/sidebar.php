@@ -38,6 +38,11 @@ $menu_items = [
                 'icon' => 'ri-file-text-line',
                 'slug' => 'plan'
             ],
+            [
+                'name' => 'Calendar',
+                'icon' => 'ri-calendar-event-fill',
+                'slug' => 'calendar'
+            ],
         ]
     ],
     [
