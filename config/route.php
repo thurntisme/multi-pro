@@ -23,9 +23,9 @@ $pageUrl = '';
 $user_id = '';
 if (!empty($token)) {
     $curr_data = $authenticationController->getCurrentUser();
-    $user_id = $curr_data['id'];
-    $user_role = $curr_data['role'];
-    if (!empty($user_id)) {
+    if (!empty($curr_data)) {
+        $user_id = $curr_data['id'];
+        $user_role = $curr_data['role'];
         $app_url = str_replace('app/', '', $url);
         $pageUrl = getPageData($app_url, $user_role)['url'];
     } else {
