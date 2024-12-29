@@ -169,7 +169,7 @@ class TodoController
         $sortOrder = isset($_GET['order']) && in_array(strtoupper($_GET['order']), ['ASC', 'DESC']) ? strtoupper($_GET['order']) : 'DESC'; // Default to DESC
 
         // Add the ORDER BY clause dynamically
-        $sql .= " ORDER BY $sortColumn $sortOrder";
+        $sql .= " ORDER BY FIELD(priority, 'critical', 'high', 'medium', 'low'), $sortColumn $sortOrder";
 
         if ($queryType === "result") {
             // Add pagination (LIMIT and OFFSET)
