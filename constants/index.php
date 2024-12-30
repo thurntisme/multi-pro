@@ -384,7 +384,8 @@ $Currency_symbols = [
     'INR' => '₹',
     'KRW' => '₩',
     'BRL' => 'R$',
-    'RUB' => '₽'
+    'RUB' => '₽',
+    'VND' => '₫'
 ];
 define("DEFAULT_CURRENCY", $Currency_symbols);
 
@@ -718,4 +719,33 @@ $finance_categories = [
         'title' => 'Other',
         'amount' => 0,
     ],
+];
+
+$months = [
+    1 => "January",
+    2 => "February",
+    3 => "March",
+    4 => "April",
+    5 => "May",
+    6 => "June",
+    7 => "July",
+    8 => "August",
+    9 => "September",
+    10 => "October",
+    11 => "November",
+    12 => "December",
+];
+
+$payment_types = [
+    'monthly' => 'Monthly',
+    'yearly' => 'Yearly',
+];
+
+$event_types = [
+    "primary" => "Primary",
+    "success" => "Success",
+    "danger" => "Danger",
+    "info" => "Info",
+    "dark" => "Dark",
+    "warning" => "Warning"
 ];

@@ -23,7 +23,7 @@ class TodoController
         // Check CSRF Token
         if ($_POST['csrf_token'] !== $_SESSION['csrf_token']) {
             $_SESSION['message_type'] = 'danger';
-            $_SESSION['message'] = "Failed to update todo. CSRF token mismatch";
+            $_SESSION['message'] = "Failed to create todo. CSRF token mismatch";
             header("Location: " . $_SERVER['REQUEST_URI']);
             exit;
         }

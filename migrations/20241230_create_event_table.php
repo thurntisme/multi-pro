@@ -2,16 +2,17 @@
 
 return function (PDO $pdo) {
     // Define the table name and attributes
-    $table_name = 'subscriptions';
+    $table_name = 'events';
     $attributes = [
         'id INTEGER PRIMARY KEY AUTOINCREMENT',
-        'service_name TEXT NOT NULL',
+        'type TEXT NOT NULL',
+        'title TEXT NOT NULL',
+        'start_date DATE NOT NULL',
+        'end_date DATE NOT NULL',
+        'start_time TIME',
+        'end_time TIME',
+        'location TEXT',
         'description TEXT',
-        'amount REAL NOT NULL',
-        'currency TEXT NOT NULL',
-        'payment_date INTEGER NOT NULL',
-        'payment_month INTEGER',
-        'payment_type TEXT NOT NULL DEFAULT "monthly"',
         'created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP',
         'updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP',
         'user_id INTEGER NOT NULL',

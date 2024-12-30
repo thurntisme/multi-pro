@@ -13,11 +13,11 @@ class ExpenseService
     }
 
     // Create a new expense
-    public function createExpense($title, $category, $amount, $description, $date_expense, $tags)
+    public function createExpense($title, $category, $amount, $description, $date_expense)
     {
-        $sql = "INSERT INTO expenses (title, category, amount, description, date_expense, tags, user_id) VALUES (:title, :category, :amount, :description, :date_expense, :tags, :user_id)";
+        $sql = "INSERT INTO expenses (title, category, amount, description, date_expense, user_id) VALUES (:title, :category, :amount, :description, :date_expense, :user_id)";
         $stmt = $this->pdo->prepare($sql);
-        $stmt->execute([':title' => $title, ':category' => $category, ':amount' => $amount, ':description' => $description, ':date_expense' => $date_expense, ':tags' => $tags, ':user_id' => $this->user_id]);
+        $stmt->execute([':title' => $title, ':category' => $category, ':amount' => $amount, ':description' => $description, ':date_expense' => $date_expense, ':user_id' => $this->user_id]);
 
         return $this->pdo->lastInsertId();
     }
@@ -33,11 +33,11 @@ class ExpenseService
     }
 
     // Update a expense
-    public function updateExpense($id, $title, $category, $amount, $description, $date_expense, $tags)
+    public function updateExpense($id, $title, $category, $amount, $description, $date_expense)
     {
-        $sql = "UPDATE expenses SET title = :title, category = :category, amount = :amount, description = :description, date_expense = :date_expense, tags = :tags, updated_at = CURRENT_TIMESTAMP WHERE id = :id";
+        $sql = "UPDATE expenses SET title = :title, category = :category, amount = :amount, description = :description, date_expense = :date_expense, updated_at = CURRENT_TIMESTAMP WHERE id = :id";
         $stmt = $this->pdo->prepare($sql);
-        $stmt->execute([':id' => $id, ':title' => $title, ':category' => $category, ':amount' => $amount, ':description' => $description, ':date_expense' => $date_expense, ':tags' => $tags, ':user_id' => $this->user_id]);
+        $stmt->execute([':id' => $id, ':title' => $title, ':category' => $category, ':amount' => $amount, ':description' => $description, ':date_expense' => $date_expense, ':user_id' => $this->user_id]);
 
         return $stmt->rowCount();
     }
