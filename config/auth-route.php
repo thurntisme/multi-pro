@@ -100,6 +100,7 @@ function getPageData($slug, $role): array
         'plan/new' => ['url' => DIR . '/views/plan-adjust.php', 'title' => 'Add Plan', 'role' => 0],
         'plan/edit' => ['url' => DIR . '/views/plan-adjust.php', 'title' => 'Edit Plan', 'role' => 0],
         'plan/detail' => ['url' => DIR . '/views/plan-detail.php', 'title' => 'Detail Plan', 'role' => 0],
+        'calendar' => ['url' => DIR . '/views/calendar.php', 'title' => 'Calendar', 'role' => 3],
         // redirectUser
         'dashboard' => ['url' => DIR . '/functions/redirectUser.php', 'title' => 'Redirect', 'role' => 3],
         'login' => ['url' => DIR . '/functions/redirectUser.php', 'title' => 'Redirect', 'role' => 3],
