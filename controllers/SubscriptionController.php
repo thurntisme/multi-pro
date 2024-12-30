@@ -20,15 +20,23 @@ class SubscriptionController
   // Handle creating a new subscription
   public function createSubscription()
   {
+    // Check CSRF Token
+    if ($_POST['csrf_token'] !== $_SESSION['csrf_token']) {
+      $_SESSION['message_type'] = 'danger';
+      $_SESSION['message'] = "Failed to create subscription. CSRF token mismatch";
+      header("Location: " . $_SERVER['REQUEST_URI']);
+      exit;
+    }
     $service_name = $_POST['service_name'] ?? '';
     $amount = $_POST['amount'] ?? '0';
     $currency = $_POST['currency'] ?? '';
     $payment_date = $_POST['payment_date'] ?? '';
+    $payment_month = $_POST['payment_month'] ?? '';
     $payment_type = $_POST['payment_type'] ?? '';
     $description = $_POST['description'] ?? '';
 
     if ($service_name && $amount && $currency && $payment_date && $payment_type) {
-      $this->subscriptionService->createSubscription($service_name, $amount, $currency, $payment_date, $payment_type, $description);
+      $this->subscriptionService->createSubscription($service_name, $amount, $currency, $payment_date, $payment_month, $payment_type, $description);
       $_SESSION['message_type'] = 'success';
       $_SESSION['message'] = "Subscription created successfully";
     } else {
@@ -36,23 +44,31 @@ class SubscriptionController
       $_SESSION['message'] = "Failed to create subscription";
     }
 
-    header("Location: " . home_url("subscription"));
+    header("Location: " . home_url("app/subscription"));
     exit;
   }
 
   // Handle updating a subscription
   public function updateSubscription()
   {
+    // Check CSRF Token
+    if ($_POST['csrf_token'] !== $_SESSION['csrf_token']) {
+      $_SESSION['message_type'] = 'danger';
+      $_SESSION['message'] = "Failed to update subscription. CSRF token mismatch";
+      header("Location: " . $_SERVER['REQUEST_URI']);
+      exit;
+    }
     $id = $_POST['subscription_id'] ?? null;
     $service_name = $_POST['service_name'] ?? '';
     $amount = $_POST['amount'] ?? '0';
     $currency = $_POST['currency'] ?? '';
     $payment_date = $_POST['payment_date'] ?? '';
+    $payment_month = $_POST['payment_month'] ?? '';
     $payment_type = $_POST['payment_type'] ?? '';
     $description = $_POST['description'] ?? '';
 
     if ($id && $service_name) {
-      $rowsAffected = $this->subscriptionService->updateSubscription($id, $service_name, $amount, $currency, $payment_date, $payment_type, $description);
+      $rowsAffected = $this->subscriptionService->updateSubscription($id, $service_name, $amount, $currency, $payment_date, $payment_month, $payment_type, $description);
       if ($rowsAffected) {
         $_SESSION['message_type'] = 'success';
         $_SESSION['message'] = "Subscription updated successfully.";
@@ -87,7 +103,7 @@ class SubscriptionController
       $_SESSION['message'] = "Failed to delete subscription.";
     }
 
-    header("Location: " . home_url("subscription"));
+    header("Location: " . home_url("app/subscription"));
     exit;
   }
 
@@ -103,11 +119,8 @@ class SubscriptionController
     $keyword = isset($_GET['s']) ? $_GET['s'] : '';
     $keyword = '%' . $keyword . '%'; // Prepare for LIKE search
 
-    // Filter last updated
-    $lastUpdated = isset($_GET['last_updated']) ? $_GET['last_updated'] : '';
-
     // Filter by role (optional)
-    $type = isset($_GET['type']) ? $_GET['type'] : '';
+    $payment_type = isset($_GET['payment_type']) ? $_GET['payment_type'] : '';
 
     $selectSql = $queryType === "result" ? "SELECT * FROM subscriptions" : "SELECT COUNT(*) FROM subscriptions";
     $sql = $selectSql . " WHERE user_id = $this->user_id ";
@@ -116,13 +129,8 @@ class SubscriptionController
       $sql .= " AND service_name LIKE :keyword";
     }
 
-    if ($type !== '') {
-      $sql .= " AND type = :type";
-    }
-
-    list($startDate, $endDate) = getDateRange($lastUpdated);
-    if ($lastUpdated !== '') {
-      $sql .= " AND datetime(updated_at, '" . getTimezoneOffset() . "') BETWEEN :start_date AND :end_date";
+    if ($payment_type !== '') {
+      $sql .= " AND payment_type = :payment_type";
     }
 
     // Sorting parameters (optional)
@@ -144,12 +152,8 @@ class SubscriptionController
     if ($keyword != '') {
       $stmt->bindParam(':keyword', $keyword, PDO::PARAM_STR);
     }
-    if ($type !== '') {
-      $stmt->bindParam(':type', $type, PDO::PARAM_STR);
-    }
-    if ($startDate && $endDate) {
-      $stmt->bindParam(':start_date', $startDate,);
-      $stmt->bindParam(':end_date', $endDate);
+    if ($payment_type !== '') {
+      $stmt->bindParam(':payment_type', $payment_type, PDO::PARAM_STR);
     }
 
     // Execute the query

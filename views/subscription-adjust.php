@@ -19,7 +19,7 @@ if (!empty($modify_type)) {
     }
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (isset($_POST['action_name'])) {
-            if ($_POST['action_name'] === 'delete_record' && isset($_GET['id'])) {
+            if ($_POST['action_name'] === 'delete_record') {
                 $subscriptionController->deleteSubscription();
             }
         } else {
@@ -35,65 +35,67 @@ if (!empty($modify_type)) {
 
 ob_start();
 ?>
-<form method="POST" action="<?= $_SERVER['REQUEST_URI'] ?>" id="subscription">
-    <div class="row">
-        <div class="col-lg-8">
 
-            <?php
-            include_once DIR . '/components/alert.php';
-            ?>
-
+<div class="row">
+    <div class="col-xl-8 col-md-10 offset-xl-2 offset-md-1">
+        <?php
+        includeFileWithVariables('components/single-button-group.php', array("slug" => "subscription", "post_id" => $postData['id'], 'modify_type' => $modify_type));
+        ?>
+        <form method="POST" action="<?= $_SERVER['REQUEST_URI'] ?>" id="subscription">
+            <?php csrfInput() ?>
             <div class="card">
                 <div class="card-body">
                     <div class="mb-3">
                         <label class="form-label" for="project-title-input">Service name</label>
                         <input type="text" class="form-control" id="project-title-input" name="service_name"
-                            placeholder="Enter service name" value="<?= $postData['service_name'] ?? '' ?>">
+                            placeholder="Enter service name" value="<?= $postData['service_name'] ?? '' ?>" required>
                         <?php if (!empty($post_id)) { ?>
-                        <input type="hidden" name="subscription_id" value="<?= $post_id ?>">
+                            <input type="hidden" name="subscription_id" value="<?= $post_id ?>">
                         <?php } ?>
                     </div>
 
-                    <div class="mb-3">
-                        <label class="form-label" for="project-thumbnail-img">Amount</label>
-                        <div class="input-group">
-                            <select class="form-select" style="max-width: 25%;" name="currency">
-                                <option value="">Select</option>
-                                <?php
-                                foreach (DEFAULT_CURRENCY as $key => $value) { ?>
-                                <option value="<?= $key ?>"
-                                    <?= !empty($postData['currency']) && $key === $postData['currency'] ? 'selected' : '' ?>>
-                                    <?= $key . ' (' . $value . ')' ?></option>
-                                <?php } ?>
-                            </select>
-                            <input type="number" class="form-control" aria-label="Amount (to the nearest dollar)"
-                                name="amount" value="<?= $postData['amount'] ?? '' ?>">
+                    <div class="row">
+                        <div class="col-lg-4">
+                            <div class="mb-3">
+                                <label class="form-label" for="currency">Currency</label>
+                                <select class="form-select" name="currency" id="currency" data-choices data-choices-search-false data-choices-sorting-false>
+                                    <?php
+                                    foreach (DEFAULT_CURRENCY as $key => $value) { ?>
+                                        <option value="<?= $key ?>"
+                                            <?= empty($postData['currency']) ? ($key === 'VND' ? 'selected' : '') : (!empty($postData['currency']) && $key === $postData['currency'] ? 'selected' : '') ?>>
+                                            <?= $key . ' (' . $value . ')' ?></option>
+                                    <?php } ?>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-lg-8">
+                            <div class="mb-3">
+                                <label class="form-label" for="project-thumbnail-img">Amount</label>
+                                <div class="input-group">
+                                    <input type="number" class="form-control" aria-label="Amount "
+                                        name="amount" value="<?= $postData['amount'] ?? '' ?>" min="1" required>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
                     <div class="row">
-                        <div class="col-lg-6">
+                        <div class="col-lg-4">
                             <div class="mb-3">
-                                <label for="payment_date" class="form-label">Payment Date</label>
-                                <input type="text" id="payment_date" class="form-control" data-provider="flatpickr"
-                                    name="payment_date" data-date-format="<?= DEFAULT_DATE_FORMAT ?>"
-                                    placeholder="Select payment date"
-                                    data-deafult-date="<?= isset($postData['payment_date']) ? $postData['payment_date'] : '' ?>">
+                                <?= generateFormControl("payment_type", "payment_type", $postData['payment_type'] ?? 'monthly', "", "select", "Payment Type", $payment_types) ?>
                             </div>
                         </div>
-                        <div class="col-lg-6">
+                        <div class="col-lg-4">
                             <div class="mb-3">
-                                <label for="payment_type" class="form-label">Payment Type</label>
-                                <select class="form-select" id="payment_type" name="payment_type">
-                                    <option value="">Select</option>
-                                    <option value="monthly"
-                                        <?= !empty($postData['payment_type']) && 'monthly' === $postData['payment_type'] ? 'selected' : '' ?>>
-                                        Monthly
-                                    </option>
-                                    <option value="yearly"
-                                        <?= !empty($postData['payment_type']) && 'yearly' === $postData['payment_type'] ? 'selected' : '' ?>>
-                                        Yearly</option>
-                                </select>
+                                <label for="payment_date" class="form-label">Payment Date</label>
+                                <input type="number" id="payment_date" class="form-control"
+                                    name="payment_date" min="1" max="31" value="<?= $postData['payment_date'] ?? date("j") ?>"
+                                    placeholder="Select payment date">
+                            </div>
+                        </div>
+                        <div class="col-lg-4">
+                            <div class="mb-3 <?= $postData['payment_type'] !== 'yearly' ? 'd-none' : '' ?>">
+                                <?= generateFormControl("payment_month", "payment_month", $postData['payment_month'] ?? (int)date("n"), "", "select", "Payment Month", $months) ?>
                             </div>
                         </div>
                     </div>
@@ -104,181 +106,35 @@ ob_start();
                             <?= $postData['description'] ?? '' ?>
                         </textarea>
                     </div>
-
-                    <div class="row">
-                        <div class="col-lg-4">
-                            <div class="mb-3 mb-lg-0">
-                                <label for="choices-priority-input" class="form-label">Priority</label>
-                                <select class="form-select" data-choices data-choices-search-false
-                                    id="choices-priority-input">
-                                    <option value="High" selected>High</option>
-                                    <option value="Medium">Medium</option>
-                                    <option value="Low">Low</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-lg-4">
-                            <div class="mb-3 mb-lg-0">
-                                <label for="choices-status-input" class="form-label">Status</label>
-                                <select class="form-select" data-choices data-choices-search-false
-                                    id="choices-status-input">
-                                    <option value="Inprogress" selected>Inprogress</option>
-                                    <option value="Completed">Completed</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-lg-4">
-                            <div>
-                                <label for="datepicker-deadline-input" class="form-label">Deadline</label>
-                                <input type="text" class="form-control" id="datepicker-deadline-input"
-                                    placeholder="Enter due date" data-provider="flatpickr">
-                            </div>
-                        </div>
-                    </div>
                 </div>
                 <!-- end card body -->
             </div>
-            <!-- end card -->
-
-            <!-- end card -->
             <div class="text-center mb-4">
-                <a href="<?= home_url('subscription') ?>" class="btn btn-light w-sm">Back</a>
                 <button type="submit"
                     class="btn btn-success w-sm"><?= $modify_type === "new" ? "Create" : "Save" ?></button>
             </div>
-        </div>
-        <!-- end col -->
-        <div class="col-lg-4">
-            <div class="card">
-                <div class="card-header">
-                    <h5 class="card-title mb-0">Action</h5>
-                </div>
-                <div class="card-body">
-                    <a href="<?= home_url('subscription') ?>" class="btn btn-light w-sm">Back</a>
-                    <a href="<?= home_url('subscription/detail?id=' . $postData['id']) ?>"
-                        class="btn btn-info w-sm mx-2">View</a>
-                    <?php if (!empty($post_id)) { ?>
-                    <button type="button" class="btn btn-danger w-sm" data-bs-toggle="modal"
-                        data-bs-target="#deleteRecordModal">Delete</button>
-                    <?php } ?>
-                </div>
-                <!-- end card body -->
-            </div>
-            <!-- end card -->
-
-            <div class="card">
-                <div class="card-header">
-                    <h5 class="card-title mb-0">Privacy</h5>
-                </div>
-                <div class="card-body">
-                    <div>
-                        <label for="choices-privacy-status-input" class="form-label">Status</label>
-                        <select class="form-select" data-choices data-choices-search-false
-                            id="choices-privacy-status-input">
-                            <option value="Private" selected>Private</option>
-                            <option value="Team">Team</option>
-                            <option value="Public">Public</option>
-                        </select>
-                    </div>
-                </div>
-                <!-- end card body -->
-            </div>
-            <!-- end card -->
-
-            <div class="card">
-                <div class="card-header">
-                    <h5 class="card-title mb-0">Tags</h5>
-                </div>
-                <div class="card-body">
-                    <div class="mb-3">
-                        <label for="choices-categories-input" class="form-label">Categories</label>
-                        <select class="form-select" data-choices data-choices-search-false
-                            id="choices-categories-input">
-                            <option value="Designing" selected>Designing</option>
-                            <option value="Development">Development</option>
-                        </select>
-                    </div>
-
-                    <div>
-                        <label for="choices-text-input" class="form-label">Skills</label>
-                        <input class="form-control" id="choices-text-input" data-choices
-                            data-choices-limit="Required Limit" placeholder="Enter Skills" type="text"
-                            value="UI/UX, Figma, HTML, CSS, Javascript, C#, Nodejs" />
-                    </div>
-                </div>
-                <!-- end card body -->
-            </div>
-            <!-- end card -->
-
-            <div class="card">
-                <div class="card-header">
-                    <h5 class="card-title mb-0">Members</h5>
-                </div>
-                <div class="card-body">
-                    <div class="mb-3">
-                        <label for="choices-lead-input" class="form-label">Team Lead</label>
-                        <select class="form-select" data-choices data-choices-search-false id="choices-lead-input">
-                            <option value="Brent Gonzalez" selected>Brent Gonzalez</option>
-                            <option value="Darline Williams">Darline Williams</option>
-                            <option value="Sylvia Wright">Sylvia Wright</option>
-                            <option value="Ellen Smith">Ellen Smith</option>
-                            <option value="Jeffrey Salazar">Jeffrey Salazar</option>
-                            <option value="Mark Williams">Mark Williams</option>
-                        </select>
-                    </div>
-
-                    <div>
-                        <label class="form-label">Team Members</label>
-                        <div class="avatar-group">
-                            <a href="javascript: void(0);" class="avatar-group-item" data-bs-toggle="tooltip"
-                                data-bs-trigger="hover" data-bs-placement="top" title="Brent Gonzalez">
-                                <div class="avatar-xs">
-                                    <img src="assets/images/users/avatar-3.jpg" alt="" class="rounded-circle img-fluid">
-                                </div>
-                            </a>
-                            <a href="javascript: void(0);" class="avatar-group-item" data-bs-toggle="tooltip"
-                                data-bs-trigger="hover" data-bs-placement="top" title="Sylvia Wright">
-                                <div class="avatar-xs">
-                                    <div class="avatar-title rounded-circle bg-secondary">
-                                        S
-                                    </div>
-                                </div>
-                            </a>
-                            <a href="javascript: void(0);" class="avatar-group-item" data-bs-toggle="tooltip"
-                                data-bs-trigger="hover" data-bs-placement="top" title="Ellen Smith">
-                                <div class="avatar-xs">
-                                    <img src="assets/images/users/avatar-4.jpg" alt="" class="rounded-circle img-fluid">
-                                </div>
-                            </a>
-                            <a href="javascript: void(0);" class="avatar-group-item" data-bs-toggle="tooltip"
-                                data-bs-trigger="hover" data-bs-placement="top" title="Add Members">
-                                <div class="avatar-xs" data-bs-toggle="modal" data-bs-target="#inviteMembersModal">
-                                    <div
-                                        class="avatar-title fs-16 rounded-circle bg-light border-dashed border text-primary">
-                                        +
-                                    </div>
-                                </div>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-                <!-- end card body -->
-            </div>
-            <!-- end card -->
-        </div>
-        <!-- end col -->
+        </form>
     </div>
-</form>
+</div>
 
 <?php
 include_once DIR . '/components/modal-delete.php';
 
 $pageContent = ob_get_clean();
 
-ob_start();
-echo "
-<script src='" . home_url("/assets/libs/@ckeditor/ckeditor5-build-classic/build/ckeditor.js") . "'></script>
-";
+ob_start(); ?>
+<script src='<?= home_url("/assets/libs/@ckeditor/ckeditor5-build-classic/build/ckeditor.js") ?>'></script>
+<script type="text/javascript">
+    $("#payment_type").on("change", function() {
+        const payment_type = $(this).val();
+        if (payment_type === "yearly") {
+            $("#payment_month").closest('.mb-3').removeClass('d-none');
+        } else {
+            $("#payment_month").closest('.mb-3').addClass('d-none');
+        }
+    })
+</script>
+<?php
 $additionJs = ob_get_clean();
 
 include 'layout.php';
