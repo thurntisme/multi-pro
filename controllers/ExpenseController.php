@@ -23,44 +23,17 @@ class ExpenseController
         $title = $_POST['title'] ?? '';
         $category = $_POST['category'] ?? '';
         $amount = $_POST['amount'] ?? '';
+        $amount = (int)str_replace(',', '', $amount);
         $description = $_POST['description'] ?? '';
         $date_expense = $_POST['date_expense'] ?? '';
-        $tags = $_POST['tags'] ?? '';
 
         if ($title && $amount) {
-            $this->expenseService->createExpense($title, $category, $amount, $description, $date_expense, $tags);
+            $this->expenseService->createExpense($title, $category, $amount, $description, $date_expense);
             $_SESSION['message_type'] = 'success';
             $_SESSION['message'] = "Expense created successfully";
         } else {
             $_SESSION['message_type'] = 'danger';
             $_SESSION['message'] = "Expense title and amount are required.";
-        }
-
-        header("Location: " . $_SERVER['REQUEST_URI']);
-        exit;
-    }
-
-    // Handle updating a expense
-    public function updateExpense()
-    {
-        $id = $_POST['id'] ?? null;
-        $title = $_POST['title'] ?? '';
-        $amount = $_POST['amount'] ?? '';
-        $description = $_POST['description'] ?? '';
-        $category_id = $_POST['category_id'] ?? '';
-
-        if ($id && $title && $amount) {
-            $rowsAffected = $this->expenseService->updateExpense($id, $title, $amount, $description, $category_id);
-            if ($rowsAffected) {
-                $_SESSION['message_type'] = 'success';
-                $_SESSION['message'] = "Expense updated successfully.";
-            } else {
-                $_SESSION['message_type'] = 'danger';
-                $_SESSION['message'] = "Failed to update expense.";
-            }
-        } else {
-            $_SESSION['message_type'] = 'danger';
-            $_SESSION['message'] = "Expense ID, title and amount are required.";
         }
 
         header("Location: " . $_SERVER['REQUEST_URI']);
@@ -89,35 +62,6 @@ class ExpenseController
         exit;
     }
 
-    // Retrieve all expenses for dashboard
-    public function getLatestTasks()
-    {
-        return $this->expenseService->getAllExpenses(4);
-    }
-
-    // Handle listing expenses in last 7 days
-    public function listExpensesLast7Days()
-    {
-        return $this->expenseService->getAllExpensesLast7Days();
-    }
-
-    // Handle viewing a single expense
-    public function viewExpense()
-    {
-        $id = $_GET['id'] ?? null;
-        if ($id) {
-            return $this->expenseService->getExpenseById($id);
-        }
-
-        $_SESSION['message_type'] = 'danger';
-        $_SESSION['message'] = "Expense ID is required.";
-        header("Location: " . $_SERVER['REQUEST_URI']);
-        exit;
-    }
-
-
-    // Get all todos
-
     public function listExpenses()
     {
         // return $this->todoService->getAllTodos();
@@ -126,8 +70,6 @@ class ExpenseController
             'count' => $this->getExpensesSQL("count"),
         ];
     }
-
-    // Handle listing all todos
 
     public function getExpensesSQL($queryType = "result")
     {
@@ -148,7 +90,7 @@ class ExpenseController
         $sql = $selectSql . " WHERE user_id = $this->user_id ";
 
         if ($keyword !== '') {
-            $sql .= " AND (title LIKE :keyword OR tags LIKE :keyword)";
+            $sql .= " AND (title LIKE :keyword)";
         }
 
         if ($date_expense !== '') {

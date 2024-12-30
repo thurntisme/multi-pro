@@ -9,7 +9,6 @@ return function (PDO $pdo) {
         'amount REAL NOT NULL',
         'description TEXT',
         'category VARCHAR(255)',
-        'tags VARCHAR(255)',
         'date_expense DATE',
         'created_at DATETIME DEFAULT CURRENT_TIMESTAMP',
         'updated_at DATETIME DEFAULT CURRENT_TIMESTAMP',
