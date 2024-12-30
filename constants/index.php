@@ -740,3 +740,12 @@ $payment_types = [
     'monthly' => 'Monthly',
     'yearly' => 'Yearly',
 ];
+
+$event_types = [
+    "primary" => "Primary",
+    "success" => "Success",
+    "danger" => "Danger",
+    "info" => "Info",
+    "dark" => "Dark",
+    "warning" => "Warning"
+];

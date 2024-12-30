@@ -1,5 +1,10 @@
 <?php
+require_once 'controllers/EventController.php';
+
 $pageTitle = "Calendar";
+
+// $eventController = new EventController();
+// $list = $eventController->listEvents();
 
 ob_start();
 ?>
@@ -10,7 +15,7 @@ ob_start();
             <div class="col-xl-3">
                 <div class="card card-h-100">
                     <div class="card-body">
-                        <button class="btn btn-primary w-100" id="btn-new-event"><i class="mdi mdi-plus"></i> Create New Event</button>
+                        <a class="btn btn-primary w-100" href="<?= home_url("app/calendar/new") ?>"><i class="mdi mdi-plus"></i> Create New Event</a>
 
                         <div id="external-events">
                             <br>
