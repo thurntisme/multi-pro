@@ -25,8 +25,6 @@ if (!empty($modify_type)) {
             }
         } else {
             if ($modify_type === "new") {
-                var_dump($_POST);
-                die();
                 $eventController->createEvent();
             }
             if ($modify_type === "edit") {

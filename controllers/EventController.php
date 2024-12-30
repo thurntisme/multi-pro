@@ -43,13 +43,13 @@ class EventController
         if ($title) {
             $this->eventService->createEvent($title, $description, $type, $start_date, $end_date, $start_time, $end_time, $location);
             $_SESSION['message_type'] = 'success';
-            $_SESSION['message'] = "Event created successfully";
+            $_SESSION['message'] = "Event <b>" . htmlspecialchars($title, ENT_QUOTES, 'UTF-8') . "</b> has been added successfully to your calendar.";
         } else {
             $_SESSION['message_type'] = 'danger';
             $_SESSION['message'] = "Failed to create event";
         }
 
-        header("Location: " . home_url("event"));
+        header("Location: " . home_url("app/calendar"));
         exit;
     }
 
@@ -81,7 +81,7 @@ class EventController
             $rowsAffected = $this->eventService->updateEvent($id, $description, $type, $start_date, $end_date, $start_time, $end_time, $location);
             if ($rowsAffected) {
                 $_SESSION['message_type'] = 'success';
-                $_SESSION['message'] = "Event updated successfully.";
+                $_SESSION['message'] = "Event <b>" . htmlspecialchars($title, ENT_QUOTES, 'UTF-8') . "</b> has been updated successfully.";
             } else {
                 $_SESSION['message_type'] = 'danger';
                 $_SESSION['message'] = "Failed to update event.";
@@ -113,98 +113,59 @@ class EventController
             $_SESSION['message'] = "Failed to delete event.";
         }
 
-        header("Location: " . home_url("event"));
+        header("Location: " . home_url("app/calendar"));
         exit;
     }
 
     // Get all events
 
-    public function listEvents()
+    public function listEvents($queryType)
     {
-        // return $this->eventService->getAllEvents();
-        return [
-            'list' => $this->getEventsSQL("result"),
-            'count' => $this->getEventsSQL("count"),
-        ];
+        return $this->getEventsSQL($queryType);
     }
 
     // Handle listing all events
 
-    public function getEventsSQL($queryType = "result")
+    public function getEventsSQL($queryType = '')
     {
-        // Pagination parameters
-        $itemsPerPage = 10; // Number of results per page
-        $page = isset($_GET['page']) ? (int)$_GET['page'] : 1; // Current page number
-        $offset = ($page - 1) * $itemsPerPage; // Offset for LIMIT clause
+        $sql = "SELECT id, title, description, type, start_date, end_date, start_time, end_time, location 
+             FROM events WHERE user_id = $this->user_id";
 
-        // Search keyword
-        $keyword = isset($_GET['s']) ? $_GET['s'] : '';
+        // Get the current date for filtering
+        $currentDate = date('Y-m-d');
 
-        // Filter last updated
-        $due_date = isset($_GET['due_date']) ? $_GET['due_date'] : '';
+        switch ($queryType) {
+            case 'month':
+                // Get the first and last day of the current month
+                $startOfMonth = date('Y-m-01'); // First day of the month
+                $endOfMonth = date('Y-m-t');   // Last day of the month
+                $sql .= " AND start_date BETWEEN '$startOfMonth' AND '$endOfMonth'";
+                break;
 
-        // Filter by role (optional)
-        $priority = isset($_GET['priority']) ? $_GET['priority'] : '';
-        $status = isset($_GET['status']) ? $_GET['status'] : '';
+            case 'week':
+                // Get the start and end dates of the current week
+                $startOfWeek = date('Y-m-d', strtotime('monday this week')); // Start of this week (Monday)
+                $endOfWeek = date('Y-m-d', strtotime('sunday this week'));   // End of this week (Sunday)
+                $sql .= " AND start_date BETWEEN '$startOfWeek' AND '$endOfWeek'";
+                break;
 
-        $selectSql = $queryType === "result" ? "SELECT * FROM events" : "SELECT COUNT(*) FROM events";
-        $sql = $selectSql . " WHERE user_id = $this->user_id ";
+            case 'day':
+                // Filter for events that are happening today
+                $sql .= " AND start_date = '$currentDate'";
+                break;
 
-        if ($keyword !== '') {
-            $keyword = '%' . $keyword . '%'; // Prepare for LIKE search
-            $sql .= " AND (title LIKE :keyword OR tags LIKE :keyword OR content LIKE :keyword)";
-        }
-
-        if ($priority !== '') {
-            $sql .= " AND priority = :priority";
-        }
-        if ($status !== '') {
-            $sql .= " AND status = :status";
-        }
-
-        $startDate = '';
-        $endDate = '';
-        if ($due_date !== '') {
-            $date_array = explode('to', $due_date);
-            $date_array = array_map('trim', $date_array);
-            list($startDate, $endDate) = $date_array;
-            $endDate = $endDate ?? $startDate;
-            $sql .= " AND due_date BETWEEN :start_date AND :end_date";
-        }
-
-        // Sorting parameters (optional)
-        $sortColumn = $_GET['sort'] ?? 'updated_at';
-        $sortOrder = isset($_GET['order']) && in_array(strtoupper($_GET['order']), ['ASC', 'DESC']) ? strtoupper($_GET['order']) : 'DESC'; // Default to DESC
-
-        // Add the ORDER BY clause dynamically
-        $sql .= " ORDER BY FIELD(priority, 'critical', 'high', 'medium', 'low'), $sortColumn $sortOrder";
-
-        if ($queryType === "result") {
-            // Add pagination (LIMIT and OFFSET)
-            $sql .= " LIMIT $itemsPerPage OFFSET $offset";
+            default:
+                // If $queryType is empty, select the next 10 upcoming events
+                $sql .= " AND start_date >= '$currentDate' ORDER BY start_date ASC LIMIT 10";
+                break;
         }
 
         // Prepare the query
         $stmt = $this->pdo->prepare($sql);
 
-        // Bind parameters
-        if ($keyword != '') {
-            $stmt->bindParam(':keyword', $keyword, PDO::PARAM_STR);
-        }
-        if ($priority !== '') {
-            $stmt->bindParam(':priority', $priority, PDO::PARAM_STR);
-        }
-        if ($status !== '') {
-            $stmt->bindParam(':status', $status, PDO::PARAM_STR);
-        }
-        if ($startDate && $endDate) {
-            $stmt->bindParam(':start_date', $startDate);
-            $stmt->bindParam(':end_date', $endDate);
-        }
-
         // Execute the query
         $stmt->execute();
-        return $queryType === "result" ? $stmt->fetchAll(PDO::FETCH_ASSOC) : $stmt->fetchColumn();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
     // Handle viewing a single event

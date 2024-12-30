@@ -3,14 +3,17 @@ require_once 'controllers/EventController.php';
 
 $pageTitle = "Calendar";
 
-// $eventController = new EventController();
-// $list = $eventController->listEvents();
+$eventController = new EventController();
+$list = $eventController->listEvents('');
 
 ob_start();
 ?>
 
 <div class="row">
     <div class="col-12">
+        <?php
+        include_once DIR . '/components/alert.php';
+        ?>
         <div class="row">
             <div class="col-xl-3">
                 <div class="card card-h-100">
@@ -83,7 +86,7 @@ ob_start();
                     <div class="modal-body p-4">
                         <form class="needs-validation" name="event-form" id="form-event" novalidate>
                             <div class="text-end">
-                                <a href="#" class="btn btn-sm btn-soft-primary" id="edit-event-btn" data-id="edit-event" onclick="editEvent(this)" role="button">Edit</a>
+                                <a data-url="<?= home_url('app/calendar/edit?id=') ?>" href="#" id="btn-edit-event" class="btn btn-sm btn-soft-primary">Edit</a>
                             </div>
                             <div class="event-details">
                                 <div class="d-flex mb-2">
@@ -215,6 +218,10 @@ $pageContent = ob_get_clean();
 
 ob_start(); ?>
 <script type="text/javascript" src="<?= home_url('assets/libs/fullcalendar/index.global.min.js') ?>"></script>
+<script type="text/javascript">
+    const eventData = '<?= json_encode($list) ?>';
+    const events = JSON.parse(eventData);
+</script>
 <script type="text/javascript" src="<?= home_url('assets/js/pages/calendar.js') ?>"></script>
 <?php
 $additionJs = ob_get_clean();
