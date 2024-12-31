@@ -50,7 +50,7 @@ ob_start();
                         <input type="text" class="form-control" id="tip-title-input" name="title"
                             placeholder="Enter title" value="<?= $postData['title'] ?? '' ?>">
                         <?php if (!empty($post_id)) { ?>
-                        <input type="hidden" name="tip_id" value="<?= $post_id ?>">
+                            <input type="hidden" name="tip_id" value="<?= $post_id ?>">
                         <?php } ?>
                     </div>
 
@@ -121,8 +121,8 @@ ob_start();
                     <a href="<?= home_url('tip/detail?id=' . $postData['id']) ?>"
                         class="btn btn-info w-sm mx-2">View</a>
                     <?php if (!empty($post_id)) { ?>
-                    <button type="button" class="btn btn-danger w-sm" data-bs-toggle="modal"
-                        data-bs-target="#deleteRecordModal">Delete</button>
+                        <button type="button" class="btn btn-danger w-sm" data-bs-toggle="modal"
+                            data-bs-target="#deleteRecordModal">Delete</button>
                     <?php } ?>
                 </div>
                 <!-- end card body -->
@@ -243,5 +243,3 @@ echo "
 <script src='" . home_url("/assets/libs/@ckeditor/ckeditor5-build-classic/build/ckeditor.js") . "'></script>
 ";
 $additionJs = ob_get_clean();
-
-include 'layout.php';

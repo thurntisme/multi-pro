@@ -157,5 +157,3 @@ if (count($categoryLists) > 0) {
 }
 
 $pageContent = ob_get_clean();
-
-include 'layout.php';

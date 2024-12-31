@@ -373,5 +373,3 @@ ob_start();
 </script>
 <?php
 $additionJs = ob_get_clean();
-
-include 'layout.php';

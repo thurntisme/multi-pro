@@ -1863,5 +1863,3 @@ echo '<script src="' . home_url('assets/js/pages/project-overview.init.js') . '"
     <script src="' . home_url('assets/js/app.js') . '"></script>';
 
 $additionJs = ob_get_clean();
-
-include 'layout.php';

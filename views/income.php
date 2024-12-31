@@ -85,5 +85,3 @@ if (count($list) > 0) {
 echo '</ul></div></div>';
 
 $pageContent = ob_get_clean();
-
-include 'layout.php';

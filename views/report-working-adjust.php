@@ -28,8 +28,7 @@ if (!empty($modify_type)) {
                 $reportWorkingController->updateReport();
             }
         }
-    }
-    ;
+    };
 }
 
 ob_start();
@@ -96,7 +95,7 @@ ob_start();
                                     $content_arr = json_decode($postData['content'], true);
                                     if (count($content_arr) > 0) {
                                         foreach ($content_arr as $key => $task) {
-                                            ?>
+                                ?>
                                             <tr id="<?= $key + 1 ?>" class="product">
                                                 <th scope="row" class="product-id align-items-center"><?= $key + 1 ?></th>
                                                 <td class="text-start">
@@ -129,11 +128,10 @@ ob_start();
                                                     <a href="javascript:void(0)" class="btn btn-success">Delete</a>
                                                 </td>
                                             </tr>
-                                        <?php }
-                                        ;
+                                    <?php };
                                     }
                                     ?>
-                                    <?php
+                                <?php
                                 } else { ?>
                                     <tr id="1" class="product">
                                         <th scope="row" class="product-id align-items-center">1</th>
@@ -331,5 +329,3 @@ echo "
 <script src='" . home_url("/assets/js/pages/report-working.js") . "'></script>
 ";
 $additionJs = ob_get_clean();
-
-include 'layout.php';

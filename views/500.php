@@ -29,5 +29,3 @@ echo '<div class="auth-page-wrapper py-5 d-flex justify-content-center align-ite
     </div>';
 
 $pageContent = ob_get_clean();
-
-include 'layout.php';

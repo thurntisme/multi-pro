@@ -437,5 +437,3 @@ echo '<!-- ckeditor -->
     <script src="' . home_url('assets/js/pages/project-create.init.js') . ' "></script>';
 
 $additionJs = ob_get_clean();
-
-include 'layout.php';

@@ -70,5 +70,3 @@ if (count($devicesLists) > 0) {
 }
 
 $pageContent = ob_get_clean();
-
-include 'layout.php';

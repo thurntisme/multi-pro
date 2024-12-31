@@ -3,9 +3,6 @@ require_once "controllers/SystemController.php";
 
 $token = $commonController->getToken();
 
-// Define the layout file
-$layout = DIR . '/layout.php';
-
 include_once 'auth-route.php';
 include_once DIR . '/functions/system.php';
 
@@ -40,6 +37,7 @@ if (!empty($token)) {
         $error_msg = $th->getMessage();
         include_once DIR . '/views/500.php';
     }
+    include DIR . '/app-layout.php';
 } else {
     switch ($url) {
         case 'login':
@@ -59,4 +57,5 @@ if (!empty($token)) {
             break;
     }
     include_once $pageUrl;
+    include  DIR . '/auth-layout.php';
 }

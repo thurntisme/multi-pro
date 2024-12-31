@@ -1757,5 +1757,3 @@ echo "
 <script src='" . home_url("/assets/js/pages/report-working.js") . "'></script>
 ";
 $additionJs = ob_get_clean();
-
-include 'layout.php';

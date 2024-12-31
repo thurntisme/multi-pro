@@ -223,5 +223,3 @@ echo "
     <script src='" . home_url("/assets/js/pages/ai-chat.js") . "'></script>
 ";
 $additionJs = ob_get_clean();
-
-include 'layout.php';

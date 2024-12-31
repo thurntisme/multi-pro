@@ -91,5 +91,3 @@ echo '</div>
 </div>';
 
 $pageContent = ob_get_clean();
-
-include 'layout.php';

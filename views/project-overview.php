@@ -973,5 +973,3 @@ echo '<!-- apexcharts -->
     <script src="' . home_url('assets/js/pages/dashboard-projects.init.js') . '"></script>';
 
 $additionJs = ob_get_clean();
-
-include 'layout.php';

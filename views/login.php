@@ -113,5 +113,3 @@ echo '<div class="row justify-content-center">
     </div>';
 
 $pageContent = ob_get_clean();
-
-include "auth-layout.php";

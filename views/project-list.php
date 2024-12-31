@@ -198,5 +198,3 @@ echo '<!-- project list init -->
     <script src="' . home_url('assets/js/pages/project-list.init.js') . '"></script>';
 
 $additionJs = ob_get_clean();
-
-include 'layout.php';

@@ -243,5 +243,3 @@ echo "
 <script src='" . home_url("/assets/libs/flatpickr/flatpickr.min.js") . "'></script>
 ";
 $additionJs = ob_get_clean();
-
-include 'layout.php';

@@ -30,44 +30,44 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 ob_start();
 ?>
 
-    <div class="row">
-        <div class="col-lg-12">
-            <div class="card">
-                <div class="card-header">
-                    <?php includeFileWithVariables('components/football-player-topbar.php'); ?>
-                </div>
+<div class="row">
+    <div class="col-lg-12">
+        <div class="card">
+            <div class="card-header">
+                <?php includeFileWithVariables('components/football-player-topbar.php'); ?>
             </div>
         </div>
+    </div>
 
-        <div class="col-lg-12">
-            <?php include_once DIR . '/components/alert.php'; ?>
-        </div>
+    <div class="col-lg-12">
+        <?php include_once DIR . '/components/alert.php'; ?>
+    </div>
 
-        <!--end col-->
-        <div class="col-lg-12">
-            <div class="card">
-                <div class="card-body">
-                    <!-- Nav tabs -->
-                    <ul class="nav nav-tabs nav-border-top nav-border-top-primary mb-3" role="tablist">
-                        <li class="nav-item">
-                            <a class="nav-link active" data-bs-toggle="tab"
-                               href="<?= home_url('football-manager/my-players') ?>" role="tab"
-                               aria-selected="false">
-                                All players
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" data-bs-toggle="tab" href="#bingo" role="tab" aria-selected="true">
-                                Bingo
-                            </a>
-                        </li>
-                    </ul>
-                    <div class="tab-content text-muted">
-                        <div class="tab-pane active" id="my-players" role="tabpanel">
-                            <div id="tasksList" class="px-3">
-                                <div class="table-responsive table-card my-3">
-                                    <table class="table align-middle table-nowrap mb-0" id="customerTable">
-                                        <thead class="table-light">
+    <!--end col-->
+    <div class="col-lg-12">
+        <div class="card">
+            <div class="card-body">
+                <!-- Nav tabs -->
+                <ul class="nav nav-tabs nav-border-top nav-border-top-primary mb-3" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link active" data-bs-toggle="tab"
+                            href="<?= home_url('football-manager/my-players') ?>" role="tab"
+                            aria-selected="false">
+                            All players
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" data-bs-toggle="tab" href="#bingo" role="tab" aria-selected="true">
+                            Bingo
+                        </a>
+                    </li>
+                </ul>
+                <div class="tab-content text-muted">
+                    <div class="tab-pane active" id="my-players" role="tabpanel">
+                        <div id="tasksList" class="px-3">
+                            <div class="table-responsive table-card my-3">
+                                <table class="table align-middle table-nowrap mb-0" id="customerTable">
+                                    <thead class="table-light">
                                         <tr>
                                             <th class="sort" scope="col">Title</th>
                                             <th class="sort text-center" scope="col">Nationality</th>
@@ -75,7 +75,7 @@ ob_start();
                                             <th class="sort text-center" scope="col">Playable</th>
                                             <th class="sort text-center" scope="col">Season</th>
                                             <th class="sort text-center" scope="col"><a
-                                                        href="<?= generatePageUrl(['sort_by' => 'ability', 'sort_order' => $sort_order]) ?>">Ability</a>
+                                                    href="<?= generatePageUrl(['sort_by' => 'ability', 'sort_order' => $sort_order]) ?>">Ability</a>
                                             </th>
                                             <th class="sort text-center" scope="col">Height</th>
                                             <th class="sort text-center" scope="col">Weight</th>
@@ -83,8 +83,8 @@ ob_start();
                                             <th class="sort text-center" scope="col">Market Price</th>
                                             <th class="text-center" scope="col"></th>
                                         </tr>
-                                        </thead>
-                                        <tbody class="list form-check-all">
+                                    </thead>
+                                    <tbody class="list form-check-all">
                                         <?php if (count($list['resources']) > 0) {
                                             foreach ($list['resources'] as $item) { ?>
                                                 <tr>
@@ -94,16 +94,16 @@ ob_start();
                                                             <ul class="list-inline tasks-list-menu mb-0 pe-4">
                                                                 <li class="list-inline-item">
                                                                     <a href="#"
-                                                                       class="edit-item-btn cursor-pointer btn-player-detail"
-                                                                       data-player-uuid="<?= $item['uuid'] ?>"
-                                                                       data-player-name="<?= $item['name'] ?>"
-                                                                       data-player-nationality="<?= $item['nationality'] ?>"
+                                                                        class="edit-item-btn cursor-pointer btn-player-detail"
+                                                                        data-player-uuid="<?= $item['uuid'] ?>"
+                                                                        data-player-name="<?= $item['name'] ?>"
+                                                                        data-player-nationality="<?= $item['nationality'] ?>"
                                                                         data-player-meta="<?= $item['age'] ?> yrd | <?= $item['height'] ?> cm | <?= $item['weight'] ?> kg"
                                                                         data-player-positions="<?= $item['best_position'] . " (" . $item['ability'] . ") | " . implode(", ", $item['playable_positions']) ?>"
-                                                                       data-player-attributes="<?= htmlspecialchars(json_encode($item['attributes'])) ?>"
-                                                                       data-bs-toggle="modal"
-                                                                       data-bs-target="#playerDetailBackdrop"><i
-                                                                                class="ri-eye-fill align-bottom me-2 text-muted"></i></a>
+                                                                        data-player-attributes="<?= htmlspecialchars(json_encode($item['attributes'])) ?>"
+                                                                        data-bs-toggle="modal"
+                                                                        data-bs-target="#playerDetailBackdrop"><i
+                                                                            class="ri-eye-fill align-bottom me-2 text-muted"></i></a>
                                                                 </li>
                                                             </ul>
                                                         </div>
@@ -120,72 +120,72 @@ ob_start();
                                                     <td class="text-center hstack gap-1">
                                                         <form method="POST" action="<?= $_SERVER['REQUEST_URI'] ?>">
                                                             <input type="hidden" name="action_name"
-                                                                   value="player_join_team">
+                                                                value="player_join_team">
                                                             <input type="hidden" name="player_id"
-                                                                   value="<?= $item['id'] ?>">
+                                                                value="<?= $item['id'] ?>">
                                                             <input type="hidden" name="player_name"
-                                                                   value="<?= $item['name'] ?>">
+                                                                value="<?= $item['name'] ?>">
                                                             <button type="submit" class="btn btn-soft-success btn-sm"><i
-                                                                        class="ri ri-user-received-2-line"></i> Join
+                                                                    class="ri ri-user-received-2-line"></i> Join
                                                             </button>
                                                         </form>
                                                         <form method="POST" action="<?= $_SERVER['REQUEST_URI'] ?>">
                                                             <input type="hidden" name="action_name"
-                                                                   value="player_in_market">
+                                                                value="player_in_market">
                                                             <input type="hidden" name="player_id"
-                                                                   value="<?= $item['id'] ?>">
+                                                                value="<?= $item['id'] ?>">
                                                             <button class="btn btn-soft-danger btn-sm"><i
-                                                                        class="ri ri-user-shared-2-line"></i> Sell
+                                                                    class="ri ri-user-shared-2-line"></i> Sell
                                                             </button>
                                                         </form>
                                                         <form method="POST" action="<?= $_SERVER['REQUEST_URI'] ?>">
                                                             <input type="hidden" name="action_name"
-                                                                   value="delete_player">
+                                                                value="delete_player">
                                                             <input type="hidden" name="player_id"
-                                                                   value="<?= $item['id'] ?>">
+                                                                value="<?= $item['id'] ?>">
                                                             <input type="hidden" name="player_name"
-                                                                   value="<?= $item['name'] ?>">
+                                                                value="<?= $item['name'] ?>">
                                                             <button class="btn btn-light btn-sm"><i
-                                                                        class="ri ri-close-line"></i></button>
+                                                                    class="ri ri-close-line"></i></button>
                                                         </form>
                                                     </td>
                                                 </tr>
-                                            <?php }
+                                        <?php }
                                         } ?>
 
-                                        </tbody>
-                                    </table>
-                                </div>
-                                <?php
-                                includeFileWithVariables('components/pagination.php', array("count" => $list['total_items']));
-                                ?>
+                                    </tbody>
+                                </table>
                             </div>
+                            <?php
+                            includeFileWithVariables('components/pagination.php', array("count" => $list['total_items']));
+                            ?>
                         </div>
-                        <div class="tab-pane" id="bingo" role="tabpanel">
-                            <div class="d-flex">
-                                <div class="flex-shrink-0">
-                                    <i class="ri-checkbox-circle-line text-success"></i>
-                                </div>
-                                <div class="flex-grow-1 ms-2">
-                                    Bingo player is coming soon
-                                    <div class="mt-2">
-                                        <a href="javascript:void(0);" class="btn btn-link">Read More <i
-                                                    class="ri-arrow-right-line ms-1 align-middle"></i></a>
-                                    </div>
+                    </div>
+                    <div class="tab-pane" id="bingo" role="tabpanel">
+                        <div class="d-flex">
+                            <div class="flex-shrink-0">
+                                <i class="ri-checkbox-circle-line text-success"></i>
+                            </div>
+                            <div class="flex-grow-1 ms-2">
+                                Bingo player is coming soon
+                                <div class="mt-2">
+                                    <a href="javascript:void(0);" class="btn btn-link">Read More <i
+                                            class="ri-arrow-right-line ms-1 align-middle"></i></a>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div><!-- end card-body -->
-            </div>
+                </div>
+            </div><!-- end card-body -->
         </div>
-        <!--end col-->
-
-        <div class="col-lg-12">
-            <?php include_once DIR . '/components/football-player-detail-modal.php'; ?>
-        </div>
-
     </div>
+    <!--end col-->
+
+    <div class="col-lg-12">
+        <?php include_once DIR . '/components/football-player-detail-modal.php'; ?>
+    </div>
+
+</div>
 
 <?php
 $pageContent = ob_get_clean();
@@ -193,5 +193,3 @@ $pageContent = ob_get_clean();
 ob_start();
 echo "<script src='" . home_url("/assets/js/pages/football-manager-player-detail.js") . "'></script>";
 $additionJs = ob_get_clean();
-
-include 'layout.php';

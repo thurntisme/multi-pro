@@ -23,5 +23,3 @@ echo '<div class="auth-page-content overflow-hidden p-0">
     </div>';
 
 $pageContent = ob_get_clean();
-
-include 'layout.php';

@@ -120,5 +120,3 @@ include_once DIR . '/components/alert.php';
 
 <?php
 $pageContent = ob_get_clean();
-
-include 'layout.php';

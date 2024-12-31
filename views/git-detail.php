@@ -1844,5 +1844,3 @@ echo "
 <script src='" . home_url("/assets/libs/@ckeditor/ckeditor5-build-classic/build/ckeditor.js") . "'></script>
 ";
 $additionJs = ob_get_clean();
-
-include 'layout.php';

@@ -58,8 +58,9 @@ $settings = [
         [
             'field' => 'language',
             'value' => 'en',
-            'type' => 'text',
-            'col' => 'col-6'
+            'type' => 'select',
+            'col' => 'col-6',
+            'options' => ['en' => 'English', 'vi' => 'Vietnamese'],
         ]
     ],
     // Appearance

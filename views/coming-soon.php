@@ -18,5 +18,3 @@ echo '<div class="container-fluid">
     </div>';
 
 $pageContent = ob_get_clean();
-
-include 'layout.php';
