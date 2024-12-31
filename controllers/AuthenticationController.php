@@ -166,7 +166,9 @@ class AuthenticationController
         $token = $commonController->getToken();
         $tokenData = $this->getTokenData($token);
         if (isset($tokenData['user_id'])) {
-            return $this->userController->getUserById($tokenData['user_id']);
+            $userData = $this->userController->getUserById($tokenData['user_id']);
+            $userData['full_name'] = $userData['first_name'] . ' ' . $userData['last_name'];;
+            return $userData;
         }
         return null;
     }

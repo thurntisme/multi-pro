@@ -1,4 +1,5 @@
-<?php include 'layouts/main.php'; ?>
+<!doctype html>
+<html lang="en" data-layout="vertical" data-topbar="light" data-sidebar="dark" data-sidebar-size="lg" data-sidebar-image="none" data-preloader="disable">
 
 <head>
 
@@ -30,7 +31,7 @@
                         <div class="text-center mt-sm-5 mb-4 text-white-50">
                             <div>
                                 <a href="<?= home_url('') ?>" class="d-inline-block auth-logo">
-                                    <img src="assets/images/logo-light.png" alt="" height="20">
+                                    <img src="<?= home_url('assets/images/logo-light.png') ?>" alt="" height="20">
                                 </a>
                             </div>
                             <p class="mt-3 fs-15 fw-medium">Premium Admin & Dashboard Template</p>

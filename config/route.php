@@ -20,26 +20,31 @@ $pageUrl = '';
 
 $user_id = '';
 if (!empty($token)) {
-    $curr_data = $authenticationController->getCurrentUser();
-    if (!empty($curr_data)) {
-        $user_id = $curr_data['id'];
-        $systemController = new SystemController($user_id);
-        $cur_lang = $systemController->getLanguage();
-        include_once DIR . "/assets/lang-php/" . $cur_lang . ".php";
-        $user_role = $curr_data['role'];
-        $app_url = str_replace('app/', '', $url);
-        $pageUrl = getPageData($app_url, $user_role)['url'];
-    } else {
-        $commonController->removeToken();
-        $pageUrl = DIR . '/functions/redirectUser.php';
-    }
     try {
-        include_once $pageUrl;
+        $curr_data = $authenticationController->getCurrentUser();
+        if (!empty($curr_data)) {
+            if ($curr_data['isActive'] === 1) {
+                $user_id = $curr_data['id'];
+                $systemController = new SystemController($user_id);
+                $cur_lang = $systemController->getLanguage();
+                include_once DIR . "/assets/lang-php/" . $cur_lang . ".php";
+                $user_role = $curr_data['role'];
+                $app_url = str_replace('app/', '', $url);
+                include_once  getPageData($app_url, $user_role)['url'];
+                include DIR . '/app-layout.php';
+            } else {
+                include_once DIR . '/views/user-block.php';
+                include  DIR . '/auth-layout.php';
+            }
+        } else {
+            $commonController->removeToken();
+            $pageUrl = DIR . '/functions/redirectUser.php';
+        }
     } catch (Throwable $th) {
         $error_msg = $th->getMessage();
         include_once DIR . '/views/500.php';
+        include  DIR . '/auth-layout.php';
     }
-    include DIR . '/app-layout.php';
 } else {
     switch ($url) {
         case 'login':
