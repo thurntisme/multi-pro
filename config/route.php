@@ -3,7 +3,7 @@ require_once "controllers/SystemController.php";
 
 $token = $commonController->getToken();
 
-include_once 'auth-route.php';
+include_once 'app-route.php';
 include_once DIR . '/functions/system.php';
 
 $url = extractPathFromCurrentUrl();
@@ -24,6 +24,8 @@ if (!empty($token)) {
     if (!empty($curr_data)) {
         $user_id = $curr_data['id'];
         $systemController = new SystemController($user_id);
+        $cur_lang = $systemController->getLanguage();
+        include_once DIR . "/assets/lang-php/" . $cur_lang . ".php";
         $user_role = $curr_data['role'];
         $app_url = str_replace('app/', '', $url);
         $pageUrl = getPageData($app_url, $user_role)['url'];

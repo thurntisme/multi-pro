@@ -61,7 +61,7 @@ include_once DIR . '/components/alert.php';
                 <div class="col-lg-12 pt-3">
                     <div class="hstack gap-2 justify-content-center">
                         <button type="button" class="btn btn-light">Cancel</button>
-                        <button type="submit" class="btn btn-primary">Updates</button>
+                        <button type="submit" class="btn btn-primary">Update</button>
                     </div>
                 </div>
                 <!--end col-->

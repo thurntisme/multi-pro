@@ -33,6 +33,8 @@ $timezones = [];
 foreach (DateTimeZone::listIdentifiers() as $zone) {
     $timezones[$zone] = $zone;
 };
+$support_languages = ['en' => 'English', 'vi' => 'Vietnamese'];
+
 $settings = [
     // Basic Settings
     'basic' => [
@@ -60,7 +62,7 @@ $settings = [
             'value' => 'en',
             'type' => 'select',
             'col' => 'col-6',
-            'options' => ['en' => 'English', 'vi' => 'Vietnamese'],
+            'options' => $support_languages,
         ]
     ],
     // Appearance

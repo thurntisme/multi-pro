@@ -203,4 +203,4 @@ $lang["t-api-key"] = "API Key";
 $lang["t-privacy-policy"] = "Privacy Policy";
 $lang["t-hot"] = "Hot";
 
-$lang["t-all-notes"] = "All Notes";
+$lang["t-all-notes"] = "Tất cả ghi chú";

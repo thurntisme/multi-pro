@@ -58,6 +58,12 @@ class SystemController
         return $timezone['option_value'] ?? 'UTC';
     }
 
+    public function getLanguage()
+    {
+        $timezone = $this->settingService->getSetting('language');
+        return $timezone['option_value'] ?? 'en';
+    }
+
     public function convertDate($utcTime): string
     {
         if ($utcTime !== '0000-00-00') {

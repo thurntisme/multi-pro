@@ -1,5 +1,8 @@
 <?php
 
+$cur_lang = $systemController->getLanguage();
+include_once DIR . "/assets/lang-php/" . $cur_lang . ".php";
+
 $isScssConverted = false;
 
 require_once("scssphp/scss.inc.php");
@@ -29,4 +32,4 @@ if ($isScssConverted) {
 }
 ?>
 <!doctype html>
-<html lang="en" data-layout="vertical" data-topbar="light" data-sidebar="dark" data-sidebar-size="lg" data-sidebar-image="none" data-preloader="disable">
+<html lang="<?= $cur_lang ?>" data-layout="vertical" data-topbar="light" data-sidebar="dark" data-sidebar-size="lg" data-sidebar-image="none" data-preloader="disable">

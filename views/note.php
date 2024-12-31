@@ -16,7 +16,7 @@ include_once DIR . '/components/alert.php';
 <div class="card" id="tasksList">
     <div class="card-header border-0">
         <div class="d-flex align-items-center">
-            <h5 class="card-title mb-0 flex-grow-1">All Notes</h5>
+            <h5 class="card-title mb-0 flex-grow-1"><?= $lang["t-all-notes"] ?></h5>
             <div class="flex-shrink-0">
                 <div class="d-flex flex-wrap gap-2">
                     <a class="btn btn-danger add-btn" href="<?= home_url('app/note/new') ?>"><i
