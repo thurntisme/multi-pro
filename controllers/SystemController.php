@@ -64,6 +64,12 @@ class SystemController
         return $timezone['option_value'] ?? 'en';
     }
 
+    public function getFont()
+    {
+        $timezone = $this->settingService->getSetting('font-family');
+        return $timezone['option_value'] ?? 'Helvetica';
+    }
+
     public function convertDate($utcTime): string
     {
         if ($utcTime !== '0000-00-00') {

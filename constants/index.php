@@ -35,6 +35,27 @@ foreach (DateTimeZone::listIdentifiers() as $zone) {
 };
 $support_languages = ['en' => 'English', 'vi' => 'Vietnamese'];
 
+$support_fonts = [
+    "Tahoma" => "Tahoma",
+    "Verdana" => "Verdana",
+    "Roboto" => "Roboto",
+    "Segoe UI" => "Segoe UI",
+    "Helvetica" => "Helvetica",
+    "Georgia" => "Georgia",
+    "Courier New" => "Courier New",
+    "Open Sans" => "Open Sans",
+    "Lato" => "Lato",
+    "Montserrat" => "Montserrat",
+    "Poppins" => "Poppins",
+    "Raleway" => "Raleway",
+    "Bitter" => "Bitter",
+    "Work Sans" => "Work Sans",
+    "Inter" => "Inter",
+    "Oswald" => "Oswald",
+    "Noto" => "Noto",
+    "Nunito" => "Nunito",
+];
+
 $settings = [
     // Basic Settings
     'basic' => [
@@ -71,8 +92,15 @@ $settings = [
             'field' => 'theme',
             'value' => 'default',
             'type' => 'select', // Dropdown select for theme options
-            'col' => 'col-12',
+            'col' => 'col-6',
             'options' => ['default', 'dark', 'light'] // Dropdown options
+        ],
+        [
+            'field' => 'font-family',
+            'value' => '',
+            'type' => 'select',
+            'col' => 'col-6',
+            'options' => $support_fonts
         ],
         [
             'field' => 'logo_url',
