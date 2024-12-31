@@ -15,7 +15,7 @@ echo '<div class="row justify-content-center">
 
                     <div class="mt-4 pt-2">
                         <h5>You are Logged Out</h5>
-                        <p class="text-muted">Thank you for using <span class="fw-semibold">' . $commonController->getSiteName() . '</span></p>
+                        <p class="text-muted">Thank you for using <span class="fw-semibold">' . Mercufee . '</span></p>
                         <div class="mt-4">
                             <a href="' . home_url("login") . '" class="btn btn-success w-100">Sign In</a>
                         </div>

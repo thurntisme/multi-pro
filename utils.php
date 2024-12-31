@@ -393,7 +393,7 @@ function generateFormControl($id, $name, $value = '', $placeholder = '', $type =
 
         case 'select':
             // Generate select dropdown
-            $inputHtml = '<select class="form-control" id="' . htmlspecialchars($id) . '" name="' . htmlspecialchars($name) . '" data-choices data-choices-search-false data-choices-sorting-false>';
+            $inputHtml = '<select class="form-control" id="' . htmlspecialchars($id) . '" name="' . htmlspecialchars($name) . '" data-choices data-choices-search-' . (count($options) < 10 ? 'false' : 'true') . 'false data-choices-sorting-false >';
             foreach ($options as $key => $optionValue) {
                 $selected = ($value == $key) ? ' selected' : ''; // Keep the selected value
                 $inputHtml .= '<option value="' . htmlspecialchars($key) . '"' . $selected . '>' . htmlspecialchars(ucwords(str_replace('_', ' ', $optionValue))) . '</option>';

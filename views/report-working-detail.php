@@ -56,7 +56,7 @@ ob_start();
                                     <div class="mb-3">
                                         <?php
                                         if (!empty($postData['content'])) {
-                                            ?>
+                                        ?>
                                             <table class="table table-nowrap">
                                                 <thead class="table-light ">
                                                     <tr>
@@ -79,7 +79,7 @@ ob_start();
                                                                 <td><?= $task['task_eta'] ?? '' ?></td>
                                                                 <td><?= $task['task_time_spend'] ?? '' ?></td>
                                                             </tr>
-                                                        <?php }
+                                                    <?php }
                                                     }
                                                     ?>
                                                 </tbody>
@@ -91,7 +91,7 @@ ob_start();
                                                     </tr>
                                                 </tfoot>
                                             </table>
-                                            <?php
+                                        <?php
                                         }
                                         ?>
                                     </div>
@@ -102,7 +102,7 @@ ob_start();
                                                 <div>
                                                     <p class="mb-2 text-uppercase fw-medium">Created At :</p>
                                                     <h5 class="fs-15 mb-0">
-                                                        <?= $commonController->convertDate($postData['created_at']) ?>
+                                                        <?= $systemController->convertDate($postData['created_at']) ?>
                                                     </h5>
                                                 </div>
                                             </div>
@@ -110,7 +110,7 @@ ob_start();
                                                 <div>
                                                     <p class="mb-2 text-uppercase fw-medium">Updated At :</p>
                                                     <h5 class="fs-15 mb-0">
-                                                        <?= $commonController->convertDate($postData['updated_at']) ?>
+                                                        <?= $systemController->convertDate($postData['updated_at']) ?>
                                                     </h5>
                                                 </div>
                                             </div>

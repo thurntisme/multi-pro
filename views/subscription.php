@@ -104,7 +104,7 @@ include_once DIR . '/components/alert.php';
                                 <td class="text-center text-capitalize"><?= $item['payment_type'] ?></td>
                                 <td class="text-center"><?= $item['payment_date'] ?></td>
                                 <td class="text-center"><?= $item['payment_type'] === 'yearly' ? $months[$item['payment_month']] : '' ?></td>
-                                <td class="text-end pe-5"><?= $commonController->convertDateTime($item['updated_at']) ?></td>
+                                <td class="text-end pe-5"><?= $systemController->convertDateTime($item['updated_at']) ?></td>
                             </tr>
                     <?php }
                     } ?>

@@ -28,36 +28,36 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 ob_start();
 ?>
 
-    <div class="row">
-        <div class="col-lg-12">
-            <div class="card">
-                <div class="card-header">
-                    <?php includeFileWithVariables('components/football-player-topbar.php'); ?>
-                </div>
+<div class="row">
+    <div class="col-lg-12">
+        <div class="card">
+            <div class="card-header">
+                <?php includeFileWithVariables('components/football-player-topbar.php'); ?>
             </div>
-
-            <?php
-            include_once DIR . '/components/alert.php';
-            ?>
         </div>
 
-        <!--end col-->
-        <div class="col-lg-12">
-            <?php if ($myTeam) { ?>
-                <div class="row">
-                    <div class="col-4">
-                        <div class="card">
-                            <div class="card-body p-0">
-                                <table class="table align-middle table-nowrap mb-0">
-                                    <thead class="table-light">
+        <?php
+        include_once DIR . '/components/alert.php';
+        ?>
+    </div>
+
+    <!--end col-->
+    <div class="col-lg-12">
+        <?php if ($myTeam) { ?>
+            <div class="row">
+                <div class="col-4">
+                    <div class="card">
+                        <div class="card-body p-0">
+                            <table class="table align-middle table-nowrap mb-0">
+                                <thead class="table-light">
                                     <tr>
                                         <th>
                                             <div class="d-flex align-items-center justify-content-between">
                                                 <span>Team Formations</span>
                                                 <select class="form-select form-select-sm" data-choices
-                                                        data-choices-sorting-false
-                                                        data-choices-search-false id="formation"
-                                                        value="<?= $myTeam['formation'] ?>">
+                                                    data-choices-sorting-false
+                                                    data-choices-search-false id="formation"
+                                                    value="<?= $myTeam['formation'] ?>">
                                                     <?php foreach (DEFAULT_FOOTBALL_FORMATION as $formation): ?>
                                                         <option value="<?= $formation['slug']; ?>" <?= $formation['slug'] === $myTeam['formation'] ? 'selected' : ''; ?>>
                                                             <?= $formation['name']; ?>
@@ -67,229 +67,229 @@ ob_start();
                                             </div>
                                         </th>
                                     </tr>
-                                    </thead>
-                                </table>
-                                <div class="p-3 d-flex align-items-center justify-content-center">
-                                    <canvas id="footballPitch" width="320" height="160"></canvas>
+                                </thead>
+                            </table>
+                            <div class="p-3 d-flex align-items-center justify-content-center">
+                                <canvas id="footballPitch" width="320" height="160"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                    <?php if ($lineupPlayers) { ?>
+                        <div class="card">
+                            <div class="card-body p-4" id="player-info">
+                                <div class="row">
+                                    <div class="col-6 text-center">
+                                        <div class="d-flex align-items-center justify-content-center mb-3">
+                                            <span class="text-muted fs-12 me-1">Level: </span>
+                                            <span class="fs-24"><?= $lineupPlayers[0]['level'] / 100 ?></span>
+                                        </div>
+                                        <div class="progress progress-sm mb-4 w-75 mx-auto">
+                                            <div class="progress-bar bg-warning" role="progressbar"
+                                                style="width: 75%" aria-valuenow="75" aria-valuemin="0"
+                                                aria-valuemax="100"></div>
+                                        </div>
+                                    </div>
+                                    <div class="col-6 text-center">
+                                        <h5 class="fs-14 mb-1"
+                                            id="player-name"><?= $lineupPlayers[0]['name'] ?></h5>
+                                        <p class="text-muted mb-0 fs-12 mb-1"
+                                            id="player-nationality"><?= $lineupPlayers[0]['nationality'] ?></p>
+                                        <p class="text-muted mb-0 fs-12"><span
+                                                id="player-best_position"><?= $lineupPlayers[0]['best_position'] ?></span>
+                                            (<span id="player-ability"><?= $lineupPlayers[0]['ability'] ?></span>)
+                                            |
+                                            <span id="player-playable_positions"><?= implode(", ", $lineupPlayers[0]['playable_positions']) ?></span>
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="px-2 py-2 mt-2">
+                                    <?php
+                                    $results = [];
+                                    foreach ($lineupPlayers[0]['attributes'] as $category => $attributes) {
+                                        $sum = array_sum($attributes);
+                                        $maxPossible = 120 * count($attributes);
+                                        $percentage = ($sum / $maxPossible) * 100;
+                                        $results[$category] = [
+                                            'sum' => $sum,
+                                            'percentage' => round($percentage, 2),
+                                        ];
+                                    }
+                                    ?>
+                                    <p class="mb-1 fs-12">Mental <span class="float-end"><span
+                                                id="mental-label"><?= $results['mental']['sum'] ?></span></span>
+                                    </p>
+                                    <div class="progress mt-2" style="height: 6px;">
+                                        <div class="progress-bar progress-bar-striped bg-primary" role="progressbar"
+                                            style="width: <?= $results['mental']['percentage'] ?>%"
+                                            aria-valuenow="<?= $results['mental']['percentage'] ?>"
+                                            aria-valuemin="0"
+                                            aria-valuemax="<?= $results['mental']['percentage'] ?>"
+                                            id="mental-value"></div>
+                                    </div>
+
+                                    <p class="mt-3 mb-1 fs-12">Physical <span class="float-end"><span
+                                                id="physical-label"><?= $results['physical']['sum'] ?></span></span>
+                                    </p>
+                                    <div class="progress mt-2" style="height: 6px;">
+                                        <div class="progress-bar progress-bar-striped bg-primary" role="progressbar"
+                                            style="width: <?= $results['physical']['percentage'] ?>%"
+                                            aria-valuenow="<?= $results['physical']['percentage'] ?>"
+                                            aria-valuemin="0"
+                                            aria-valuemax="<?= $results['physical']['percentage'] ?>"
+                                            id="physical-value"></div>
+                                    </div>
+
+                                    <p class="mt-3 mb-1 fs-12">Technical <span class="float-end"><span
+                                                id="technical-label"><?= $results['technical']['sum'] ?></span></span>
+                                    </p>
+                                    <div class="progress mt-2" style="height: 6px;">
+                                        <div class="progress-bar progress-bar-striped bg-primary" role="progressbar"
+                                            style="width: <?= $results['technical']['percentage'] ?>%"
+                                            aria-valuenow="<?= $results['technical']['percentage'] ?>"
+                                            aria-valuemin="0"
+                                            aria-valuemax="<?= $results['technical']['percentage'] ?>"
+                                            id="technical-value"></div>
+                                    </div>
+                                </div>
+                                <div class="row mt-4">
+                                    <ul class="list-group px-3">
+                                        <li class="list-group-item hstack gap-2">
+                                            <div class="w-50 d-flex justify-content-between">
+                                                <span class="fs-12">Age</span>
+                                                <span class="fs-12"><?= $lineupPlayers[0]['age'] ?></span>
+                                            </div>
+                                            |
+                                            <div class="w-50 d-flex justify-content-between">
+                                                <span class="fs-12">Nationality</span>
+                                                <span class="fs-12"><?= $lineupPlayers[0]['nationality'] ?></span>
+                                            </div>
+                                        </li>
+                                        <li class="list-group-item hstack gap-2">
+                                            <div class="w-50 d-flex justify-content-between">
+                                                <span class="fs-12">Height</span>
+                                                <span class="fs-12"><?= $lineupPlayers[0]['height'] ?> cm</span>
+                                            </div>
+                                            |
+                                            <div class="w-50 d-flex justify-content-between">
+                                                <span class="fs-12">Weight</span>
+                                                <span class="fs-12"><?= $lineupPlayers[0]['weight'] ?> kg</span>
+                                            </div>
+                                        </li>
+                                        <li class="list-group-item hstack gap-2">
+                                            <div class="w-100 d-flex justify-content-between">
+                                                <span class="fs-12">Market Value</span>
+                                                <span class="fs-12"><?= formatCurrency($lineupPlayers[0]['market_value']) ?></span>
+                                            </div>
+                                        </li>
+                                        <li class="list-group-item hstack gap-2">
+                                            <div class="w-100 d-flex justify-content-between">
+                                                <span class="fs-12">Contract Wage</span>
+                                                <span class="fs-12"><?= formatCurrency($lineupPlayers[0]['contract_wage']) ?></span>
+                                            </div>
+                                        </li>
+                                        <li class="list-group-item hstack gap-2">
+                                            <div class="w-100 d-flex justify-content-between">
+                                                <span class="fs-12">Contract End Date</span>
+                                                <span class="fs-12"><?= $systemController->convertDate($lineupPlayers[0]['contract_end_date']) ?></span>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="mt-3 hstack gap-2 justify-content-between px-1">
+                                    <button type="button"
+                                        class="btn btn-info btn-sm btn-label waves-effect waves-light"><i
+                                            class="ri-check-double-line label-icon align-middle fs-16 me-2"></i>
+                                        Renew Contract
+                                    </button>
+                                    <button type="button"
+                                        class="btn btn-danger btn-sm btn-label waves-effect waves-light"><i
+                                            class="ri-check-double-line label-icon align-middle fs-16 me-2"></i>
+                                        Terminate Contract
+                                    </button>
                                 </div>
                             </div>
                         </div>
-                        <?php if ($lineupPlayers) { ?>
+                    <?php } ?>
+                </div>
+                <div class="col-8">
+                    <?php if (!empty($teamPlayerData)) { ?>
+                        <div class="card crm-widget">
+                            <div class="card-body p-0">
+                                <div class="row row-cols-md-3 row-cols-1">
+                                    <div class="col col-lg border-end">
+                                        <div class="py-2 px-3">
+                                            <div class="d-flex align-items-center">
+                                                <div class="flex-shrink-0">
+                                                    <i class="mdi mdi-account-group-outline fs-24 text-muted"></i>
+                                                </div>
+                                                <div class="flex-grow-1 ms-3">
+                                                    <h2 class="mb-0 fs-24"><?= $teamPlayerData['total'] ?></h2>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col col-lg border-end">
+                                        <div class="py-2 px-3">
+                                            <div class="d-flex align-items-center">
+                                                <div class="flex-shrink-0">
+                                                    <i class="mdi mdi-shield-outline fs-24 text-success"></i>
+                                                </div>
+                                                <div class="flex-grow-1 ms-3">
+                                                    <h2 class="mb-0 fs-24"><?= $teamPlayerData['Defenders']['averageRating'] ?></h2>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col col-lg border-end">
+                                        <div class="py-2 px-3">
+                                            <div class="d-flex align-items-center">
+                                                <div class="flex-shrink-0">
+                                                    <i class="mdi mdi-target fs-24 text-primary"></i>
+                                                </div>
+                                                <div class="flex-grow-1 ms-3">
+                                                    <h2 class="mb-0 fs-24"><?= $teamPlayerData['Midfielders']['averageRating'] ?></h2>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col col-lg border-end">
+                                        <div class="py-2 px-3">
+                                            <div class="d-flex align-items-center">
+                                                <div class="flex-shrink-0">
+                                                    <i class="mdi mdi-soccer fs-24 text-danger"></i>
+                                                </div>
+                                                <div class="flex-grow-1 ms-3">
+                                                    <h2 class="mb-0 fs-24"><?= $teamPlayerData['Attackers']['averageRating'] ?></h2>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div><!-- end row -->
+                            </div><!-- end card body -->
+                        </div>
+                    <?php } ?>
+                    <div class="row">
+                        <div class="col-7">
                             <div class="card">
-                                <div class="card-body p-4" id="player-info">
-                                    <div class="row">
-                                        <div class="col-6 text-center">
-                                            <div class="d-flex align-items-center justify-content-center mb-3">
-                                                <span class="text-muted fs-12 me-1">Level: </span>
-                                                <span class="fs-24"><?= $lineupPlayers[0]['level'] / 100 ?></span>
-                                            </div>
-                                            <div class="progress progress-sm mb-4 w-75 mx-auto">
-                                                <div class="progress-bar bg-warning" role="progressbar"
-                                                     style="width: 75%" aria-valuenow="75" aria-valuemin="0"
-                                                     aria-valuemax="100"></div>
-                                            </div>
-                                        </div>
-                                        <div class="col-6 text-center">
-                                            <h5 class="fs-14 mb-1"
-                                                id="player-name"><?= $lineupPlayers[0]['name'] ?></h5>
-                                            <p class="text-muted mb-0 fs-12 mb-1"
-                                               id="player-nationality"><?= $lineupPlayers[0]['nationality'] ?></p>
-                                            <p class="text-muted mb-0 fs-12"><span
-                                                        id="player-best_position"><?= $lineupPlayers[0]['best_position'] ?></span>
-                                                (<span id="player-ability"><?= $lineupPlayers[0]['ability'] ?></span>)
-                                                |
-                                                <span id="player-playable_positions"><?= implode(", ", $lineupPlayers[0]['playable_positions']) ?></span>
-                                            </p>
-                                        </div>
-                                    </div>
-                                    <div class="px-2 py-2 mt-2">
-                                        <?php
-                                        $results = [];
-                                        foreach ($lineupPlayers[0]['attributes'] as $category => $attributes) {
-                                            $sum = array_sum($attributes);
-                                            $maxPossible = 120 * count($attributes);
-                                            $percentage = ($sum / $maxPossible) * 100;
-                                            $results[$category] = [
-                                                'sum' => $sum,
-                                                'percentage' => round($percentage, 2),
-                                            ];
-                                        }
-                                        ?>
-                                        <p class="mb-1 fs-12">Mental <span class="float-end"><span
-                                                        id="mental-label"><?= $results['mental']['sum'] ?></span></span>
-                                        </p>
-                                        <div class="progress mt-2" style="height: 6px;">
-                                            <div class="progress-bar progress-bar-striped bg-primary" role="progressbar"
-                                                 style="width: <?= $results['mental']['percentage'] ?>%"
-                                                 aria-valuenow="<?= $results['mental']['percentage'] ?>"
-                                                 aria-valuemin="0"
-                                                 aria-valuemax="<?= $results['mental']['percentage'] ?>"
-                                                 id="mental-value"></div>
-                                        </div>
-
-                                        <p class="mt-3 mb-1 fs-12">Physical <span class="float-end"><span
-                                                        id="physical-label"><?= $results['physical']['sum'] ?></span></span>
-                                        </p>
-                                        <div class="progress mt-2" style="height: 6px;">
-                                            <div class="progress-bar progress-bar-striped bg-primary" role="progressbar"
-                                                 style="width: <?= $results['physical']['percentage'] ?>%"
-                                                 aria-valuenow="<?= $results['physical']['percentage'] ?>"
-                                                 aria-valuemin="0"
-                                                 aria-valuemax="<?= $results['physical']['percentage'] ?>"
-                                                 id="physical-value"></div>
-                                        </div>
-
-                                        <p class="mt-3 mb-1 fs-12">Technical <span class="float-end"><span
-                                                        id="technical-label"><?= $results['technical']['sum'] ?></span></span>
-                                        </p>
-                                        <div class="progress mt-2" style="height: 6px;">
-                                            <div class="progress-bar progress-bar-striped bg-primary" role="progressbar"
-                                                 style="width: <?= $results['technical']['percentage'] ?>%"
-                                                 aria-valuenow="<?= $results['technical']['percentage'] ?>"
-                                                 aria-valuemin="0"
-                                                 aria-valuemax="<?= $results['technical']['percentage'] ?>"
-                                                 id="technical-value"></div>
-                                        </div>
-                                    </div>
-                                    <div class="row mt-4">
-                                        <ul class="list-group px-3">
-                                            <li class="list-group-item hstack gap-2">
-                                                <div class="w-50 d-flex justify-content-between">
-                                                    <span class="fs-12">Age</span>
-                                                    <span class="fs-12"><?= $lineupPlayers[0]['age'] ?></span>
-                                                </div>
-                                                |
-                                                <div class="w-50 d-flex justify-content-between">
-                                                    <span class="fs-12">Nationality</span>
-                                                    <span class="fs-12"><?= $lineupPlayers[0]['nationality'] ?></span>
-                                                </div>
-                                            </li>
-                                            <li class="list-group-item hstack gap-2">
-                                                <div class="w-50 d-flex justify-content-between">
-                                                    <span class="fs-12">Height</span>
-                                                    <span class="fs-12"><?= $lineupPlayers[0]['height'] ?> cm</span>
-                                                </div>
-                                                |
-                                                <div class="w-50 d-flex justify-content-between">
-                                                    <span class="fs-12">Weight</span>
-                                                    <span class="fs-12"><?= $lineupPlayers[0]['weight'] ?> kg</span>
-                                                </div>
-                                            </li>
-                                            <li class="list-group-item hstack gap-2">
-                                                <div class="w-100 d-flex justify-content-between">
-                                                    <span class="fs-12">Market Value</span>
-                                                    <span class="fs-12"><?= formatCurrency($lineupPlayers[0]['market_value']) ?></span>
-                                                </div>
-                                            </li>
-                                            <li class="list-group-item hstack gap-2">
-                                                <div class="w-100 d-flex justify-content-between">
-                                                    <span class="fs-12">Contract Wage</span>
-                                                    <span class="fs-12"><?= formatCurrency($lineupPlayers[0]['contract_wage']) ?></span>
-                                                </div>
-                                            </li>
-                                            <li class="list-group-item hstack gap-2">
-                                                <div class="w-100 d-flex justify-content-between">
-                                                    <span class="fs-12">Contract End Date</span>
-                                                    <span class="fs-12"><?= $commonController->convertDate($lineupPlayers[0]['contract_end_date']) ?></span>
-                                                </div>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                    <div class="mt-3 hstack gap-2 justify-content-between px-1">
-                                        <button type="button"
-                                                class="btn btn-info btn-sm btn-label waves-effect waves-light"><i
-                                                    class="ri-check-double-line label-icon align-middle fs-16 me-2"></i>
-                                            Renew Contract
-                                        </button>
-                                        <button type="button"
-                                                class="btn btn-danger btn-sm btn-label waves-effect waves-light"><i
-                                                    class="ri-check-double-line label-icon align-middle fs-16 me-2"></i>
-                                            Terminate Contract
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        <?php } ?>
-                    </div>
-                    <div class="col-8">
-                        <?php if (!empty($teamPlayerData)) { ?>
-                            <div class="card crm-widget">
-                                <div class="card-body p-0">
-                                    <div class="row row-cols-md-3 row-cols-1">
-                                        <div class="col col-lg border-end">
-                                            <div class="py-2 px-3">
-                                                <div class="d-flex align-items-center">
-                                                    <div class="flex-shrink-0">
-                                                        <i class="mdi mdi-account-group-outline fs-24 text-muted"></i>
-                                                    </div>
-                                                    <div class="flex-grow-1 ms-3">
-                                                        <h2 class="mb-0 fs-24"><?= $teamPlayerData['total'] ?></h2>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col col-lg border-end">
-                                            <div class="py-2 px-3">
-                                                <div class="d-flex align-items-center">
-                                                    <div class="flex-shrink-0">
-                                                        <i class="mdi mdi-shield-outline fs-24 text-success"></i>
-                                                    </div>
-                                                    <div class="flex-grow-1 ms-3">
-                                                        <h2 class="mb-0 fs-24"><?= $teamPlayerData['Defenders']['averageRating'] ?></h2>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col col-lg border-end">
-                                            <div class="py-2 px-3">
-                                                <div class="d-flex align-items-center">
-                                                    <div class="flex-shrink-0">
-                                                        <i class="mdi mdi-target fs-24 text-primary"></i>
-                                                    </div>
-                                                    <div class="flex-grow-1 ms-3">
-                                                        <h2 class="mb-0 fs-24"><?= $teamPlayerData['Midfielders']['averageRating'] ?></h2>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col col-lg border-end">
-                                            <div class="py-2 px-3">
-                                                <div class="d-flex align-items-center">
-                                                    <div class="flex-shrink-0">
-                                                        <i class="mdi mdi-soccer fs-24 text-danger"></i>
-                                                    </div>
-                                                    <div class="flex-grow-1 ms-3">
-                                                        <h2 class="mb-0 fs-24"><?= $teamPlayerData['Attackers']['averageRating'] ?></h2>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div><!-- end row -->
-                                </div><!-- end card body -->
-                            </div>
-                        <?php } ?>
-                        <div class="row">
-                            <div class="col-7">
-                                <div class="card">
-                                    <div class="card-body">
-                                        <div class="table-responsive table-card">
-                                            <table class="table align-middle table-nowrap mb-0">
-                                                <thead class="table-light">
+                                <div class="card-body">
+                                    <div class="table-responsive table-card">
+                                        <table class="table align-middle table-nowrap mb-0">
+                                            <thead class="table-light">
                                                 <tr>
                                                     <th colspan="4">Lineup</th>
                                                 </tr>
-                                                </thead>
-                                            </table>
-                                            <?php if (count($lineupPlayers) > 0) { ?>
-                                                <table class="table align-middle table-nowrap mb-0" id="lineup">
-                                                    <tbody class="list form-check-all">
+                                            </thead>
+                                        </table>
+                                        <?php if (count($lineupPlayers) > 0) { ?>
+                                            <table class="table align-middle table-nowrap mb-0" id="lineup">
+                                                <tbody class="list form-check-all">
                                                     <?php foreach ($lineupPlayers as $item) { ?>
                                                         <tr style="background-color: <?= getBackgroundColor($item['ability']) ?>"
                                                             class="my-club-player-row"
                                                             data-player-uuid="<?= $item['player_uuid'] ?>">
                                                             <td style="width: 10%;">
                                                                 <span class="ps-2"
-                                                                      style="border-left: solid 4px <?= getPositionColor($item['best_position']) ?>"> <?= $item['best_position'] ?></span>
+                                                                    style="border-left: solid 4px <?= getPositionColor($item['best_position']) ?>"> <?= $item['best_position'] ?></span>
                                                             </td>
                                                             <td>
                                                                 <div class="d-flex align-items-center">
@@ -308,53 +308,53 @@ ob_start();
                                                             <td class="text-center" style="width: 15%;">
                                                                 <div class="progress">
                                                                     <div class="progress-bar bg-success"
-                                                                         role="progressbar"
-                                                                         style="width: 25%" aria-valuenow="25"
-                                                                         aria-valuemin="0"
-                                                                         aria-valuemax="100"></div>
+                                                                        role="progressbar"
+                                                                        style="width: 25%" aria-valuenow="25"
+                                                                        aria-valuemin="0"
+                                                                        aria-valuemax="100"></div>
                                                                 </div>
                                                             </td>
                                                         </tr>
                                                     <?php } ?>
-                                                    </tbody>
-                                                </table>
-                                            <?php } else { ?>
-                                                <div class="p-3">
-                                                    <div class="text-muted">Find player and register they into your
-                                                        team
-                                                    </div>
-                                                    <a href="<?= home_url('football-manager/transfer') ?>"
-                                                       class="btn btn-soft-primary mt-2">Go to Market <i
-                                                                class="ri-arrow-right-line ms-1 align-middle"></i></a>
+                                                </tbody>
+                                            </table>
+                                        <?php } else { ?>
+                                            <div class="p-3">
+                                                <div class="text-muted">Find player and register they into your
+                                                    team
                                                 </div>
-                                            <?php } ?>
-                                        </div>
+                                                <a href="<?= home_url('football-manager/transfer') ?>"
+                                                    class="btn btn-soft-primary mt-2">Go to Market <i
+                                                        class="ri-arrow-right-line ms-1 align-middle"></i></a>
+                                            </div>
+                                        <?php } ?>
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-5">
-                                <div class="card">
-                                    <div class="card-body p-0">
-                                        <table class="table align-middle table-nowrap mb-0">
-                                            <thead class="table-light">
+                        </div>
+                        <div class="col-5">
+                            <div class="card">
+                                <div class="card-body p-0">
+                                    <table class="table align-middle table-nowrap mb-0">
+                                        <thead class="table-light">
                                             <tr>
                                                 <th colspan="4">Subtitle</th>
                                             </tr>
-                                            </thead>
-                                        </table>
-                                        <div class="p-3">
-                                            <?php if (count($subPlayers) > 0) { ?>
-                                                <div class="table-responsive table-card" data-simplebar
-                                                     style="max-height: 442px;">
-                                                    <table class="table align-middle table-nowrap mb-0" id="subtitle">
-                                                        <tbody class="list form-check-all">
+                                        </thead>
+                                    </table>
+                                    <div class="p-3">
+                                        <?php if (count($subPlayers) > 0) { ?>
+                                            <div class="table-responsive table-card" data-simplebar
+                                                style="max-height: 442px;">
+                                                <table class="table align-middle table-nowrap mb-0" id="subtitle">
+                                                    <tbody class="list form-check-all">
                                                         <?php foreach ($subPlayers as $index => $item) { ?>
                                                             <tr style="background-color: <?= getBackgroundColor($item['ability']) ?>"
                                                                 class="my-club-player-row"
                                                                 data-player-uuid="<?= $item['player_uuid'] ?>">
                                                                 <td style="width: 10%;">
                                                                     <span class="ps-2"
-                                                                          style="border-left: solid 4px <?= getPositionColor($item['best_position']) ?>"> <?= $item['best_position'] ?></span>
+                                                                        style="border-left: solid 4px <?= getPositionColor($item['best_position']) ?>"> <?= $item['best_position'] ?></span>
                                                                 </td>
                                                                 <td>
                                                                     <div class="d-flex align-items-center">
@@ -373,53 +373,53 @@ ob_start();
                                                                 <td class="text-center" style="width: 20%;">
                                                                     <div class="progress">
                                                                         <div class="progress-bar bg-success"
-                                                                             role="progressbar"
-                                                                             style="width: 25%" aria-valuenow="25"
-                                                                             aria-valuemin="0"
-                                                                             aria-valuemax="100"></div>
+                                                                            role="progressbar"
+                                                                            style="width: 25%" aria-valuenow="25"
+                                                                            aria-valuemin="0"
+                                                                            aria-valuemax="100"></div>
                                                                     </div>
                                                                 </td>
                                                             </tr>
                                                         <?php } ?>
-                                                        </tbody>
-                                                    </table>
-                                                </div>
-                                            <?php } else { ?>
-                                                <div class="text-muted">Find player and register they into your team
-                                                </div>
-                                                <a href="<?= home_url('football-manager/transfer') ?>"
-                                                   class="btn btn-soft-primary mt-2">Go to Market <i
-                                                            class="ri-arrow-right-line ms-1 align-middle"></i></a>
-                                            <?php } ?>
-                                        </div>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        <?php } else { ?>
+                                            <div class="text-muted">Find player and register they into your team
+                                            </div>
+                                            <a href="<?= home_url('football-manager/transfer') ?>"
+                                                class="btn btn-soft-primary mt-2">Go to Market <i
+                                                    class="ri-arrow-right-line ms-1 align-middle"></i></a>
+                                        <?php } ?>
                                     </div>
                                 </div>
-                                <div class="d-flex justify-center">
-                                    <button class="btn btn-light me-2">Reset</button>
-                                    <form action="<?= $_SERVER['REQUEST_URI'] ?>" method="post" id="my-club-form">
-                                        <input type="hidden" name="action_name" value="update_my_club">
-                                        <input type="hidden" name="team_formation" value="<?= $myTeam['formation'] ?>">
-                                        <input type="hidden" name="team_players" value="">
-                                        <button class="btn btn-success" type="submit">Save</button>
-                                    </form>
-                                </div>
+                            </div>
+                            <div class="d-flex justify-center">
+                                <button class="btn btn-light me-2">Reset</button>
+                                <form action="<?= $_SERVER['REQUEST_URI'] ?>" method="post" id="my-club-form">
+                                    <input type="hidden" name="action_name" value="update_my_club">
+                                    <input type="hidden" name="team_formation" value="<?= $myTeam['formation'] ?>">
+                                    <input type="hidden" name="team_players" value="">
+                                    <button class="btn btn-success" type="submit">Save</button>
+                                </form>
                             </div>
                         </div>
                     </div>
                 </div>
-            <?php } else { ?>
-                <div class="card">
-                    <div class="card-body text-center py-5">
-                        <h3>Please register a team</h3>
-                        <a href="<?= home_url('football-manager') ?>" class="btn btn-link">Back to home <i
-                                    class="ri-arrow-right-line ms-1 align-middle"></i></a>
-                    </div>
+            </div>
+        <?php } else { ?>
+            <div class="card">
+                <div class="card-body text-center py-5">
+                    <h3>Please register a team</h3>
+                    <a href="<?= home_url('football-manager') ?>" class="btn btn-link">Back to home <i
+                            class="ri-arrow-right-line ms-1 align-middle"></i></a>
                 </div>
-            <?php } ?>
-        </div>
+            </div>
+        <?php } ?>
     </div>
-    <!--end col-->
-    </div>
+</div>
+<!--end col-->
+</div>
 
 <?php
 $pageContent = ob_get_clean();

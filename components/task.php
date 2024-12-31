@@ -50,7 +50,7 @@ $commonController = new CommonController();
                 <h5 class="mb-1 text-gray-900"><?= $task['title'] ?? '' ?></h5>
                 <p class="mb-1"><?= $task['description'] ?? '' ?></p>
                 <div class="row">
-                  <small class="col-6"><i class="fas fa-pen text-gray-500 mr-1"></i> <?= isset($task['updated_at']) ? timeAgo($commonController->convertDateTime($task['updated_at'])) : '' ?></small>
+                  <small class="col-6"><i class="fas fa-pen text-gray-500 mr-1"></i> <?= isset($task['updated_at']) ? timeAgo($systemController->convertDateTime($task['updated_at'])) : '' ?></small>
                   <?php if (!empty($task['due_date'])) { ?>
                     <small class="ml-4"><i class="fas fa-calendar text-gray-500 mr-1"></i> <?= date("d-m-Y", strtotime($task['due_date'])) ?></small>
                   <?php } ?>

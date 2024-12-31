@@ -18,6 +18,9 @@ try {
         $mysqlPass = $_ENV['MYSQL_PASSWORD'];
         $pdo = new PDO("mysql:host=$mysqlHost;dbname=$mysqlDb;charset=utf8mb4", $mysqlUser, $mysqlPass);
 
+        // Set the MySQL timezone to UTC
+        $pdo->exec("SET time_zone = '+00:00'");
+
         $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     }
 

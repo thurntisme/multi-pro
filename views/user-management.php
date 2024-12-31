@@ -87,7 +87,7 @@ include_once DIR . '/components/alert.php';
                                 <td><?= $item['last_name'] ?></td>
                                 <td><?= $item['email'] ?></td>
                                 <td class="text-center"><?= $user_roles[$item['role']] ?></td>
-                                <td class="text-end"><?= $commonController->convertDateTime($item['created_at']) ?></td>
+                                <td class="text-end"><?= $systemController->convertDateTime($item['created_at']) ?></td>
                             </tr>
                     <?php }
                     } ?>

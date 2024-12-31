@@ -30,6 +30,10 @@ foreach ($settings as $item) {
 
 ob_start();
 ?>
+
+<?php
+include_once DIR . '/components/alert.php';
+?>
 <div class="card">
     <div class="card-header">
         <ul class="nav nav-tabs-custom rounded card-header-tabs border-bottom-0">
@@ -49,7 +53,7 @@ ob_start();
                 <?php foreach ($default_settings as $setting) { ?>
                     <div class="<?= $setting['col'] ?>">
                         <div class="mb-3">
-                            <?= generateFormControl($setting['field'], $setting['field'], $settingData[$setting['field']] ?? $setting['value'], "", $setting['type'], ucwords(str_replace('_', ' ', $setting['field'])), $setting['options']) ?>
+                            <?= generateFormControl($setting['field'], $setting['field'], $settingData[$setting['field']] ?? $setting['value'], "", $setting['type'], ucwords(str_replace('_', ' ', $setting['field'])), $setting['options'] ?? []) ?>
                         </div>
                     </div>
                 <?php } ?>

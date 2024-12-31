@@ -165,7 +165,7 @@ if (count($list) > 0) {
                 <td class="id">' . $item['title'] . '</td>
                 <td class="customer_name">' . $item['description'] . '</td>
                 <td class="email">' . $categoryMap[$item['category_id']] . '</td>
-                <td class="date">' . $commonController->convertDateTime($item['created_at']) . '</td>
+                <td class="date">' . $systemController->convertDateTime($item['created_at']) . '</td>
                 <td class="invoice_amount">' . convertAmount($item['amount']) . ' vnd</td>
                 <td>
                     <form action="' . home_url("finance/expenses") . '" method="POST">

@@ -93,8 +93,8 @@ include_once DIR . '/components/alert.php';
                                 </td>
                                 <td class="text-center"><?= $item['tags'] ?></td>
                                 <td class="text-center"><?= renderStatusBadge($item['status']) ?></td>
-                                <td class="text-end pe-5"><?= $commonController->convertDate($item['created_at']) ?></td>
-                                <td class="text-end pe-5"><?= $commonController->convertDate($item['updated_at']) ?></td>
+                                <td class="text-end pe-5"><?= $systemController->convertDate($item['created_at']) ?></td>
+                                <td class="text-end pe-5"><?= $systemController->convertDate($item['updated_at']) ?></td>
                             </tr>
                     <?php }
                     } ?>

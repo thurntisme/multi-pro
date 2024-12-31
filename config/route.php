@@ -1,4 +1,5 @@
 <?php
+require_once "controllers/SystemController.php";
 
 $token = $commonController->getToken();
 
@@ -25,6 +26,7 @@ if (!empty($token)) {
     $curr_data = $authenticationController->getCurrentUser();
     if (!empty($curr_data)) {
         $user_id = $curr_data['id'];
+        $systemController = new SystemController($user_id);
         $user_role = $curr_data['role'];
         $app_url = str_replace('app/', '', $url);
         $pageUrl = getPageData($app_url, $user_role)['url'];

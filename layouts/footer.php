@@ -9,7 +9,7 @@ $lastVersionKey = key($projectVersions);
             <div class="col-sm-6">
                 <script>
                     document.write(new Date().getFullYear())
-                </script> © <?= $commonController->getSiteName() ?>.
+                </script> © Mercufee.
             </div>
             <div class="col-sm-6">
                 <a href="<?= home_url("version") ?>" class="text-sm-end d-none d-sm-block">

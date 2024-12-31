@@ -71,7 +71,7 @@ if (count($list) > 0) {
               <div>
                 <strong>' . $item['title'] . '</strong> - $' . $item['amount'] . ' <br>
                 <small>' . $item['description'] . '</small> <br>
-                <small class="text-muted">Added on: ' . $commonController->convertDateTime($item['created_at']) . '</small>
+                <small class="text-muted">Added on: ' . $systemController->convertDateTime($item['created_at']) . '</small>
               </div>
               <form action="' . home_url("finance/income") . '" method="POST">
                 <input type="hidden" name="income_id" value="' . $item['id'] . '" />

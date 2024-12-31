@@ -40,7 +40,7 @@ foreach ($list as $project) {
                 <div class="d-flex flex-column h-100">
                     <div class="d-flex">
                         <div class="flex-grow-1">
-                            <p class="text-muted mb-1">Updated ' . timeAgo($commonController->convertDateTime($project['updated_at'])) . '</p>
+                            <p class="text-muted mb-1">Updated ' . timeAgo($systemController->convertDateTime($project['updated_at'])) . '</p>
                         </div>
                         <div class="flex-shrink-0">
                             <div class="d-flex gap-1 align-items-center">
@@ -74,7 +74,7 @@ foreach ($list as $project) {
                             <div class="col-6">
                                 <div>
                                     <p class="text-muted mb-1">Deadline</p>
-                                    <h5 class="fs-14">' . (!empty($project['end_date']) ? $commonController->convertDate($project['end_date']) : "Unset") . '</h5>
+                                    <h5 class="fs-14">' . (!empty($project['end_date']) ? $systemController->convertDate($project['end_date']) : "Unset") . '</h5>
                                 </div>
                             </div>
                         </div>

@@ -73,7 +73,7 @@ ob_start();
                                 <div>
                                     <p class="mb-2 text-uppercase fw-medium">Created At :</p>
                                     <h5 class="fs-15 mb-0">
-                                        <?= $commonController->convertDateTime($postData['created_at']) ?>
+                                        <?= $systemController->convertDateTime($postData['created_at']) ?>
                                     </h5>
                                 </div>
                             </div>
@@ -81,7 +81,7 @@ ob_start();
                                 <div>
                                     <p class="mb-2 text-uppercase fw-medium">Updated At :</p>
                                     <h5 class="fs-15 mb-0">
-                                        <?= $commonController->convertDateTime($postData['updated_at']) ?>
+                                        <?= $systemController->convertDateTime($postData['updated_at']) ?>
                                     </h5>
                                 </div>
                             </div>

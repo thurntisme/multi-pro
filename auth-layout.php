@@ -55,7 +55,7 @@
                             <p class="mb-0 text-muted">&copy;
                                 <script>
                                     document.write(new Date().getFullYear())
-                                </script> <?= $commonController->getSiteName() ?>
+                                </script> Mercufee
                             </p>
                         </div>
                     </div>

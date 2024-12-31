@@ -115,7 +115,7 @@ ob_start();
                         </tr>
                         <tr>
                           <th class="ps-0" scope="row">Joining Date</th>
-                          <td class="text-muted"><?= $commonController->convertDate($userData['created_at']) ?></td>
+                          <td class="text-muted"><?= $systemController->convertDate($userData['created_at']) ?></td>
                         </tr>
                       </tbody>
                     </table>

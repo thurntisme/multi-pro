@@ -1,7 +1,6 @@
 <?php
 
 define('DEFAULT_HOME_PATH', '');
-define('DEFAULT_TIMEZONE', 'Asia/Ho_Chi_Minh');
 define('DEFAULT_SITE_NAME', 'MultiPro');
 define('DEFAULT_DATE_FORMAT', 'Y-m-d');
 define('DEFAULT_TIME_FORMAT', 'H:i:s');
@@ -30,6 +29,10 @@ $months = [
 ];
 define("MONTHS", $months);
 
+$timezones = [];
+foreach (DateTimeZone::listIdentifiers() as $zone) {
+    $timezones[$zone] = $zone;
+};
 $settings = [
     // Basic Settings
     'basic' => [
@@ -48,8 +51,9 @@ $settings = [
         [
             'field' => 'timezone',
             'value' => 'UTC',
-            'type' => 'text',
-            'col' => 'col-6'
+            'type' => 'select',
+            'col' => 'col-6',
+            'options' => $timezones,
         ],
         [
             'field' => 'language',

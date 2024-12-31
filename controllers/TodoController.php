@@ -7,14 +7,17 @@ class TodoController
     private $user_id;
     private $pdo;
     private $todoService;
+    private $systemController;
 
     public function __construct()
     {
         global $user_id;
         global $pdo;
+        global $systemController;
         $this->user_id = $user_id;
         $this->pdo = $pdo;
         $this->todoService = new TodoService($pdo);
+        $this->systemController = $systemController;
     }
 
     // Handle creating a new todo

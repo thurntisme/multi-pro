@@ -79,7 +79,7 @@ include_once DIR . '/components/alert.php';
                                 <td class="text-center"><?= $item['context']['method'] ?></td>
                                 <td class="text-center"><?= $item['context']['route'] ?></td>
                                 <td class="text-center"><?= $item['context']['result']['code'] ?></td>
-                                <td class="text-end"><?= $commonController->convertDateTime($item['timestamp']) ?></td>
+                                <td class="text-end"><?= $systemController->convertDateTime($item['timestamp']) ?></td>
                             </tr>
                     <?php }
                     } ?>

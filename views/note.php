@@ -57,8 +57,8 @@ include_once DIR . '/components/alert.php';
                     <tr>
                         <th>Title</th>
                         <th>Tags</th>
-                        <th class="sort text-end pe-5">Created Date</th>
-                        <th class="sort text-end pe-5">Updated Date</th>
+                        <th class="sort text-end pe-5">Created At</th>
+                        <th class="sort text-end pe-5">Updated At</th>
                     </tr>
                 </thead>
                 <tbody class="list form-check-all">
@@ -84,8 +84,8 @@ include_once DIR . '/components/alert.php';
                                     </div>
                                 </td>
                                 <td><?= $item['tags'] ?></td>
-                                <td class="text-end pe-5"><?= $commonController->convertDate($item['created_at']) ?></td>
-                                <td class="text-end pe-5"><?= $commonController->convertDate($item['updated_at']) ?></td>
+                                <td class="text-end pe-5"><?= $systemController->convertDateTime($item['created_at']) ?></td>
+                                <td class="text-end pe-5"><?= $systemController->convertDateTime($item['updated_at']) ?></td>
                             </tr>
                     <?php }
                     } ?>

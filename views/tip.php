@@ -81,26 +81,26 @@ include_once DIR . '/components/alert.php';
                 <tbody class="list form-check-all">
                     <?php if (count($list['list']) > 0) {
                         foreach ($list['list'] as $item) { ?>
-                    <tr>
-                        <td>
-                            <div class="d-flex">
-                                <div class="flex-grow-1"><?= truncateString($item['title'], 50) ?></div>
-                                <div class="flex-shrink-0 ms-4">
-                                    <ul class="list-inline tasks-list-menu mb-0">
-                                        <li class="list-inline-item"><a
-                                                href="<?= home_url('tip/detail?id=' . $item['id']) ?>"><i
-                                                    class="ri-eye-fill align-bottom me-2 text-muted"></i></a></li>
-                                        <li class="list-inline-item"><a class="edit-item-btn"
-                                                href="<?= home_url('tip/edit?id=' . $item['id']) ?>"><i
-                                                    class="ri-pencil-fill align-bottom me-2 text-muted"></i></a></li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </td>
-                        <td><?= $item['tags'] ?></td>
-                        <td class="text-end pe-5"><?= $commonController->convertDate($item['created_at']) ?></td>
-                        <td class="text-end pe-5"><?= $commonController->convertDate($item['updated_at']) ?></td>
-                    </tr>
+                            <tr>
+                                <td>
+                                    <div class="d-flex">
+                                        <div class="flex-grow-1"><?= truncateString($item['title'], 50) ?></div>
+                                        <div class="flex-shrink-0 ms-4">
+                                            <ul class="list-inline tasks-list-menu mb-0">
+                                                <li class="list-inline-item"><a
+                                                        href="<?= home_url('tip/detail?id=' . $item['id']) ?>"><i
+                                                            class="ri-eye-fill align-bottom me-2 text-muted"></i></a></li>
+                                                <li class="list-inline-item"><a class="edit-item-btn"
+                                                        href="<?= home_url('tip/edit?id=' . $item['id']) ?>"><i
+                                                            class="ri-pencil-fill align-bottom me-2 text-muted"></i></a></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td><?= $item['tags'] ?></td>
+                                <td class="text-end pe-5"><?= $systemController->convertDate($item['created_at']) ?></td>
+                                <td class="text-end pe-5"><?= $systemController->convertDate($item['updated_at']) ?></td>
+                            </tr>
                     <?php }
                     } ?>
                 </tbody>

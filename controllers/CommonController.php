@@ -1,64 +1,11 @@
 <?php
 
-require_once 'services/SettingService.php';
-
 class CommonController
 {
-    private $settingService;
 
     public function __construct()
     {
         global $pdo;
-        $this->settingService = new SettingService($pdo);
-    }
-
-    public function convertDateTime($utcTime)
-    {
-        $dateTime = $this->getDateTime($utcTime);
-        // Format and display the converted time
-        return $dateTime->format('Y-m-d H:i:s');
-    }
-
-    private function getDateTime($utcTime)
-    {
-        $timezone = $this->getTimezone();
-
-        // Create a DateTime object in UTC
-        $dateTime = new DateTime($utcTime, new DateTimeZone('UTC'));
-
-        // Convert the time to the Asia/Ho_Chi_Minh time zone
-        $dateTime->setTimezone(new DateTimeZone($timezone));
-
-        return $dateTime;
-    }
-
-    public function getTimezone()
-    {
-        $timezone = $this->settingService->getSetting('timezone');
-        return $timezone['value'] ?? DEFAULT_TIMEZONE;
-    }
-
-    public function convertDate($utcTime): string
-    {
-        if ($utcTime !== '0000-00-00') {
-            $dateTime = $this->getDateTime($utcTime);
-            // Format and display the converted time
-            return $dateTime->format('Y-m-d');
-        }
-        return '';
-    }
-
-    public function convertTime($utcTime)
-    {
-        $dateTime = $this->getDateTime($utcTime);
-        // Format and display the converted time
-        return $dateTime->format('H:i:s');
-    }
-
-    public function getSiteName()
-    {
-        $siteName = $this->settingService->getSetting('site_name');
-        return $siteName['value'] ?? DEFAULT_SITE_NAME;
     }
 
     public function getToken()

@@ -26,12 +26,14 @@ require_once __DIR__ . '/constants/index.php';
 const DIR = __DIR__;
 define('HOME_PATH', $_ENV['HOME_PATH'] ?? DEFAULT_HOME_PATH);
 
-// Config timezone
 require_once "controllers/CommonController.php";
 $commonController = new CommonController();
 
 require_once "controllers/AuthenticationController.php";
 $authenticationController = new AuthenticationController();
+
+// Set default timezone to UTC
+date_default_timezone_set('UTC');
 
 // Start session
 session_start();
