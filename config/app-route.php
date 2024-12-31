@@ -103,6 +103,7 @@ function getPageData($slug, $role): array
         'calendar' => ['url' => DIR . '/views/calendar.php', 'title' => 'Calendar', 'role' => 3],
         'calendar/new' => ['url' => DIR . '/views/calendar-adjust.php', 'title' => 'Calendar', 'role' => 3],
         'calendar/edit' => ['url' => DIR . '/views/calendar-adjust.php', 'title' => 'Calendar', 'role' => 3],
+        'system-error' => ['url' => DIR . '/views/system-error.php', 'title' => 'System Error', 'role' => 0],
         // redirectUser
         'dashboard' => ['url' => DIR . '/functions/redirectUser.php', 'title' => 'Redirect', 'role' => 3],
         'login' => ['url' => DIR . '/functions/redirectUser.php', 'title' => 'Redirect', 'role' => 3],

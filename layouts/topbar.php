@@ -424,6 +424,15 @@ $fullName = !empty(trim($user_fullName)) ? $user_fullName : 'User';
                     </button>
                 </div>
 
+                <div class="ms-1 header-item d-none d-sm-flex">
+                    <a href="<?= home_url('app/system-error') ?>"
+                        class="btn btn-icon btn-topbar btn-ghost-secondary rounded-circle light-dark-mode">
+                        <i class='bx bx-bug fs-22'></i>
+                        <span class="position-absolute topbar-badge fs-10 translate-middle badge rounded-pill bg-danger">1<span
+                                class="visually-hidden">unread messages</span></span>
+                    </a>
+                </div>
+
                 <div class="dropdown topbar-head-dropdown ms-1 header-item" id="notificationDropdown">
                     <button type="button" class="btn btn-icon btn-topbar btn-ghost-secondary rounded-circle"
                         id="page-header-notifications-dropdown" data-bs-toggle="dropdown"
