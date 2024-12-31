@@ -96,7 +96,25 @@ class UserController
         $joined_date = isset($_GET['joined_date']) ? $_GET['joined_date'] : '';
         $user_role = isset($_GET['user_role']) ? $_GET['user_role'] : '';
 
-        $selectSql = $queryType === "result" ? "SELECT * FROM users" : "SELECT COUNT(*) FROM users";
+        $userQuery = "SELECT 
+            users.id, 
+            users.username,  
+            users.first_name,  
+            users.last_name, 
+            users.email, 
+            users.role, 
+            users.created_at, 
+            users.isEmailVerify, 
+            users.isActive, 
+            MAX(tokens.last_time_login) AS last_time_login
+        FROM 
+            users
+        LEFT JOIN 
+            tokens ON users.id = tokens.user_id
+        GROUP BY 
+            users.id;  
+        ";
+        $selectSql = $queryType === "result" ? $userQuery : "SELECT COUNT(*) FROM users";
         $sql = $selectSql . " WHERE id != $this->user_id ";
 
         if ($keyword !== '') {
@@ -104,6 +122,8 @@ class UserController
             $sql .= " AND (title LIKE :keyword OR tags LIKE :keyword OR content LIKE :keyword)";
         }
 
+        $startDate = '';
+        $endDate = '';
         if ($joined_date !== '') {
             $date_array = explode('to', $joined_date);
             $date_array = array_map('trim', $date_array);

@@ -16,6 +16,7 @@ class SystemController
 
     public function convertDateTime($utcTime)
     {
+        if (empty($utcTime)) return '';
         $dateTime = $this->getDateTime($utcTime);
         // Format and display the converted time
         return $dateTime->format('Y-m-d H:i:s');
@@ -82,6 +83,7 @@ class SystemController
 
     public function convertTime($utcTime)
     {
+        if (empty($utcTime)) return '';
         $dateTime = $this->getDateTime($utcTime);
         // Format and display the converted time
         return $dateTime->format('H:i:s');

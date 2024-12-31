@@ -70,12 +70,14 @@ include_once DIR . '/components/alert.php';
             <table class="table align-middle table-nowrap mb-0" id="todosTable">
                 <thead class="table-light text-muted">
                     <tr>
-                        <th>Title</th>
-                        <th>FirstName</th>
-                        <th>LastName</th>
-                        <th>email</th>
+                        <th>Username</th>
+                        <th>First Name</th>
+                        <th>Email</th>
                         <th class="text-center">Role</th>
+                        <th class="text-center">Email Verified</th>
+                        <th class="text-center">Status</th>
                         <th class="text-end">Joined Date</th>
+                        <th class="text-end">Last Login Time</th>
                     </tr>
                 </thead>
                 <tbody class="list form-check-all">
@@ -83,11 +85,21 @@ include_once DIR . '/components/alert.php';
                         foreach ($list['list'] as $item) { ?>
                             <tr>
                                 <td><?= $item['username'] ?></td>
-                                <td><?= $item['first_name'] ?></td>
-                                <td><?= $item['last_name'] ?></td>
+                                <td><?= $item['first_name'] . ' ' . $item['last_name'] ?></td>
                                 <td><?= $item['email'] ?></td>
                                 <td class="text-center"><?= $user_roles[$item['role']] ?></td>
+                                <td class="text-center">
+                                    <span class='badge bg-<?= $item['isEmailVerify'] === 0 ? 'light text-dark' : 'primary' ?>'>
+                                        <?= $item['isEmailVerify'] === 0 ? 'Waiting' : 'Verified' ?>
+                                    </span>
+                                </td>
+                                <td class="text-center">
+                                    <span class='badge bg-<?= $item['isActive'] === 0 ? 'light' : 'success' ?>'>
+                                        <?= $item['isActive'] === 0 ? 'Deactivate' : 'Active' ?>
+                                    </span>
+                                </td>
                                 <td class="text-end"><?= $systemController->convertDateTime($item['created_at']) ?></td>
+                                <td class="text-end"><?= $systemController->convertDateTime($item['last_time_login']) ?></td>
                             </tr>
                     <?php }
                     } ?>
