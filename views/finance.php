@@ -35,7 +35,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
-function renderPercentage($item)
+function renderPercentage($item): void
 {
     $text_color = 'muted';
     $icon = ' d-none ';
@@ -48,7 +48,7 @@ function renderPercentage($item)
         }
     }
 
-    echo '<span class="badge bg-light text-' . $text_color . ' mb-0"><i class="ri-arrow-' . $icon . '-line align-middle"></i> ' . $item['percentageChange'] . ' %</span>';
+    echo '<span class="badge bg-light text-' . $text_color . ' mb-0"><i class="ri-arrow-' . $icon . '-line align-middle"></i> ' . round($item['percentageChange'], 2) . ' %</span>';
 }
 
 ob_start();
@@ -58,223 +58,223 @@ ob_start();
 include_once DIR . '/components/alert.php';
 ?>
 
-<div class="row">
-    <div class="col-md-12">
-        <?php
-        include_once DIR . '/components/alert.php';
-        ?>
-    </div>
-    <div class="col-md-3">
-        <div class="card">
-            <form method="POST" action="<?= $_SERVER['REQUEST_URI'] ?>">
-                <div class="card-header">
-                    <h5 class="card-title mb-0">Create Finance</h5>
-                </div>
-                <div class="card-body">
-                    <div class="row g-4">
-                        <input type="hidden" name="action_name" value="new_record">
-                        <div class="col-lg-12">
-                            <div>
-                                <label for="title-Input" class="form-label">Title <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" id="title-Input" name="title"
-                                    placeholder="Enter title" required />
+    <div class="row">
+        <div class="col-md-12">
+            <?php
+            include_once DIR . '/components/alert.php';
+            ?>
+        </div>
+        <div class="col-md-3">
+            <div class="card">
+                <form method="POST" action="<?= $_SERVER['REQUEST_URI'] ?>">
+                    <div class="card-header">
+                        <h5 class="card-title mb-0">Create Finance</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row g-4">
+                            <input type="hidden" name="action_name" value="new_record">
+                            <div class="col-lg-12">
+                                <div>
+                                    <label for="title-Input" class="form-label">Title <span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control" id="title-Input" name="title"
+                                           placeholder="Enter title" required/>
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-lg-12">
-                            <div>
-                                <label for="job-type-Input" class="form-label">Category<span
-                                        class="text-danger">*</span></label>
-                                <select class="form-control" name="category" required data-choices
-                                    data-choices-sorting-false>
-                                    <?php foreach ($finance_categories as $category): ?>
-                                        <option value="<?php echo htmlspecialchars($category['slug']); ?>" <?= $category['slug'] === 'other' ? 'selected' : '' ?>>
-                                            <?php echo htmlspecialchars($category['icon'] . '  ' . $category['title']); ?>
-                                        </option>
-                                    <?php endforeach; ?>
-                                </select>
+                            <div class="col-lg-12">
+                                <div>
+                                    <label for="job-type-Input" class="form-label">Category<span
+                                                class="text-danger">*</span></label>
+                                    <select class="form-control" name="category" required data-choices
+                                            data-choices-sorting-false>
+                                        <?php foreach ($finance_categories as $category): ?>
+                                            <option value="<?php echo htmlspecialchars($category['slug']); ?>" <?= $category['slug'] === 'other' ? 'selected' : '' ?>>
+                                                <?php echo htmlspecialchars($category['icon'] . '  ' . $category['title']); ?>
+                                            </option>
+                                        <?php endforeach; ?>
+                                    </select>
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-lg-12">
-                            <div>
-                                <label for="date-expense-Input" class="form-label">Date of Expense <span
-                                        class="text-danger">*</span></label>
-                                <input type="text" class="form-control" id="date-expense-Input"
-                                    data-provider="flatpickr" data-date-format="Y-m-d" placeholder="Select date"
-                                    name="date_expense" value="<?= date('Y-m-d') ?>"
-                                    required />
+                            <div class="col-lg-12">
+                                <div>
+                                    <label for="date-expense-Input" class="form-label">Date of Expense <span
+                                                class="text-danger">*</span></label>
+                                    <input type="text" class="form-control" id="date-expense-Input"
+                                           data-provider="flatpickr" data-date-format="Y-m-d" placeholder="Select date"
+                                           name="date_expense" value="<?= date('Y-m-d') ?>"
+                                           required/>
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-md-12">
-                            <div>
-                                <label for="amount-Input" class="form-label">Amount <span
-                                        class="text-danger">*</span></label>
-                                <input type="text" class="form-control" id="amount-Input" name="amount"
-                                    placeholder="Enter start amount" required />
+                            <div class="col-md-12">
+                                <div>
+                                    <label for="amount-Input" class="form-label">Amount <span
+                                                class="text-danger">*</span></label>
+                                    <input type="text" class="form-control" id="amount-Input" name="amount"
+                                           placeholder="Enter start amount" required/>
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-lg-12">
-                            <div>
-                                <label for="description-field" class="form-label">Description</label>
-                                <textarea class="form-control" name="description" rows="3"
-                                    placeholder="Enter description"></textarea>
+                            <div class="col-lg-12">
+                                <div>
+                                    <label for="description-field" class="form-label">Description</label>
+                                    <textarea class="form-control" name="description" rows="3"
+                                              placeholder="Enter description"></textarea>
+                                </div>
                             </div>
-                        </div>
 
-                        <div class="col-lg-12">
-                            <div class="hstack justify-content-center">
-                                <button type="submit" class="btn btn-primary">Add Finance</button>
+                            <div class="col-lg-12">
+                                <div class="hstack justify-content-center">
+                                    <button type="submit" class="btn btn-primary">Add Finance</button>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            </form>
+                </form>
+            </div>
         </div>
-    </div>
-    <div class="col-md-9">
-        <div class="row">
-            <div class="col-xl-3 col-md-6">
-                <!-- card -->
-                <div class="card card-animate card-height-100">
-                    <div class="card-body">
-                        <div class="d-flex align-items-center">
-                            <div class="flex-grow-1 overflow-hidden">
-                                <p class="text-uppercase fw-medium text-muted text-truncate mb-0"> Total
-                                    Budget</p>
+        <div class="col-md-9">
+            <div class="row">
+                <div class="col-xl-3 col-md-6">
+                    <!-- card -->
+                    <div class="card card-animate card-height-100">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center">
+                                <div class="flex-grow-1 overflow-hidden">
+                                    <p class="text-uppercase fw-medium text-muted text-truncate mb-0"> Total
+                                        Budget</p>
+                                </div>
+                                <div class="flex-shrink-0">
+                                    <h5 class="text-success fs-14 mb-0">
+                                        <i class="ri-arrow-right-up-line fs-13 align-middle"></i> +100 %
+                                    </h5>
+                                </div>
                             </div>
-                            <div class="flex-shrink-0">
-                                <h5 class="text-success fs-14 mb-0">
-                                    <i class="ri-arrow-right-up-line fs-13 align-middle"></i> +100 %
-                                </h5>
-                            </div>
-                        </div>
-                        <div class="d-flex align-items-end justify-content-between mt-4">
-                            <div>
-                                <h4 class="fs-22 fw-semibold ff-secondary mb-4"><?= convertAmount($total_expense); ?>
-                                    vnd</h4>
-                                <a href="" class="text-decoration-underline" data-bs-toggle="modal"
-                                    data-bs-target="#budgetModal">View Budget Detail</a>
-                            </div>
-                            <div class="avatar-sm flex-shrink-0">
+                            <div class="d-flex align-items-end justify-content-between mt-4">
+                                <div>
+                                    <h4 class="fs-22 fw-semibold ff-secondary mb-4"><?= convertAmount($total_expense); ?>
+                                        vnd</h4>
+                                    <a href="" class="text-decoration-underline" data-bs-toggle="modal"
+                                       data-bs-target="#budgetModal">View Budget Detail</a>
+                                </div>
+                                <div class="avatar-sm flex-shrink-0">
                                 <span class="avatar-title bg-success-subtle rounded fs-3">
                                     <i class="bx bx-dollar-circle text-success"></i>
                                 </span>
+                                </div>
                             </div>
-                        </div>
-                    </div><!-- end card body -->
-                </div><!-- end card -->
-            </div><!-- end col -->
+                        </div><!-- end card body -->
+                    </div><!-- end card -->
+                </div><!-- end col -->
 
-            <div class="col-xl-3 col-md-6">
-                <div class="card card-animate card-height-100">
-                    <div class="card-body">
-                        <div class="d-flex justify-content-between">
-                            <div>
-                                <p class="fw-medium text-muted mb-0">Monthly Expense</p>
-                                <h2 class="mt-3 ff-secondary fw-semibold fs-22"><?= convertAmount($monthlyExpenses['expense']); ?>
-                                    vnd
-                                </h2><?php if (!empty($monthlyExpenses['lastExpense']) && $monthlyExpenses['lastExpense'] > 0) { ?>
-                                    <span class="text-muted fs-12">/ <?= convertAmount($monthlyExpenses['lastExpense']); ?> vnd</span>
-                                <?php } ?>
-                                <p class="mb-0 mt-2 text-muted"><?= renderPercentage($monthlyExpenses) ?>
-                                    vs. previous month</p>
+                <div class="col-xl-3 col-md-6">
+                    <div class="card card-animate card-height-100">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <p class="fw-medium text-muted mb-0">Monthly Expense</p>
+                                    <h2 class="mt-3 ff-secondary fw-semibold fs-22"><?= convertAmount($monthlyExpenses['expense']); ?>
+                                        vnd
+                                    </h2><?php if (!empty($monthlyExpenses['lastExpense']) && $monthlyExpenses['lastExpense'] > 0) { ?>
+                                        <span class="text-muted fs-12">/ <?= convertAmount($monthlyExpenses['lastExpense']); ?> vnd</span>
+                                    <?php } ?>
+                                    <p class="mb-0 mt-2 text-muted"><?= renderPercentage($monthlyExpenses) ?>
+                                        vs. previous month</p>
+                                </div>
                             </div>
-                        </div>
-                    </div><!-- end card body -->
-                </div>
-            </div><!-- end col -->
-
-            <div class="col-xl-3 col-md-6">
-                <div class="card card-animate card-height-100">
-                    <div class="card-body">
-                        <div class="d-flex justify-content-between">
-                            <div>
-                                <p class="fw-medium text-muted mb-0">Daily Expense</p>
-                                <h2 class="mt-3 ff-secondary fw-semibold fs-22"><?= convertAmount($dailyExpenses['expense']); ?>
-                                    vnd</h2>
-                                <?php if (!empty($dailyExpenses['lastExpense']) && $dailyExpenses['lastExpense'] > 0) { ?>
-                                    <span class="text-muted fs-12">/ <?= convertAmount($dailyExpenses['lastExpense']); ?> vnd</span>
-                                <?php } ?>
-                                <p class="mb-0 mt-1 text-muted"><?= renderPercentage($dailyExpenses) ?>
-                                    vs. yesterday</p>
-                            </div>
-                        </div>
-                    </div><!-- end card body -->
-                </div>
-            </div><!-- end col -->
-
-            <div class="col-xl-3 col-md-6">
-                <div class="card card-animate card-height-100">
-                    <div class="card-body">
-                        <div class="d-flex justify-content-between">
-                            <div>
-                                <p class="fw-medium text-muted mb-0">My Balance</p>
-                                <h2 class="mt-3 ff-secondary fw-semibold fs-22"><?= convertAmount($balance['expense']); ?>
-                                    vnd</h2>
-                                <?php if (!empty($balance['lastExpense']) && $balance['lastExpense'] > 0) { ?>
-                                    <span class="text-muted fs-12">/ <?= convertAmount($balance['lastExpense']); ?> vnd</span>
-                                <?php } ?>
-                                <p class="mb-0 mt-1 text-muted"><?= renderPercentage($balance) ?>
-                                    vs. previous month</p>
-                            </div>
-                        </div>
-                    </div><!-- end card body -->
-                </div>
-            </div><!-- end col -->
-        </div>
-        <div class="card">
-            <div class="card-body border border-dashed border-end-0 border-start-0 border-top-0">
-                <form method="get" action="<?= $_SERVER['REQUEST_URI'] ?>">
-                    <div class="row g-3">
-                        <div class="col-xxl-3 col-sm-12">
-                            <div class="search-box">
-                                <input type="text" name="s" class="form-control search bg-light border-light"
-                                    placeholder="Search for expenses or something..."
-                                    value="<?= $_GET['s'] ?? '' ?>">
-                                <i class="ri-search-line search-icon"></i>
-                            </div>
-                        </div>
-                        <!--end col-->
-                        <div class="col-xxl-3 col-sm-4">
-                            <input type="text" class="form-control bg-light border-light" name="date_expense"
-                                data-provider="flatpickr" data-date-format="Y-m-d" data-range-date="true"
-                                placeholder="Select date range" value="<?= $_GET['date_expense'] ?? '' ?>">
-                        </div>
-                        <div class="col-xxl-3 col-sm-4">
-                            <div class="input-light">
-                                <select class="form-control" data-choices
-                                    name="category">
-                                    <option value="">Select Category</option>
-                                    <?php
-                                    foreach ($finance_categories as $category):
-                                        $selected = (!empty($_GET['category']) ? $category['slug'] === $_GET['category'] : $category['slug'] === '') ? 'selected' : '';
-                                    ?>
-                                        <option value="<?php echo htmlspecialchars($category['slug']); ?>" <?= $selected ?>>
-                                            <?php echo htmlspecialchars($category['icon'] . '  ' . $category['title']); ?>
-                                        </option>
-                                    <?php endforeach; ?>
-                                    ?>
-                                </select>
-                            </div>
-                        </div>
-                        <!--end col-->
-                        <div class="col-xxl-3 col-sm-4 d-flex">
-                            <button type="submit" class="btn btn-primary"><i
-                                    class="ri-equalizer-fill me-1 align-bottom"></i>
-                                Filters
-                            </button>
-                            <a href="<?= home_url("finance") ?>" class="btn btn-danger ms-1"><i
-                                    class="ri-delete-bin-2-fill me-1 align-bottom"></i>Reset</a>
-                        </div>
-                        <!--end col-->
+                        </div><!-- end card body -->
                     </div>
-                    <!--end row-->
-                </form>
+                </div><!-- end col -->
+
+                <div class="col-xl-3 col-md-6">
+                    <div class="card card-animate card-height-100">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <p class="fw-medium text-muted mb-0">Daily Expense</p>
+                                    <h2 class="mt-3 ff-secondary fw-semibold fs-22"><?= convertAmount($dailyExpenses['expense']); ?>
+                                        vnd</h2>
+                                    <?php if (!empty($dailyExpenses['lastExpense']) && $dailyExpenses['lastExpense'] > 0) { ?>
+                                        <span class="text-muted fs-12">/ <?= convertAmount($dailyExpenses['lastExpense']); ?> vnd</span>
+                                    <?php } ?>
+                                    <p class="mb-0 mt-1 text-muted"><?= renderPercentage($dailyExpenses) ?>
+                                        vs. yesterday</p>
+                                </div>
+                            </div>
+                        </div><!-- end card body -->
+                    </div>
+                </div><!-- end col -->
+
+                <div class="col-xl-3 col-md-6">
+                    <div class="card card-animate card-height-100">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <p class="fw-medium text-muted mb-0">My Balance</p>
+                                    <h2 class="mt-3 ff-secondary fw-semibold fs-22"><?= convertAmount($balance['expense']); ?>
+                                        vnd</h2>
+                                    <?php if (!empty($balance['lastExpense']) && $balance['lastExpense'] > 0) { ?>
+                                        <span class="text-muted fs-12">/ <?= convertAmount($balance['lastExpense']); ?> vnd</span>
+                                    <?php } ?>
+                                    <p class="mb-0 mt-1 text-muted"><?= renderPercentage($balance) ?>
+                                        vs. previous month</p>
+                                </div>
+                            </div>
+                        </div><!-- end card body -->
+                    </div>
+                </div><!-- end col -->
             </div>
-            <!--end card-body-->
-            <div class="card-body">
-                <div class="table-responsive table-card mb-4">
-                    <table class="table align-middle table-nowrap mb-0" id="expensesTable">
-                        <thead class="table-light text-muted">
+            <div class="card">
+                <div class="card-body border border-dashed border-end-0 border-start-0 border-top-0">
+                    <form method="get" action="<?= $_SERVER['REQUEST_URI'] ?>">
+                        <div class="row g-3">
+                            <div class="col-xxl-3 col-sm-12">
+                                <div class="search-box">
+                                    <input type="text" name="s" class="form-control search bg-light border-light"
+                                           placeholder="Search for expenses or something..."
+                                           value="<?= $_GET['s'] ?? '' ?>">
+                                    <i class="ri-search-line search-icon"></i>
+                                </div>
+                            </div>
+                            <!--end col-->
+                            <div class="col-xxl-3 col-sm-4">
+                                <input type="text" class="form-control bg-light border-light" name="date_expense"
+                                       data-provider="flatpickr" data-date-format="Y-m-d" data-range-date="true"
+                                       placeholder="Select date range" value="<?= $_GET['date_expense'] ?? '' ?>">
+                            </div>
+                            <div class="col-xxl-3 col-sm-4">
+                                <div class="input-light">
+                                    <select class="form-control" data-choices
+                                            name="category">
+                                        <option value="">Select Category</option>
+                                        <?php
+                                        foreach ($finance_categories as $category):
+                                            $selected = (!empty($_GET['category']) ? $category['slug'] === $_GET['category'] : $category['slug'] === '') ? 'selected' : '';
+                                            ?>
+                                            <option value="<?php echo htmlspecialchars($category['slug']); ?>" <?= $selected ?>>
+                                                <?php echo htmlspecialchars($category['icon'] . '  ' . $category['title']); ?>
+                                            </option>
+                                        <?php endforeach; ?>
+                                        ?>
+                                    </select>
+                                </div>
+                            </div>
+                            <!--end col-->
+                            <div class="col-xxl-3 col-sm-4 d-flex">
+                                <button type="submit" class="btn btn-primary"><i
+                                            class="ri-equalizer-fill me-1 align-bottom"></i>
+                                    Filters
+                                </button>
+                                <a href="<?= home_url("finance") ?>" class="btn btn-danger ms-1"><i
+                                            class="ri-delete-bin-2-fill me-1 align-bottom"></i>Reset</a>
+                            </div>
+                            <!--end col-->
+                        </div>
+                        <!--end row-->
+                    </form>
+                </div>
+                <!--end card-body-->
+                <div class="card-body">
+                    <div class="table-responsive table-card mb-4">
+                        <table class="table align-middle table-nowrap mb-0" id="expensesTable">
+                            <thead class="table-light text-muted">
                             <tr>
                                 <th>Title</th>
                                 <th>Description</th>
@@ -283,14 +283,14 @@ include_once DIR . '/components/alert.php';
                                 <th class="text-center">Date of Expense</th>
                                 <th></th>
                             </tr>
-                        </thead>
-                        <tbody class="list form-check-all">
+                            </thead>
+                            <tbody class="list form-check-all">
                             <?php if (count($list['list']) > 0) {
                                 foreach ($list['list'] as $item) {
                                     $category = array_filter($finance_categories, function ($cate) use ($item) {
                                         return $cate['slug'] == $item['category'];
                                     });
-                            ?>
+                                    ?>
                                     <tr>
                                         <td><?= $item['title'] ?></td>
                                         <td><?= $item['description'] ?></td>
@@ -307,40 +307,40 @@ include_once DIR . '/components/alert.php';
                                             </form>
                                         </td>
                                     </tr>
-                            <?php }
+                                <?php }
                             } ?>
-                        </tbody>
-                    </table>
+                            </tbody>
+                        </table>
+                    </div>
+                    <?php
+                    includeFileWithVariables('components/pagination.php', array("count" => $list['count'], 'perPage' => 6));
+                    ?>
                 </div>
-                <?php
-                includeFileWithVariables('components/pagination.php', array("count" => $list['count'], 'perPage' => 6));
-                ?>
+                <!--end card-body-->
             </div>
-            <!--end card-body-->
         </div>
     </div>
-</div>
 
-<!-- Default Modals -->
-<div id="budgetModal" class="modal fade" tabindex="-1" aria-labelledby="myModalLabel" aria-hidden="true"
-    style="display: none;">
-    <div class="modal-dialog modal-dialog-scrollable">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="myModalLabel">Budget Detail</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <!-- Striped Rows -->
-                <table class="table table-striped">
-                    <thead>
+    <!-- Default Modals -->
+    <div id="budgetModal" class="modal fade" tabindex="-1" aria-labelledby="myModalLabel" aria-hidden="true"
+         style="display: none;">
+        <div class="modal-dialog modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="myModalLabel">Budget Detail</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- Striped Rows -->
+                    <table class="table table-striped">
+                        <thead>
                         <tr>
                             <th scope="col">Id</th>
                             <th scope="col">Title</th>
                             <th scope="col" class="text-end">Amount</th>
                         </tr>
-                    </thead>
-                    <tbody>
+                        </thead>
+                        <tbody>
                         <?php foreach ($finance_categories as $index => $item) { ?>
                             <tr>
                                 <td><?= $index + 1 ?></td>
@@ -348,28 +348,28 @@ include_once DIR . '/components/alert.php';
                                 <td class="text-end"><?= convertAmount($item['amount']) ?> vnd</td>
                             </tr>
                         <?php } ?>
-                    </tbody>
-                </table>
-            </div>
-            <div class="modal-footer d-flex justify-content-center">
-                <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
-            </div>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="modal-footer d-flex justify-content-center">
+                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
+                </div>
 
-        </div><!-- /.modal-content -->
-    </div><!-- /.modal-dialog -->
-</div><!-- /.modal -->
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
 
 <?php
 $pageContent = ob_get_clean();
 
 ob_start();
 ?>
-<script src="<?= home_url('assets/libs/cleave.js/cleave.min.js') ?>"></script>
-<script type="text/javascript">
-    new Cleave('#amount-Input', {
-        numeral: true,
-        numeralThousandsGroupStyle: 'thousand'
-    });
-</script>
+    <script src="<?= home_url('assets/libs/cleave.js/cleave.min.js') ?>"></script>
+    <script type="text/javascript">
+        new Cleave('#amount-Input', {
+            numeral: true,
+            numeralThousandsGroupStyle: 'thousand'
+        });
+    </script>
 <?php
 $additionJs = ob_get_clean();

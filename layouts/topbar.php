@@ -1,4 +1,6 @@
 <?php
+require_once 'controllers/NotificationController.php';
+
 $user = new UserController();
 $user_fullName = $user->getUserFullName($user_id);
 $fullName = !empty(trim($user_fullName)) ? $user_fullName : 'User';
@@ -6,6 +8,9 @@ $fullName = !empty(trim($user_fullName)) ? $user_fullName : 'User';
 $file = 'error.log';
 $content = file_get_contents($file);
 $error_count = substr_count($content, 'PHP Warning');
+
+$notificationController = new NotificationController();
+$notifications = $notificationController->newestNotifications($user_id);
 
 ?>
 
@@ -447,8 +452,10 @@ $error_count = substr_count($content, 'PHP Warning');
                             id="page-header-notifications-dropdown" data-bs-toggle="dropdown"
                             data-bs-auto-close="outside" aria-haspopup="true" aria-expanded="false">
                         <i class='bx bx-bell fs-22'></i>
-                        <span class="position-absolute topbar-badge fs-10 translate-middle badge rounded-pill bg-danger">3<span
-                                    class="visually-hidden">unread messages</span></span>
+                        <?php if ($notifications['count'] > 0) { ?>
+                            <span class="position-absolute topbar-badge fs-10 translate-middle badge rounded-pill bg-danger"><?= $notifications['count'] ?><span
+                                        class="visually-hidden">unread messages</span></span>
+                        <?php } ?>
                     </button>
                     <div class="dropdown-menu dropdown-menu-lg dropdown-menu-end p-0"
                          aria-labelledby="page-header-notifications-dropdown">
@@ -460,7 +467,9 @@ $error_count = substr_count($content, 'PHP Warning');
                                         <h6 class="m-0 fs-16 fw-semibold text-white"> Notifications </h6>
                                     </div>
                                     <div class="col-auto dropdown-tabs">
-                                        <span class="badge bg-light-subtle text-body fs-13"> 4 New</span>
+                                        <?php if ($notifications['count'] > 0) { ?>
+                                            <span class="badge bg-light-subtle text-body fs-13"> <?= $notifications['count'] ?> New</span>
+                                        <?php } ?>
                                     </div>
                                 </div>
                             </div>
@@ -494,34 +503,37 @@ $error_count = substr_count($content, 'PHP Warning');
                         <div class="tab-content position-relative" id="notificationItemsTabContent">
                             <div class="tab-pane fade show active py-2 ps-2" id="all-noti-tab" role="tabpanel">
                                 <div data-simplebar style="max-height: 300px;" class="pe-2">
-                                    <div class="text-reset notification-item d-block dropdown-item position-relative">
-                                        <div class="d-flex">
-                                            <div class="avatar-xs me-3 flex-shrink-0">
-                                                <span class="avatar-title bg-info-subtle text-info rounded-circle fs-16">
-                                                    <i class="bx bx-badge-check"></i>
-                                                </span>
-                                            </div>
-                                            <div class="flex-grow-1">
-                                                <a href="#!" class="stretched-link">
-                                                    <h6 class="mt-0 mb-2 lh-base">Your <b>Elite</b> author Graphic
-                                                        Optimization <span class="text-secondary">reward</span> is
-                                                        ready!
-                                                    </h6>
-                                                </a>
-                                                <p class="mb-0 fs-11 fw-medium text-uppercase text-muted">
-                                                    <span><i class="mdi mdi-clock-outline"></i> Just 30 sec ago</span>
-                                                </p>
-                                            </div>
-                                            <div class="px-2 fs-15">
-                                                <div class="form-check notification-check">
-                                                    <input class="form-check-input" type="checkbox" value=""
-                                                           id="all-notification-check01">
-                                                    <label class="form-check-label"
-                                                           for="all-notification-check01"></label>
+                                    <?php foreach ($notifications['newest'] as $noti) { ?>
+                                        <div class="text-reset notification-item d-block dropdown-item position-relative">
+                                            <div class="d-flex">
+                                                <img src="<?= home_url("assets/images/users/avatar-8.jpg") ?>"
+                                                     class="me-3 rounded-circle avatar-xs flex-shrink-0" alt="user-pic">
+                                                <div class="flex-grow-1">
+                                                    <a href="#!" class="stretched-link">
+                                                        <h6 class="mt-0 mb-1 fs-13 fw-semibold"><?= $noti['title'] ?></h6>
+                                                    </a>
+                                                    <div class="fs-13 text-muted">
+                                                        <p class="mb-1"><?= $noti['message'] ?></p>
+                                                    </div>
+                                                    <p class="mb-0 fs-11 fw-medium text-uppercase text-muted">
+                                                        <span><i class="mdi mdi-clock-outline"></i> <?= $systemController->convertDateTime($noti['created_at']) ?>></span>
+                                                    </p>
+                                                </div>
+                                                <div class="px-2 fs-15">
+                                                    <?php if ($noti['is_read'] === '0') { ?>
+                                                        <div class="form-check notification-check">
+                                                            <input class="form-check-input notification-check"
+                                                                   type="checkbox" value=""
+                                                                   data-idx="<?= $noti['id'] ?>"
+                                                                   id="all-notification-check<?= $noti['id'] ?>">
+                                                            <label class="form-check-label"
+                                                                   for="all-notification-check<?= $noti['id'] ?>"></label>
+                                                        </div>
+                                                    <?php } ?>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
+                                    <?php } ?>
 
                                     <div class="text-reset notification-item d-block dropdown-item position-relative">
                                         <div class="d-flex">
