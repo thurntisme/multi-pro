@@ -104,6 +104,7 @@ class UserController
             users.email, 
             users.role, 
             users.created_at, 
+            users.updated_at, 
             users.isEmailVerify, 
             users.isActive, 
             MAX(tokens.last_time_login) AS last_time_login
@@ -111,15 +112,13 @@ class UserController
             users
         LEFT JOIN 
             tokens ON users.id = tokens.user_id
-        GROUP BY 
-            users.id;  
+        WHERE users.id != $this->user_id
         ";
-        $selectSql = $queryType === "result" ? $userQuery : "SELECT COUNT(*) FROM users";
-        $sql = $selectSql . " WHERE id != $this->user_id ";
+        $sql = $queryType === "result" ? $userQuery : "SELECT COUNT(*) FROM users WHERE id != $this->user_id";
 
         if ($keyword !== '') {
-            $keyword = '%' . $keyword . '%'; // Prepare for LIKE search
-            $sql .= " AND (title LIKE :keyword OR tags LIKE :keyword OR content LIKE :keyword)";
+            $keyword = '%' . $keyword . '%';
+            $sql .= " AND (username LIKE :keyword OR first_name LIKE :keyword OR last_name LIKE :keyword OR email LIKE :keyword)";
         }
 
         $startDate = '';
@@ -138,6 +137,10 @@ class UserController
         // Sorting parameters (optional)
         $sortColumn = $_GET['sort'] ?? 'created_at';
         $sortOrder = isset($_GET['order']) && in_array(strtoupper($_GET['order']), ['ASC', 'DESC']) ? strtoupper($_GET['order']) : 'DESC'; // Default to DESC
+
+        if ($queryType === "result") {
+            $sql .= " GROUP BY users.id";
+        }
 
         // Add the ORDER BY clause dynamically
         $sql .= " ORDER BY $sortColumn $sortOrder";

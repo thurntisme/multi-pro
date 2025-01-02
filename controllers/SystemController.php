@@ -94,4 +94,16 @@ class SystemController
         $siteName = $this->settingService->getSetting('site_name');
         return $siteName['value'] ?? DEFAULT_SITE_NAME;
     }
+
+    public function checkUserOnline($last_time_login)
+    {
+        if (empty($last_time_login)) return false;
+        $loginTime = $this->getDateTime($last_time_login);
+        $currentTime = $this->getDateTime('');
+
+        $interval = $loginTime->diff($currentTime);
+
+        // Check if the difference is less than 1 day
+        return $interval->days < 1 && $interval->invert == 0;
+    }
 }

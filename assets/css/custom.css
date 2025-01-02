@@ -49,3 +49,11 @@ tr.my-club-player-row.selected :is(.btn-search, .btn-change) {
 .dropdown-icon-item:hover {
     background-color: #eff2f7;
 }
+
+.user-online {
+    background-color: #0ab39c;
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    display: inline-block;
+}
