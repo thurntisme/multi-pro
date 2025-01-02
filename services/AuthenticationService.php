@@ -30,44 +30,82 @@ class AuthenticationService
         global $commonController;
 
         // Retrieve user from database
-        $stmt = $this->pdo->prepare('SELECT * FROM users WHERE email = ?');
-        $stmt->execute([$email]);
-        $user = $stmt->fetch();
+        $user = $this->getUserByEmail($email);
 
         if ($user && password_verify($password, $user['password'])) {
-            // Check existing tokens for the user
-            $stmt = $this->pdo->prepare('SELECT id FROM tokens WHERE user_id = ? ORDER BY last_time_login ASC');
-            $stmt->execute([$user['id']]);
-            $tokens = $stmt->fetchAll(PDO::FETCH_COLUMN); // Fetch only IDs
+            // Manage tokens for the user
+            $this->manageUserTokens($user['id']);
 
-            // Remove the oldest token if more than 3 exist
-            if (count($tokens) >= 3) {
-                $oldestTokenId = $tokens[0]; // Get the oldest token ID
-                $stmt = $this->pdo->prepare('DELETE FROM tokens WHERE id = ?');
-                $stmt->execute([$oldestTokenId]);
-            }
+            // Generate and store a new token
+            $token = $this->createUserToken($user['id'], $commonController);
 
-            // Generate a token
-            $token = bin2hex(random_bytes(16)); // 32-character token
-            $expires_at = date('Y-m-d H:i:s', strtotime('+1 day')); // Token expiration time
-            $deviceDetails = $commonController->getDeviceDetails();
-            $ipAddress = $_SERVER['REMOTE_ADDR'];
-            $lastTimeLogin = date('Y-m-d H:i:s');
-
-            // Store token in the database
-            $stmt = $this->pdo->prepare('INSERT INTO tokens (user_id, token, expires_at, device_name, device_type, ip_address, last_time_login) VALUES (?, ?, ?, ?, ?, ?, ?)');
-            $stmt->execute([$user['id'], $token, $expires_at, $deviceDetails['device_name'], $deviceDetails['device_type'], $ipAddress, $lastTimeLogin]);
+            // Update user's last login time
+            $this->updateUserLastLogin($user['id']);
 
             return $token;
-        } else {
-            return null;
         }
+
+        return null;
+    }
+
+    private function getUserByEmail($email)
+    {
+        $stmt = $this->pdo->prepare('SELECT * FROM users WHERE email = ?');
+        $stmt->execute([$email]);
+        return $stmt->fetch();
+    }
+
+    private function manageUserTokens($userId)
+    {
+        $stmt = $this->pdo->prepare('SELECT id FROM tokens WHERE user_id = ? ORDER BY last_time_login ASC');
+        $stmt->execute([$userId]);
+        $tokens = $stmt->fetchAll(PDO::FETCH_COLUMN);
+
+        // Remove the oldest token if more than 3 exist
+        if (count($tokens) >= 3) {
+            $oldestTokenId = $tokens[0];
+            $stmt = $this->pdo->prepare('DELETE FROM tokens WHERE id = ?');
+            $stmt->execute([$oldestTokenId]);
+        }
+    }
+
+    private function createUserToken($userId, $commonController)
+    {
+        $token = bin2hex(random_bytes(16));
+        $expiresAt = date('Y-m-d H:i:s', strtotime('+1 day'));
+        $deviceDetails = $commonController->getDeviceDetails();
+        $ipAddress = $_SERVER['REMOTE_ADDR'];
+        $lastTimeLogin = date('Y-m-d H:i:s');
+
+        $stmt = $this->pdo->prepare(
+            'INSERT INTO tokens (user_id, token, expires_at, device_name, device_type, ip_address, last_time_login) 
+        VALUES (?, ?, ?, ?, ?, ?, ?)'
+        );
+        $stmt->execute([
+            $userId,
+            $token,
+            $expiresAt,
+            $deviceDetails['device_name'],
+            $deviceDetails['device_type'],
+            $ipAddress,
+            $lastTimeLogin
+        ]);
+
+        return $token;
+    }
+
+    private function updateUserLastLogin($userId)
+    {
+        $lastTimeLogin = date('Y-m-d H:i:s');
+        $stmt = $this->pdo->prepare('UPDATE users SET last_login = :last_login, updated_at = CURRENT_TIMESTAMP WHERE id = :id');
+        $stmt->execute(['id' => $userId, 'last_login' => $lastTimeLogin]);
     }
 
     public function logoutUser($token)
     {
-        $stmt = $this->pdo->prepare('DELETE FROM tokens WHERE token = ?');
-        $stmt->execute([$token]);
+        $ipAddress = $_SERVER['REMOTE_ADDR'];
+        $stmt = $this->pdo->prepare('DELETE FROM tokens WHERE token = ? AND ip_address = ?');
+        $stmt->execute([$token, $ipAddress]);
     }
 
     public function getTokenData($token)

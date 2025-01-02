@@ -120,7 +120,7 @@ include_once DIR . '/components/alert.php';
                                     </span>
                                 </td>
                                 <td class="text-end"><?= $systemController->convertDateTime($item['created_at']) ?></td>
-                                <td class="text-end"><?= $systemController->convertDateTime($item['last_time_login']) ?></td>
+                                <td class="text-end"><?= $systemController->convertDateTime($item['last_login']) ?></td>
                                 <td class="text-end"><?= $systemController->convertDateTime($item['updated_at']) ?></td>
                             </tr>
                     <?php }

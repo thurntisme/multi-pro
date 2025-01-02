@@ -107,6 +107,7 @@ class UserController
             users.updated_at, 
             users.isEmailVerify, 
             users.isActive, 
+            users.last_login,  
             MAX(tokens.last_time_login) AS last_time_login
         FROM 
             users
