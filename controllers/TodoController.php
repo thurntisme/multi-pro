@@ -48,7 +48,7 @@ class TodoController
             $_SESSION['message'] = "Failed to create todo";
         }
 
-        header("Location: " . home_url("todo"));
+        header("Location: " . home_url("app/todo"));
         exit;
     }
 
@@ -108,7 +108,7 @@ class TodoController
             $_SESSION['message'] = "Failed to delete todo.";
         }
 
-        header("Location: " . home_url("todo"));
+        header("Location: " . home_url("app/todo"));
         exit;
     }
 

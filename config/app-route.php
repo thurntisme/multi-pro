@@ -92,6 +92,8 @@ function getPageData($slug, $role): array
         'file-manager/new' => ['url' => DIR . '/views/file-manager.php', 'title' => 'File Manager - New', 'role' => 3],
         'api-log' => ['url' => DIR . '/views/api-log.php', 'title' => 'API Log', 'role' => 0],
         'user-management' => ['url' => DIR . '/views/user-management.php', 'title' => 'User Management', 'role' => 0],
+        'user-management/detail' => ['url' => DIR . '/views/user-management-detail.php', 'title' => 'User Management', 'role' => 0],
+        'user-management/edit' => ['url' => DIR . '/views/user-management-detail.php', 'title' => 'User Management', 'role' => 0],
         'settings' => ['url' => DIR . '/views/settings.php', 'title' => 'Settings', 'role' => 0],
         'mail-log' => ['url' => DIR . '/views/mail-log.php', 'title' => 'Mail', 'role' => 0],
         'database' => ['url' => DIR . '/views/database.php', 'title' => 'Database', 'role' => 0],

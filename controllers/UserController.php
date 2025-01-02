@@ -172,4 +172,42 @@ class UserController
         $stmt->execute();
         return $queryType === "result" ? $stmt->fetchAll(PDO::FETCH_ASSOC) : $stmt->fetchColumn();
     }
+
+    public function viewUser($id)
+    {
+        $userData = $this->userService->getUser('id', $id);
+        $listDevices = $this->getUserDevices($id);
+
+        return array_merge($userData, ['devices' => $listDevices]);
+    }
+
+    private function getUserDevices($id)
+    {
+        $sql = "SELECT * FROM tokens WHERE user_id = :user_id ORDER BY updated_at DESC";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute([':user_id' => $id]);
+
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function changeUserStatus($id)
+    {
+        $userData = $this->userService->getUser('id', $id);
+        $newStatus = $userData['isActive'] === 0 ? 1 : 0;
+        $rowsAffected = $this->userService->changeUserStatus($id, $newStatus);
+        if ($rowsAffected) {
+            $_SESSION['message_type'] = 'success';
+            $_SESSION['message'] = sprintf(
+                "User (ID: %d) status updated successfully to %s.",
+                $id,
+                $newStatus === 1 ? 'active' : 'inactive'
+            );
+        } else {
+            $_SESSION['message_type'] = 'danger';
+            $_SESSION['message'] = "Failed to update user.";
+        }
+
+        header("Location: " . $_SERVER['REQUEST_URI']);
+        exit;
+    }
 }

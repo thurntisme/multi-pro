@@ -52,4 +52,15 @@ class UserService
             throw new Exception("Error retrieving users: " . $e->getMessage());
         }
     }
+
+    public function changeUserStatus($id, $isActive)
+    {
+        try {
+            $stmt = $this->pdo->prepare("UPDATE users SET isActive = :isActive WHERE id = :id");
+            $stmt->execute(['id' => $id, 'isActive' => $isActive]);
+            return $stmt->rowCount();
+        } catch (PDOException $e) {
+            throw new Exception("Error updating user: " . $e->getMessage());
+        }
+    }
 }

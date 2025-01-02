@@ -116,7 +116,7 @@ include_once DIR . '/components/alert.php';
                                 </td>
                                 <td class="text-center">
                                     <span class='badge bg-<?= $item['isActive'] === 0 ? 'danger' : 'success' ?>'>
-                                        <?= $item['isActive'] === 0 ? 'Deactivate' : 'Active' ?>
+                                        <?= $item['isActive'] === 0 ? 'Inactivate' : 'Active' ?>
                                     </span>
                                 </td>
                                 <td class="text-end"><?= $systemController->convertDateTime($item['created_at']) ?></td>
