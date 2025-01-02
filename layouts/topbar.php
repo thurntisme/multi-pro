@@ -437,6 +437,13 @@ $notifications = $notificationController->newestNotifications($user_id);
                 </div>
 
                 <div class="ms-1 header-item d-none d-sm-flex">
+                    <a href="<?= home_url('app/system-notification') ?>"
+                        class="btn btn-icon btn-topbar btn-ghost-secondary rounded-circle light-dark-mode">
+                        <i class='bx bx-broadcast fs-22'></i>
+                    </a>
+                </div>
+
+                <div class="ms-1 header-item d-none d-sm-flex">
                     <a href="<?= home_url('app/system-error') ?>"
                         class="btn btn-icon btn-topbar btn-ghost-secondary rounded-circle light-dark-mode">
                         <i class='bx bx-bug fs-22'></i>
