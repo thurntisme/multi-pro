@@ -21,35 +21,19 @@ class NotificationController
     }
 
     // Handle creating a new notification
-    public function createNotification()
+    public function createNotification($csrf_token, $title, $type, $message)
     {
         // Check CSRF Token
-        if ($_POST['csrf_token'] !== $_SESSION['csrf_token']) {
+        if ($csrf_token !== $_SESSION['csrf_token']) {
             $_SESSION['message_type'] = 'danger';
             $_SESSION['message'] = "Failed to create notification. CSRF token mismatch";
             header("Location: " . $_SERVER['REQUEST_URI']);
             exit;
         }
 
-        $title = $_POST['title'] ?? '';
-        $content = $_POST['content'] ?? '';
-        $tags = $_POST['tags'] ?? '';
-        $status = $_POST['status'] ?? '';
-        $priority = $_POST['priority'] ?? '';
-        //        $due_date = !empty($_POST['due_date']) ? $_POST['due_date'] : date('Y-m-d');
-        $due_date = $_POST['due_date'] ?? '';
-
-        if ($title) {
-            $this->notificationService->createNotification($title, $content, $tags, $status, $priority, $due_date);
-            $_SESSION['message_type'] = 'success';
-            $_SESSION['message'] = "Notification created successfully";
-        } else {
-            $_SESSION['message_type'] = 'danger';
-            $_SESSION['message'] = "Failed to create notification";
+        if ($title && $type && $message) {
+            $this->notificationService->createNotification($title, $type, $message);
         }
-
-        header("Location: " . home_url("notification"));
-        exit;
     }
 
     // Handle updating a notification

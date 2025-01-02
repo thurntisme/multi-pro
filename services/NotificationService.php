@@ -13,21 +13,21 @@ class NotificationService
     }
 
     // Create a new notification
-    public function createNotification($title, $content, $tags, $status, $priority, $due_date)
+    public function createNotification($title, $type, $message)
     {
-        $sql = "INSERT INTO notifications (title, content, tags, status, priority, due_date, user_id) VALUES (:title, :content, :tags, :status, :priority, :due_date, :user_id)";
+        $sql = "INSERT INTO notifications (title, type, message, user_id) VALUES (:title, :type, :message, :user_id)";
         $stmt = $this->pdo->prepare($sql);
-        $stmt->execute([':title' => $title, ':content' => $content, ':tags' => $tags, ':status' => $status, ':priority' => $priority, ':due_date' => $due_date, ':user_id' => $this->user_id]);
+        $stmt->execute([':title' => $title, ':type' => $type, ':message' => $message, ':user_id' => $this->user_id]);
 
         return $this->pdo->lastInsertId();
     }
 
     // Update a notification
-    public function updateNotification($id, $title, $content, $tags, $status, $priority, $due_date)
+    public function readNotification($id)
     {
-        $sql = "UPDATE notifications SET title = :title, content = :content, tags = :tags, status = :status, priority = :priority, due_date = :due_date, updated_at = CURRENT_TIMESTAMP WHERE user_id = :user_id AND id = :id";
+        $sql = "UPDATE notifications SET is_read = :is_read, updated_at = CURRENT_TIMESTAMP WHERE user_id = :user_id AND id = :id";
         $stmt = $this->pdo->prepare($sql);
-        $stmt->execute([':title' => $title, ':content' => $content, ':tags' => $tags, ':status' => $status, ':priority' => $priority, ':due_date' => $due_date, ':id' => $id, ':user_id' => $this->user_id]);
+        $stmt->execute([':is_read' => 1, ':id' => $id, ':user_id' => $this->user_id]);
 
         return $stmt->rowCount();
     }
