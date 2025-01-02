@@ -1,5 +1,6 @@
 <?php
 require_once 'controllers/NotificationController.php';
+require_once 'controllers/SystemNotificationController.php';
 
 $user = new UserController();
 $user_fullName = $user->getUserFullName($user_id);
@@ -10,7 +11,9 @@ $content = file_get_contents($file);
 $error_count = substr_count($content, 'PHP Warning');
 
 $notificationController = new NotificationController();
+$systemNotificationController = new SystemNotificationController();
 $notifications = $notificationController->newestNotifications($user_id);
+$systemNotiCount = $systemNotificationController->getSystemNotificationsUnreadCount();
 
 ?>
 
@@ -440,6 +443,10 @@ $notifications = $notificationController->newestNotifications($user_id);
                     <a href="<?= home_url('app/system-notification') ?>"
                         class="btn btn-icon btn-topbar btn-ghost-secondary rounded-circle light-dark-mode">
                         <i class='bx bx-broadcast fs-22'></i>
+                        <?php if ($systemNotiCount > 0) { ?>
+                            <span class="position-absolute topbar-badge fs-10 translate-middle badge rounded-pill bg-danger"><?= $systemNotiCount ?><span
+                                    class="visually-hidden">unread messages</span></span>
+                        <?php } ?>
                     </a>
                 </div>
 

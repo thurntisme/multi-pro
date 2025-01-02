@@ -1,16 +1,16 @@
 <?php
 global $priorities, $status;
-require_once 'controllers/TodoController.php';
+require_once 'controllers/SystemNotificationController.php';
 
 $pageTitle = "System Notifications";
 
-$todoController = new TodoController();
-$list = $todoController->listTodos();
+$systemNotificationController = new SystemNotificationController();
+$list = $systemNotificationController->listNotifications();
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_POST['action_name'])) {
-        if ($_POST['action_name'] === 'delete_record' && isset($_POST['post_id'])) {
-            $todoController->deleteTodo();
+        if ($_POST['action_name'] === 'delete_record') {
+            $systemNotificationController->deleteSystemNotification();
         }
     }
 }
@@ -65,11 +65,9 @@ include_once DIR . '/components/alert.php';
                 <thead class="table-light text-muted">
                     <tr>
                         <th>Title</th>
-                        <th class="text-center">Due Date</th>
-                        <th class="text-center">Tags</th>
-                        <th class="text-center">Priority</th>
-                        <th class="text-center">Status</th>
-                        <th class="text-end">Last Updated</th>
+                        <th class="text-center">Type</th>
+                        <th>Message</th>
+                        <th class="text-end">Log Time</th>
                     </tr>
                 </thead>
                 <tbody class="list form-check-all">
@@ -78,8 +76,7 @@ include_once DIR . '/components/alert.php';
                             <tr>
                                 <td>
                                     <div class="d-flex align-items-baseline">
-                                        <a class="text-black"
-                                            href="<?= home_url('app/todo/detail?id=' . $item['id']) ?>"><?= truncateString($item['title'], 50) ?></a>
+                                        <span class="text-black"><?= $item['title'] ?></span>
                                         <ul class="list-inline tasks-list-menu mb-0 ms-3">
                                             <li class="list-inline-item m-0"><a
                                                     class="edit-item-btn btn btn-link btn-sm"
@@ -104,11 +101,9 @@ include_once DIR . '/components/alert.php';
                                         </ul>
                                     </div>
                                 </td>
-                                <td class="text-center"><?= $systemController->convertDate($item['due_date']) ?></td>
-                                <td class="text-center"><?= $item['tags'] ?></td>
-                                <td class="text-center"><?= renderPriorityBadge($item['priority']) ?></td>
-                                <td class="text-center"><?= renderStatusBadge($item['status']) ?></td>
-                                <td class="text-end"><?= $systemController->convertDateTime($item['updated_at']) ?></td>
+                                <td class="text-center"><?= $item['type'] ?></td>
+                                <td><?= $item['message'] ?></td>
+                                <td class="text-end"><?= $systemController->convertDateTime($item['created_at']) ?></td>
                             </tr>
                     <?php }
                     } ?>

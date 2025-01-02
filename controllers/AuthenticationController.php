@@ -7,10 +7,12 @@ class AuthenticationController
 {
     private $authenticationService;
     private $userController;
+    private $pdo;
 
     public function __construct()
     {
         global $pdo;
+        $this->pdo = $pdo;
         $this->authenticationService = new AuthenticationService($pdo);
         $this->userController = new UserController();
     }
@@ -49,12 +51,28 @@ class AuthenticationController
                 }
             }
 
+            $currentUtcTime = (new DateTime('now', new DateTimeZone('UTC')))->format('Y-m-d H:i:s');
+            $this->createSystemNotification(
+                'A user has been created',
+                'new_user',
+                sprintf('User "%s" has been created at %s', $username, $currentUtcTime)
+            );
+
             $_SESSION['message_type'] = 'success';
             $_SESSION['message'] = "Register new user successfully";
         }
 
         header("Location: " . home_url("register"));
         exit;
+    }
+
+    function createSystemNotification($title, $type, $message)
+    {
+        $sql = "INSERT INTO system_notifications (title, type, message) VALUES (:title, :type, :message)";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute([':title' => $title, ':type' => $type, ':message' => $message]);
+
+        return $this->pdo->lastInsertId();
     }
 
     private function validateUserData($email, $password, $username = null, $confirmPassword = null, $isRegister = false)
