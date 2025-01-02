@@ -75,6 +75,21 @@ echo '<div class="row justify-content-center">
                                 </div>
                             </div>
 
+                            <div class="row">
+                                <div class="col-6">
+                                    <div class="mb-3">
+                                        <label for="first_name" class="form-label">First Name</label>
+                                        <input type="text" class="form-control" name="first_name" id="first_name" placeholder="Enter first name">
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="mb-3">
+                                        <label for="last_name" class="form-label">Last Name</label>
+                                        <input type="text" class="form-control" name="last_name" id="last_name" placeholder="Enter last name">
+                                    </div>
+                                </div>
+                            </div>
+
                             <div class="mb-3 ' . (!empty($password_err) ? 'has-error' : '') . '">
                                 <label class="form-label" for="password-input">Password</label>
                                 <div class="position-relative auth-pass-inputgroup">

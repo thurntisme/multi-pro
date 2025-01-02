@@ -11,11 +11,55 @@ class AuthenticationService
 
     public function createUser($firstName, $lastName, $username, $email, $password)
     {
-        $sql = "INSERT INTO users (first_name, last_name, username, email, password) VALUES (:first_name, :last_name, :username, :email, :password)";
-        $stmt = $this->pdo->prepare($sql);
-        $stmt->execute([':first_name' => $firstName, ':last_name' => $lastName, ':username' => $username, ':email' => $email, ':password' => password_hash($password, PASSWORD_DEFAULT)]);
+        // Validate input
+        if (empty($firstName) || empty($lastName) || empty($username) || empty($email) || empty($password)) {
+            throw new InvalidArgumentException("All fields are required.");
+        }
 
-        return $this->pdo->lastInsertId();
+        try {
+            // Begin transaction
+            $this->pdo->beginTransaction();
+
+            // Insert user into the `users` table
+            $userSql = "INSERT INTO users (first_name, last_name, username, email, password) 
+                    VALUES (:first_name, :last_name, :username, :email, :password)";
+            $userStmt = $this->pdo->prepare($userSql);
+            $userStmt->execute([
+                ':first_name' => $firstName,
+                ':last_name' => $lastName,
+                ':username' => $username,
+                ':email' => $email,
+                ':password' => password_hash($password, PASSWORD_DEFAULT)
+            ]);
+
+            // Get the newly inserted user ID
+            $userId = $this->pdo->lastInsertId();
+            if (!$userId) {
+                throw new Exception("Failed to create user.");
+            }
+
+            // Create a notification for the administrator
+            $notificationSql = "INSERT INTO notifications (title, type, message, user_id) 
+                            VALUES (:title, :type, :message, :user_id)";
+            $notificationStmt = $this->pdo->prepare($notificationSql);
+
+            $notificationStmt->execute([
+                ':title' => 'Welcome!',
+                ':type' => 'welcome',
+                ':message' => "Hello <b>$firstName</b>, your account has been created successfully.",
+                ':user_id' => $userId
+            ]);
+
+            // Commit transaction
+            $this->pdo->commit();
+
+            // Return notification ID
+            return $this->pdo->lastInsertId();
+        } catch (Exception $e) {
+            // Rollback transaction on error
+            $this->pdo->rollBack();
+            throw new Exception("Error creating user: " . $e->getMessage());
+        }
     }
 
     public function userExists($username)

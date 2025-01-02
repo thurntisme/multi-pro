@@ -17,8 +17,8 @@ class AuthenticationController
 
     public function registerUser()
     {
-        $firstName = $_POST['firstName'] ?? '';
-        $lastName = $_POST['lastName'] ?? '';
+        $firstName = $_POST['first_name'] ?? '';
+        $lastName = $_POST['last_name'] ?? '';
         $username = $_POST['username'] ?? '';
         $email = $_POST['email'] ?? '';
         $password = $_POST['password'] ?? '';
