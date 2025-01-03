@@ -7,7 +7,7 @@ function getPageData($slug, $role): array
         '' => ['url' => DIR . '/views/dashboard.php', 'title' => 'Dashboard', 'role' => 3],
         'app' => ['url' => DIR . '/views/dashboard.php', 'title' => 'Dashboard', 'role' => 3],
         'my-profile' => ['url' => DIR . '/views/my-profile.php', 'title' => 'My Profile', 'role' => 3],
-        'my-setting' => ['url' => DIR . '/views/my-setting.php', 'title' => 'My Setting', 'role' => 3],
+        'my-settings' => ['url' => DIR . '/views/my-setting.php', 'title' => 'My Setting', 'role' => 3],
         'my-notification' => ['url' => DIR . '/views/my-notification.php', 'title' => 'My Notification', 'role' => 3],
         'devices' => ['url' => DIR . '/views/devices.php', 'title' => 'Devices', 'role' => 0],
         'logout' => ['url' => DIR . '/views/logout.php', 'title' => 'Logout', 'role' => 3],

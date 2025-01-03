@@ -211,7 +211,7 @@ $menu_items = [
             [
                 'name' => 'Settings',
                 'icon' => 'ri-settings-3-line',
-                'slug' => 'my-setting',
+                'slug' => 'my-settings',
             ],
             [
                 'name' => 'Notifications',

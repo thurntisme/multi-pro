@@ -5,8 +5,8 @@ require_once 'controllers/SettingController.php';
 
 $settingController = new SettingController();
 
-$tab = $_GET['tab'] ?? 'basic';
-$default_settings = DEFAULT_SETTINGS[$tab];
+$tab = $_GET['tab'] ?? 'general';
+$default_settings = DEFAULT_USER_SETTINGS[$tab] ?? DEFAULT_USER_SETTINGS['general'];
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_POST['action_name']) && ($_POST['action_name'] === 'update_record')) {
@@ -37,9 +37,9 @@ include_once DIR . '/components/alert.php';
 <div class="card">
     <div class="card-header">
         <ul class="nav nav-tabs-custom rounded card-header-tabs border-bottom-0">
-            <?php foreach (array_keys(DEFAULT_SETTINGS) as $option) { ?>
+            <?php foreach (array_keys(DEFAULT_USER_SETTINGS) as $option) { ?>
                 <li class="nav-item">
-                    <a class="nav-link <?= $tab === $option ? 'active' : '' ?>" href="<?= home_url("app/settings?tab=" . $option) ?>">
+                    <a class="nav-link <?= $tab === $option ? 'active' : '' ?>" href="<?= home_url("app/my-settings?tab=" . $option) ?>">
                         <i class="fas fa-home"></i> <?= ucwords(str_replace('_', ' ', $option)) ?>
                     </a>
                 </li>
