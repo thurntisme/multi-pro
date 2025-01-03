@@ -1,5 +1,5 @@
 <?php
-$pageTitle = "Settings";
+$pageTitle = "My Settings";
 
 require_once 'controllers/SettingController.php';
 

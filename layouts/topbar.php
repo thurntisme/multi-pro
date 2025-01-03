@@ -707,8 +707,8 @@ $systemNotiCount = $systemNotificationController->getSystemNotificationsUnreadCo
                     </button>
                     <div class="dropdown-menu dropdown-menu-end">
                         <!-- item-->
-                        <h6 class="dropdown-header">Welcome <?= $fullName ?>!</h6>
-                        <a class="dropdown-item" href="<?= home_url('app/profile') ?>"><i
+                        <h6 class="dropdown-header">Welcome <b><?= $fullName ?></b>!</h6>
+                        <a class="dropdown-item" href="<?= home_url('app/my-profile') ?>"><i
                                 class="mdi mdi-account-circle text-muted fs-16 align-middle me-1"></i> <span
                                 class="align-middle">Profile</span></a>
                         <a class="dropdown-item" href="apps-chat"><i
@@ -724,9 +724,9 @@ $systemNotiCount = $systemNotificationController->getSystemNotificationsUnreadCo
                         <a class="dropdown-item" href="<?= home_url('app/wallet') ?>"><i
                                 class="mdi mdi-wallet text-muted fs-16 align-middle me-1"></i> <span
                                 class="align-middle">Balance : <b>$5971.67</b></span></a>
-                        <a class="dropdown-item" href="<?= home_url('app/settings') ?>"><i
+                        <a class="dropdown-item" href="<?= home_url('app/my-settings') ?>"><i
                                 class="mdi mdi-cog-outline text-muted fs-16 align-middle me-1"></i> <span
-                                class="align-middle">Settings</span></a>
+                                class="align-middle">My Settings</span></a>
                         <a class="dropdown-item" href="auth-lockscreen-basic"><i
                                 class="mdi mdi-lock text-muted fs-16 align-middle me-1"></i> <span
                                 class="align-middle">Lock screen</span></a>
