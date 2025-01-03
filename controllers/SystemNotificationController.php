@@ -22,17 +22,17 @@ class SystemNotificationController
             $rowsAffected =  $stmt->rowCount();
             if ($rowsAffected) {
                 $_SESSION['message_type'] = 'success';
-                $_SESSION['message'] = "Notification deleted successfully.";
+                $_SESSION['message'] = "System notification deleted successfully.";
             } else {
                 $_SESSION['message_type'] = 'danger';
-                $_SESSION['message'] = "Failed to delete notification.";
+                $_SESSION['message'] = "Failed to delete System notification.";
             }
         } else {
             $_SESSION['message_type'] = 'danger';
-            $_SESSION['message'] = "Failed to delete notification.";
+            $_SESSION['message'] = "Failed to delete system notification.";
         }
 
-        header("Location: " . home_url("app/todo"));
+        header("Location: " . $_SERVER['REQUEST_URI']);
         exit;
     }
 
@@ -79,6 +79,8 @@ class SystemNotificationController
             $sql .= " AND created_at BETWEEN :start_date AND :end_date";
         }
 
+        $sql .= " ORDER BY created_at DESC";
+
         if ($queryType === "result") {
             // Add pagination (LIMIT and OFFSET)
             $sql .= " LIMIT $itemsPerPage OFFSET $offset";
@@ -105,5 +107,41 @@ class SystemNotificationController
         $sql = "SELECT COUNT(*) FROM system_notifications WHERE is_read = 0";
         $stmt = $this->pdo->query($sql);
         return $stmt->fetchColumn();
+    }
+
+    public function readSystemNotification()
+    {
+        $id = $_POST['post_id'] ?? null;
+        if ($id) {
+            $rowsAffected = $this->setReadSystemNotification($id);
+            if ($rowsAffected) {
+                $_SESSION['message_type'] = 'success';
+                $_SESSION['message'] = "System notification has been successfully updated.";
+            } else {
+                $_SESSION['message_type'] = 'danger';
+                $_SESSION['message'] = "Failed to update system notification.";
+            }
+        } else {
+            $_SESSION['message_type'] = 'danger';
+            $_SESSION['message'] = "Failed to update system notification.";
+        }
+
+        header("Location: " . $_SERVER['REQUEST_URI']);
+        exit;
+    }
+
+    function setReadSystemNotification($id)
+    {
+        $sql = "SELECT is_read FROM system_notifications WHERE id = :id";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute([':id' => $id]);
+        $noti = $stmt->fetch(PDO::FETCH_ASSOC);
+        $newNoti = $noti['is_read'] === 0 ? 1 : 0;
+
+        $sql = "UPDATE system_notifications SET is_read = :is_read WHERE id = :id";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute([':is_read' => $newNoti, ':id' => $id]);
+
+        return $stmt->rowCount();
     }
 }

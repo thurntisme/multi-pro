@@ -12,6 +12,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($_POST['action_name'] === 'delete_record') {
             $systemNotificationController->deleteSystemNotification();
         }
+        if ($_POST['action_name'] === 'mark_read_record') {
+            $systemNotificationController->readSystemNotification();
+        }
     }
 }
 
@@ -68,6 +71,7 @@ include_once DIR . '/components/alert.php';
                         <th class="text-center">Type</th>
                         <th>Message</th>
                         <th class="text-end">Log Time</th>
+                        <th class="text-center"></th>
                     </tr>
                 </thead>
                 <tbody class="list form-check-all">
@@ -75,35 +79,36 @@ include_once DIR . '/components/alert.php';
                         foreach ($list['list'] as $item) { ?>
                             <tr>
                                 <td>
-                                    <div class="d-flex align-items-baseline">
-                                        <span class="text-black"><?= $item['title'] ?></span>
-                                        <ul class="list-inline tasks-list-menu mb-0 ms-3">
-                                            <li class="list-inline-item m-0"><a
-                                                    class="edit-item-btn btn btn-link btn-sm"
-                                                    href="<?= home_url('app/todo/detail?id=' . $item['id']) ?>"><i
-                                                        class="ri-eye-fill align-bottom text-muted"></i></a>
-                                            </li>
-                                            <li class="list-inline-item m-0"><a
-                                                    class="edit-item-btn btn btn-link btn-sm"
-                                                    href="<?= home_url('app/todo/edit?id=' . $item['id']) ?>"><i
-                                                        class="ri-pencil-fill align-bottom text-muted"></i></a>
-                                            </li>
-                                            <li class="list-inline-item m-0">
-                                                <form method="POST" action="<?= $_SERVER['REQUEST_URI'] ?>">
-                                                    <input type="hidden" name="action_name" value="delete_record">
-                                                    <input type="hidden" name="post_id" value="<?= $item['id'] ?>">
-                                                    <button type="submit" class="btn btn-link btn-sm btn-delete-record">
-                                                        <i
-                                                            class="ri-delete-bin-5-line align-bottom text-muted"></i>
-                                                    </button>
-                                                </form>
-                                            </li>
-                                        </ul>
-                                    </div>
+                                    <span class="text-black"><?= $item['title'] ?></span>
                                 </td>
                                 <td class="text-center"><?= $item['type'] ?></td>
                                 <td><?= $item['message'] ?></td>
                                 <td class="text-end"><?= $systemController->convertDateTime($item['created_at']) ?></td>
+                                <td class="d-flex justify-content-center gap-1">
+                                    <form method="POST" action="<?= $_SERVER['REQUEST_URI'] ?>">
+                                        <input type="hidden" name="post_id" value="<?= $item['id'] ?>">
+                                        <input type="hidden" name="action_name" value="mark_read_record">
+                                        <?php if ($item['is_read'] === 0) { ?>
+                                            <button type="submit" class="btn btn-soft-success btn-sm">
+                                                <i
+                                                    class="ri-check-line align-bottom"></i> Mark read
+                                            </button>
+                                        <?php } else { ?>
+                                            <button type="submit" class="btn btn-soft-warning btn-sm">
+                                                <i
+                                                    class="ri-close-line align-bottom"></i> Mark unread
+                                            </button>
+                                        <?php } ?>
+                                    </form>
+                                    <form method="POST" action="<?= $_SERVER['REQUEST_URI'] ?>">
+                                        <input type="hidden" name="post_id" value="<?= $item['id'] ?>">
+                                        <input type="hidden" name="action_name" value="delete_record">
+                                        <button type="submit" class="btn btn-soft-danger btn-sm btn-delete-record">
+                                            <i
+                                                class="ri-delete-bin-5-line align-bottom"></i>
+                                        </button>
+                                    </form>
+                                </td>
                             </tr>
                     <?php }
                     } ?>
