@@ -206,6 +206,31 @@ $menu_items = [
         ]
     ],
     [
+        'title' => 'My Account',
+        'sub_items' => [
+            [
+                'name' => 'Settings',
+                'icon' => 'ri-settings-3-line',
+                'slug' => 'my-setting',
+            ],
+            [
+                'name' => 'Notifications',
+                'icon' => 'ri-notification-2-line',
+                'slug' => 'my-notification',
+            ],
+            [
+                'name' => 'Package',
+                'icon' => 'ri-star-s-line',
+                'slug' => 'my-package',
+            ],
+            [
+                'name' => 'Profile',
+                'icon' => 'ri-user-settings-line',
+                'slug' => 'my-profile',
+            ],
+        ]
+    ],
+    [
         'title' => 'System',
         'sub_items' => [
             [
@@ -262,7 +287,7 @@ $menu_items = [
             </span>
         </a>
         <button type="button" class="btn btn-sm p-0 fs-20 header-item float-end btn-vertical-sm-hover"
-                id="vertical-hover">
+            id="vertical-hover">
             <i class="ri-record-circle-line"></i>
         </button>
     </div>

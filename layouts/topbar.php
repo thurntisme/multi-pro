@@ -550,8 +550,12 @@ $systemNotiCount = $systemNotificationController->getSystemNotificationsUnreadCo
                                     <?php } ?>
 
                                     <div class="my-3 text-center view-all">
-                                        <button type="button" class="btn btn-soft-success waves-effect waves-light">View
-                                            All Notifications <i class="ri-arrow-right-line align-middle"></i></button>
+                                        <?php if ($systemNotiCount > 0) { ?>
+                                            <button type="button" class="btn btn-soft-success waves-effect waves-light">View
+                                                All Notifications <i class="ri-arrow-right-line align-middle"></i></button>
+                                        <?php } else { ?>
+                                            <p class="text-bold">There is not any notifications.</p>
+                                        <?php } ?>
                                     </div>
                                 </div>
 

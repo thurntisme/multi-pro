@@ -36,44 +36,6 @@ class NotificationController
         }
     }
 
-    // Handle updating a notification
-    public function updateNotification()
-    {
-        // Check CSRF Token
-        if ($_POST['csrf_token'] !== $_SESSION['csrf_token']) {
-            $_SESSION['message_type'] = 'danger';
-            $_SESSION['message'] = "Failed to update notification. CSRF token mismatch";
-            header("Location: " . $_SERVER['REQUEST_URI']);
-            exit;
-        }
-
-        $id = $_POST['notification_id'] ?? '';
-        $title = $_POST['title'] ?? '';
-        $content = $_POST['content'] ?? '';
-        $tags = $_POST['tags'] ?? '';
-        $status = $_POST['status'] ?? '';
-        $priority = $_POST['priority'] ?? '';
-        //        $due_date = !empty($_POST['due_date']) ? $_POST['due_date'] : date('Y-m-d');
-        $due_date = $_POST['due_date'] ?? '';
-
-        if ($id && $title) {
-            $rowsAffected = $this->notificationService->updateNotification($id, $title, $content, $tags, $status, $priority, $due_date);
-            if ($rowsAffected) {
-                $_SESSION['message_type'] = 'success';
-                $_SESSION['message'] = "Notification updated successfully.";
-            } else {
-                $_SESSION['message_type'] = 'danger';
-                $_SESSION['message'] = "Failed to update notification.";
-            }
-        } else {
-            $_SESSION['message_type'] = 'danger';
-            $_SESSION['message'] = "Notification ID and service name are required.";
-        }
-
-        header("Location: " . home_url("notification/edit") . '?id=' . $id);
-        exit;
-    }
-
     // Handle deleting a notification
     public function deleteNotification()
     {
@@ -118,5 +80,109 @@ class NotificationController
         $_SESSION['message'] = "Notification ID is required.";
         header("Location: " . $_SERVER['REQUEST_URI']);
         exit;
+    }
+
+    public function listNotifications()
+    {
+        return [
+            'list' => $this->getNotificationsSQL("result"),
+            'count' => $this->getNotificationsSQL("count"),
+        ];
+    }
+
+    public function getNotificationsSQL($queryType = "result")
+    {
+        // Pagination parameters
+        $itemsPerPage = 10; // Number of results per page
+        $page = isset($_GET['page']) ? (int)$_GET['page'] : 1; // Current page number
+        $offset = ($page - 1) * $itemsPerPage; // Offset for LIMIT clause
+
+        // Search keyword
+        $keyword = isset($_GET['s']) ? $_GET['s'] : '';
+
+        // Filter last updated
+        $log_date = isset($_GET['log_date']) ? $_GET['log_date'] : '';
+
+        $selectSql = $queryType === "result" ? "SELECT * FROM notifications" : "SELECT COUNT(*) FROM notifications";
+        $sql = $selectSql . " WHERE user_id = $this->user_id ";
+
+        if ($keyword !== '') {
+            $keyword = '%' . $keyword . '%'; // Prepare for LIKE search
+            $sql .= " AND (title LIKE :keyword OR message LIKE :keyword)";
+        }
+
+        $startDate = '';
+        $endDate = '';
+        if ($log_date !== '') {
+            $date_array = explode('to', $log_date);
+            $date_array = array_map('trim', $date_array);
+            list($startDate, $endDate) = $date_array;
+            $endDate = $endDate ?? $startDate;
+            $sql .= " AND log_date BETWEEN :start_date AND :end_date";
+        }
+
+        // Sorting parameters (optional)
+        $sortColumn = $_GET['sort'] ?? 'updated_at';
+        $sortOrder = isset($_GET['order']) && in_array(strtoupper($_GET['order']), ['ASC', 'DESC']) ? strtoupper($_GET['order']) : 'DESC'; // Default to DESC
+
+        // Add the ORDER BY clause dynamically
+        $sql .= " ORDER BY $sortColumn $sortOrder";
+
+        if ($queryType === "result") {
+            // Add pagination (LIMIT and OFFSET)
+            $sql .= " LIMIT $itemsPerPage OFFSET $offset";
+        }
+
+        // Prepare the query
+        $stmt = $this->pdo->prepare($sql);
+
+        // Bind parameters
+        if ($keyword != '') {
+            $stmt->bindParam(':keyword', $keyword, PDO::PARAM_STR);
+        }
+        if ($startDate && $endDate) {
+            $stmt->bindParam(':start_date', $startDate);
+            $stmt->bindParam(':end_date', $endDate);
+        }
+
+        // Execute the query
+        $stmt->execute();
+        return $queryType === "result" ? $stmt->fetchAll(PDO::FETCH_ASSOC) : $stmt->fetchColumn();
+    }
+
+    public function readNotification()
+    {
+        $id = $_POST['post_id'] ?? null;
+        if ($id) {
+            $rowsAffected = $this->setReadNotification($id);
+            if ($rowsAffected) {
+                $_SESSION['message_type'] = 'success';
+                $_SESSION['message'] = "Notification has been successfully updated.";
+            } else {
+                $_SESSION['message_type'] = 'danger';
+                $_SESSION['message'] = "Failed to update notification.";
+            }
+        } else {
+            $_SESSION['message_type'] = 'danger';
+            $_SESSION['message'] = "Failed to update notification.";
+        }
+
+        header("Location: " . $_SERVER['REQUEST_URI']);
+        exit;
+    }
+
+    function setReadNotification($id)
+    {
+        $sql = "SELECT is_read FROM notifications WHERE id = :id AND user_id = :user_id";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute([':id' => $id, ':user_id' => $this->user_id]);
+        $noti = $stmt->fetch(PDO::FETCH_ASSOC);
+        $newNoti = $noti['is_read'] === 0 ? 1 : 0;
+
+        $sql = "UPDATE notifications SET is_read = :is_read WHERE id = :id";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute([':is_read' => $newNoti, ':id' => $id]);
+
+        return $stmt->rowCount();
     }
 }

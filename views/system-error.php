@@ -43,7 +43,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $_SESSION['message'] = "Error log file does not exist or is not writable.";
                 }
                 $_SESSION['message_type'] = 'success';
-                $_SESSION['message'] = "Todo deleted successfully.";
+                $_SESSION['message'] = "Error log deleted successfully.";
             } catch (Exception $e) {
                 $_SESSION['message'] = "Failed to delete error. " . $e->getMessage();
             }
