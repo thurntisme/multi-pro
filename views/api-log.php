@@ -1,7 +1,19 @@
 <?php
-$pageTitle = "API logs";
-$commonController = new CommonController();
-$list = $commonController->convertResources(get_api_logs());
+global $priorities, $status;
+require_once 'controllers/ApiLogController.php';
+
+$pageTitle = "API Logs";
+
+$apiLogController = new ApiLogController();
+$list = $apiLogController->listLogs();
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    if (isset($_POST['action_name'])) {
+        if ($_POST['action_name'] === 'delete_record') {
+            $apiLogController->deleteLog();
+        }
+    }
+}
 
 ob_start();
 ?>
@@ -13,7 +25,7 @@ include_once DIR . '/components/alert.php';
 <div class="card" id="tasksList">
     <div class="card-header border-0">
         <div class="d-flex align-items-center">
-            <h5 class="card-title mb-0 flex-grow-1">API Logs</h5>
+            <h5 class="card-title mb-0 flex-grow-1">All Logs</h5>
         </div>
     </div>
     <div class="card-body border border-dashed border-end-0 border-start-0">
@@ -22,23 +34,15 @@ include_once DIR . '/components/alert.php';
                 <div class="col-xxl-4 col-sm-12">
                     <div class="search-box">
                         <input type="text" name="s" class="form-control search bg-light border-light"
-                            placeholder="Search for api log message or something..." value="<?= $_GET['s'] ?? '' ?>">
+                            placeholder="Search for notification or something..." value="<?= $_GET['s'] ?? '' ?>">
                         <i class="ri-search-line search-icon"></i>
                     </div>
                 </div>
+                <!--end col-->
                 <div class="col-xxl-2 col-sm-4">
-                    <div class="input-light">
-                        <select class="form-control" data-choices data-choices-search-false
-                            name="status">
-                            <?php
-                            echo '<option value="" ' . (!empty($_GET['status']) ? 'selected' : "") . '>Select Status</option>';
-                            foreach ($status as $value => $label) {
-                                $selected = (!empty($_GET['status']) && $value === $_GET['status']) ? 'selected' : '';
-                                echo "<option value=\"$value\" $selected>$label</option>";
-                            }
-                            ?>
-                        </select>
-                    </div>
+                    <input type="text" class="form-control bg-light border-light" name="log_date"
+                        data-provider="flatpickr" data-date-format="Y-m-d" data-range-date="true"
+                        placeholder="Select date range" value="<?= $_GET['log_date'] ?? '' ?>">
                 </div>
                 <!--end col-->
                 <div class="col-xxl-2 col-sm-4 d-flex">
@@ -64,30 +68,44 @@ include_once DIR . '/components/alert.php';
                         <th class="text-center">Method</th>
                         <th class="text-center">Route</th>
                         <th class="text-center">Code</th>
+                        <th class="text-center">IP Address</th>
                         <th class="text-end">Timestamp</th>
+                        <td></td>
                     </tr>
                 </thead>
                 <tbody class="list form-check-all">
-                    <?php if (count($list['resources']) > 0) {
-                        foreach ($list['resources'] as $item) { ?>
+                    <?php if (count($list['list']) > 0) {
+                        foreach ($list['list'] as $item) { ?>
                             <tr>
                                 <td>
                                     <div class="d-flex align-items-center">
-                                        <?= get_api_log_badge($item['context']['result']['status']) ?><span class="text-muted"><?= $item['context']['result']['message'] ?></span>
+                                        <?= get_api_log_badge($item['status']) ?><span class="text-muted"><?= $item['message'] ?></span>
                                     </div>
                                 </td>
-                                <td class="text-center"><?= $item['context']['method'] ?></td>
-                                <td class="text-center"><?= $item['context']['route'] ?></td>
-                                <td class="text-center"><?= $item['context']['result']['code'] ?></td>
-                                <td class="text-end"><?= $systemController->convertDateTime($item['timestamp']) ?></td>
+                                <td class="text-center"><?= $item['method'] ?></td>
+                                <td class="text-center"><?= $item['route'] ?></td>
+                                <td class="text-center"><?= $item['result_code'] ?></td>
+                                <td class="text-center"><?= $item['ip_address'] ?></td>
+                                <td class="text-end"><?= $systemController->convertDateTime($item['created_at']) ?></td>
+                                <td class="d-flex justify-content-center gap-1">
+                                    <form method="POST" action="<?= $_SERVER['REQUEST_URI'] ?>">
+                                        <input type="hidden" name="post_id" value="<?= $item['id'] ?>">
+                                        <input type="hidden" name="action_name" value="delete_record">
+                                        <button type="submit" class="btn btn-soft-danger btn-sm btn-delete-record">
+                                            <i
+                                                class="ri-delete-bin-5-line align-bottom"></i>
+                                        </button>
+                                    </form>
+                                </td>
                             </tr>
                     <?php }
                     } ?>
                 </tbody>
             </table>
+            <!--end table-->
         </div>
         <?php
-        includeFileWithVariables('components/pagination.php', array("count" => $list['total_items'], "perPage" => $list['per_page']));
+        includeFileWithVariables('components/pagination.php', array("count" => $list['count']));
         ?>
     </div>
     <!--end card-body-->

@@ -1,6 +1,8 @@
 <?php
 
 global $url;
+require_once 'controllers/ApiLogController.php';
+$apiLogController = new ApiLogController();
 header("Content-Type: application/json");
 $api_url = str_replace('api/', '', $url);
 
@@ -10,7 +12,7 @@ $method = $_SERVER['REQUEST_METHOD'];
 // Helper function to format responses
 function sendResponse($status, $code, $message, $data = null)
 {
-    global $method, $api_url, $payload, $userData;
+    global $method, $api_url, $payload, $userData, $apiLogController;
     $logData = [
         'timestamp' => date('Y-m-d H:i:s'),
         'context' => [
@@ -25,9 +27,10 @@ function sendResponse($status, $code, $message, $data = null)
                 'message' => $message
             ]
         ],
-        'user_id' => $userData['id'],
+        'user_id' => $userData['id'] ?? '',
     ];
     log_api_message($logData);
+    $apiLogController->createLog($status, $method, $api_url, $code, $message);
     echo json_encode([
         "status" => $status,
         "code" => $code,
@@ -39,6 +42,7 @@ function sendResponse($status, $code, $message, $data = null)
 }
 
 try {
+
     // Decode payload based on the request method and content type
     if (in_array($method, ['GET', 'POST', 'PUT', 'DELETE'])) {
         $contentType = $_SERVER['CONTENT_TYPE'] ?? '';
@@ -65,8 +69,8 @@ try {
         } else {
             sendResponse('error', 500, 'Internal Server Error');
         }
-        if (isset($payload['token'])) {
-            $token = $payload['token'];
+        if (isset($_SESSION['token'])) {
+            $token = $_SESSION['token'];
             $userData = $authenticationController->checkUserDataByToken($token);
 
             if (!empty($userData['role'])) {
@@ -75,7 +79,6 @@ try {
                     'football-manager' => 'football-manager.php',
                     'file-manager' => 'file-manager.php',
                 ];
-
                 // Loop through each route and check permissions
                 foreach ($apiRoutes as $route => $file) {
                     if (str_starts_with($api_url, $route) && checkUserPermission($route, $userData['role'])) {
@@ -84,8 +87,8 @@ try {
                     }
                 }
             }
-            sendResponse("error", 403, "Permission denied");
         }
+        sendResponse("error", 403, "Permission denied");
     } else {
         sendResponse('error', 405, 'Method Not Allowed');
     }
