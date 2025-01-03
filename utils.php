@@ -373,7 +373,7 @@ function generateFormControl($id, $name, $value = '', $placeholder = '', $type =
     // Start the label if provided
     $labelHtml = '';
     if ($label) {
-        $labelHtml = '<label class="form-label" for="' . htmlspecialchars($id) . '">' . htmlspecialchars($label) . '</label>';
+        $labelHtml = '<label class="form-label ' . ($type === 'checkbox' ? 'mb-0' : '') . '" for="' . htmlspecialchars($id) . '">' . htmlspecialchars($label) . '</label>';
     }
 
     // Handle different input types
