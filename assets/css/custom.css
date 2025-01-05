@@ -57,3 +57,12 @@ tr.my-club-player-row.selected :is(.btn-search, .btn-change) {
     border-radius: 50%;
     display: inline-block;
 }
+
+.player-alert {
+    width: 28px;
+    height: 28px;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

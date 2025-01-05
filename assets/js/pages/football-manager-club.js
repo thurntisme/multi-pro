@@ -7,7 +7,11 @@ $("#formation").on("change", (event) => {
 const redraw = (formation) => {
     const myTeam = groupTeams[0];
     myTeam.formation = formation;
-    renderTeamInFitch([myTeam], {isDisplayScore: false, circleRadius: 8, isDisplayName: myTeam.players === 1 ? true : false});
+    renderTeamInFitch([myTeam], {
+        isDisplayScore: false,
+        circleRadius: 8,
+        isDisplayName: myTeam.players === 1 ? true : false
+    });
 };
 
 redraw($("#formation").val());
@@ -20,7 +24,7 @@ $(document).on("click", playerRowEl, (e) => {
         $(item).removeClass("selected");
     });
     const formation = $("[name='team_formation']").val();
-    if (!$(e.currentTarget).find(".btn-group")[0].contains(e.target)) {
+    if (!$(e.currentTarget).find(".btn-action")[0].contains(e.target)) {
         $(e.currentTarget).addClass("selected");
         playerSelected = $(e.currentTarget);
         renderPlayerSelected(playerSelected);
@@ -68,6 +72,7 @@ const renderPlayerSelected = (player) => {
     const player_uuid = player.attr("data-player-uuid");
     const player_data = allPlayers.find((p) => p.player_uuid === player_uuid);
     if (player_data) {
+        console.log(player_data);
         $("#player-info #player-name").text(player_data.name || "");
         $("#player-info #player-nationality").text(player_data.nationality || "");
         $("#player-info #player-best_position").text(
@@ -93,6 +98,18 @@ const renderPlayerSelected = (player) => {
             $(`#${key}-value`).attr("aria-valuenow", results[key].percentage);
             $(`#${key}-value`).attr("aria-valuemax", results[key].percentage);
         });
+
+        $("#player-age").text(player_data.age);
+        $("#player-height").text(player_data.height);
+        $("#player-weight").text(player_data.weight);
+        $("#player-nationality").text(player_data.nationality);
+        $("#player-market_value").text(player_data.market_value);
+        $("#player-contract_wage").text(player_data.contract_wage);
+        $("#player-contract_end_date").text(player_data.contract_end_date);
+        $("#player-level-num").text(player_data.level.num);
+        $("#player-level-percent").attr("style", `width: ${player_data.level.percentageToNextLevel}%`);
+        $("#player-level-percent").attr("aria-valuenow", player_data.level.percentageToNextLevel);
+        $("#player-level-percent").attr("aria-valuemax", player_data.level.percentageToNextLevel);
     }
 };
 

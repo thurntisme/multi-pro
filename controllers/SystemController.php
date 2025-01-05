@@ -22,7 +22,7 @@ class SystemController
         return $dateTime->format('Y-m-d H:i:s');
     }
 
-    private function getDateTime($utcTime)
+    public function getDateTime($utcTime): DateTime
     {
         $timezone = $this->getTimezone();
 
@@ -33,6 +33,19 @@ class SystemController
         $dateTime->setTimezone(new DateTimeZone($timezone));
 
         return $dateTime;
+    }
+
+    public function getTimezone()
+    {
+        $timezone = $this->settingService->getSetting('timezone');
+        return $timezone['option_value'] ?? 'UTC';
+    }
+
+    public function getCurrentDateTimeStr($format = 'Y-m-d H:i:s')
+    {
+        $timezone = $this->getTimezone();
+        $dateTime = new DateTime('now', new DateTimeZone($timezone));
+        return $dateTime->format($format);
     }
 
     function getTimezoneOffset()
@@ -51,12 +64,6 @@ class SystemController
         $formattedOffset = ($hours >= 0 ? '+' : '-') . str_pad(abs($hours), 2, '0', STR_PAD_LEFT) . ' hours';
 
         return $formattedOffset;
-    }
-
-    public function getTimezone()
-    {
-        $timezone = $this->settingService->getSetting('timezone');
-        return $timezone['option_value'] ?? 'UTC';
     }
 
     public function getLanguage()

@@ -8,14 +8,17 @@ class FootballTeamService
     private $user_id;
     private $footballPlayerController;
     private $footballTransferService;
+    private $systemController;
 
     public function __construct($pdo)
     {
         global $user_id;
+        global $systemController;
         $this->pdo = $pdo;
         $this->user_id = $user_id;
         $this->footballPlayerController = new FootballPlayerController();
         $this->footballTransferService = new FootballTransferService($this->pdo);
+        $this->systemController = $systemController;
     }
 
     public function initializeTeams(array $teams, $systemUserId)
@@ -116,11 +119,56 @@ class FootballTeamService
         $team = $this->getMyTeamData();
         if (!empty($team)) {
             $players = array_map(function ($player) {
-                return $this->footballPlayerController->viewPlayer($player['id']);
+                $playerData = $this->footballPlayerController->viewPlayer($player['id']);
+                $playerData['remaining_contract_date'] = $this->calRemainingContractDate($playerData['contract_end_date']);
+                $playerData['market_value'] = formatCurrency($playerData['market_value']);
+                $playerData['contract_wage'] = formatCurrency($playerData['contract_wage']);
+                $playerData['contract_end_date'] = $this->systemController->convertDate($playerData['contract_end_date']);
+                $playerData['is_expired'] = $playerData['remaining_contract_date'] < 0;
+                $playerData['level'] = $this->getLevelDetails($playerData['level']);
+                return $playerData;
             }, $this->getTeamPlayers($team['id'], 'club'));
             $team['players'] = $players;
         }
         return $team;
+    }
+
+    public function calRemainingContractDate($date): int
+    {
+        // Convert both $now and $date to DateTime objects
+        try {
+            $nowDateTime = $this->systemController->getDateTime('now');
+            $convertedDate = $this->systemController->getDateTime($date);
+        } catch (Exception $e) {
+            throw new InvalidArgumentException("Invalid date format provided: " . $e->getMessage());
+        }
+
+        $nowDateTime->setTime(0, 0);
+        $convertedDate->setTime(0, 0);
+
+        // Calculate the difference
+        $diff = $nowDateTime->diff($convertedDate);
+
+        // Determine the sign of the difference using $diff->invert
+        $days = (int)$diff->format('%a');
+        if ($diff->invert === 1) {
+            $days = -$days; // Make the difference negative if the date is in the future
+        }
+
+        return $days;
+    }
+
+    function getLevelDetails($points): array
+    {
+        $pointsPerLevel = 100; // Points required for one level
+        $level = floor($points / $pointsPerLevel); // Current level
+        $progress = $points % $pointsPerLevel; // Points towards the next level
+        $percentageToNextLevel = ($progress / $pointsPerLevel) * 100; // Progress percentage
+
+        return [
+            'num' => $level,
+            'percentageToNextLevel' => number_format($percentageToNextLevel, 2)
+        ];
     }
 
     public function getTeamPlayers($team_id, $type = '')
@@ -130,7 +178,6 @@ class FootballTeamService
 
         if ($type === 'club') {
             $query = "AND joining_date <= CURRENT_TIMESTAMP 
-                  AND contract_end_date > CURRENT_TIMESTAMP 
                   AND status = 'club'";
         } elseif ($type === 'players') {
             $query = "AND joining_date < CURRENT_TIMESTAMP 
