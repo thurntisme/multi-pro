@@ -53,33 +53,37 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
+$timestamp = gmdate('[d-M-Y H:i:s T]');
+$timestampWithUTC = str_replace('GMT', 'UTC', $timestamp);
+
 ob_start();
 ?>
 
 <?php
 include_once DIR . '/components/alert.php';
 ?>
-<div class="card">
-    <div class="card-header d-flex justify-content-between">
-        <h4 class="card-title mb-0"><?= $pageTitle ?></h4>
-        <form method="POST" action="<?= $_SERVER['REQUEST_URI'] ?>">
-            <input type="hidden" name="action_name" value="delete_error">
-            <button type="submit" class="btn btn-danger btn-sm btn-delete-record">
-                <i
-                    class="ri-delete-bin-5-line align-bottom"></i> Delete
-            </button>
-        </form>
+    <div class="card">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h4 class="card-title mb-0"><?= $pageTitle ?></h4>
+            <span class="text-dark"><?= $timestampWithUTC ?></span>
+            <form method="POST" action="<?= $_SERVER['REQUEST_URI'] ?>">
+                <input type="hidden" name="action_name" value="delete_error">
+                <button type="submit" class="btn btn-danger btn-sm btn-delete-record">
+                    <i
+                            class="ri-delete-bin-5-line align-bottom"></i> Delete
+                </button>
+            </form>
+        </div>
+        <div class="card-body">
+            <?php if (!empty($log_content)) { ?>
+                <div class="live-preview">
+                    <pre><code class="language-log"><?= $log_content ?></code></pre>
+                </div>
+            <?php } else { ?>
+                <h5 class="mb-0 text-muted fs-14">The error log is currently empty.</h5>
+            <?php } ?>
+        </div>
     </div>
-    <div class="card-body">
-        <?php if (!empty($log_content)) { ?>
-            <div class="live-preview">
-                <pre><code class="language-log"><?= $log_content ?></code></pre>
-            </div>
-        <?php } else { ?>
-            <h5 class="mb-0 text-muted fs-14">The error log is currently empty.</h5>
-        <?php } ?>
-    </div>
-</div>
 
 <?php
 ob_start();
