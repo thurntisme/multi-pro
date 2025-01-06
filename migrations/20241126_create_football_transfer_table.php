@@ -6,7 +6,6 @@ return function (PDO $pdo) {
     $attributes = [
         'id INTEGER PRIMARY KEY AUTOINCREMENT',
         'type TEXT NOT NULL',
-        'status TEXT NOT NULL DEFAULT "pending"',
         'amount BIGINT NOT NULL',
         'is_success BOOLEAN DEFAULT 0',
         'response_at TIMESTAMP',

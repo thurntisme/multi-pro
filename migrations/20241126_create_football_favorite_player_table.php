@@ -6,7 +6,6 @@ return function (PDO $pdo) {
     $attributes = [
         'id INTEGER PRIMARY KEY AUTOINCREMENT',
         'created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP',
-        'updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP',
         'player_uuid TEXT NOT NULL',
         'manager_id INTEGER NOT NULL',
         'FOREIGN KEY(manager_id) REFERENCES users(id)'
