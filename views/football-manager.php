@@ -3,20 +3,16 @@
 global $user_id;
 $pageTitle = "Football Manager";
 
-require_once DIR . '/functions/generate-player.php';
-require_once DIR . '/controllers/FootballTeamController.php';
 require_once DIR . '/controllers/FootballMatchController.php';
+require_once DIR . '/controllers/FootballTeamController.php';
+require_once DIR . '/controllers/FootballPlayerController.php';
 
-$commonController = new CommonController();
-
-$footballTeamController = new FootballTeamController();
 $footballMatchController = new FootballMatchController();
-$teams = $footballTeamController->listTeams();
+$footballTeamController = new FootballTeamController();
+$footballPlayerController = new FootballPlayerController();
 $myTeam = $footballTeamController->getMyTeam();
-
 $mySchedule = $footballMatchController->getMatch();
-
-$popular_players = [];
+$rcm_players = $footballTeamController->getRecommendPlayer($myTeam['formation']);
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_POST['action_name'])) {
@@ -48,18 +44,19 @@ ob_start();
             <div class="card">
                 <div class="card-header">
                     <div class="card-title mb-0">
-                        Popular Players
+                        Recommend Players
                     </div>
                 </div>
                 <div class="card-body">
-                    <div class="list-group">
-                        <?php foreach ($popular_players as $player) { ?>
+                    <div class="list-group" data-simplebar style="max-height: 560px;">
+                        <?php foreach ($rcm_players as $player) { ?>
                             <div class="list-group-item list-group-item-action">
                                 <div class="float-end">
                                     <div class="d-flex flex-column align-items-end">
-                                        <?= formatCurrency($player['market_value']) ?>
-                                        <button class="btn btn-sm btn-outline-success mt-1" style="width: 40px">Buy
-                                        </button>
+                                        <span class="fs-12"><?= formatCurrency($player['market_value']) ?></span>
+                                        <a href="<?= home_url('app/football-manager/transfer?s=' . urlencode($player['name'])) ?>"
+                                            class="btn btn-sm btn-outline-success mt-1" style="width: 30px"><i class="ri ri-search-2-line"></i>
+                                        </a>
                                     </div>
                                 </div>
                                 <div class="d-flex align-items-center">
@@ -68,7 +65,7 @@ ob_start();
                                             class="avatar-sm rounded-circle" />
                                     </div>
                                     <div class="flex-grow-1 ms-3">
-                                        <h5 class="list-title fs-15 mb-1"><?= $player['name'] ?></h5>
+                                        <h5 class="list-title fs-14 mb-1"><?= $player['name'] ?></h5>
                                         <p class="list-text mb-0 fs-12"><?= $player['best_position'] ?>
                                             | <?= $player['ability'] ?>
                                             | <?= implode(", ", $player['playable_positions']) ?></p>
@@ -83,8 +80,7 @@ ob_start();
         <div class="col-lg-4">
             <div class="card">
                 <div class="card-header">
-                    <h4 class="card-title mb-0 text-center"></h4>
-                    <div class="text-muted text-center mt-1 fs-12"></div>
+                    <h4 class="card-title mb-0 text-center">Next Match</h4>
                 </div>
                 <div class="card-body text-center">
                     <?php if (!empty($mySchedule)) { ?>
@@ -147,8 +143,11 @@ ob_start();
                     <table class="table align-middle table-nowrap mb-0">
                         <thead class="table-light">
                             <tr>
-                                <th scope="col"></th>
-                                <th scope="col">Name</th>
+                                <th class="text-center fs-12 px-0" style="width: 28px">#</th>
+                                <th class="fs-12">Name</th>
+                                <th class="text-center fs-12 px-1" style="width: 52px">Match</th>
+                                <th class="text-center fs-12 px-1" style="width: 52px">Goals</th>
+                                <th class="text-center fs-12 px-1" style="width: 52px">Assists</th>
                             </tr>
                         </thead>
                     </table>
@@ -157,9 +156,12 @@ ob_start();
                             <tbody>
                                 <?php if (!empty($myTeam['players'])) {
                                     foreach ($myTeam['players'] as $index => $player) { ?>
-                                        <tr class="<?= $team['manager_id'] === $user_id ? 'table-primary' : '' ?>">
-                                            <td class="text-center" style="width: 52px"><?= $index + 1 ?></td>
-                                            <td><?= $player['name'] ?></td>
+                                        <tr>
+                                            <td class="text-center fs-12 px-0" style="width: 28px"><?= $index + 1 ?></td>
+                                            <td class="fs-12"><?= $player['name'] ?></td>
+                                            <td class="text-center fs-12 px-1" style="width: 52px"><?= $player['match_played'] ?></td>
+                                            <td class="text-center fs-12 px-1" style="width: 52px"><?= $player['goals_scored'] ?></td>
+                                            <td class="text-center fs-12 px-1" style="width: 52px"><?= $player['assists'] ?></td>
                                         </tr>
                                 <?php }
                                 } ?>

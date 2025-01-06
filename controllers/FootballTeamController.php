@@ -111,6 +111,15 @@ class FootballTeamController
         return $this->footballTeamService->getTeamByUserId();
     }
 
+    public function getRecommendPlayer($formation)
+    {
+        $formationData = array_filter(DEFAULT_FOOTBALL_FORMATION, function ($item) use ($formation) {
+            return $item['slug'] === $formation;
+        });
+        $players = $this->randomTeamPlayers(array_values($formationData)[0]);
+        return array_slice($players, 0, 11);
+    }
+
     function randomTeamPlayers($formation)
     {
         $players = getPlayersJson();
