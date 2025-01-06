@@ -5,29 +5,26 @@ $pageTitle = "Football Manager";
 
 require_once DIR . '/functions/generate-player.php';
 require_once DIR . '/controllers/FootballTeamController.php';
-require_once DIR . '/controllers/FootballLeagueController.php';
+require_once DIR . '/controllers/FootballMatchController.php';
 
 $commonController = new CommonController();
 
 $footballTeamController = new FootballTeamController();
-$footballLeagueController = new FootballLeagueController();
+$footballMatchController = new FootballMatchController();
 $teams = $footballTeamController->listTeams();
+$myTeam = $footballTeamController->getMyTeam();
 
-$curr_league = $footballLeagueController->getNewestLeague();
-$mySchedule = $footballLeagueController->getMySchedule();
+$mySchedule = $footballMatchController->getMatch();
 
 $popular_players = [];
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_POST['action_name'])) {
-        if ($_POST['action_name'] === 'add_team') {
-            $footballTeamController->createTeam();
-        }
-        if ($_POST['action_name'] === 'add_league') {
-            $footballLeagueController->createLeague();
-        }
         if ($_POST['action_name'] === 'game_on') {
-            $footballLeagueController->gameOn();
+            $footballMatchController->gameOn();
+        }
+        if ($_POST['action_name'] === 'create_match') {
+            $footballMatchController->createMatch();
         }
     }
 }
@@ -46,7 +43,7 @@ ob_start();
         include_once DIR . '/components/alert.php';
         ?>
     </div>
-    <?php if (!empty($teams) && count($teams) > 0) { ?>
+    <?php if (!empty($myTeam)) { ?>
         <div class="col-lg-4">
             <div class="card">
                 <div class="card-header">
@@ -84,13 +81,13 @@ ob_start();
             </div>
         </div>
         <div class="col-lg-4">
-            <?php if ($curr_league) { ?>
-                <div class="card">
-                    <div class="card-header">
-                        <h4 class="card-title mb-0 text-center"><?= $curr_league['name'] ?></h4>
-                        <div class="text-muted text-center mt-1 fs-12"><?= $curr_league['season'] ?></div>
-                    </div>
-                    <div class="card-body text-center">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="card-title mb-0 text-center"></h4>
+                    <div class="text-muted text-center mt-1 fs-12"></div>
+                </div>
+                <div class="card-body text-center">
+                    <?php if (!empty($mySchedule)) { ?>
                         <div class="row py-3 mb-2">
                             <div class="col-6">
                                 <div class="avatar-sm mx-auto mb-3">
@@ -98,7 +95,7 @@ ob_start();
                                         <i class="ri-add-line"></i>
                                     </div>
                                 </div>
-                                <h4 class="card-title"><?= $mySchedule['home']['team_name'] ?></h4>
+                                <h4 class="card-title"><?= $mySchedule['home_team'] ?></h4>
                             </div>
                             <div class="col-6">
                                 <div class="avatar-sm mx-auto mb-3">
@@ -106,7 +103,7 @@ ob_start();
                                         <i class="ri-add-line"></i>
                                     </div>
                                 </div>
-                                <h4 class="card-title"><?= $mySchedule['away']['team_name'] ?></h4>
+                                <h4 class="card-title"><?= $mySchedule['away_team'] ?></h4>
                             </div>
                         </div>
                         <form method="POST" action="<?= $_SERVER['REQUEST_URI'] ?>">
@@ -115,25 +112,18 @@ ob_start();
                                 <button type="submit" class="btn btn-success">Game on</button>
                             </div>
                         </form>
-                    </div>
+                    <?php } else { ?>
+                        <div class="row py-3 mb-2">
+                            <form method="POST" action="<?= $_SERVER['REQUEST_URI'] ?>">
+                                <input type="hidden" name="action_name" value="create_match">
+                                <div class="text-center">
+                                    <button type="submit" class="btn btn-primary">Create Match</button>
+                                </div>
+                            </form>
+                        </div>
+                    <?php } ?>
                 </div>
-            <?php } else { ?>
-                <div class="card">
-                    <div class="card-header">
-                        <h4 class="card-title mb-0 text-center">League</h4>
-                    </div>
-                    <div class="card-body text-center">
-                        <p class="card-text py-2 mb-3">No league found.<br />Please create a new league to get
-                            started!</p>
-                        <form method="POST" action="<?= $_SERVER['REQUEST_URI'] ?>">
-                            <input type="hidden" name="action_name" value="add_league">
-                            <div class="text-center">
-                                <button type="submit" class="btn btn-primary">Create League</button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            <?php } ?>
+            </div>
             <div class="card">
                 <div class="card-header">
                     <h4 class="card-title mb-0 text-center">Challenge Match</h4>
@@ -150,50 +140,26 @@ ob_start();
             <div class="card card-height-100">
                 <div class="card-header">
                     <div class="card-title mb-0">
-                        Team Ranking
+                        My Player
                     </div>
                 </div>
                 <div class="card-body p-0">
                     <table class="table align-middle table-nowrap mb-0">
                         <thead class="table-light">
                             <tr>
-                                <th scope="col" class="text-center" style="width: 52px">Rank</th>
-                                <th scope="col">Team</th>
-                                <th scope="col" class="text-center" style="width: 52px">Win</th>
-                                <th scope="col" class="text-center" style="width: 52px">Draw</th>
-                                <th scope="col" class="text-center" style="width: 52px">Lose</th>
+                                <th scope="col"></th>
+                                <th scope="col">Name</th>
                             </tr>
                         </thead>
                     </table>
                     <div data-simplebar style="max-height: 560px;">
                         <table class="table align-middle table-nowrap mb-0">
                             <tbody>
-                                <?php if (!empty($teams)) {
-                                    foreach ($teams as $index => $team) { ?>
+                                <?php if (!empty($myTeam['players'])) {
+                                    foreach ($myTeam['players'] as $index => $player) { ?>
                                         <tr class="<?= $team['manager_id'] === $user_id ? 'table-primary' : '' ?>">
                                             <td class="text-center" style="width: 52px"><?= $index + 1 ?></td>
-                                            <td>
-                                                <div class="d-flex align-items-center">
-                                                    <div class="flex-shrink-0 avatar-xs">
-                                                        <div class="avatar-title bg-danger-subtle text-danger rounded">
-                                                            <i class="ri-netflix-fill"></i>
-                                                        </div>
-                                                    </div>
-                                                    <div class="flex-shrink-0 ms-2">
-                                                        <h6 class="fs-14 mb-0">
-                                                            <?php if ($team['manager_id'] === $user_id) { ?>
-                                                                <a href="<?= home_url("football-manager/my-club") ?>"><?= $team['team_name'] ?></a>
-                                                            <?php } else { ?>
-                                                                <?= $team['team_name'] ?>
-                                                        </h6>
-                                                    <?php } ?>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td class="text-center" style="width: 52px"><?= $team['total_wins'] ?></td>
-                                            <td class="text-center" style="width: 52px"><?= $team['total_draws'] ?></td>
-                                            <td class="text-center"
-                                                style="width: 52px"><?= $team['total_losses'] ?></td>
+                                            <td><?= $player['name'] ?></td>
                                         </tr>
                                 <?php }
                                 } ?>
@@ -209,8 +175,8 @@ ob_start();
                 <div class="card-body">
                     <form method="POST" action="<?= $_SERVER['REQUEST_URI'] ?>">
                         <div class="mb-3">
-                            <label for="employeeName" class="form-label">Team Name</label>
-                            <input type="text" class="form-control" name="team_name"
+                            <label for="team_name" class="form-label">Team Name</label>
+                            <input type="text" class="form-control" name="team_name" id="team_name"
                                 placeholder="Enter your team name">
                             <input type="hidden" name="action_name" value="add_team">
                         </div>

@@ -25,10 +25,13 @@ class FootballTeamController
 
         if ($team_name) {
             $teamId = $this->footballTeamService->createTeam($team_name, $this->user_id);
-            $this->initializeTeamPlayers($teamId);
-            $this->initializeSystemTeams();
-            $_SESSION['message_type'] = 'success';
-            $_SESSION['message'] = "Team created successfully";
+            if ($teamId) {
+                $_SESSION['message_type'] = 'success';
+                $_SESSION['message'] = "Team created successfully";
+            } else {
+                $_SESSION['message_type'] = 'danger';
+                $_SESSION['message'] = "Failed to create team";
+            }
         } else {
             $_SESSION['message_type'] = 'danger';
             $_SESSION['message'] = "Failed to create team";
@@ -36,28 +39,6 @@ class FootballTeamController
 
         header("Location: " . home_url("football-manager"));
         exit;
-    }
-
-    public function initializeTeamPlayers($teamId)
-    {
-        $playerArr = getPlayersJson();
-        if (count($playerArr) < 22) {
-            throw new Exception("The player array must contain at least 22 items.");
-        }
-        // Shuffle the array
-        // shuffle($playerArr);
-        // Get the first 22 players
-        // $players = array_slice($playerArr, 0, 22);
-        // $this->footballTeamService->initializeTeamPlayers($teamId, $players);
-    }
-
-    public function initializeSystemTeams()
-    {
-        $systemUser = $this->userController->getSystemUser();
-        foreach (DEFAULT_FOOTBALL_TEAM as $index => $team) {
-            $teamId = $this->footballTeamService->createTeam($team['name'], $systemUser['id'], $index + 2, $this->randFormation()['slug']);
-//            $this->initializeTeamPlayers($teamId);
-        }
     }
 
     function randFormation()
