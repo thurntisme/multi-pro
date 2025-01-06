@@ -78,6 +78,7 @@ function getPageData($slug, $role): array
         'football-manager/transfer/favorite' => ['url' => DIR . '/views/football-manager-transfer-favorite.php', 'title' => 'Football Manager - Transfer Favorite', 'role' => 0],
         'football-manager/transfer/buy' => ['url' => DIR . '/views/football-manager-transfer-buy.php', 'title' => 'Football Manager - Transfer Buy Player', 'role' => 0],
         'football-manager/my-players' => ['url' => DIR . '/views/football-manager-players.php', 'title' => 'Football Manager - My Players', 'role' => 0],
+        'football-manager/locker-room' => ['url' => DIR . '/views/football-manager-locker-room.php', 'title' => 'Football Manager - Locker Room', 'role' => 0],
         'football-manager/match' => ['url' => DIR . '/views/football-manager-match.php', 'title' => 'Football Manager - Match', 'role' => 0],
         'football-manager/store' => ['url' => DIR . '/views/football-manager-store.php', 'title' => 'Football Manager - Store', 'role' => 0],
         'football-manager/store/inventory' => ['url' => DIR . '/views/football-manager-inventory.php', 'title' => 'Football Manager - Store Inventory', 'role' => 0],

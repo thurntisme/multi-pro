@@ -18,6 +18,10 @@ $myTeam = $footballTeamController->getMyTeam();
             href="<?= home_url("football-manager/my-club") ?>"><i
                 class="ri-add-fill me-1 align-bottom"></i> My Club
         </a>
+        <a class="btn btn-<?= $slug !== 'locker-room' ? 'soft-' : '' ?>info add-btn"
+            href="<?= home_url("football-manager/locker-room") ?>"><i
+                class="ri-add-fill me-1 align-bottom"></i> Locker Room
+        </a>
         <a class="btn btn-<?= $slug !== 'my-players' ? 'soft-' : '' ?>info add-btn"
             href="<?= home_url("football-manager/my-players") ?>"><i
                 class="ri-add-fill me-1 align-bottom"></i> My Players
