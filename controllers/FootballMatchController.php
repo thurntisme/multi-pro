@@ -125,9 +125,10 @@ class FootballMatchController
 
     public function gameOn()
     {
-        $match_uuid = $this->createMatch($this->myTeam);
+        $match = $this->getMatch();
+        $match_uuid = $match['match_uuid'];
         if (!empty($match_uuid)) {
-            header("Location: " . home_url("football-manager/match?uuid=$match_uuid"));
+            header("Location: " . home_url("app/football-manager/match?uuid=$match_uuid"));
         } else {
             $_SESSION['message_type'] = 'danger';
             $_SESSION['message'] = "Failed to create match";
@@ -141,9 +142,9 @@ class FootballMatchController
         // Prepare the SQL insert statement
         $stmt = $this->pdo->prepare("
             INSERT INTO football_match (
-                team_id, match_uuid, home_team, away_team, home_score, away_score
+                team_id, match_uuid, home_team, away_team, home_score, away_score, is_home
             ) VALUES (
-                :team_id, :match_uuid, :home_team, :away_team, :home_score, :away_score
+                :team_id, :match_uuid, :home_team, :away_team, :home_score, :away_score, :is_home
             )
         ");
 
@@ -155,11 +156,8 @@ class FootballMatchController
         $is_home = rand(0, 1) > 0;
         $home_team_name = $is_home ? $myTeamName : $randTeamName;
         $away_team_name = !$is_home ? $myTeamName : $randTeamName;
-        $home_score = (int)rand(0, 9);
-        $away_score = (int)rand(0, 9);
-        $home_score = ($home_team_name === $myTeamName) ? 0 : 3;
-        $away_score = ($away_team_name === $myTeamName) ? 0 : 3;
-
+        $home_score = $is_home ? 0 : 3;
+        $away_score = !$is_home ? 0 : 3;
 
         $stmt->execute([
             ':team_id' => $myTeamId,
@@ -168,6 +166,7 @@ class FootballMatchController
             ':away_team' => $away_team_name,
             ':home_score' => $home_score,
             ':away_score' => $away_score,
+            ':is_home' => $is_home,
         ]);
         $rowAffect = $this->pdo->lastInsertId();
         if ($rowAffect) {
@@ -185,7 +184,7 @@ class FootballMatchController
     {
         $myTeamId = $this->myTeam['id'];
         // Corrected: use prepare instead of query
-        $sql = "SELECT * FROM football_match WHERE team_id = :team_id AND status = 'scheduled'";
+        $sql = "SELECT * FROM football_match WHERE team_id = :team_id AND status = 'scheduled' ORDER BY created_at DESC LIMIT 1";
 
         // Prepare the statement
         $stmt = $this->pdo->prepare($sql);
@@ -197,5 +196,34 @@ class FootballMatchController
 
         // Fetch the result
         return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+
+    public function getTeamInMatch($match_uuid)
+    {
+        // Corrected: use prepare instead of query
+        $sql = "SELECT * FROM football_match WHERE match_uuid = :match_uuid AND status = 'scheduled' ORDER BY created_at DESC LIMIT 1";
+
+        // Prepare the statement
+        $stmt = $this->pdo->prepare($sql);
+
+        // Execute the statement with bound parameters
+        $stmt->execute([
+            ':match_uuid' => $match_uuid
+        ]);
+
+        // Fetch the result
+        $match = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if (!empty($match)) {
+            $players = [
+                'home_team_data' => $match['is_home'] ? $this->footballTeamController->getMyTeamInMatch($match['team_id']) : $this->footballTeamController->getRandTeamInMatch(),
+                'away_team_data' => $match['is_home'] ? $this->footballTeamController->getRandTeamInMatch() : $this->footballTeamController->getMyTeamInMatch($match['team_id']),
+            ];
+
+            return array_merge($match, $players);
+        }
+
+        // Return null if no match is found
+        return null;
     }
 }

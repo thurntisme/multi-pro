@@ -92,6 +92,20 @@ class FootballTeamController
         }
     }
 
+    public function getRandTeamInMatch()
+    {
+        $formation = $this->randFormation();
+        $players = $this->randomTeamPlayers($formation);
+        $lineupPlayers = array_slice($players, 0, 11);
+        $subPlayers = array_slice($players, 11);
+        return [
+            'formation' => $formation['slug'],
+            'lineup' => $lineupPlayers,
+            'bench' => $subPlayers,
+            'myTeam' => false
+        ];
+    }
+
     public function getMyTeam()
     {
         return $this->footballTeamService->getTeamByUserId();

@@ -4,14 +4,16 @@ $pageTitle = "Football Manager - Match";
 require_once DIR . '/functions/generate-player.php';
 require_once DIR . '/controllers/FootballTeamController.php';
 require_once DIR . '/controllers/FootballLeagueController.php';
+require_once DIR . '/controllers/FootballMatchController.php';
 
 $footballTeamController = new FootballTeamController();
 $footballLeagueController = new FootballLeagueController();
+$footballMatchController = new FootballMatchController();
 
 $match_uuid = $_GET['uuid'];
-$match = $footballLeagueController->getMatch($match_uuid);
-$home_team = $match['home'];
-$away_team = $match['away'];
+$match = $footballMatchController->getTeamInMatch($match_uuid);
+$home_team = $match['home_team_data'];
+$away_team = $match['away_team_data'];
 
 ob_start();
 ?>
@@ -30,13 +32,13 @@ ob_start();
             <div class="col-8">
                 <div class="card">
                     <div class="card-header align-items-center justify-content-center d-flex">
-                        <span class="text-muted fs-12" id="team-1-name"><?= $home_team['team_name'] ?></span>
+                        <span class="text-muted fs-12" id="team-1-name"><?= $match['home_team'] ?></span>
                         <h4 class="card-title mb-0 fs-20 mx-2">
                             <span id="team-1-score">0</span>
                             <span class="mx-1">:</span>
                             <span id="team-2-score">0</span>
                         </h4>
-                        <span class="text-muted fs-12" id="team-2-name"><?= $away_team['team_name'] ?></span>
+                        <span class="text-muted fs-12" id="team-2-name"><?= $match['away_team'] ?></span>
                     </div>
                     <div class="card-body p-0">
                         <div class="p-3 d-flex align-items-center justify-content-center">
@@ -185,7 +187,7 @@ echo "
         const height = canvas.height;
 
         const team1 = {
-            name: '" . $home_team['team_name'] . "',
+            name: '" . $match['home_team'] . "',
             formation: '" . $home_team['formation'] . "',
             score: 0,
             players: " . json_encode($home_team['lineup']) . ",
@@ -193,7 +195,7 @@ echo "
         }
 
         const team2 = {
-            name: '" . $away_team['team_name'] . "',
+            name: '" . $match['away_team'] . "',
             formation: '" . $away_team['formation'] . "',
             score: 0,
             players: " . json_encode($away_team['lineup']) . ",
