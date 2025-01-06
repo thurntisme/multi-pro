@@ -18,6 +18,7 @@ return function (PDO $pdo) {
         'yellow_cards INTEGER DEFAULT 0',  // Tracks yellow cards
         'red_cards INTEGER DEFAULT 0',  // Tracks red cards
         'age_in_team_days INTEGER DEFAULT 0',  // Tracks the number of days the player has been in the team
+        'match_played INTEGER DEFAULT 0',
         'stamina INTEGER DEFAULT 100',
         'shirt_number INTEGER',
         'created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP',
