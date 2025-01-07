@@ -18,7 +18,7 @@ const teamsInMatch = groupTeams.map((team, teamIdx) => {
 const redraw = () => {
     renderTeamInFitch(teamsInMatch, {circleRadius: 8, isDisplayScore: true, isDisplayName: true, isTeamInMatch: true});
 };
-redraw(); 
+redraw();
 
 function simulateMatch(teamsInMatch) {
     const team1 = teamsInMatch[0];
@@ -40,6 +40,7 @@ function simulateMatch(teamsInMatch) {
     const halfTimeDuration = maxHalfTime + extraHalfTime; // Half-time between 45 and 55 minutes
 
     let prevAction = null;
+    let prevPlayer = null;
 
     const matchInterval = setInterval(() => {
         document.getElementById("minute").innerText =
@@ -111,24 +112,25 @@ function simulateMatch(teamsInMatch) {
                 logEvent(currentTimeInSeconds, "start", '', "Match start");
             } else {
                 let action = null;
+                let player = null;
                 if (!prevAction) {
                     // Simulate an action
                     const team = Math.random() < 0.5 ? team1 : team2;
-                    const player =
+                    player =
                         team.players[Math.floor(Math.random() * team.players.length)];
                     const randAction = getActionFromPlayer(player, currentTimeInSeconds);
                     prevAction = randAction;
                     action = randAction;
+                    prevPlayer = player;
                 } else {
-                    const nextAction = performNextAction(prevAction);
-                    action = nextAction['action'];
+                    const nextAction = performNextAction(prevAction, prevPlayer);
+                    action = nextAction.action;
                     prevAction = action;
+                    if (nextAction.player) {
+                        player = nextAction.player;
+                    }
                 }
-                console.log(action);
-                // console.log({name: player.name, action, ...performNextAction(action)})
-                // if (Math.random() < 0.5) {
-                //     simulateAction(team, player, team1, team2, currentTimeInSeconds);
-                // }
+                console.log(action, player, currentTimeInSeconds);
             }
         }
 
@@ -137,24 +139,88 @@ function simulateMatch(teamsInMatch) {
     }, 10); // Delay of 1 second per iteration
 }
 
-function getActionFromPlayer(player, currentTimeInSeconds){
-    // Define valid actions for each position
-    const validActionsByPosition = {
-        GK: ["goal_kick", "save_shot", "catch_cross", "punch", "clearance", "distribute_ball"],
-        LB: ["intercept", "tackle", "overlap", "cross", "cut_inside", "long_ball"],
-        CB: ["clearance", "intercept", "tackle", "block_shot", "header", "mark"],
-        RB: ["intercept", "tackle", "overlap", "cross", "cut_inside", "long_ball"],
-        LM: ["cross", "dribble", "cut_inside", "pass", "long_shot", "skill_move"],
-        CDM: ["intercept", "tackle", "pass", "long_ball", "shield_ball", "switch_play"],
-        CM: ["pass", "dribble", "long_shot", "through_ball", "tackle", "intercept"],
-        CAM: ["dribble", "pass", "through_ball", "shoot", "cut_inside", "skill_move"],
-        RM: ["cross", "dribble", "cut_inside", "pass", "long_shot", "skill_move"],
-        LW: ["cross", "dribble", "cut_inside", "pass", "shoot", "skill_move"],
-        CF: ["shoot", "lay_off", "pass", "press_defender", "header", "dribble"],
-        ST: ["shoot", "header", "hold_up_play", "press_defender", "run_in_behind", "tap_in"],
-        RW: ["cross", "dribble", "cut_inside", "pass", "shoot", "skill_move"],
-    };
+// Define possible follow-up actions for players
+const playerActions = {
+    goal_kick: ["save_shot", "distribute_ball"],
+    save_shot: ["catch_cross", "punch", "clearance"],
+    catch_cross: ["punch", "clearance"],
+    punch: ["clearance", "distribute_ball"],
+    clearance: ["intercept", "tackle"],
+    distribute_ball: ["intercept", "tackle", "dribble"],
+    intercept: ["tackle", "pass"],
+    tackle: ["pass", "dribble"],
+    overlap: ["cross", "cut_inside"],
+    cross: ["header", "volley", "tap_in"],
+    cut_inside: ["shoot", "pass", "lay_off"],
+    long_ball: ["header", "mark"],
+    block_shot: ["clearance", "intercept"],
+    header: ["clearance", "shoot"],
+    mark: ["intercept", "tackle"],
+    dribble: ["cut_inside", "pass", "shoot"],
+    pass: ["overlap", "cross", "shoot"],
+    long_shot: ["rebound", "shoot"],
+    skill_move: ["dribble", "pass", "shoot"],
+    shield_ball: ["pass", "dribble"],
+    switch_play: ["cross", "pass"],
+    through_ball: ["shoot", "dribble"],
+    shoot: ["rebound", "press_defender"],
+    lay_off: ["shoot", "dribble"],
+    press_defender: ["tackle", "intercept"],
+    hold_up_play: ["lay_off", "pass"],
+    run_in_behind: ["shoot", "cross"],
+    tap_in: ["rebound", "press_defender"]
+};
 
+// Define possible opponent reactions
+const opponentReactions = {
+    goal_kick: ["press", "mark_strikers"],
+    save_shot: ["pressure_goalkeeper", "mark_players"],
+    catch_cross: ["challenge_goalkeeper", "mark"],
+    punch: ["collect_loose_ball", "block_clearance"],
+    clearance: ["block", "recover_ball"],
+    distribute_ball: ["press_receiver", "intercept"],
+    intercept: ["counter_attack", "pass"],
+    tackle: ["recover_ball", "counter_attack"],
+    overlap: ["track_runner", "intercept_cross"],
+    cross: ["block_cross", "clearance"],
+    cut_inside: ["block_shot", "tackle"],
+    long_ball: ["challenge_header", "intercept"],
+    block_shot: ["recover_ball", "counter_attack"],
+    header: ["challenge_header", "block"],
+    mark: ["track_runner", "intercept"],
+    dribble: ["tackle", "block"],
+    pass: ["intercept", "press_receiver"],
+    long_shot: ["block_shot", "save"],
+    skill_move: ["tackle", "contain"],
+    shield_ball: ["tackle", "press"],
+    switch_play: ["shift_defensive_line", "intercept"],
+    through_ball: ["intercept", "block_shot"],
+    shoot: ["block", "save"],
+    lay_off: ["intercept", "press"],
+    press_defender: ["dribble_away", "pass"],
+    hold_up_play: ["tackle", "press"],
+    run_in_behind: ["track_run", "block_pass"],
+    tap_in: ["block_shot", "save"]
+};
+
+// Define valid actions for each position
+const validActionsByPosition = {
+    GK: ["goal_kick", "save_shot", "save", "catch_cross", "punch", "clearance", "distribute_ball", "pressure_goalkeeper", "mark_players", "block_shot"],
+    LB: ["intercept", "tackle", "overlap", "cross", "cut_inside", "long_ball", "track_runner", "intercept_cross", "contain", "block_shot", "press_receiver"],
+    CB: ["clearance", "intercept", "tackle", "block_shot", "header", "mark", "challenge_header", "recover_ball", "contain", "press_receiver"],
+    RB: ["intercept", "tackle", "overlap", "cross", "cut_inside", "long_ball", "track_runner", "intercept_cross", "contain", "block_shot", "press_receiver"],
+    LM: ["cross", "dribble", "cut_inside", "pass", "long_shot", "skill_move", "block_cross", "press_receiver"],
+    CDM: ["intercept", "tackle", "pass", "long_ball", "shield_ball", "switch_play", "shift_defensive_line", "contain", "block_shot", "press_receiver"],
+    CM: ["pass", "dribble", "long_shot", "through_ball", "tackle", "intercept", "counter_attack", "contain", "block_shot", "press_receiver"],
+    CAM: ["dribble", "pass", "through_ball", "shoot", "cut_inside", "skill_move", "block_shot", "press_receiver"],
+    RM: ["cross", "dribble", "cut_inside", "pass", "long_shot", "skill_move", "block_cross", "press_receiver"],
+    LW: ["cross", "dribble", "cut_inside", "pass", "shoot", "skill_move", "block_shot"],
+    CF: ["shoot", "lay_off", "pass", "press_defender", "header", "dribble", "hold_up_play"],
+    ST: ["shoot", "header", "hold_up_play", "press_defender", "run_in_behind", "tap_in", "block_shot", "press_receiver"],
+    RW: ["cross", "dribble", "cut_inside", "pass", "shoot", "skill_move", "block_shot"],
+};
+
+function getActionFromPlayer(player, currentTimeInSeconds) {
     const {position_in_match} = player;
     // Randomly select a valid action for the chosen position
     let actions = validActionsByPosition[position_in_match];
@@ -175,48 +241,37 @@ function getActionFromPlayer(player, currentTimeInSeconds){
 }
 
 // Function to perform an action and simulate opponent reaction
-function performNextAction(currentAction) {
-    // Define possible follow-up actions for players
-    const playerActions = {
-        dribble: ["cut_inside", "shield_ball", "pass", "shoot", "step_over", "nutmeg", "drag_back", "flick", "sprint"],
-        pass: ["overlap", "move_forward", "cross", "one_two", "through_ball", "switch_play", "back_pass", "long_ball"],
-        cross: ["header", "volley", "tap_in", "back_post_run", "chest_control", "flick_on", "dummy"],
-        shoot: ["rebound", "curl", "power_shot", "low_driven", "chip", "volley", "dipping_shot", "scissor_kick"],
-        cut_inside: ["shoot", "pass", "lay_off", "skill_move", "cross", "link_up", "drive_towards_goal"],
-    };
-
-    // Define possible opponent reactions
-    const opponentReactions = {
-        dribble: ["cut_off_ball", "intercept", "tackle", "shadow", "force_error", "block_path"],
-        pass: ["intercept", "block", "pressure_receiver", "force_turnover", "delay"],
-        cross: ["clearance", "block", "intercept", "win_header", "disrupt_runner", "deflect"],
-        shoot: ["block_shot", "goalkeeper_save", "deflect", "pressure_shooter", "last_ditch_tackle"],
-        cut_inside: ["tackle", "force_wide", "intercept", "block_cross", "double_team"],
-    };
-    
+function performNextAction(currentAction, prevPlayer) {
     // Check if opponent can react to this action
     const possibleReactions = opponentReactions[currentAction];
     const possibleFollowUps = playerActions[currentAction];
-  
+
     if (possibleReactions) {
-      // Simulate a random chance for opponent reaction
-      const opponentChance = Math.random(); // 0 to 1
-  
-      if (opponentChance < 0.5) {
-        // Opponent reacts
-        const reactionIndex = Math.floor(Math.random() * possibleReactions.length);
-        const opponentAction = possibleReactions[reactionIndex];
-        return {player_type: 'opponent', action: opponentAction};
-      }
+        // Simulate a random chance for opponent reaction
+        const opponentChance = Math.random(); // 0 to 1
+
+        if (opponentChance < 0.5) {
+            // Opponent reacts
+            const reactionIndex = Math.floor(Math.random() * possibleReactions.length);
+            const opponentAction = possibleReactions[reactionIndex];
+            const positionsWithAction = Object.keys(validActionsByPosition).filter(position =>
+                validActionsByPosition[position].includes(opponentAction)
+            );
+            const randomPosition = positionsWithAction[Math.floor(Math.random() * positionsWithAction.length)];
+            const opponentPlayers = teamsInMatch[prevPlayer.teamIdx === 0 ? 1 : 0].players.filter(p => p.position_in_match === randomPosition);
+            const opponentPlayer = opponentPlayers[Math.floor(Math.random() * opponentPlayers.length)];
+
+            return {player: opponentPlayer, action: opponentAction};
+        }
     }
-  
+
     // If no opponent reaction, continue with the player's follow-up action
     if (possibleFollowUps) {
-      const followUpIndex = Math.floor(Math.random() * possibleFollowUps.length);
-      const nextAction = possibleFollowUps[followUpIndex];
-      return {player_type: 'team', action: nextAction};
+        const followUpIndex = Math.floor(Math.random() * possibleFollowUps.length);
+        const nextAction = possibleFollowUps[followUpIndex];
+        return {player: prevPlayer, action: nextAction};
     } else {
-      return {player_type: null, action: null};
+        return {player: null, action: null};
     }
 }
 
