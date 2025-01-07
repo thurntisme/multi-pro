@@ -9,7 +9,7 @@
   <meta content="Premium Multipurpose Admin & Dashboard Template" name="description" />
   <meta content="Themesbrand" name="author" />
   <!-- App favicon -->
-  <link rel="shortcut icon" href="assets/images/favicon.ico">
+  <link rel="shortcut icon" href="<?= home_url('assets/images/favicon.png') ?>">
 
   <!--Swiper slider css-->
   <link href="assets/libs/swiper/swiper-bundle.min.css" rel="stylesheet" type="text/css" />
