@@ -2,6 +2,7 @@ const teamsInMatch = groupTeams.map((team, teamIdx) => {
     const playerColor = teamIdx === 0 ? homeTeamColor : awayTeamColor;
     const players = generateFormation(team.formation).map((pos, idx) => {
         return {
+            teamIdx,
             position_in_match: pos.posName,
             score: 5,
             playerColor,
@@ -9,7 +10,7 @@ const teamsInMatch = groupTeams.map((team, teamIdx) => {
         };
     });
     const bench = team.bench.map((player) => {
-        return {...player, position_in_match: player.best_position, playerColor}
+        return {...player, position_in_match: player.best_position, playerColor, teamIdx, score: 5}
     });
     return {...team, players, bench};
 });
@@ -17,7 +18,7 @@ const teamsInMatch = groupTeams.map((team, teamIdx) => {
 const redraw = () => {
     renderTeamInFitch(teamsInMatch, {circleRadius: 8, isDisplayScore: true, isDisplayName: true, isTeamInMatch: true});
 };
-redraw();
+redraw(); 
 
 function simulateMatch(teamsInMatch) {
     const team1 = teamsInMatch[0];
@@ -38,11 +39,13 @@ function simulateMatch(teamsInMatch) {
     // Random half-time duration (between 45 and 55 minutes)
     const halfTimeDuration = maxHalfTime + extraHalfTime; // Half-time between 45 and 55 minutes
 
+    let prevAction = null;
+
     const matchInterval = setInterval(() => {
         document.getElementById("minute").innerText =
-            formatTime(currentTimeInSeconds)["minute"];
+            formatMatchTime(currentTimeInSeconds)["minute"];
         document.getElementById("second").innerText =
-            formatTime(currentTimeInSeconds)["second"];
+            formatMatchTime(currentTimeInSeconds)["second"];
 
         if (currentTimeInSeconds === maxHalfTime && extraHalfTime > 0) {
             logEvent(
@@ -107,13 +110,25 @@ function simulateMatch(teamsInMatch) {
             if (!currentTimeInSeconds) {
                 logEvent(currentTimeInSeconds, "start", '', "Match start");
             } else {
-                // Simulate an action
-                const team = Math.random() < 0.5 ? team1 : team2;
-                const player =
-                    team.players[Math.floor(Math.random() * team.players.length)];
-                if (Math.random() < 0.5) {
-                    simulateAction(team, player, team1, team2, currentTimeInSeconds);
+                let action = null;
+                if (!prevAction) {
+                    // Simulate an action
+                    const team = Math.random() < 0.5 ? team1 : team2;
+                    const player =
+                        team.players[Math.floor(Math.random() * team.players.length)];
+                    const randAction = getActionFromPlayer(player, currentTimeInSeconds);
+                    prevAction = randAction;
+                    action = randAction;
+                } else {
+                    const nextAction = performNextAction(prevAction);
+                    action = nextAction['action'];
+                    prevAction = action;
                 }
+                console.log(action);
+                // console.log({name: player.name, action, ...performNextAction(action)})
+                // if (Math.random() < 0.5) {
+                //     simulateAction(team, player, team1, team2, currentTimeInSeconds);
+                // }
             }
         }
 
@@ -122,8 +137,91 @@ function simulateMatch(teamsInMatch) {
     }, 10); // Delay of 1 second per iteration
 }
 
+function getActionFromPlayer(player, currentTimeInSeconds){
+    // Define valid actions for each position
+    const validActionsByPosition = {
+        GK: ["goal_kick", "save_shot", "catch_cross", "punch", "clearance", "distribute_ball"],
+        LB: ["intercept", "tackle", "overlap", "cross", "cut_inside", "long_ball"],
+        CB: ["clearance", "intercept", "tackle", "block_shot", "header", "mark"],
+        RB: ["intercept", "tackle", "overlap", "cross", "cut_inside", "long_ball"],
+        LM: ["cross", "dribble", "cut_inside", "pass", "long_shot", "skill_move"],
+        CDM: ["intercept", "tackle", "pass", "long_ball", "shield_ball", "switch_play"],
+        CM: ["pass", "dribble", "long_shot", "through_ball", "tackle", "intercept"],
+        CAM: ["dribble", "pass", "through_ball", "shoot", "cut_inside", "skill_move"],
+        RM: ["cross", "dribble", "cut_inside", "pass", "long_shot", "skill_move"],
+        LW: ["cross", "dribble", "cut_inside", "pass", "shoot", "skill_move"],
+        CF: ["shoot", "lay_off", "pass", "press_defender", "header", "dribble"],
+        ST: ["shoot", "header", "hold_up_play", "press_defender", "run_in_behind", "tap_in"],
+        RW: ["cross", "dribble", "cut_inside", "pass", "shoot", "skill_move"],
+    };
+
+    const {position_in_match} = player;
+    // Randomly select a valid action for the chosen position
+    let actions = validActionsByPosition[position_in_match];
+    const randAction = Math.random();
+    let action = actions[Math.floor(randAction * actions.length)];
+    const isPossibleSub = currentTimeInSeconds > 45 * 60;
+    if (randAction < 0.2) {
+        if (randAction < 0.01) {
+            action = "injury";
+        } else if (randAction < 0.1 && isPossibleSub) {
+            action = "substitute";
+        } else {
+            action = "foul";
+        }
+    }
+
+    return action;
+}
+
+// Function to perform an action and simulate opponent reaction
+function performNextAction(currentAction) {
+    // Define possible follow-up actions for players
+    const playerActions = {
+        dribble: ["cut_inside", "shield_ball", "pass", "shoot", "step_over", "nutmeg", "drag_back", "flick", "sprint"],
+        pass: ["overlap", "move_forward", "cross", "one_two", "through_ball", "switch_play", "back_pass", "long_ball"],
+        cross: ["header", "volley", "tap_in", "back_post_run", "chest_control", "flick_on", "dummy"],
+        shoot: ["rebound", "curl", "power_shot", "low_driven", "chip", "volley", "dipping_shot", "scissor_kick"],
+        cut_inside: ["shoot", "pass", "lay_off", "skill_move", "cross", "link_up", "drive_towards_goal"],
+    };
+
+    // Define possible opponent reactions
+    const opponentReactions = {
+        dribble: ["cut_off_ball", "intercept", "tackle", "shadow", "force_error", "block_path"],
+        pass: ["intercept", "block", "pressure_receiver", "force_turnover", "delay"],
+        cross: ["clearance", "block", "intercept", "win_header", "disrupt_runner", "deflect"],
+        shoot: ["block_shot", "goalkeeper_save", "deflect", "pressure_shooter", "last_ditch_tackle"],
+        cut_inside: ["tackle", "force_wide", "intercept", "block_cross", "double_team"],
+    };
+    
+    // Check if opponent can react to this action
+    const possibleReactions = opponentReactions[currentAction];
+    const possibleFollowUps = playerActions[currentAction];
+  
+    if (possibleReactions) {
+      // Simulate a random chance for opponent reaction
+      const opponentChance = Math.random(); // 0 to 1
+  
+      if (opponentChance < 0.5) {
+        // Opponent reacts
+        const reactionIndex = Math.floor(Math.random() * possibleReactions.length);
+        const opponentAction = possibleReactions[reactionIndex];
+        return {player_type: 'opponent', action: opponentAction};
+      }
+    }
+  
+    // If no opponent reaction, continue with the player's follow-up action
+    if (possibleFollowUps) {
+      const followUpIndex = Math.floor(Math.random() * possibleFollowUps.length);
+      const nextAction = possibleFollowUps[followUpIndex];
+      return {player_type: 'team', action: nextAction};
+    } else {
+      return {player_type: null, action: null};
+    }
+}
+
 // Convert time to mm:ss format
-function formatTime(time) {
+function formatMatchTime(time) {
     // Calculate minutes and seconds
     const minutes = Math.floor(time / 60);
     const seconds = time % 60;
@@ -165,253 +263,6 @@ function getRandPlayerFromTeam(action = "", team, player = "") {
 }
 
 function simulateAction(team, player, team1, team2, currentTime) {
-    const GK_actions = [
-        "save", // Stopping a shot on goal
-        "catch", // Catching the ball, typically from crosses or shots
-        "punch", // Punching the ball away when a catch is not possible
-        "goal_kick", // Taking a goal kick to restart play from the goal area
-        "handling", // Handling the ball cleanly, avoiding handball violations
-        "reflexes", // Quick reflexes to react to sudden shots or passes
-        "kicking", // Kicking the ball to distribute it to teammates
-        "throwing", // Throwing the ball to a teammate for a fast counter-attack or restart
-        "1v1", // Dealing with one-on-one situations, where the goalkeeper faces a direct attacker
-        "command_of_area", // Organizing and controlling the area around the goal, especially during set pieces
-        "rushing_out", // Rushing out to challenge an attacker before they can shoot on goal
-        "communication", // Communicating with defenders and directing them during play
-        "shot_stopping", // General shot-stopping ability, reacting to any kind of shot
-        "distribution", // Distributing the ball, whether long passes, goal kicks, or punts to teammates
-        "sweeping" // Acting as a sweeper, clearing balls or stopping attackers outside the penalty area
-    ];
-    const LRB_actions = [
-        "tackle", // Defending the ball by making a tackle to dispossess the opponent
-        "clearance", // Clearing the ball out of the defensive area to relieve pressure
-        "heading", // Winning headers, especially from crosses or long balls
-        "cross", // Delivering a cross into the box from wide positions
-        "shoot", // Attempting a shot at goal from open play or set pieces
-        "intercept", // Intercepting passes from the opposition to regain possession
-        "offside", // Avoiding being caught offside and ensuring proper positioning
-        "passing", // Passing the ball to teammates to move the ball upfield
-        "dribbling", // Dribbling the ball past opponents to maintain possession or progress the attack
-        "crossing", // Delivering accurate crosses into the box for teammates to score
-        "finishing", // Attempting to score from opportunities, especially inside the box
-        "technique", // General technical ability in passing, dribbling, and ball control
-        "volleys", // Striking the ball in mid-air, often used for shots or clearances
-        "curve", // Using the inside of the foot to bend the ball for passes, crosses, or shots
-        "ball_control", // Maintaining possession of the ball with close, controlled touches
-        "tracking_back", // Tracking opposing wingers or attackers and helping with defense
-        "overlap", // Overlapping the winger to provide additional attacking support down the flank
-        "marking", // Marking opposing players, especially during set pieces or crosses
-        "positioning", // Maintaining proper positioning to both defend and support the attack
-        "cut_inside", // Dribbling inside from the wing to create shooting or passing opportunities
-        "anticipation", // Anticipating the opponent's passes or runs to intercept or block them
-        "support_attack", // Moving up the pitch to support attacking plays and create width
-        "defensive_heading", // Using headers defensively to clear the ball from dangerous situations
-        "aggression" // Playing with aggression to win duels, tackles, and challenge opponents
-    ];
-    const CB_actions = [
-        "tackle", // Winning the ball back from an opponent through a strong or well-timed tackle
-        "clearance", // Clearing the ball from the defensive area to relieve pressure
-        "heading", // Winning aerial duels to clear or direct the ball, especially during crosses or long balls
-        "block", // Blocking shots, passes, or crosses to prevent scoring opportunities
-        "intercept", // Intercepting passes to regain possession for the team
-        "strength", // Using physical strength to win duels, challenge attackers, and hold off opponents
-        "positioning", // Maintaining the correct defensive position to prevent attackers from getting in behind
-        "decision_making", // Making quick and effective decisions to choose the best defensive option
-        "anticipation", // Reading the game and anticipating passes or movements to intercept or challenge
-        "composure", // Remaining calm under pressure to make clear decisions and accurate passes
-        "concentration", // Staying focused on the ball and marking assignments for the full duration of the match
-        "leadership", // Organizing the defense, communicating effectively, and directing teammates
-        "cover", // Providing cover for teammates by positioning yourself to deal with attacking threats
-        "tracking", // Tracking the runs of opposing attackers, particularly in the box or on the counter-attack
-        "passing", // Passing the ball out from the back to transition to attack
-        "blocking_crosses", // Positioning to block or clear crosses into the box
-        "clearance_under_pressure", // Making clearances when under pressure from opponents
-        "marking", // Tight marking of opposing attackers, especially during set pieces or dangerous situations
-        "tactical_fouling", // Committing a foul in a tactical manner to break up an opposition counter-attack or dangerous play
-        "communication", // Communicating with teammates to maintain defensive shape and organization
-    ];
-    const LRM_actions = [
-        "dribble", // Dribbling past opponents to maintain possession or create attacking opportunities
-        "cross", // Delivering crosses into the box from wide positions to assist strikers
-        "intercept", // Intercepting passes from the opposition to regain possession for your team
-        "offside", // Avoiding offside positions and timing runs correctly to receive passes
-        "passing", // Passing the ball accurately to teammates, either short or long-range
-        "crossing", // Delivering accurate crosses from the wing to create goal-scoring chances
-        "flair", // Demonstrating creativity and skill in attacking situations, often with tricks or unpredictable moves
-        "technique", // General technical ability in controlling the ball, passing, and shooting
-        "shoot", // Taking shots at goal, either from distance or in the box
-        "ball_control", // Keeping the ball under control, especially in tight spaces or while dribbling
-        "tracking_back", // Tracking back to help defend and support the team when losing possession
-        "cut_inside", // Dribbling inside from the wing to create shooting or passing opportunities
-        "movement", // Making intelligent runs into space to receive passes or stretch the opposition
-        "stamina", // Maintaining energy levels throughout the match, especially on the wing where running is key
-        "vision", // Seeing the game and making passes or decisions based on a broader understanding of play
-        "1v1", // Winning one-on-one duels against defenders with skill or strength
-        "counter_attack", // Transitioning quickly from defense to attack when possession is won
-        "positional_awareness", // Understanding the position of teammates and opponents to make effective runs or passes
-    ];
-    const CDM_actions = [
-        "intercept", // Intercepting passes to regain possession for the team
-        "shield_ball", // Shielding the ball from opponents to retain possession and slow down attacks
-        "tackle", // Winning the ball back from an opponent through a well-timed or strong tackle
-        "clearance", // Clearing the ball from the defensive area, especially under pressure
-        "decision_making", // Making quick and effective decisions on whether to pass, tackle, or move
-        "work_rate", // Demonstrating high energy levels and persistence throughout the match, especially in defensive actions
-        "vision", // Seeing the game and making the right passes, even under pressure
-        "teamwork", // Working well with teammates to organize defensive lines or launch counter-attacks
-        "passing", // Passing the ball accurately to start offensive moves or relieve pressure
-        "positioning", // Maintaining the right position to break up attacks and cover spaces
-        "marking", // Marking opposition players, especially in midfield and defensive areas
-        "tracking", // Tracking attacking runs from opposition players to stop counter-attacks
-        "pressing", // Applying pressure to the ball carrier to force mistakes or win the ball back
-        "distribution", // Distributing the ball effectively to attack or switch play
-        "cut_out_pass", // Cutting out or intercepting passes before they reach the target player
-        "aerial_duels", // Winning aerial challenges, especially during set pieces or long balls
-        "composure", // Staying calm under pressure, making simple decisions to maintain possession
-        "counter_attack", // Starting or supporting quick counter-attacks when possession is regained
-        "tactical_fouling", // Committing a foul at a strategic moment to disrupt the opposition's flow
-    ];
-    const CM_actions = [
-        "dribble", // Dribbling past opponents to maintain possession or drive forward
-        "key_pass", // Creating goal-scoring opportunities by delivering key passes to teammates
-        "tackle", // Winning the ball back through strong or well-timed tackles
-        "intercept", // Intercepting passes to regain possession for the team
-        "clearance", // Clearing the ball from dangerous areas when under pressure
-        "passing", // General passing to move the ball across the field, either short or long-range
-        "positioning", // Maintaining the correct positioning to support defense and attack
-        "composure", // Staying calm under pressure to make better decisions with the ball
-        "anticipation", // Anticipating the opponent's moves to intercept or block passes
-        "ball_control", // Controlling the ball smoothly, especially under pressure
-        "vision", // Seeing the game and making decisions based on the broader flow of play
-        "work_rate", // Showing high energy levels, both in attack and defense
-        "creativity", // Demonstrating creative playmaking, often with unpredictable or inventive passes
-        "passing_range", // Ability to make both short and long passes effectively
-        "stamina", // Maintaining performance levels throughout the match, especially in a box-to-box role
-        "movement", // Making intelligent runs to receive passes or support attacking plays
-        "teamwork", // Working effectively with teammates to build plays and maintain balance in the midfield
-        "defensive_contribution", // Helping the defense by tracking back or making defensive tackles
-        "crossing", // Delivering crosses from central areas to assist attacking players
-        "set_piece_delivery", // Taking free kicks or corners to create goal-scoring opportunities
-        "finishing", // Scoring goals from central areas or arriving late into the box
-    ];
-    const CAM_actions = [
-        "key_pass", // Delivering passes that create clear goal-scoring opportunities for teammates
-        "shoot", // Taking shots on goal, either from distance or in the box
-        "offside", // Timing runs to stay onside and receive passes without being caught by the defenders
-        "chip_shot", // Using a delicate chip to lift the ball over the goalkeeper or defenders
-        "vision", // Seeing the game and making intelligent decisions based on the flow of play
-        "decision_making", // Making the right decisions under pressure, whether to pass, shoot, or dribble
-        "flair", // Displaying creativity and flair with unpredictable moves, tricks, or passes
-        "technique", // High technical ability in controlling, passing, and shooting the ball
-        "finishing", // Scoring goals through accurate and composed finishing in front of goal
-        "passing", // General passing to move the ball and set up attacking plays
-        "dribble", // Dribbling past defenders to create space or get into goal-scoring positions
-        "ball_control", // Maintaining tight control of the ball while under pressure from defenders
-        "crossing", // Delivering accurate crosses from central areas to assist attackers
-        "movement", // Making intelligent runs into the box or to receive passes in dangerous areas
-        "link_up_play", // Combining with teammates to build attacking moves and create chances
-        "set_piece_delivery", // Taking free kicks, corners, or other set pieces to create scoring opportunities
-        "aerial_duels", // Winning aerial duels, particularly when crossing or defending set pieces
-        "creativity", // Producing unexpected moments of brilliance, such as through through-balls or skillful moves
-        "pressing", // Pressing the opposition when out of possession to regain the ball high up the field
-    ];
-    const LRW_actions = [
-        "cross", // Delivering accurate crosses from the left wing to assist strikers
-        "dribble", // Dribbling past defenders to create space or get into dangerous areas
-        "shoot", // Taking shots at goal, especially from wide areas or cutting inside
-        "offside", // Timing runs correctly to avoid being caught offside
-        "flair", // Demonstrating creativity and skill with tricks, flicks, or unpredictable moves
-        "technique", // High technical ability in ball control, passing, and shooting
-        "passing", // Passing the ball effectively, including through balls or quick passes to teammates
-        "finishing", // Scoring goals from crosses, through balls, or individual efforts
-        "ball_control", // Keeping the ball under control, especially in tight spaces or when under pressure
-        "cut_inside", // Dribbling inside from the wing to take a shot or make a pass
-        "movement", // Making intelligent runs to stretch the defense or receive passes
-        "tracking_back", // Tracking back to help defend and support the team when out of possession
-        "1v1", // Winning duels against defenders, either through skill or speed
-        "stamina", // Maintaining energy levels throughout the match, especially for a winger who needs to cover a lot of ground
-        "aerial_duels", // Winning aerial challenges, particularly when the ball is played into the box or during set pieces
-        "passing_range", // Making accurate and varied passes, from short to long-range passes to switch play
-        "positional_awareness", // Being in the right place at the right time to receive the ball or support the attack
-        "counter_attack", // Starting or supporting quick counter-attacks when possession is regained
-        "pressing", // Applying pressure to the opponent when out of possession to win the ball back
-    ];
-    const CF_actions = [
-        "shoot", // Taking shots on goal, whether from inside or outside the box
-        "offside", // Timing runs correctly to avoid being caught offside
-        "penalty", // Taking and converting penalties from the spot
-        "heading", // Winning headers, particularly in attacking situations or from crosses
-        "chip_shot", // Taking delicate chip shots over the goalkeeper or defenders
-        "positioning", // Being in the right place at the right time to receive passes or finish chances
-        "finishing", // Composed and accurate finishing to convert chances into goals
-        "decision_making", // Making the right decisions, whether to shoot, pass, or dribble
-        "technique", // High technical ability in ball control, passing, and shooting
-        "link_up_play", // Combining with teammates to create goal-scoring opportunities and maintain possession
-        "hold_up_play", // Holding the ball up to bring others into play, especially when under pressure from defenders
-        "movement", // Making intelligent runs to get into goal-scoring positions or create space
-        "pressing", // Pressing high up the field to regain possession and disrupt the opposition's buildup
-        "aerial_duels", // Competing in the air for crosses, long balls, and set pieces
-        "counter_attack", // Starting or supporting quick counter-attacks, exploiting spaces left by the opposition
-        "stamina", // Maintaining energy levels to keep up the intensity throughout the game
-        "passing", // Quick, accurate passes to set up teammates or retain possession in attacking situations
-        "creativity", // Showing creativity to break down defenses with unexpected movements or passes
-    ];
-    const ST_actions = [
-        "shoot", // Taking shots on goal, either from inside the box or from long range
-        "offside", // Timing runs to avoid being caught offside
-        "penalty", // Taking and converting penalties from the spot
-        "heading", // Winning headers to score goals or challenge for aerial duels
-        "chip_shot", // Using a delicate chip shot over the goalkeeper or defenders
-        "finishing", // Composed and accurate finishing to convert chances into goals
-        "positioning", // Being in the right place at the right time to receive passes or finish chances
-        "dribbling", // Taking on defenders with the ball and creating goal-scoring opportunities
-        "composure", // Keeping calm and making the right decisions in front of goal or under pressure
-        "anticipation", // Reading the game, predicting where the ball will go, and reacting accordingly
-        "link_up_play", // Combining with teammates to create goal-scoring opportunities or to hold possession
-        "hold_up_play", // Holding the ball up to bring teammates into the attack, especially when under pressure
-        "movement", // Making intelligent runs to break defensive lines and receive the ball in dangerous areas
-        "pressing", // Pressuring defenders and goalkeepers to regain possession high up the field
-        "aerial_duels", // Competing for headers, especially from crosses or set pieces
-        "counter_attack", // Supporting or initiating counter-attacks with speed and decisiveness
-        "stamina", // Maintaining energy levels to keep the pressure on throughout the game
-        "passing", // Quick and accurate passing to set up teammates or retain possession in attacking situations
-        "creativity", // Creating unexpected moments of brilliance, such as flicks, passes, or shots
-    ];
-    // Define valid actions for each position
-    const validActionsByPosition = {
-        GK: GK_actions,
-        LB: LRB_actions,
-        CB: CB_actions,
-        RB: LRB_actions,
-        LM: LRM_actions,
-        CDM: CDM_actions,
-        CM: CM_actions,
-        CAM: CAM_actions,
-        RM: LRM_actions,
-        LW: LRW_actions,
-        CF: CF_actions,
-        ST: ST_actions,
-        RW: LRW_actions,
-    };
-
-    const {position_in_match} = player;
-    const opposingTeam = team === team1 ? team2 : team1;
-    const goalkeeper = getRandPlayerFromTeam("save", opposingTeam);
-    // Randomly select a valid action for the chosen position
-    let actions = validActionsByPosition[position_in_match];
-    const randAction = Math.random();
-    let action = actions[Math.floor(randAction * actions.length)];
-    const isPossibleSub = currentTime > 45 * 60;
-    if (randAction < 0.2) {
-        if (randAction < 0.01) {
-            action = "injury";
-        } else if (randAction < 0.1 && isPossibleSub) {
-            action = "substitute";
-        } else {
-            action = "foul";
-        }
-    }
-
     const randTime = Math.round(Math.random() * (10 - 1) + 1);
 
     const team1score = document.getElementById("team-1-score");
@@ -422,7 +273,6 @@ function simulateAction(team, player, team1, team2, currentTime) {
     const highPlayerScore = Math.random() * (2.5 - 2.0) + 2.0; // Range: 2.0 to 2.5
     const veryHighPlayerScore = Math.random() * (3.0 - 2.5) + 2.5; // Range: 2.5 to 3.0
 
-    action = 'shoot';
     // Handle valid actions based on the player's position
     switch (action) {
         case "save":
@@ -1156,7 +1006,6 @@ function attemptOutcome(action, player, opponentTeam) {
         // Calculate attempt outcome with bonus chance
         const attemptOutcome = attackerScore * bonusChance - (goalkeeperScore + defenderScore);
 
-        console.log(attemptOutcome);
         // Return true if the shot results in a goal, false otherwise
         return attemptOutcome > 0;
     }
@@ -1941,8 +1790,8 @@ function logEvent(time, action, player, message) {
         </div>
     </div>
     <div class="flex-grow-1 ms-3 pt-1">
-        <p class="text-muted mb-0 fs-12">${formatTime(time)["minute"]}:${
-        formatTime(time)["second"]
+        <p class="text-muted mb-0 fs-12">${formatMatchTime(time)["minute"]}:${
+        formatMatchTime(time)["second"]
     }<span class="player-dot" style="background-color: ${player.playerColor}"></span></p>
         <h6 class="mb-1">${message}</h6>
     </div>`;
