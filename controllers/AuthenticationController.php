@@ -39,27 +39,19 @@ class AuthenticationController
             $userId = $this->authenticationService->createUser($firstName, $lastName, $username, $email, $password);
 
             if ($userId) {
-                // Check if the "system" user already exists
-                if (!$this->authenticationService->userExists('system')) {
-                    // Create the "system" user
-                    $systemFirstName = 'System';
-                    $systemLastName = 'User';
-                    $systemUsername = 'system';
-                    $systemEmail = 'system@multi-pro.com';
-                    $systemPassword = 'securepassword'; // Use a strong password here
-                    $this->authenticationService->createUser($systemFirstName, $systemLastName, $systemUsername, $systemEmail, $systemPassword);
-                }
+                $currentUtcTime = (new DateTime('now', new DateTimeZone('UTC')))->format('Y-m-d H:i:s');
+                $this->createSystemNotification(
+                    'A user has been created',
+                    'new_user',
+                    sprintf('User "%s" has been created at %s', $username, $currentUtcTime)
+                );
+
+                $_SESSION['message_type'] = 'success';
+                $_SESSION['message'] = "Register new user successfully";
+            } else {
+                $_SESSION['message_type'] = 'danger';
+                $_SESSION['message'] = "Failed to register user, please try again.";
             }
-
-            $currentUtcTime = (new DateTime('now', new DateTimeZone('UTC')))->format('Y-m-d H:i:s');
-            $this->createSystemNotification(
-                'A user has been created',
-                'new_user',
-                sprintf('User "%s" has been created at %s', $username, $currentUtcTime)
-            );
-
-            $_SESSION['message_type'] = 'success';
-            $_SESSION['message'] = "Register new user successfully";
         }
 
         header("Location: " . home_url("register"));
