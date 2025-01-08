@@ -165,6 +165,7 @@ function simulateMatch(teamsInMatch) {
     const maxExtraTime = 10; // Maximum possible extra time in minutes
     let currentTime = 0;
     let currentTimeInSeconds = 0;
+    let matchTimeInSeconds = 0;
     let halfTimePassed = false;
     let extraTimePassed = false;
     let matchOver = false;
@@ -273,29 +274,42 @@ function simulateMatch(teamsInMatch) {
                 }
             }
         }
-
+        if (matchTimeInSeconds%(15) === 0) {
+            currentTimeInSeconds++;
+        }
         // Increment the total time
-        currentTimeInSeconds++;
+        matchTimeInSeconds++;
     }, 10); // Delay of 1 second per iteration
 }
 
 function getActionFromPlayer(player, currentTimeInSeconds) {
     const { position_in_match } = player;
-    // Randomly select a valid action for the chosen position
+
+    // Select possible actions based on the player's position
     let actions = validActionsByPosition[position_in_match];
+    
+    // Randomly select an action from the available actions
     const randAction = Math.random();
     let action = actions[Math.floor(randAction * actions.length)];
+    
+    // Determine if a substitution is possible (after 45 minutes, for example)
     const isPossibleSub = currentTimeInSeconds > 45 * 60;
-    if (randAction < 0.2) {
-        if (randAction < 0.01) {
+    
+    // Check if the randomly chosen action should be a special event (injury, substitute, or foul)
+    if (randAction < 0.2) { // 20% chance for special actions
+        if (randAction < 0.01) {  // 1% chance for injury
             action = "injury";
-        } else if (randAction < 0.1 && isPossibleSub) {
+        } else if (randAction < 0.1 && isPossibleSub) {  // 9% chance for substitute (only after 45 mins)
             action = "substitute";
-        } else {
+        } else {  // 10% chance for foul
             action = "foul";
         }
     }
 
+    // Possible extensions based on additional factors:
+    // - Adjust based on fatigue, injury recovery, tactical changes, etc.
+    
+    // Return the chosen action
     return action;
 }
 
@@ -2868,7 +2882,60 @@ function logEvent(time, action, player, message) {
     newElement.innerHTML = html;
 
     parentElement.insertBefore(newElement, parentElement.firstChild);
+    speakText(message);
 }
 
-// Start the match simulation
-simulateMatch(teamsInMatch);
+// Function to speak text
+function speakText(text) {
+    console.log("speak: " + text);
+
+    // Check if speech synthesis is supported
+    if ('speechSynthesis' in window) {
+        // Create a new SpeechSynthesisUtterance instance
+        const utterance = new SpeechSynthesisUtterance(text);
+
+        // Set the voice to a more dynamic, lively voice (can be adjusted based on available voices in the browser)
+        let voices = window.speechSynthesis.getVoices();
+        let commentatorVoice = voices.find(voice => voice.name.includes("Google UK English Male") || voice.name.includes("Microsoft Mark Desktop"));
+
+        // Set the selected voice if found, or fallback to default
+        if (commentatorVoice) {
+            utterance.voice = commentatorVoice;
+        }
+
+        // Adjust pitch and rate for a football commentator feel
+        // utterance.pitch = 1.5;  // Higher pitch for excitement
+        // utterance.rate = 1.2;   // Slightly faster rate to simulate a dynamic commentary pace
+        // utterance.volume = 1;   // Full volume
+
+        // Start speaking the text
+        window.speechSynthesis.speak(utterance);
+    } else {
+        console.log("Speech synthesis not supported in this browser.");
+    }
+}
+
+// Function to play crowd noise
+function playCrowdNoise() {
+    const crowdAudio = new Audio(crowdAudioPath);  // Replace with the correct path to your crowd noise file
+    crowdAudio.loop = true;  // Make sure it loops
+    crowdAudio.volume = 0.3; // Set a lower volume for background noise
+    crowdAudio.play();
+    
+    // Stop crowd noise after a certain duration (for example, after 60 seconds)
+    setTimeout(() => {
+        crowdAudio.pause();
+        crowdAudio.currentTime = 0;  // Reset the audio to the start
+        crowdAudio.play();
+    }, 39000);  // Stop after 39 seconds (adjust as necessary)
+}
+
+$("#btn-start-match").on('click', () =>{
+    $("#btn-start-match").hide();
+    $("#btn-cancel-match").removeClass('d-none');
+
+    // Play the crowd noise in the background
+    playCrowdNoise();
+    // Start the match simulation
+    simulateMatch(teamsInMatch);
+})

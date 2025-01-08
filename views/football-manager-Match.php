@@ -55,8 +55,9 @@ ob_start();
                                 style="width: 20px">00</span>:<span
                                 id="second" class="d-inline-block text-center" style="width: 20px">00</span>
                         </h4>
-                        <button class="btn btn-sm btn-light ms-auto me-1" id="btn-cancel-match">Cancel</button>
-                        <button class="btn btn-sm btn-success" id="btn-accept-match" disabled>Next</button>
+                        <button class="btn btn-sm btn-primary ms-auto" id="btn-start-match">Start</button>
+                        <button class="btn btn-sm btn-light ms-auto me-1 d-none" id="btn-cancel-match">Cancel</button>
+                        <button class="btn btn-sm btn-success d-none" id="btn-accept-match" disabled>Next</button>
                     </div>
                     <div class="card-body">
                         <div class="profile-timeline" data-simplebar style="height: 370px;">
@@ -205,6 +206,7 @@ echo "
         const pitchX = 50 * groupTeams.length;
 
         const positionGroups = " . json_encode($positionGroupsExtra) . "; 
+        const crowdAudioPath = '" . home_url('assets/audio/football-crowd.mp3') . "'; 
     </script>
     <script src='" . home_url("/assets/js/pages/football-manager-formation.js") . "'></script>
     <script src='" . home_url("/assets/js/pages/football-manager.js") . "'></script>
