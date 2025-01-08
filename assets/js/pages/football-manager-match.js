@@ -10,15 +10,152 @@ const teamsInMatch = groupTeams.map((team, teamIdx) => {
         };
     });
     const bench = team.bench.map((player) => {
-        return {...player, position_in_match: player.best_position, playerColor, teamIdx, score: 5}
+        return { ...player, position_in_match: player.best_position, playerColor, teamIdx, score: 5 }
     });
-    return {...team, players, bench};
+    return { ...team, players, bench };
 });
 
 const redraw = () => {
-    renderTeamInFitch(teamsInMatch, {circleRadius: 8, isDisplayScore: true, isDisplayName: true, isTeamInMatch: true});
+    renderTeamInFitch(teamsInMatch, { circleRadius: 8, isDisplayScore: true, isDisplayName: true, isTeamInMatch: true });
 };
 redraw();
+
+// Define possible follow-up actions for players
+const playerActions = {
+    // Starting play by distributing or launching a long ball forward.
+    goal_kick: ["distribute_ball", "long_ball"], // Distribute to teammates or attempt a long ball.
+    // After saving a shot, a goalkeeper can control the ball to distribute or clear danger.
+    save_shot: ["catch_cross", "punch", "distribute_ball"], // Prepare for crosses, punch away, or start distribution.
+    // Catching a cross typically leads to transitioning play or clearing the ball quickly.
+    catch_cross: ["distribute_ball", "long_ball"], // Distribute the ball or send it long.
+    // Punching the ball clears immediate danger, often followed by clearance or a long ball.
+    punch: ["clearance", "long_ball"], // Clear the ball or send it long after punching.
+    // A clearance removes immediate danger; logical follow-ups are passing or a long pass to teammates.
+    clearance: ["pass", "long_pass"], // Retain possession or transition quickly via long pass.
+    // Distributing the ball leads to advancing play through dribbling or passing.
+    distribute_ball: ["dribble", "pass", "long_pass"], // Move the ball forward via teammates or a long pass.
+    // Interceptions can quickly transition into attack or controlled possession.
+    intercept: ["pass", "dribble"], // Gain possession and look for teammates or space to dribble.
+    // Tackling leads to an opportunity to build play by passing or dribbling.
+    tackle: ["pass", "dribble"], // Retain possession and progress play.
+    // Overlapping players often aim to cross the ball or cut inside for an attack.
+    overlap: ["cross", "cut_inside"], // Create attacking opportunities by crossing or moving inside.
+    // Crossing aims to set up attacking chances like headers, volleys, or tap-ins.
+    cross: ["header", "volley", "tap_in"], // Deliver the ball into dangerous areas for finishes.
+    // Cutting inside creates shooting or passing opportunities.
+    cut_inside: ["shoot", "pass", "lay_off"], // Create chances through shots or combinations.
+    // Long balls look for advanced teammates who can head or control the ball.
+    long_ball: ["header", "control", "pass"], // Target advanced players for progression.
+    // Blocking a shot is defensive; clearing or sending a long pass follows logically.
+    block_shot: ["clearance", "long_pass"], // Defuse danger by clearing or transitioning.
+    // Heading the ball often leads to passing or attempting a shot, depending on position.
+    header: ["pass", "clearance", "shoot"], // Retain or transition possession, or attempt a goal.
+    // Marking involves defensive outcomes like interceptions or blocking shots.
+    mark: ["intercept", "block_shot"], // Prevent the opponent from advancing.
+    // Dribbling creates opportunities to attack or find teammates.
+    dribble: ["cut_inside", "pass", "shoot"], // Beat opponents or create chances.
+    // Passing opens up opportunities to continue attacking or distribute the ball long.
+    pass: ["overlap", "cross", "shoot", "long_pass"], // Combine with teammates for attacks.
+    // Long shots aim to score but can lead to rebounds or pressing defenders.
+    long_shot: ["rebound", "shoot", "press_defender"], // Capitalize on deflections or defensive errors.
+    // Skill moves help beat opponents and create attacking opportunities.
+    skill_move: ["dribble", "pass", "shoot"], // Gain space or break through defenders.
+    // Shielding the ball helps retain possession and set up teammates.
+    shield_ball: ["pass", "lay_off", "dribble"], // Protect the ball and look for options.
+    // Switching play opens space on the opposite side of the pitch.
+    switch_play: ["cross", "pass"], // Exploit open areas or set up crosses.
+    // Through balls aim to set up scoring or attacking runs.
+    through_ball: ["shoot", "dribble"], // Create scoring chances or progress play.
+    // Shooting leads to potential rebounds or pressing defenders for loose balls.
+    shoot: ["rebound", "press_defender"], // Follow up missed shots or apply pressure.
+    // Lay-offs set up teammates for shots or continued play.
+    lay_off: ["shoot", "pass", "dribble"], // Support teammates with short, controlled passes.
+    // Pressing defenders aims to regain possession through tackles or interceptions.
+    press_defender: ["tackle", "intercept"], // Win the ball back quickly.
+    // Holding up play helps create space for teammates to join the attack.
+    hold_up_play: ["lay_off", "pass"], // Retain possession and set up teammates.
+    // Running in behind aims to exploit defensive gaps for scoring or crossing.
+    run_in_behind: ["shoot", "cross"], // Take advantage of space behind defenders.
+    // Tap-ins follow up on close-range opportunities, with rebounds or pressing defenders as logical next steps.
+    tap_in: ["rebound", "press_defender"] // Capitalize on close chances or press after misses.
+};
+
+// Define possible opponent reactions
+const opponentReactions = {
+    // Opponents press to regain possession or tightly mark strikers during a goal kick.
+    goal_kick: ["press", "mark_strikers"], // Apply pressure to the defense or mark attackers to disrupt distribution.
+    // After a save, opponents pressure the goalkeeper or mark attacking players to limit options.
+    save_shot: ["pressure_goalkeeper", "mark_players"], // Prevent quick distribution or cover potential threats.
+    // When the goalkeeper catches a cross, opponents can challenge or maintain defensive positioning.
+    catch_cross: ["challenge_goalkeeper", "mark"], // Contest the catch or mark nearby players.
+    // Following a punch, opponents aim to recover loose balls or block the clearance.
+    punch: ["collect_loose_ball", "block_clearance"], // Quickly react to second balls or stop the follow-up clearance.
+    // After a clearance, opponents focus on blocking passes or regaining possession.
+    clearance: ["block", "recover_ball"], // Prevent progression or regain control.
+    // When the ball is distributed, opponents press receivers or intercept the pass.
+    distribute_ball: ["press_receiver", "intercept"], // Apply pressure or cut off passing lanes.
+    // After an interception, opponents either launch a counter-attack or retain possession.
+    intercept: ["counter_attack", "pass"], // Transition quickly or build possession.
+    // Tackles are followed by attempts to secure possession or start a counter-attack.
+    tackle: ["recover_ball", "counter_attack"], // Regain control and exploit the turnover.
+    // Opponents track overlapping runs or attempt to cut out the resulting cross.
+    overlap: ["track_runner", "intercept_cross"], // Follow overlapping players or intercept deliveries.
+    // Crosses are countered by blocking or clearing the ball to safety.
+    cross: ["block_cross", "clearance"], // Prevent the cross or clear the ball from danger.
+    // Cutting inside is met with defensive reactions to block a shot or make a tackle.
+    cut_inside: ["block_shot", "tackle"], // Prevent progression towards goal or block shooting opportunities.
+    // Long balls trigger aerial challenges or interceptions by opponents.
+    long_ball: ["challenge_header", "intercept"], // Compete for the ball or cut off its trajectory.
+    // After blocking a shot, opponents aim to recover possession or counter-attack.
+    block_shot: ["recover_ball", "counter_attack"], // Clear danger and transition quickly.
+    // Headers are contested by opponents or followed by attempts to block progression.
+    header: ["challenge_header", "block"], // Compete in the air or obstruct follow-up actions.
+    // Marking involves tracking runners or intercepting passes intended for marked players.
+    mark: ["track_runner", "intercept"], // Follow attacking players or cut off passes.
+    // Dribbling is countered by tackles or blocking the dribbler’s progress.
+    dribble: ["tackle", "block"], // Stop the dribbler by challenging or obstructing them.
+    // Passing is met with interception attempts or pressure on the receiver.
+    pass: ["intercept", "press_receiver"], // Anticipate the pass or press its recipient.
+    // Long shots prompt opponents to block or prepare for saves.
+    long_shot: ["block_shot", "save"], // Prevent the shot from reaching goal or rely on the goalkeeper.
+    // Skill moves are countered by tackles or containment strategies.
+    skill_move: ["tackle", "contain"], // Challenge the player or deny space.
+    // Shielding the ball is met with pressure or tackling to regain possession.
+    shield_ball: ["tackle", "press"], // Challenge the ball carrier or force mistakes.
+    // Switching play causes opponents to shift their defensive line or intercept the pass.
+    switch_play: ["shift_defensive_line", "intercept"], // Realign defense or cut off the switch.
+    // Through balls prompt interception attempts or blocking the resulting shot.
+    through_ball: ["intercept", "block_shot"], // Stop the pass or defend against the attack.
+    // Shooting is countered with blocks or goalkeeper saves.
+    shoot: ["block", "save"], // Defend the shot or rely on the goalkeeper.
+    // Lay-offs are met with interception attempts or immediate pressure.
+    lay_off: ["intercept", "press"], // Cut off the pass or apply pressure.
+    // Pressing defenders leads to dribbling away or a quick pass to avoid pressure.
+    press_defender: ["dribble_away", "pass"], // Evade pressure or find a teammate.
+    // Holding up play is countered by tackles or pressing the ball carrier.
+    hold_up_play: ["tackle", "press"], // Regain possession or disrupt the player.
+    // Runs in behind trigger defensive tracking or attempts to block the pass.
+    run_in_behind: ["track_run", "block_pass"], // Prevent the run or cut off the supply
+    // Tap-ins are defended by blocking the shot or making a save.
+    tap_in: ["block_shot", "save"] // Stop the close-range attempt or rely on the goalkeeper.
+};
+
+// Define valid actions for each position
+const validActionsByPosition = {
+    GK: ["goal_kick", "save_shot", "save", "catch_cross", "punch", "clearance", "distribute_ball", "pressure_goalkeeper", "mark_players", "block_shot"],
+    LB: ["intercept", "tackle", "overlap", "cross", "cut_inside", "long_ball", "track_runner", "intercept_cross", "contain", "block_shot", "press_receiver"],
+    CB: ["clearance", "intercept", "tackle", "block_shot", "header", "mark", "challenge_header", "recover_ball", "contain", "press_receiver"],
+    RB: ["intercept", "tackle", "overlap", "cross", "cut_inside", "long_ball", "track_runner", "intercept_cross", "contain", "block_shot", "press_receiver"],
+    LM: ["cross", "dribble", "cut_inside", "pass", "long_shot", "skill_move", "block_cross", "press_receiver"],
+    CDM: ["intercept", "tackle", "pass", "long_ball", "shield_ball", "switch_play", "shift_defensive_line", "contain", "block_shot", "press_receiver"],
+    CM: ["pass", "dribble", "long_shot", "through_ball", "tackle", "intercept", "counter_attack", "contain", "block_shot", "press_receiver"],
+    CAM: ["dribble", "pass", "through_ball", "shoot", "cut_inside", "skill_move", "block_shot", "press_receiver"],
+    RM: ["cross", "dribble", "cut_inside", "pass", "long_shot", "skill_move", "block_cross", "press_receiver"],
+    LW: ["cross", "dribble", "cut_inside", "pass", "shoot", "skill_move", "block_shot"],
+    CF: ["shoot", "lay_off", "pass", "press_defender", "header", "dribble", "hold_up_play"],
+    ST: ["shoot", "header", "hold_up_play", "press_defender", "run_in_behind", "tap_in", "block_shot", "press_receiver"],
+    RW: ["cross", "dribble", "cut_inside", "pass", "shoot", "skill_move", "block_shot"],
+};
 
 function simulateMatch(teamsInMatch) {
     const team1 = teamsInMatch[0];
@@ -130,7 +267,9 @@ function simulateMatch(teamsInMatch) {
                         player = nextAction.player;
                     }
                 }
-                console.log(action, player, currentTimeInSeconds);
+                if (player) {
+                    simulatePlayerAction(action, player, currentTimeInSeconds);
+                }
             }
         }
 
@@ -139,89 +278,8 @@ function simulateMatch(teamsInMatch) {
     }, 10); // Delay of 1 second per iteration
 }
 
-// Define possible follow-up actions for players
-const playerActions = {
-    goal_kick: ["save_shot", "distribute_ball"],
-    save_shot: ["catch_cross", "punch", "clearance"],
-    catch_cross: ["punch", "clearance"],
-    punch: ["clearance", "distribute_ball"],
-    clearance: ["intercept", "tackle"],
-    distribute_ball: ["intercept", "tackle", "dribble"],
-    intercept: ["tackle", "pass"],
-    tackle: ["pass", "dribble"],
-    overlap: ["cross", "cut_inside"],
-    cross: ["header", "volley", "tap_in"],
-    cut_inside: ["shoot", "pass", "lay_off"],
-    long_ball: ["header", "mark"],
-    block_shot: ["clearance", "intercept"],
-    header: ["clearance", "shoot"],
-    mark: ["intercept", "tackle"],
-    dribble: ["cut_inside", "pass", "shoot"],
-    pass: ["overlap", "cross", "shoot"],
-    long_shot: ["rebound", "shoot"],
-    skill_move: ["dribble", "pass", "shoot"],
-    shield_ball: ["pass", "dribble"],
-    switch_play: ["cross", "pass"],
-    through_ball: ["shoot", "dribble"],
-    shoot: ["rebound", "press_defender"],
-    lay_off: ["shoot", "dribble"],
-    press_defender: ["tackle", "intercept"],
-    hold_up_play: ["lay_off", "pass"],
-    run_in_behind: ["shoot", "cross"],
-    tap_in: ["rebound", "press_defender"]
-};
-
-// Define possible opponent reactions
-const opponentReactions = {
-    goal_kick: ["press", "mark_strikers"],
-    save_shot: ["pressure_goalkeeper", "mark_players"],
-    catch_cross: ["challenge_goalkeeper", "mark"],
-    punch: ["collect_loose_ball", "block_clearance"],
-    clearance: ["block", "recover_ball"],
-    distribute_ball: ["press_receiver", "intercept"],
-    intercept: ["counter_attack", "pass"],
-    tackle: ["recover_ball", "counter_attack"],
-    overlap: ["track_runner", "intercept_cross"],
-    cross: ["block_cross", "clearance"],
-    cut_inside: ["block_shot", "tackle"],
-    long_ball: ["challenge_header", "intercept"],
-    block_shot: ["recover_ball", "counter_attack"],
-    header: ["challenge_header", "block"],
-    mark: ["track_runner", "intercept"],
-    dribble: ["tackle", "block"],
-    pass: ["intercept", "press_receiver"],
-    long_shot: ["block_shot", "save"],
-    skill_move: ["tackle", "contain"],
-    shield_ball: ["tackle", "press"],
-    switch_play: ["shift_defensive_line", "intercept"],
-    through_ball: ["intercept", "block_shot"],
-    shoot: ["block", "save"],
-    lay_off: ["intercept", "press"],
-    press_defender: ["dribble_away", "pass"],
-    hold_up_play: ["tackle", "press"],
-    run_in_behind: ["track_run", "block_pass"],
-    tap_in: ["block_shot", "save"]
-};
-
-// Define valid actions for each position
-const validActionsByPosition = {
-    GK: ["goal_kick", "save_shot", "save", "catch_cross", "punch", "clearance", "distribute_ball", "pressure_goalkeeper", "mark_players", "block_shot"],
-    LB: ["intercept", "tackle", "overlap", "cross", "cut_inside", "long_ball", "track_runner", "intercept_cross", "contain", "block_shot", "press_receiver"],
-    CB: ["clearance", "intercept", "tackle", "block_shot", "header", "mark", "challenge_header", "recover_ball", "contain", "press_receiver"],
-    RB: ["intercept", "tackle", "overlap", "cross", "cut_inside", "long_ball", "track_runner", "intercept_cross", "contain", "block_shot", "press_receiver"],
-    LM: ["cross", "dribble", "cut_inside", "pass", "long_shot", "skill_move", "block_cross", "press_receiver"],
-    CDM: ["intercept", "tackle", "pass", "long_ball", "shield_ball", "switch_play", "shift_defensive_line", "contain", "block_shot", "press_receiver"],
-    CM: ["pass", "dribble", "long_shot", "through_ball", "tackle", "intercept", "counter_attack", "contain", "block_shot", "press_receiver"],
-    CAM: ["dribble", "pass", "through_ball", "shoot", "cut_inside", "skill_move", "block_shot", "press_receiver"],
-    RM: ["cross", "dribble", "cut_inside", "pass", "long_shot", "skill_move", "block_cross", "press_receiver"],
-    LW: ["cross", "dribble", "cut_inside", "pass", "shoot", "skill_move", "block_shot"],
-    CF: ["shoot", "lay_off", "pass", "press_defender", "header", "dribble", "hold_up_play"],
-    ST: ["shoot", "header", "hold_up_play", "press_defender", "run_in_behind", "tap_in", "block_shot", "press_receiver"],
-    RW: ["cross", "dribble", "cut_inside", "pass", "shoot", "skill_move", "block_shot"],
-};
-
 function getActionFromPlayer(player, currentTimeInSeconds) {
-    const {position_in_match} = player;
+    const { position_in_match } = player;
     // Randomly select a valid action for the chosen position
     let actions = validActionsByPosition[position_in_match];
     const randAction = Math.random();
@@ -261,7 +319,7 @@ function performNextAction(currentAction, prevPlayer) {
             const opponentPlayers = teamsInMatch[prevPlayer.teamIdx === 0 ? 1 : 0].players.filter(p => p.position_in_match === randomPosition);
             const opponentPlayer = opponentPlayers[Math.floor(Math.random() * opponentPlayers.length)];
 
-            return {player: opponentPlayer, action: opponentAction};
+            return { player: opponentPlayer, action: opponentAction };
         }
     }
 
@@ -269,9 +327,15 @@ function performNextAction(currentAction, prevPlayer) {
     if (possibleFollowUps) {
         const followUpIndex = Math.floor(Math.random() * possibleFollowUps.length);
         const nextAction = possibleFollowUps[followUpIndex];
-        return {player: prevPlayer, action: nextAction};
+        const positionsWithAction = Object.keys(validActionsByPosition).filter(position =>
+            validActionsByPosition[position].includes(nextAction)
+        );
+        const randomPosition = positionsWithAction[Math.floor(Math.random() * positionsWithAction.length)];
+        const teamPlayers = teamsInMatch[prevPlayer.teamIdx].players.filter(p => p.position_in_match === randomPosition);
+        const teamPlayer = teamPlayers[Math.floor(Math.random() * teamPlayers.length)];
+        return { player: teamPlayer, action: nextAction };
     } else {
-        return {player: null, action: null};
+        return { player: null, action: null };
     }
 }
 
@@ -315,6 +379,418 @@ function getRandPlayerFromTeam(action = "", team, player = "") {
         return condition;
     });
     return filterPlayers[Math.floor(Math.random() * filterPlayers.length)];
+}
+
+function simulatePlayerAction(action, player, currentTime) {
+    switch (action) {
+        case "goal_kick":
+            logEvent(
+                currentTime,
+                "goal_kick",
+                player,
+                `${player.name} took a goal kick, sending the ball upfield to initiate an attack.`
+            );
+            break;
+        case "distribute_ball":
+            logEvent(
+                currentTime,
+                "distribute_ball",
+                player,
+                `${player.name} distributed the ball with precision, finding a teammate to start the attack.`
+            );
+            break;
+        case "long_ball":
+            logEvent(
+                currentTime,
+                "long_ball",
+                player,
+                `${player.name} launched a long ball upfield, aiming to bypass the opposition's defense.`
+            );
+            break;
+        case "save_shot":
+            logEvent(
+                currentTime,
+                "save_shot",
+                player,
+                `${player.name} made a crucial save, denying the opposition from scoring.`
+            );
+            break;
+        case "catch_cross":
+            logEvent(
+                currentTime,
+                "catch_cross",
+                player,
+                `${player.name} caught the cross with confidence, securing possession.`
+            );
+            break;
+        case "punch":
+            logEvent(
+                currentTime,
+                "punch",
+                player,
+                `${player.name} punched the ball away, clearing the danger from the box.`
+            );
+            break;
+        case "clearance":
+            logEvent(
+                currentTime,
+                "clearance",
+                player,
+                `${player.name} cleared the ball away from danger, ensuring no immediate threats.`
+            );
+            break;
+        case "pass":
+            logEvent(
+                currentTime,
+                "pass",
+                player,
+                `${player.name} made a well-timed pass, setting up a potential attack.`
+            );
+            break;
+        case "long_pass":
+            logEvent(
+                currentTime,
+                "long_pass",
+                player,
+                `${player.name} delivered a long pass, attempting to break the opposition's defensive line.`
+            );
+            break;
+        case "dribble":
+            logEvent(
+                currentTime,
+                "dribble",
+                player,
+                `${player.name} skillfully dribbled past the defender, advancing the ball forward.`
+            );
+            break;
+        case "intercept":
+            logEvent(
+                currentTime,
+                "intercept",
+                player,
+                `${player.name} intercepted the pass, regaining possession for the team.`
+            );
+            break;
+        case "tackle":
+            logEvent(
+                currentTime,
+                "tackle",
+                player,
+                `${player.name} made a crucial tackle, winning the ball back for the team.`
+            );
+            break;
+        case "overlap":
+            // Handle overlap action
+            logEvent(
+                currentTime,
+                "overlap",
+                player,
+                `${player.name} made an overlapping run, providing an option for the ball carrier.`
+            );
+            break;
+        case "cross":
+            // Handle cross action
+            logEvent(
+                currentTime,
+                "cross",
+                player,
+                `${player.name} delivered a dangerous cross into the box, looking for a teammate.`
+            );
+            break;
+        case "cut_inside":
+            // Handle cut inside action
+            logEvent(
+                currentTime,
+                "cut_inside",
+                player,
+                `${player.name} cut inside, looking for a shot or a pass to break the defense.`
+            );
+            break;
+        case "header":
+            // Handle header action
+            logEvent(
+                currentTime,
+                "header",
+                player,
+                `${player.name} went for a header, challenging for the ball in the air.`
+            );
+            break;
+        case "volley":
+            // Handle volley action
+            logEvent(
+                currentTime,
+                "volley",
+                player,
+                `${player.name} took a powerful volley, attempting to score in a spectacular fashion.`
+            );
+            break;
+        case "tap_in":
+            // Handle tap-in action
+            logEvent(
+                currentTime,
+                "tap_in",
+                player,
+                `${player.name} calmly tapped the ball into the net to finish off a great team move.`
+            );
+            break;
+        case "shoot":
+            // Handle shoot action
+            logEvent(
+                currentTime,
+                "shoot",
+                player,
+                `${player.name} took a shot at goal, trying to score from distance.`
+            );
+            break;
+        case "lay_off":
+            // Handle lay off action
+            logEvent(
+                currentTime,
+                "lay_off",
+                player,
+                `${player.name} laid off the ball to a teammate, setting up a potential shot.`
+            );
+            break;
+        case "control":
+            // Handle control action
+            logEvent(
+                currentTime,
+                "control",
+                player,
+                `${player.name} took control of the ball, settling it to prepare for the next move.`
+            );
+            break;
+        case "block_shot":
+            // Handle block shot action
+            logEvent(
+                currentTime,
+                "block_shot",
+                player,
+                `${player.name} made a crucial block to stop the shot and keep the team in the game.`
+            );
+            break;
+        case "mark":
+            // Handle mark action
+            logEvent(
+                currentTime,
+                "mark",
+                player,
+                `${player.name} marked the opposition closely, preventing them from receiving the ball.`
+            );
+            break;
+        case "long_shot":
+            // Handle long shot action
+            logEvent(
+                currentTime,
+                "long_shot",
+                player,
+                `${player.name} took a powerful long shot, testing the goalkeeper from a distance.`
+            );
+            break;
+        case "rebound":
+            // Handle rebound action
+            logEvent(
+                currentTime,
+                "rebound",
+                player,
+                `${player.name} capitalized on the rebound, pouncing on the loose ball to score.`
+            );
+            break;
+        case "press_defender":
+            // Handle press defender action
+            logEvent(
+                currentTime,
+                "press_defender",
+                player,
+                `${player.name} applied pressure on the defender, forcing a mistake or pass.`
+            );
+            break;
+        case "skill_move":
+            // Handle skill move action
+            logEvent(
+                currentTime,
+                "skill_move",
+                player,
+                `${player.name} performed a skill move, dazzling the defender and advancing with the ball.`
+            );
+            break;
+        case "shield_ball":
+            // Handle shield ball action
+            logEvent(
+                currentTime,
+                "shield_ball",
+                player,
+                `${player.name} shielded the ball from the defender, maintaining possession under pressure.`
+            );
+            break;
+        case "switch_play":
+            // Handle switch play action
+            logEvent(
+                currentTime,
+                "switch_play",
+                player,
+                `${player.name} switched the play to the opposite side, looking for space and an attacking option.`
+            );
+            break;
+        case "through_ball":
+            // Handle through ball action
+            logEvent(
+                currentTime,
+                "through_ball",
+                player,
+                `${player.name} played a perfect through ball, setting up a teammate for a clear shot on goal.`
+            );
+            break;
+        case "hold_up_play":
+            // Handle hold up play action
+            logEvent(
+                currentTime,
+                "hold_up_play",
+                player,
+                `${player.name} held up the ball, waiting for support before making the next move.`
+            );
+            break;
+        case "run_in_behind":
+            // Handle run in behind action
+            logEvent(
+                currentTime,
+                "run_in_behind",
+                player,
+                `${player.name} made a run in behind the defense, looking to receive a through ball or cross.`
+            );
+            break;
+        case "counter_attack":
+            // Handle counter attack action
+            logEvent(
+                currentTime,
+                "counter_attack",
+                player,
+                `${player.name} launched a counter-attack, exploiting the space left by the opposition.`
+            );
+            break;
+        case "foul":
+            // Handle foul action
+            logEvent(
+                currentTime,
+                "foul",
+                player,
+                `${player.name} committed a foul, giving away a free kick to the opposition.`
+            );
+            break;
+        case "recover_ball":
+            // Handle recover ball action
+            logEvent(
+                currentTime,
+                "recover_ball",
+                player,
+                `${player.name} won the ball back, recovering possession for the team.`
+            );
+            break;
+        case "save":
+            // Handle save action (Goalkeeper)
+            logEvent(
+                currentTime,
+                "save",
+                player,
+                `${player.name} made a crucial save, denying the opposition from scoring.`
+            );
+            break;
+        case "contain":
+            // Handle contain action
+            logEvent(
+                currentTime,
+                "contain",
+                player,
+                `${player.name} contained the attacker, preventing them from advancing further.`
+            );
+            break;
+        case "substitute":
+            // Handle substitute action
+            logEvent(
+                currentTime,
+                "substitute",
+                player,
+                `${player.name} was substituted off, making way for a fresh player.`
+            );
+            break;
+        case "press_receiver":
+            // Handle press receiver action
+            logEvent(
+                currentTime,
+                "press_receiver",
+                player,
+                `${player.name} pressed the ball receiver, putting pressure on them to make a mistake.`
+            );
+            break;
+        case "track_runner":
+            // Handle track runner action
+            logEvent(
+                currentTime,
+                "track_runner",
+                player,
+                `${player.name} tracked the opposing runner, staying close to prevent a dangerous move.`
+            );
+            break;
+        case "block_cross":
+            // Handle block cross action
+            logEvent(
+                currentTime,
+                "block_cross",
+                player,
+                `${player.name} blocked the cross, preventing any attacking opportunity from the wing.`
+            );
+            break;
+        case "shift_defensive_line":
+            // Handle shift defensive line action
+            logEvent(
+                currentTime,
+                "shift_defensive_line",
+                player,
+                `${player.name} shifted the defensive line, ensuring better coverage against the opposition's attack.`
+            );
+            break;
+        case "intercept_cross":
+            // Handle intercept cross action
+            logEvent(
+                currentTime,
+                "intercept_cross",
+                player,
+                `${player.name} intercepted the cross, preventing any threat in the box.`
+            );
+            break;
+        case "pressure_goalkeeper":
+            // Handle pressure goalkeeper action
+            logEvent(
+                currentTime,
+                "pressure_goalkeeper",
+                player,
+                `${player.name} pressured the goalkeeper, forcing them into a rushed clearance.`
+            );
+            break;
+        case "challenge_header":
+            // Handle challenge header action
+            logEvent(
+                currentTime,
+                "challenge_header",
+                player,
+                `${player.name} challenged for the header, competing in the air for possession.`
+            );
+            break;
+        case "mark_players":
+            // Handle mark players action
+            logEvent(
+                currentTime,
+                "mark_players",
+                player,
+                `${player.name} marked the opposition players tightly, denying them space to receive the ball.`
+            );
+            break;
+                                                                        
+
+        default:
+            console.log(action, player, currentTime)
+            break;
+    }
 }
 
 function simulateAction(team, player, team1, team2, currentTime) {
@@ -1019,7 +1495,7 @@ function attemptOutcome(action, player, opponentTeam) {
         return attemptOutcome > 0;
     }
     if (action === "shoot") {
-        const attacker = {...player}; // The player attempting the shot
+        const attacker = { ...player }; // The player attempting the shot
         const goalkeeper = opponentTeam.players.find((p) => p.position_in_match === "GK");
         const defender = opponentTeam.players.find(
             (p) => ["CB", "LB", "RB"].includes(p.position_in_match)
@@ -1065,7 +1541,7 @@ function attemptOutcome(action, player, opponentTeam) {
         return attemptOutcome > 0;
     }
     if (action === "chip_shot") {
-        const attacker = {...player}; // The player attempting the chip shot
+        const attacker = { ...player }; // The player attempting the chip shot
         const goalkeeper = opponentTeam.players.find((p) => p.position_in_match === "GK");
         const defender = opponentTeam.players.find(
             (p) => ["CB", "LB", "RB"].includes(p.position_in_match)
@@ -1110,7 +1586,7 @@ function attemptOutcome(action, player, opponentTeam) {
         return attemptOutcome > 0;
     }
     if (action === "penalty") {
-        const attacker = {...player}; // The player taking the penalty
+        const attacker = { ...player }; // The player taking the penalty
         const goalkeeper = opponentTeam.players.find((p) => p.position_in_match === "GK");
 
         // Calculate attacker score
@@ -1271,7 +1747,7 @@ function attemptOutcome(action, player, opponentTeam) {
         return attemptOutcome > 0;
     }
     if (action === "1v1") {
-        const attacker = {...player}; // The attacker in the 1v1 situation
+        const attacker = { ...player }; // The attacker in the 1v1 situation
         const defender = opponentTeam.players.find(
             (p) => ["CB", "LB", "RB", "CDM"].includes(p.position_in_match)
         );
@@ -1845,9 +2321,8 @@ function logEvent(time, action, player, message) {
         </div>
     </div>
     <div class="flex-grow-1 ms-3 pt-1">
-        <p class="text-muted mb-0 fs-12">${formatMatchTime(time)["minute"]}:${
-        formatMatchTime(time)["second"]
-    }<span class="player-dot" style="background-color: ${player.playerColor}"></span></p>
+        <p class="text-muted mb-0 fs-12">${formatMatchTime(time)["minute"]}:${formatMatchTime(time)["second"]
+        }<span class="player-dot" style="background-color: ${player.playerColor}"></span></p>
         <h6 class="mb-1">${message}</h6>
     </div>`;
     const parentElement = document.getElementById("match-timeline");
