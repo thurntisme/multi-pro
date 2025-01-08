@@ -25,7 +25,7 @@ const playerActions = {
     // Starting play by distributing or launching a long ball forward.
     goal_kick: ["distribute_ball", "long_ball"], // Distribute to teammates or attempt a long ball.
     // After saving a shot, a goalkeeper can control the ball to distribute or clear danger.
-    save_shot: ["catch_cross", "punch", "distribute_ball"], // Prepare for crosses, punch away, or start distribution.
+    save: ["catch_cross", "punch", "distribute_ball"], // Prepare for crosses, punch away, or start distribution.
     // Catching a cross typically leads to transitioning play or clearing the ball quickly.
     catch_cross: ["distribute_ball", "long_ball"], // Distribute the ball or send it long.
     // Punching the ball clears immediate danger, often followed by clearance or a long ball.
@@ -85,7 +85,7 @@ const opponentReactions = {
     // Opponents press to regain possession or tightly mark strikers during a goal kick.
     goal_kick: ["press", "mark_strikers"], // Apply pressure to the defense or mark attackers to disrupt distribution.
     // After a save, opponents pressure the goalkeeper or mark attacking players to limit options.
-    save_shot: ["pressure_goalkeeper", "mark_players"], // Prevent quick distribution or cover potential threats.
+    save: ["pressure_goalkeeper", "mark_players"], // Prevent quick distribution or cover potential threats.
     // When the goalkeeper catches a cross, opponents can challenge or maintain defensive positioning.
     catch_cross: ["challenge_goalkeeper", "mark"], // Contest the catch or mark nearby players.
     // Following a punch, opponents aim to recover loose balls or block the clearance.
@@ -142,7 +142,7 @@ const opponentReactions = {
 
 // Define valid actions for each position
 const validActionsByPosition = {
-    GK: ["goal_kick", "save_shot", "save", "catch_cross", "punch", "clearance", "distribute_ball", "pressure_goalkeeper", "mark_players", "block_shot"],
+    GK: ["goal_kick", "save", "catch_cross", "punch", "clearance", "distribute_ball", "pressure_goalkeeper", "mark_players", "block_shot"],
     LB: ["intercept", "tackle", "overlap", "cross", "cut_inside", "long_ball", "track_runner", "intercept_cross", "contain", "block_shot", "press_receiver"],
     CB: ["clearance", "intercept", "tackle", "block_shot", "header", "mark", "challenge_header", "recover_ball", "contain", "press_receiver"],
     RB: ["intercept", "tackle", "overlap", "cross", "cut_inside", "long_ball", "track_runner", "intercept_cross", "contain", "block_shot", "press_receiver"],
@@ -268,7 +268,8 @@ function simulateMatch(teamsInMatch) {
                     }
                 }
                 if (player) {
-                    simulatePlayerAction(action, player, currentTimeInSeconds);
+                    const outcomeAction = performOutcomeAction(action, player);
+                    simulatePlayerAction(outcomeAction, player, currentTimeInSeconds);
                 }
             }
         }
@@ -381,6 +382,221 @@ function getRandPlayerFromTeam(action = "", team, player = "") {
     return filterPlayers[Math.floor(Math.random() * filterPlayers.length)];
 }
 
+function performOutcomeAction(action, player) {
+    let outcome;
+
+    switch (action) {
+        case "shoot":
+            outcome = getShootOutcome(player);
+            break;
+        case "long_shot":
+            outcome = getLongShotOutcome(player);
+            break;
+        case "save":
+            outcome = getSaveOutcome(player);
+            break;
+        case "catch_cross":
+            outcome = getCatchCrossOutcome(player);
+            break;
+        case "pass":
+            outcome = getPassOutcome(player);
+            break;
+        case "long_pass":
+            outcome = getLongPassOutcome(player);
+            break;
+        case "dribble":
+            outcome = getDribbleOutcome(player);
+            break;
+        case "intercept":
+            outcome = getInterceptOutcome(player);
+            break;
+        case "tackle":
+            outcome = getTackleOutcome(player);
+            break;
+        case "cut_inside":
+            outcome = getCutInsideOutcome(player);
+            break;
+        case "volley":
+            outcome = getVolleyOutcome(player);
+            break;
+        case "tap_in":
+            outcome = getTapInOutcome(player);
+            break;
+        case "foul":
+            outcome = getFoulOutcome(player);
+            break;
+        case "recover_ball":
+            outcome = getRecoverBallOutcome(player);
+            break;
+        case "block_cross":
+            outcome = getBlockCrossOutcome(player);
+            break;
+        case "intercept_cross":
+            outcome = getInterceptCrossOutcome(player);
+            break;
+        case "challenge_header":
+            outcome = getChallengeHeaderOutcome(player);
+            break;
+        case "injury":
+            outcome = getInjuryOutcome(player);
+            break;
+        case "substitute":
+            outcome = getSubstituteOutcome(player);
+            break;
+        default:
+            return action; 
+    }
+
+    return `${action}_${outcome}`;
+}
+
+function getShootOutcome(player) {
+    let chance = Math.random();  // Random chance for simplicity
+    if (chance < 0.2) return "goal";    // 20% chance of scoring
+    // else if (chance < 0.4) return "save";    // 20% chance of a save
+    else if (chance < 0.7) return "miss";    // 30% chance of missing
+    else return "blocked";    // 30% chance of being blocked
+}
+function getLongShotOutcome(player) {
+    let chance = Math.random();  // Random chance for simplicity
+    if (chance < 0.1) return "goal";    // 10% chance of scoring
+    // else if (chance < 0.3) return "save";    // 20% chance of a save
+    else if (chance < 0.6) return "miss";    // 30% chance of missing
+    else return "blocked";    // 40% chance of being blocked
+}
+function getSaveOutcome(player) {
+    let chance = Math.random();  // Random chance for simplicity
+    if (chance < 0.5) return "success";    // 50% chance of saving the shot
+    else return "failure";    // 50% chance of failing to save
+}
+function getCatchCrossOutcome(player) {
+    let chance = Math.random(); // Random chance for simplicity
+    if (chance < 0.3) return "success"; // 30% chance of successful catch
+    else if (chance < 0.6) return "fail"; // 30% chance of failure to catch
+    else if (chance < 0.8) return "punch"; // 20% chance of punching the ball away
+    else return "intercepted"; // 20% chance of the cross being intercepted by a defender
+}
+function getPassOutcome(player) {
+    let chance = Math.random();  // Random chance for simplicity
+    if (chance < 0.7) return "successful"; // 70% chance of a successful pass
+    else if (chance < 0.85) return "intercepted"; // 15% chance of interception
+    else if (chance < 0.95) return "blocked"; // 10% chance of being blocked
+    else return "missed"; // 5% chance of the pass going out of bounds or being off-target
+}
+function getLongPassOutcome(player) {
+    let chance = Math.random();  // Random chance for simplicity
+    if (chance < 0.6) return "successful"; // 60% chance of successful long pass
+    else if (chance < 0.8) return "intercepted"; // 20% chance of interception
+    else if (chance < 0.9) return "blocked"; // 10% chance of being blocked
+    else if (chance < 0.95) return "missed"; // 5% chance of going out of bounds
+    else return "chipped"; // 5% chance of a successful chip over the defender
+}
+function getDribbleOutcome(player) {
+    let chance = Math.random(); // Random chance for simplicity
+    if (chance < 0.5) return "successful"; // 50% chance of a successful dribble
+    else if (chance < 0.75) return "tackled"; // 25% chance of being tackled
+    else if (chance < 0.9) return "fouled"; // 15% chance of being fouled
+    else return "lose_control"; // 10% chance of losing control
+}
+function getInterceptOutcome(player) {
+    let chance = Math.random(); // Random chance for simplicity
+    if (chance < 0.5) return "successful"; // 50% chance of successful interception
+    else if (chance < 0.75) return "missed"; // 25% chance of missing the interception
+    else if (chance < 0.9) return "deflection"; // 15% chance of deflecting the ball
+    else return "foul"; // 10% chance of committing a foul
+}
+function getTackleOutcome(player) {
+    let chance = Math.random(); // Random chance for simplicity
+    if (chance < 0.5) return "successful"; // 50% chance of successful tackle
+    else if (chance < 0.8) return "missed"; // 30% chance of missing the tackle
+    else if (chance < 0.95) return "foul"; // 15% chance of committing a foul
+    else return "deflected"; // 5% chance of deflecting the ball
+}
+function getCutInsideOutcome(player) {
+    let chance = Math.random(); // Random chance for simplicity
+    if (chance < 0.5) return "successful"; // 50% chance of successfully cutting inside
+    else if (chance < 0.75) return "blocked"; // 25% chance of being blocked
+    else if (chance < 0.9) return "fouled"; // 15% chance of being fouled
+    else return "lost_possession"; // 10% chance of losing possession
+}
+function getVolleyOutcome(player) {
+    let chance = Math.random(); // Random chance for simplicity
+    if (chance < 0.3) return "goal"; // 30% chance of scoring a goal
+    else if (chance < 0.5) return "saved"; // 20% chance of the volley being saved
+    else if (chance < 0.7) return "missed"; // 20% chance of missing the target
+    else if (chance < 0.85) return "blocked"; // 15% chance of being blocked by a defender
+    else return "rebound"; // 15% chance of a rebound
+}
+function getTapInOutcome(player) {
+    let chance = Math.random(); // Random chance for simplicity
+    if (chance < 0.7) return "goal"; // 70% chance of a successful tap-in
+    else if (chance < 0.85) return "missed"; // 15% chance of missing the tap-in
+    else if (chance < 0.95) return "saved"; // 10% chance of the goalkeeper making a save
+    else return "blocked"; // 5% chance of being blocked by a defender
+}
+function getFoulOutcome(player) {
+    let chance = Math.random(); // Random chance for simplicity
+    if (chance < 0.1) return "red_card"; // 10% chance of a red card (serious foul)
+    else if (chance < 0.3) return "yellow_card"; // 20% chance of a yellow card (reckless foul)
+    else if (chance < 0.5) return "penalty_kick"; // 20% chance of a penalty kick (foul in the box)
+    else if (chance < 0.7) return "free_kick"; // 20% chance of a free kick (foul outside the box)
+    else return "no_card"; // 30% chance of no card (minor foul)
+}
+function getRecoverBallOutcome(player) {
+    let chance = Math.random(); // Random chance for simplicity
+    if (chance < 0.5) return "success"; // 50% chance of successfully recovering the ball
+    else if (chance < 0.7) return "failed"; // 20% chance of failing to recover the ball
+    else if (chance < 0.85) return "tackle"; // 15% chance of a tackle but not a clean recovery
+    else if (chance < 0.95) return "clearance"; // 10% chance of a clearance under pressure
+    else return "pressured"; // 5% chance of being pressured and losing the ball
+}
+function getBlockCrossOutcome(player) {
+    let chance = Math.random(); // Random chance for simplicity
+    if (chance < 0.3) return "success"; // 30% chance of a successful block
+    else if (chance < 0.5) return "deflected"; // 20% chance of a deflection into a dangerous area
+    else if (chance < 0.7) return "cleared"; // 20% chance of a block that still needs a clearance
+    else if (chance < 0.85) return "failed"; // 15% chance of failing to block the cross
+    else if (chance < 0.95) return "offside"; // 10% chance of the attacking player being offside
+    else return "handled"; // 5% chance of handling the ball during the block
+}
+function getInterceptCrossOutcome(player) {
+    let chance = Math.random(); // Random chance for simplicity
+    if (chance < 0.4) return "success"; // 40% chance of a successful interception
+    else if (chance < 0.6) return "deflected"; // 20% chance of a deflection
+    else if (chance < 0.75) return "cleared"; // 15% chance of a clearance after interception
+    else if (chance < 0.9) return "failed"; // 15% chance of failing to intercept
+    else if (chance < 0.95) return "offside"; // 5% chance of the attacker being offside
+    else return "handled"; // 5% chance of handball during the interception attempt
+}
+function getChallengeHeaderOutcome(player) {
+    let chance = Math.random(); // Random chance for simplicity
+    if (chance < 0.4) return "success"; // 40% chance of successfully winning the header
+    else if (chance < 0.6) return "failed"; // 20% chance of failing to win the header
+    else if (chance < 0.75) return "foul"; // 15% chance of committing a foul during the challenge
+    else if (chance < 0.85) return "deflected"; // 10% chance of a deflection off the header
+    else if (chance < 0.95) return "cleared"; // 10% chance of winning the header but needing a clearance
+    else return "offside"; // 5% chance of the attacker being offside when the ball is headed
+}
+function getInjuryOutcome(player) {
+    let chance = Math.random(); // Random chance for simplicity
+    if (chance < 0.4) return "minor"; // 40% chance of a minor injury
+    else if (chance < 0.6) return "serious"; // 20% chance of a serious injury
+    else if (chance < 0.75) return "fake"; // 15% chance of faking an injury
+    else if (chance < 0.85) return "temporary"; // 10% chance of a temporary injury
+    else if (chance < 0.95) return "rehabilitation"; // 10% chance of requiring rehabilitation but continuing
+    else return "stoppage"; // 5% chance of an injury stoppage
+}
+function getSubstituteOutcome(player) {
+    let chance = Math.random(); // Random chance for simplicity
+    if (chance < 0.25) return "injury"; // 25% chance of substitution due to injury
+    else if (chance < 0.5) return "tactical"; // 25% chance of tactical substitution
+    else if (chance < 0.65) return "fatigue"; // 15% chance of fatigue substitution
+    else if (chance < 0.8) return "strategic"; // 15% chance of strategic substitution
+    else if (chance < 0.9) return "time_wasting"; // 10% chance of time-wasting substitution
+    else if (chance < 0.95) return "performance"; // 5% chance of performance-based substitution
+    else return "multiple"; // 5% chance of part of multiple substitutions
+}
+
 function simulatePlayerAction(action, player, currentTime) {
     switch (action) {
         case "goal_kick":
@@ -407,20 +623,44 @@ function simulatePlayerAction(action, player, currentTime) {
                 `${player.name} launched a long ball upfield, aiming to bypass the opposition's defense.`
             );
             break;
-        case "save_shot":
-            logEvent(
-                currentTime,
-                "save_shot",
-                player,
-                `${player.name} made a crucial save, denying the opposition from scoring.`
-            );
-            break;
         case "catch_cross":
             logEvent(
                 currentTime,
-                "catch_cross",
+                action,
                 player,
                 `${player.name} caught the cross with confidence, securing possession.`
+            );
+            break;
+        case "catch_cross_success":
+            logEvent(
+                currentTime,
+                action,
+                player,
+                `${player.name} caught the cross cleanly, ending the attack.`
+            );
+            break;
+        case "catch_cross_fail":
+            logEvent(
+                currentTime,
+                action,
+                player,
+                `${player.name} missed the cross! The ball is loose in the box.`
+            );
+            break;
+        case "catch_cross_punch":
+            logEvent(
+                currentTime,
+                action,
+                player,
+                `${player.name} punched the cross away, clearing the danger.`
+            );
+            break;
+        case "catch_cross_intercepted":
+            logEvent(
+                currentTime,
+                action,
+                player,
+                `${player.name}'s cross was intercepted by a defender before the goalkeeper could react.`
             );
             break;
         case "punch":
@@ -442,10 +682,22 @@ function simulatePlayerAction(action, player, currentTime) {
         case "pass":
             logEvent(
                 currentTime,
-                "pass",
+                action,
                 player,
                 `${player.name} made a well-timed pass, setting up a potential attack.`
             );
+            break;
+        case "pass_successful":
+            logEvent(currentTime, action, player, `${player.name} made a brilliant pass to their teammate.`);
+            break;
+        case "pass_intercepted":
+            logEvent(currentTime, action, player, `${player.name}'s pass was intercepted by the opposition.`);
+            break;
+        case "pass_blocked":
+            logEvent(currentTime, action, player, `${player.name}'s pass was blocked by a defender.`);
+            break;
+        case "pass_missed":
+            logEvent(currentTime, action, player, `${player.name}'s pass went out of bounds.`);
             break;
         case "long_pass":
             logEvent(
@@ -455,6 +707,21 @@ function simulatePlayerAction(action, player, currentTime) {
                 `${player.name} delivered a long pass, attempting to break the opposition's defensive line.`
             );
             break;
+        case "long_pass_successful":
+            logEvent(currentTime, action, player, `${player.name} made a successful long pass to their teammate.`);
+            break;
+        case "long_pass_intercepted":
+            logEvent(currentTime, action, player, `${player.name}'s long pass was intercepted by the opposition.`);
+            break;
+        case "long_pass_blocked":
+            logEvent(currentTime, action, player, `${player.name}'s long pass was blocked by a defender.`);
+            break;
+        case "long_pass_missed":
+            logEvent(currentTime, action, player, `${player.name}'s long pass went out of bounds.`);
+            break;
+        case "long_pass_chipped":
+            logEvent(currentTime, action, player, `${player.name} executed a brilliant chip pass over the defender.`);
+            break;
         case "dribble":
             logEvent(
                 currentTime,
@@ -462,6 +729,18 @@ function simulatePlayerAction(action, player, currentTime) {
                 player,
                 `${player.name} skillfully dribbled past the defender, advancing the ball forward.`
             );
+            break;
+        case "dribble_successful":
+            logEvent(currentTime, action, player, `${player.name} dribbled past the defender successfully.`);
+            break;
+        case "dribble_tackled":
+            logEvent(currentTime, action, player, `${player.name} was tackled and lost the ball.`);
+            break;
+        case "dribble_fouled":
+            logEvent(currentTime, action, player, `${player.name} was fouled while attempting a dribble.`);
+            break;
+        case "dribble_lose_control":
+            logEvent(currentTime, action, player, `${player.name} lost control of the ball during the dribble.`);
             break;
         case "intercept":
             logEvent(
@@ -471,6 +750,18 @@ function simulatePlayerAction(action, player, currentTime) {
                 `${player.name} intercepted the pass, regaining possession for the team.`
             );
             break;
+        case "intercept_successful":
+            logEvent(currentTime, action, player, `${player.name} successfully intercepted the ball and regained possession.`);
+            break;
+        case "intercept_missed":
+            logEvent(currentTime, action, player, `${player.name} attempted to intercept but missed, allowing the ball to continue.`);
+            break;
+        case "intercept_deflection":
+            logEvent(currentTime, action, player, `${player.name} got a touch on the ball, causing a deflection but no possession.`);
+            break;
+        case "intercept_foul":
+            logEvent(currentTime, action, player, `${player.name} fouled the opponent while trying to intercept.`);
+            break;
         case "tackle":
             logEvent(
                 currentTime,
@@ -478,6 +769,18 @@ function simulatePlayerAction(action, player, currentTime) {
                 player,
                 `${player.name} made a crucial tackle, winning the ball back for the team.`
             );
+            break;
+        case "tackle_successful":
+            logEvent(currentTime, action, player, `${player.name} successfully tackled the opponent and regained possession.`);
+            break;
+        case "tackle_missed":
+            logEvent(currentTime, action, player, `${player.name} attempted a tackle but missed, and the opponent retained possession.`);
+            break;
+        case "tackle_foul":
+            logEvent(currentTime, action, player, `${player.name} committed a foul while attempting a tackle.`);
+            break;
+        case "tackle_deflected":
+            logEvent(currentTime, action, player, `${player.name}'s tackle deflected the ball into a neutral area.`);
             break;
         case "overlap":
             // Handle overlap action
@@ -498,16 +801,26 @@ function simulatePlayerAction(action, player, currentTime) {
             );
             break;
         case "cut_inside":
-            // Handle cut inside action
             logEvent(
                 currentTime,
-                "cut_inside",
+                action,
                 player,
                 `${player.name} cut inside, looking for a shot or a pass to break the defense.`
             );
             break;
+        case "cut_inside_successful":
+            logEvent(currentTime, action, player, `${player.name} successfully cut inside, creating space for a pass or shot.`);
+            break;
+        case "cut_inside_blocked":
+            logEvent(currentTime, action, player, `${player.name}'s attempt to cut inside was blocked by a defender.`);
+            break;
+        case "cut_inside_fouled":
+            logEvent(currentTime, action, player, `${player.name} was fouled while attempting to cut inside.`);
+            break;
+        case "cut_inside_lost_possession":
+            logEvent(currentTime, action, player, `${player.name} lost possession while trying to cut inside.`);
+            break;
         case "header":
-            // Handle header action
             logEvent(
                 currentTime,
                 "header",
@@ -516,30 +829,89 @@ function simulatePlayerAction(action, player, currentTime) {
             );
             break;
         case "volley":
-            // Handle volley action
             logEvent(
                 currentTime,
-                "volley",
+                action,
                 player,
                 `${player.name} took a powerful volley, attempting to score in a spectacular fashion.`
             );
             break;
+        case "volley_goal":
+            logEvent(currentTime, action, player, `${player.name} executed a stunning volley to score a spectacular goal!`);
+            break;
+        case "volley_saved":
+            logEvent(currentTime, action, player, `${player.name} struck a volley on target, but the goalkeeper made an excellent save.`);
+            break;
+        case "volley_missed":
+            logEvent(currentTime, action, player, `${player.name} attempted a volley but missed the target.`);
+            break;
+        case "volley_blocked":
+            logEvent(currentTime, action, player, `${player.name}'s volley was blocked by a defender.`);
+            break;
+        case "volley_rebound":
+            logEvent(currentTime, action, player, `${player.name}'s volley was deflected, and the ball is now in play as a rebound.`);
+            break;
         case "tap_in":
-            // Handle tap-in action
             logEvent(
                 currentTime,
-                "tap_in",
+                action,
                 player,
                 `${player.name} calmly tapped the ball into the net to finish off a great team move.`
             );
             break;
+        case "tap_in_goal":
+            logEvent(currentTime, action, player, `${player.name} easily taps the ball into the goal to score!`);
+            break;
+        case "tap_in_missed":
+            logEvent(currentTime, action, player, `${player.name} missed the tap-in opportunity, sending the ball wide.`);
+            break;
+        case "tap_in_saved":
+            logEvent(currentTime, action, player, `${player.name} attempted a tap-in, but the goalkeeper made a quick save.`);
+            break;
+        case "tap_in_blocked":
+            logEvent(currentTime, action, player, `${player.name}'s tap-in attempt was blocked by a defender.`);
+            break;
+        case "tap_in_offside":
+            logEvent(currentTime, action, player, `${player.name} was caught offside during the tap-in attempt.`);
+            break;
         case "shoot":
-            // Handle shoot action
             logEvent(
                 currentTime,
                 "shoot",
                 player,
                 `${player.name} took a shot at goal, trying to score from distance.`
+            );
+            break;
+        case "shoot_goal":
+            logEvent(
+                currentTime,
+                action,
+                player,
+                `${player.name} took a shot and scored a fantastic goal!`
+            );
+            break;
+        case "shoot_save":
+            logEvent(
+                currentTime,
+                action,
+                player,
+                `${player.name} took a shot, but the goalkeeper made a brilliant save!`
+            );
+            break;
+        case "shoot_miss":
+            logEvent(
+                currentTime,
+                action,
+                player,
+                `${player.name} took a shot, but it went wide of the goal.`
+            );
+            break;
+        case "shoot_blocked":
+            logEvent(
+                currentTime,
+                action,
+                player,
+                `${player.name}'s shot was blocked by a defender, stopping a potential goal.`
             );
             break;
         case "lay_off":
@@ -579,12 +951,43 @@ function simulatePlayerAction(action, player, currentTime) {
             );
             break;
         case "long_shot":
-            // Handle long shot action
             logEvent(
                 currentTime,
-                "long_shot",
+                action,
                 player,
                 `${player.name} took a powerful long shot, testing the goalkeeper from a distance.`
+            );
+            break;
+        case "long_shot_goal":
+            logEvent(
+                currentTime,
+                action,
+                player,
+                `${player.name} took a long shot and scored a stunning goal from distance!`
+            );
+            break;
+        case "long_shot_save":
+            logEvent(
+                currentTime,
+                action,
+                player,
+                `${player.name} took a long shot, but the goalkeeper made a remarkable save!`
+            );
+            break;
+        case "long_shot_miss":
+            logEvent(
+                currentTime,
+                action,
+                player,
+                `${player.name}'s long shot missed the target and went over the crossbar.`
+            );
+            break;
+        case "long_shot_blocked":
+            logEvent(
+                currentTime,
+                action,
+                player,
+                `${player.name}'s long shot was blocked by a defender, stopping a potential threat.`
             );
             break;
         case "rebound":
@@ -669,34 +1072,76 @@ function simulatePlayerAction(action, player, currentTime) {
             );
             break;
         case "foul":
-            // Handle foul action
             logEvent(
                 currentTime,
-                "foul",
+                action,
                 player,
                 `${player.name} committed a foul, giving away a free kick to the opposition.`
             );
             break;
+        case "foul_free_kick":
+            logEvent(currentTime, action, player, `${player.name} committed a foul and the opposing team is awarded a free kick.`);
+            break;
+        case "foul_penalty_kick":
+            logEvent(currentTime, action, player, `${player.name} committed a foul inside the penalty area, awarding a penalty kick.`);
+            break;
+        case "foul_yellow_card":
+            logEvent(currentTime, action, player, `${player.name} committed a foul and received a yellow card.`);
+            break;
+        case "foul_red_card":
+            logEvent(currentTime, action, player, `${player.name} committed a serious foul and received a red card, resulting in a sending off.`);
+            break;
+        case "foul_no_card":
+            logEvent(currentTime, action, player, `${player.name} committed a foul, but the referee decided no card would be issued.`);
+            break;
         case "recover_ball":
-            // Handle recover ball action
             logEvent(
                 currentTime,
-                "recover_ball",
+                action,
                 player,
                 `${player.name} won the ball back, recovering possession for the team.`
             );
             break;
+        case "recover_ball_success":
+            logEvent(currentTime, action, player, `${player.name} successfully recovered the ball and gained possession.`);
+            break;
+        case "recover_ball_failed":
+            logEvent(currentTime, action, player, `${player.name} attempted to recover the ball but was unsuccessful.`);
+            break;
+        case "recover_ball_tackle":
+            logEvent(currentTime, action, player, `${player.name} successfully tackled the opponent, but the ball remains contested.`);
+            break;
+        case "recover_ball_clearance":
+            logEvent(currentTime, action, player, `${player.name} cleared the ball under pressure, but it was not a clean recovery.`);
+            break;
+        case "recover_ball_pressured":
+            logEvent(currentTime, action, player, `${player.name} was pressured by the opponent and lost possession.`);
+            break;
         case "save":
-            // Handle save action (Goalkeeper)
             logEvent(
                 currentTime,
-                "save",
+                action,
                 player,
                 `${player.name} made a crucial save, denying the opposition from scoring.`
             );
             break;
+        case "save_success":
+            logEvent(
+                currentTime,
+                action,
+                player,
+                `${player.name} made a great save, denying the striker a goal!`
+            );
+            break;
+        case "save_failure":
+            logEvent(
+                currentTime,
+                action,
+                player,
+                `${player.name} couldn't save the shot and the ball went into the net!`
+            );
+            break;
         case "contain":
-            // Handle contain action
             logEvent(
                 currentTime,
                 "contain",
@@ -740,6 +1185,24 @@ function simulatePlayerAction(action, player, currentTime) {
                 `${player.name} blocked the cross, preventing any attacking opportunity from the wing.`
             );
             break;
+        case "block_cross_success":
+            logEvent(currentTime, action, player, `${player.name} successfully blocked the cross and denied the attacking team.`);
+            break;
+        case "block_cross_deflected":
+            logEvent(currentTime, action, player, `${player.name} got a touch on the cross, but it deflected into a dangerous area.`);
+            break;
+        case "block_cross_cleared":
+            logEvent(currentTime, action, player, `${player.name} blocked the cross, but the ball remains in play and needs to be cleared.`);
+            break;
+        case "block_cross_failed":
+            logEvent(currentTime, action, player, `${player.name} missed the block, and the cross reached its intended target.`);
+            break;
+        case "block_cross_offside":
+            logEvent(currentTime, action, player, `${player.name} blocked the cross, but the attacking player was offside.`);
+            break;
+        case "block_cross_handled":
+            logEvent(currentTime, action, player, `${player.name} handled the ball while attempting to block the cross, resulting in a foul.`);
+            break;
         case "shift_defensive_line":
             // Handle shift defensive line action
             logEvent(
@@ -750,13 +1213,30 @@ function simulatePlayerAction(action, player, currentTime) {
             );
             break;
         case "intercept_cross":
-            // Handle intercept cross action
             logEvent(
                 currentTime,
-                "intercept_cross",
+                action,
                 player,
                 `${player.name} intercepted the cross, preventing any threat in the box.`
             );
+            break;
+        case "intercept_cross_success":
+            logEvent(currentTime, action, player, `${player.name} successfully intercepted the cross and denied the attack.`);
+            break;
+        case "intercept_cross_deflected":
+            logEvent(currentTime, action, player, `${player.name} got a touch on the cross, but it deflected into a dangerous area.`);
+            break;
+        case "intercept_cross_cleared":
+            logEvent(currentTime, action, player, `${player.name} intercepted the cross, but the ball needs to be cleared.`);
+            break;
+        case "intercept_cross_failed":
+            logEvent(currentTime, action, player, `${player.name} missed the interception, and the cross reached its target.`);
+            break;
+        case "intercept_cross_offside":
+            logEvent(currentTime, action, player, `${player.name} intercepted the cross, but the attacking player was offside.`);
+            break;
+        case "intercept_cross_handled":
+            logEvent(currentTime, action, player, `${player.name} handled the ball while attempting to intercept the cross, resulting in a foul.`);
             break;
         case "pressure_goalkeeper":
             // Handle pressure goalkeeper action
@@ -768,13 +1248,30 @@ function simulatePlayerAction(action, player, currentTime) {
             );
             break;
         case "challenge_header":
-            // Handle challenge header action
             logEvent(
                 currentTime,
-                "challenge_header",
+                action,
                 player,
                 `${player.name} challenged for the header, competing in the air for possession.`
             );
+            break;
+        case "challenge_header_success":
+            logEvent(currentTime, action, player, `${player.name} successfully won the header and gained possession.`);
+            break;
+        case "challenge_header_failed":
+            logEvent(currentTime, action, player, `${player.name} missed the header, and the opponent won possession.`);
+            break;
+        case "challenge_header_foul":
+            logEvent(currentTime, action, player, `${player.name} committed a foul while challenging for the header.`);
+            break;
+        case "challenge_header_deflected":
+            logEvent(currentTime, action, player, `${player.name} touched the ball, but it deflected into a dangerous area.`);
+            break;
+        case "challenge_header_cleared":
+            logEvent(currentTime, action, player, `${player.name} won the header, but the ball was not controlled and needs to be cleared.`);
+            break;
+        case "challenge_header_offside":
+            logEvent(currentTime, action, player, `${player.name} won the header, but the attacking player was offside.`);
             break;
         case "mark_players":
             // Handle mark players action
@@ -785,8 +1282,48 @@ function simulatePlayerAction(action, player, currentTime) {
                 `${player.name} marked the opposition players tightly, denying them space to receive the ball.`
             );
             break;
-                                                                        
-
+        case "injury_minor":
+            logEvent(currentTime, action, player, `${player.name} sustained a minor injury but is able to continue playing.`);
+            break;
+        case "injury_serious":
+            logEvent(currentTime, action, player, `${player.name} sustained a serious injury and is unable to continue the game.`);
+            break;
+        case "injury_fake":
+            logEvent(currentTime, action, player, `${player.name} appeared injured but was faking it.`);
+            break;
+        case "injury_temporary":
+            logEvent(currentTime, action, player, `${player.name} felt a knock but is continuing to play after a brief stop.`);
+            break;
+        case "injury_rehabilitation":
+            logEvent(currentTime, action, player, `${player.name} has a minor injury and is receiving treatment off the field.`);
+            break;
+        case "injury_stoppage":
+            logEvent(currentTime, action, player, `${player.name} is injured, and the match is temporarily stopped for treatment.`);
+            break;
+        case "injury_substitution":
+            logEvent(currentTime, action, player, `${player.name} is forced to be substituted due to injury.`);
+            break;                                                                
+        case "substitute_injury":
+            logEvent(currentTime, action, player, `${player.name} is substituted due to an injury.`);
+            break;
+        case "substitute_tactical":
+            logEvent(currentTime, action, player, `${player.name} is substituted for tactical reasons.`);
+            break;
+        case "substitute_fatigue":
+            logEvent(currentTime, action, player, `${player.name} is substituted due to fatigue.`);
+            break;
+        case "substitute_strategic":
+            logEvent(currentTime, action, player, `${player.name} is substituted as part of a strategic move.`);
+            break;
+        case "substitute_time_wasting":
+            logEvent(currentTime, action, player, `${player.name} is substituted to waste time.`);
+            break;
+        case "substitute_performance":
+            logEvent(currentTime, action, player, `${player.name} is substituted due to poor performance.`);
+            break;
+        case "substitute_multiple":
+            logEvent(currentTime, action, player, `${player.name} is part of a planned substitution.`);
+            break;
         default:
             console.log(action, player, currentTime)
             break;
