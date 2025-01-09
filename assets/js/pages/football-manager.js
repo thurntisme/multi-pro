@@ -192,27 +192,28 @@ function renderTeamInFitch(
             playerSelected: team?.playerSelected,
         };
         teamData.players.forEach((pos, index) => {
-            if (!pos?.is_off) {
-                let playerColor = getPositionColor(pos.posName);
-                if (conditions?.isTeamInMatch) {
-                    playerColor = pos.playerColor ?? 'gray';
-                }
-                drawCircle(
-                    pos.x,
-                    pos.y,
-                    playerColor,
-                    conditions?.circleRadius
-                );
-                if (team?.playerSelected && team?.playerSelected === pos.uuid) {
-                    drawCircle(pos.x, pos.y, "#fff", 12, false);
-                }
-                drawPlayerNumber(pos.x, pos.y, index + 1);
-                if (conditions?.isDisplayName) {
-                    drawPlayerName(pos.x, pos.y, pos.name);
-                }
-                if (conditions?.isDisplayScore) {
-                    drawPlayerScore(pos);
-                }
+            let playerColor = getPositionColor(pos.posName);
+            if (conditions?.isTeamInMatch) {
+                playerColor = pos.playerColor ?? 'gray';
+            }
+            if (pos?.is_off) {
+                playerColor = 'gray';
+            }
+            drawCircle(
+                pos.x,
+                pos.y,
+                playerColor,
+                conditions?.circleRadius
+            );
+            if (team?.playerSelected && team?.playerSelected === pos.uuid) {
+                drawCircle(pos.x, pos.y, "#fff", 12, false);
+            }
+            drawPlayerNumber(pos.x, pos.y, index + 1);
+            if (conditions?.isDisplayName) {
+                drawPlayerName(pos.x, pos.y, pos.name);
+            }
+            if (conditions?.isDisplayScore) {
+                drawPlayerScore(pos);
             }
         });
     });
