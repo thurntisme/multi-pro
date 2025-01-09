@@ -78,7 +78,17 @@ function drawPlayerName(x, y, name) {
     ctx.fillStyle = "#FFFFFF";
     ctx.textAlign = "center";
     ctx.textBaseline = "middle";
-    ctx.fillText(name, x, y + 20);
+    ctx.fillText(getShortPlayerName(name), x, y + 20);
+}
+
+function getShortPlayerName(fullName) {
+    const nameParts = fullName.trim().split(" "); // Split the name into parts
+    if (nameParts.length < 2) return fullName; // If there's no last name, return the full name
+
+    const firstNameInitial = nameParts[0][0].toUpperCase(); // Get the first initial
+    const lastName = nameParts[nameParts.length - 1]; // Get the last name
+
+    return `${firstNameInitial}. ${lastName}`;
 }
 
 function getPositionColor(position) {

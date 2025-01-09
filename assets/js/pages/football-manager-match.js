@@ -12,7 +12,15 @@ const teamsInMatch = groupTeams.map((team, teamIdx) => {
         };
     });
     const bench = team.bench.map((player) => {
-        return {...player, position_in_match: player.best_position, playerColor, teamIdx, score: 5, is_played: false, is_injury: false}
+        return {
+            ...player,
+            position_in_match: player.best_position,
+            playerColor,
+            teamIdx,
+            score: 5,
+            is_played: false,
+            is_injury: false
+        }
     });
     return {...team, players, bench};
 });
@@ -165,7 +173,7 @@ function simulateMatch(teamsInMatch) {
     const matchTime = 90 * 60; // Total match duration in minutes
     const maxHalfTime = 45 * 60; // Total match duration in minutes
     const maxExtraTime = 10; // Maximum possible extra time in minutes
-    const realTimeRate = 1;
+    const realTimeRate = 10;
     let currentTime = 0;
     let currentTimeInSeconds = 0;
     let matchTimeInSeconds = 0;
@@ -1591,27 +1599,27 @@ function performActionSubstitute(player) {
     }
 
     // Find a suitable bench player to substitute
-    const benchPlayers = team.bench.filter(benchPlayer => 
-        !benchPlayer.is_played && !benchPlayer.is_injury && !benchPlayer?.is_off && 
-        (benchPlayer.position_in_match === player.position_in_match || 
-         benchPlayer.playable_positions.includes(player.position_in_match))
+    const benchPlayers = team.bench.filter(benchPlayer =>
+        !benchPlayer.is_played && !benchPlayer.is_injury && !benchPlayer?.is_off &&
+        (benchPlayer.position_in_match === player.position_in_match ||
+            benchPlayer.playable_positions.includes(player.position_in_match))
     );
 
     let substitutePlayer;
     if (benchPlayers.length === 0) {
         // Determine the filter condition based on the position of the player
         const isGK = player.position_in_match === "GK";
-        const filteredBenchPlayers = team.bench.filter(benchPlayer => 
-            !benchPlayer.is_played && !benchPlayer.is_injury && !benchPlayer?.is_off && 
+        const filteredBenchPlayers = team.bench.filter(benchPlayer =>
+            !benchPlayer.is_played && !benchPlayer.is_injury && !benchPlayer?.is_off &&
             (isGK ? benchPlayer.position_in_match === "GK" : benchPlayer.position_in_match !== "GK")
         );
-    
+
         substitutePlayer = filteredBenchPlayers[Math.floor(Math.random() * filteredBenchPlayers.length)];
     } else {
         substitutePlayer = benchPlayers[Math.floor(Math.random() * benchPlayers.length)];
     }
-    
-    if(!substitutePlayer) return null;
+
+    if (!substitutePlayer) return null;
 
     // Prepare the updated bench player
     const updatedBenchPlayer = {
@@ -1620,11 +1628,11 @@ function performActionSubstitute(player) {
     };
 
     // Update the team's players and bench
-    team.players = team.players.map(p => 
+    team.players = team.players.map(p =>
         p.uuid === player.uuid ? updatedBenchPlayer : p
     );
 
-    team.bench = team.bench.map(b => 
+    team.bench = team.bench.map(b =>
         b.uuid === substitutePlayer.uuid ? player : b
     );
 
