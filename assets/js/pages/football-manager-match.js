@@ -7,11 +7,12 @@ const teamsInMatch = groupTeams.map((team, teamIdx) => {
             score: 5,
             playerColor,
             is_played: true,
+            is_injury: false,
             ...team.players[idx],
         };
     });
     const bench = team.bench.map((player) => {
-        return {...player, position_in_match: player.best_position, playerColor, teamIdx, score: 5, is_played: false}
+        return {...player, position_in_match: player.best_position, playerColor, teamIdx, score: 5, is_played: false, is_injury: false}
     });
     return {...team, players, bench};
 });
@@ -457,6 +458,9 @@ function performOutcomeAction(action, player) {
             break;
         case "injury":
             outcome = getInjuryOutcome(player);
+            const injuryOutcome = getInjuryOutcome(player);
+            outcome = injuryOutcome.outcome;
+            opponentPlayer = injuryOutcome.opponentPlayer;
             break;
         case "substitute":
             const substituteOutcome = getSubstituteOutcome(player);
@@ -619,13 +623,21 @@ function getChallengeHeaderOutcome(player) {
 }
 
 function getInjuryOutcome(player) {
-    let chance = Math.random(); // Random chance for simplicity
-    if (chance < 0.4) return "minor"; // 40% chance of a minor injury
-    else if (chance < 0.6) return "serious"; // 20% chance of a serious injury
-    else if (chance < 0.75) return "fake"; // 15% chance of faking an injury
-    else if (chance < 0.85) return "temporary"; // 10% chance of a temporary injury
-    else if (chance < 0.95) return "rehabilitation"; // 10% chance of requiring rehabilitation but continuing
-    else return "stoppage"; // 5% chance of an injury stoppage
+    let outcome = '';
+    let substitutePlayer = null;
+    if (substitutePlayer) {
+        let chance = Math.random(); // Random chance for simplicity
+        if (chance < 0.4) outcome = "minor"; // 40% chance of a minor injury
+        else if (chance < 0.6) outcome = "serious"; // 20% chance of a serious injury
+        else if (chance < 0.75) outcome = "fake"; // 15% chance of faking an injury
+        else if (chance < 0.85) outcome = "temporary"; // 10% chance of a temporary injury
+        else if (chance < 0.95) outcome = "rehabilitation"; // 10% chance of requiring rehabilitation but continuing
+        else outcome = "stoppage"; // 5% chance of an injury stoppage
+    }
+    if (outcome === "serious" || outcome === "stoppage" || outcome === "substitution") {
+        substitutePlayer = performActionSubstitute(player)
+    }
+    return {outcome, opponentPlayer: substitutePlayer};
 }
 
 function getSubstituteOutcome(player) {
@@ -1421,7 +1433,14 @@ function simulatePlayerAction(action, player, currentTime, opponentPlayer) {
             logEvent(currentTime, action, player, `${player.name} sustained a minor injury but is able to continue playing.`);
             break;
         case "injury_serious":
-            logEvent(currentTime, action, player, `${player.name} sustained a serious injury and is unable to continue the game.`);
+            logEvent(
+                currentTime,
+                action,
+                player,
+                `${player.name} sustained a serious injury and is unable to continue the game.` +
+                (opponentPlayer?.name ? ` Opponent involved: ${opponentPlayer.name}.` : "")
+            );
+            redraw();
             break;
         case "injury_fake":
             logEvent(currentTime, action, player, `${player.name} appeared injured but was faking it.`);
@@ -1433,10 +1452,24 @@ function simulatePlayerAction(action, player, currentTime, opponentPlayer) {
             logEvent(currentTime, action, player, `${player.name} has a minor injury and is receiving treatment off the field.`);
             break;
         case "injury_stoppage":
-            logEvent(currentTime, action, player, `${player.name} is injured, and the match is temporarily stopped for treatment.`);
+            logEvent(
+                currentTime,
+                action,
+                player,
+                `${player.name} is injured, and the match is temporarily stopped for treatment.` +
+                (opponentPlayer?.name ? ` Opponent involved: ${opponentPlayer.name}.` : "")
+            );
+            redraw();
             break;
         case "injury_substitution":
-            logEvent(currentTime, action, player, `${player.name} is forced to be substituted due to injury.`);
+            logEvent(
+                currentTime,
+                action,
+                player,
+                `${player.name} is forced to be substituted due to injury.` +
+                (opponentPlayer?.name ? ` Opponent involved: ${opponentPlayer.name}.` : "")
+            );
+            redraw();
             break;
         case "substitute_injury":
             logEvent(
@@ -1555,7 +1588,7 @@ function performActionSubstitute(player) {
 
     // Find a suitable bench player to substitute
     const benchPlayers = team.bench.filter(benchPlayer => 
-        !benchPlayer.is_played &&
+        !benchPlayer.is_played && !benchPlayer.is_injury &&
         (benchPlayer.position_in_match === player.position_in_match || 
          benchPlayer.playable_positions.includes(player.position_in_match))
     );
@@ -1565,7 +1598,7 @@ function performActionSubstitute(player) {
         // Determine the filter condition based on the position of the player
         const isGK = player.position_in_match === "GK";
         const filteredBenchPlayers = team.bench.filter(benchPlayer => 
-            !benchPlayer.is_played && 
+            !benchPlayer.is_played && !benchPlayer.is_injury &&
             (isGK ? benchPlayer.position_in_match === "GK" : benchPlayer.position_in_match !== "GK")
         );
     
