@@ -6,11 +6,12 @@ const teamsInMatch = groupTeams.map((team, teamIdx) => {
             position_in_match: pos.posName,
             score: 5,
             playerColor,
+            is_played: true,
             ...team.players[idx],
         };
     });
     const bench = team.bench.map((player) => {
-        return {...player, position_in_match: player.best_position, playerColor, teamIdx, score: 5}
+        return {...player, position_in_match: player.best_position, playerColor, teamIdx, score: 5, is_played: false}
     });
     return {...team, players, bench};
 });
@@ -163,6 +164,7 @@ function simulateMatch(teamsInMatch) {
     const matchTime = 90 * 60; // Total match duration in minutes
     const maxHalfTime = 45 * 60; // Total match duration in minutes
     const maxExtraTime = 10; // Maximum possible extra time in minutes
+    const realTimeRate = 10;
     let currentTime = 0;
     let currentTimeInSeconds = 0;
     let matchTimeInSeconds = 0;
@@ -186,7 +188,7 @@ function simulateMatch(teamsInMatch) {
         document.getElementById("second").innerText =
             formatMatchTime(currentTimeInSeconds)["second"];
 
-        if (matchTimeInSeconds % (10) === 0) {
+        if (matchTimeInSeconds % realTimeRate === 0) {
             if (currentTimeInSeconds === maxHalfTime && extraHalfTime > 0) {
                 logEvent(
                     currentTimeInSeconds,
@@ -270,8 +272,8 @@ function simulateMatch(teamsInMatch) {
                         }
                     }
                     if (player) {
-                        const outcomeAction = performOutcomeAction(action, player);
-                        simulatePlayerAction(outcomeAction, player, currentTimeInSeconds);
+                        const {outcomeAction, opponentPlayer} = performOutcomeAction(action, player);
+                        simulatePlayerAction(outcomeAction, player, currentTimeInSeconds, opponentPlayer);
                     }
                 }
             }
@@ -399,6 +401,7 @@ function getRandPlayerFromTeam(action = "", team, player = "") {
 
 function performOutcomeAction(action, player) {
     let outcome;
+    let opponentPlayer = '';
 
     switch (action) {
         case "shoot":
@@ -456,13 +459,19 @@ function performOutcomeAction(action, player) {
             outcome = getInjuryOutcome(player);
             break;
         case "substitute":
-            outcome = getSubstituteOutcome(player);
+            const substituteOutcome = getSubstituteOutcome(player);
+            outcome = substituteOutcome.outcome;
+            opponentPlayer = substituteOutcome.opponentPlayer;
             break;
         default:
-            return action;
+            outcome = '';
+            break;
     }
 
-    return `${action}${outcome ? `_${outcome}` : ""}`;
+    return {
+        outcomeAction: `${action}${outcome ? `_${outcome}` : ""}`,
+        opponentPlayer,
+    };
 }
 
 function getShootOutcome(player) {
@@ -620,14 +629,19 @@ function getInjuryOutcome(player) {
 }
 
 function getSubstituteOutcome(player) {
-    let chance = Math.random(); // Random chance for simplicity
-    if (chance < 0.25) return "injury"; // 25% chance of substitution due to injury
-    else if (chance < 0.5) return "tactical"; // 25% chance of tactical substitution
-    else if (chance < 0.65) return "fatigue"; // 15% chance of fatigue substitution
-    else if (chance < 0.8) return "strategic"; // 15% chance of strategic substitution
-    else if (chance < 0.9) return "time_wasting"; // 10% chance of time-wasting substitution
-    else if (chance < 0.95) return "performance"; // 5% chance of performance-based substitution
-    else return "multiple"; // 5% chance of part of multiple substitutions
+    let outcome = '';
+    let substitutePlayer = performActionSubstitute(player);
+    if (substitutePlayer) {
+        let chance = Math.random(); // Random chance for simplicity
+        if (chance < 0.25) outcome = "injury"; // 25% chance of substitution due to injury
+        else if (chance < 0.5) outcome = "tactical"; // 25% chance of tactical substitution
+        else if (chance < 0.65) outcome = "fatigue"; // 15% chance of fatigue substitution
+        else if (chance < 0.8) outcome = "strategic"; // 15% chance of strategic substitution
+        else if (chance < 0.9) outcome = "time_wasting"; // 10% chance of time-wasting substitution
+        else if (chance < 0.95) outcome = "performance"; // 5% chance of performance-based substitution
+        else outcome = ""; // 5% chance of part of multiple substitutions
+    }
+    return {outcome, opponentPlayer: substitutePlayer};
 }
 
 // Generate random scores for players with updated ranges
@@ -635,7 +649,7 @@ const lowPlayerScore = Math.random() * 0.5 + 0.5; // Range: 0.5 to 1.0
 const mediumPlayerScore = Math.random() + 1.0; // Range: 1.0 to 2.0
 const highPlayerScore = Math.random() * 0.5 + 2.0; // Range: 2.0 to 2.5
 
-function simulatePlayerAction(action, player, currentTime) {
+function simulatePlayerAction(action, player, currentTime, opponentPlayer) {
     const team1score = document.getElementById("team-1-score");
     const team2score = document.getElementById("team-2-score");
 
@@ -1425,26 +1439,66 @@ function simulatePlayerAction(action, player, currentTime) {
             logEvent(currentTime, action, player, `${player.name} is forced to be substituted due to injury.`);
             break;
         case "substitute_injury":
-            logEvent(currentTime, action, player, `${player.name} is substituted due to an injury.`);
+            logEvent(
+                currentTime,
+                action,
+                player,
+                `${player.name} is substituted due to an injury.` +
+                (opponentPlayer?.name ? ` Opponent involved: ${opponentPlayer.name}.` : "")
+            );
+            redraw();
             break;
         case "substitute_tactical":
-            logEvent(currentTime, action, player, `${player.name} is substituted for tactical reasons.`);
+            logEvent(
+                currentTime,
+                action,
+                player,
+                `${player.name} is substituted for tactical reasons.` +
+                (opponentPlayer?.name ? ` Opponent involved: ${opponentPlayer.name}.` : "")
+            );
+            redraw();
             break;
         case "substitute_fatigue":
-            logEvent(currentTime, action, player, `${player.name} is substituted due to fatigue.`);
+            logEvent(
+                currentTime,
+                action,
+                player,
+                `${player.name} is substituted due to fatigue.` +
+                (opponentPlayer?.name ? ` Opponent involved: ${opponentPlayer.name}.` : "")
+            );
+            redraw();
             break;
         case "substitute_strategic":
-            logEvent(currentTime, action, player, `${player.name} is substituted as part of a strategic move.`);
+            logEvent(
+                currentTime,
+                action,
+                player,
+                `${player.name} is substituted as part of a strategic move.` +
+                (opponentPlayer?.name ? ` Opponent involved: ${opponentPlayer.name}.` : "")
+            );
+            redraw();
             break;
         case "substitute_time_wasting":
-            logEvent(currentTime, action, player, `${player.name} is substituted to waste time.`);
+            logEvent(
+                currentTime,
+                action,
+                player,
+                `${player.name} is substituted to waste time.` +
+                (opponentPlayer?.name ? ` Opponent involved: ${opponentPlayer.name}.` : "")
+            );
+            redraw();
             break;
         case "substitute_performance":
-            logEvent(currentTime, action, player, `${player.name} is substituted due to poor performance.`);
+            logEvent(
+                currentTime,
+                action,
+                player,
+                `${player.name} is substituted due to poor performance.` +
+                (opponentPlayer?.name ? ` Opponent involved: ${opponentPlayer.name}.` : "")
+            );
+            redraw();
             break;
-        case "substitute_multiple":
-            logEvent(currentTime, action, player, `${player.name} is part of a planned substitution.`);
-            break;
+
         default:
             console.log(action, player, currentTime)
             break;
@@ -1485,6 +1539,59 @@ function handlePlayerExit(team, currentTime, player, reason) {
             team.players = team.players.filter((p) => p !== player);
         }
     }
+}
+
+function performActionSubstitute(player) {
+    if (!player || !player.is_played) {
+        return null;
+    }
+
+    // Find the team the player belongs to
+    const team = teamsInMatch[player.teamIdx];
+
+    if (!team) {
+        return null;
+    }
+
+    // Find a suitable bench player to substitute
+    const benchPlayers = team.bench.filter(benchPlayer => 
+        !benchPlayer.is_played &&
+        (benchPlayer.position_in_match === player.position_in_match || 
+         benchPlayer.playable_positions.includes(player.position_in_match))
+    );
+
+    let substitutePlayer;
+    if (benchPlayers.length === 0) {
+        // Determine the filter condition based on the position of the player
+        const isGK = player.position_in_match === "GK";
+        const filteredBenchPlayers = team.bench.filter(benchPlayer => 
+            !benchPlayer.is_played && 
+            (isGK ? benchPlayer.position_in_match === "GK" : benchPlayer.position_in_match !== "GK")
+        );
+    
+        substitutePlayer = filteredBenchPlayers[Math.floor(Math.random() * filteredBenchPlayers.length)];
+    } else {
+        substitutePlayer = benchPlayers[Math.floor(Math.random() * benchPlayers.length)];
+    }
+    
+    if(!substitutePlayer) return null;
+
+    // Prepare the updated bench player
+    const updatedBenchPlayer = {
+        ...substitutePlayer,
+        is_played: true
+    };
+
+    // Update the team's players and bench
+    team.players = team.players.map(p => 
+        p.uuid === player.uuid ? updatedBenchPlayer : p
+    );
+
+    team.bench = team.bench.map(b => 
+        b.uuid === substitutePlayer.uuid ? player : b
+    );
+
+    return substitutePlayer;
 }
 
 function getActionIcon(action) {
