@@ -369,6 +369,11 @@ function generateRandomPlayers($type = '', $playerData = []): array
         }
     }
 
+    if ($type === 'on-demand') {
+        $minAttr = 60;
+        $maxAttr = 90;
+    }
+
     // Randomly select or generate player data
     $uuid = uniqid();
     $age = rand(16, 35);
