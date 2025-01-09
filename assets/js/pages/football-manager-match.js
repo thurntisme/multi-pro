@@ -165,7 +165,7 @@ function simulateMatch(teamsInMatch) {
     const matchTime = 90 * 60; // Total match duration in minutes
     const maxHalfTime = 45 * 60; // Total match duration in minutes
     const maxExtraTime = 10; // Maximum possible extra time in minutes
-    const realTimeRate = 10;
+    const realTimeRate = 1;
     let currentTime = 0;
     let currentTimeInSeconds = 0;
     let matchTimeInSeconds = 0;
@@ -1218,6 +1218,7 @@ function simulatePlayerAction(action, player, currentTime, opponentPlayer) {
         case "foul_red_card":
             logEvent(currentTime, action, player, `${player.name} committed a serious foul and received a red card, resulting in a sending off.`);
             player.score = Math.max(player.score - highPlayerScore, 1);
+            player.is_off = true;
             redraw();
             break;
         case "foul_no_card":
@@ -1429,6 +1430,9 @@ function simulatePlayerAction(action, player, currentTime, opponentPlayer) {
                 `${player.name} marked the opposition players tightly, denying them space to receive the ball.`
             );
             break;
+        case "injury":
+            logEvent(currentTime, action, player, `${player.name} has sustained an injury during the match and is receiving medical attention. The extent of the injury is yet to be determined.`);
+            break;
         case "injury_minor":
             logEvent(currentTime, action, player, `${player.name} sustained a minor injury but is able to continue playing.`);
             break;
@@ -1588,7 +1592,7 @@ function performActionSubstitute(player) {
 
     // Find a suitable bench player to substitute
     const benchPlayers = team.bench.filter(benchPlayer => 
-        !benchPlayer.is_played && !benchPlayer.is_injury &&
+        !benchPlayer.is_played && !benchPlayer.is_injury && !benchPlayer?.is_off && 
         (benchPlayer.position_in_match === player.position_in_match || 
          benchPlayer.playable_positions.includes(player.position_in_match))
     );
@@ -1598,7 +1602,7 @@ function performActionSubstitute(player) {
         // Determine the filter condition based on the position of the player
         const isGK = player.position_in_match === "GK";
         const filteredBenchPlayers = team.bench.filter(benchPlayer => 
-            !benchPlayer.is_played && !benchPlayer.is_injury &&
+            !benchPlayer.is_played && !benchPlayer.is_injury && !benchPlayer?.is_off && 
             (isGK ? benchPlayer.position_in_match === "GK" : benchPlayer.position_in_match !== "GK")
         );
     
