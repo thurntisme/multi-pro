@@ -173,7 +173,7 @@ function simulateMatch(teamsInMatch) {
     const matchTime = 90 * 60; // Total match duration in minutes
     const maxHalfTime = 45 * 60; // Total match duration in minutes
     const maxExtraTime = 10; // Maximum possible extra time in minutes
-    const realTimeRate = 10;
+    const realTimeRate = 1;
     let currentTime = 0;
     let currentTimeInSeconds = 0;
     let matchTimeInSeconds = 0;
@@ -1219,13 +1219,23 @@ function simulatePlayerAction(action, player, currentTime, opponentPlayer) {
             redraw();
             break;
         case "foul_yellow_card":
-            logEvent(currentTime, action, player, `${player.name} committed a foul and received a yellow card.`);
             player.score = Math.max(player.score - mediumPlayerScore, 1);
+            if (!player.yellow_card){
+                player.yellow_card = 1;
+                logEvent(currentTime, action, player, `${player.name} committed a foul and received a yellow card.`);
+            } else if (player.yellow_card === 1){
+                player.yellow_card = 2;
+                player.red_card = 1;
+                player.is_off = true;
+                logEvent(currentTime, action, player, 
+                    `${player.name} committed another foul, resulting in a second yellow card and a subsequent red card. ${player.name} has been sent off the field.`);
+            }
             redraw();
             break;
         case "foul_red_card":
             logEvent(currentTime, action, player, `${player.name} committed a serious foul and received a red card, resulting in a sending off.`);
             player.score = Math.max(player.score - highPlayerScore, 1);
+            player.red_card = 1;
             player.is_off = true;
             redraw();
             break;

@@ -153,11 +153,16 @@ function drawPlayerScore(player) {
     ); // Peaks in the middle
     const blue = Math.min(255, Math.floor((1 - normalizedScore) * 255));
 
-    const backgroundColor = `rgb(${red}, ${green}, ${blue})`;
+    let backgroundColor = `rgb(${red}, ${green}, ${blue})`;
 
     // Calculate luminance for dynamic text color
     const luminance = (0.299 * red + 0.587 * green + 0.114 * blue) / 255;
-    const textColor = luminance > 0.5 ? "#000000" : "#ffffff";
+    let textColor = luminance > 0.5 ? "#000000" : "#ffffff";
+
+    if (player?.is_off) {
+        backgroundColor = 'gray';
+        textColor = '#fff';
+    }
 
     drawRoundedRect(scoreX - 11, scoreY, 22, 14, 5, backgroundColor);
 
