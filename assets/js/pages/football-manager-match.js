@@ -155,13 +155,13 @@ const opponentReactions = {
 // Define valid actions for each position
 const validActionsByPosition = {
     GK: ["goal_kick", "save", "catch_cross", "punch", "clearance", "distribute_ball", "pressure_goalkeeper", "mark_players", "block_shot"],
-    LB: ["intercept", "tackle", "overlap", "cross", "cut_inside", "long_ball", "track_runner", "intercept_cross", "contain", "block_shot", "press_receiver"],
+    LB: ["intercept", "tackle", "overlap", "cross", "cut_inside", "long_ball", "track_runner", "intercept_cross", "contain", "block_shot", "press_receiver", "long_shot"],
     CB: ["clearance", "intercept", "tackle", "block_shot", "header", "mark", "challenge_header", "recover_ball", "contain", "press_receiver"],
-    RB: ["intercept", "tackle", "overlap", "cross", "cut_inside", "long_ball", "track_runner", "intercept_cross", "contain", "block_shot", "press_receiver"],
+    RB: ["intercept", "tackle", "overlap", "cross", "cut_inside", "long_ball", "track_runner", "intercept_cross", "contain", "block_shot", "press_receiver", "long_shot"],
     LM: ["cross", "dribble", "cut_inside", "pass", "long_shot", "skill_move", "block_cross", "press_receiver"],
-    CDM: ["intercept", "tackle", "pass", "long_ball", "shield_ball", "switch_play", "shift_defensive_line", "contain", "block_shot", "press_receiver"],
-    CM: ["pass", "dribble", "long_shot", "through_ball", "tackle", "intercept", "counter_attack", "contain", "block_shot", "press_receiver"],
-    CAM: ["dribble", "pass", "through_ball", "shoot", "cut_inside", "skill_move", "block_shot", "press_receiver"],
+    CDM: ["intercept", "tackle", "pass", "long_ball", "shield_ball", "switch_play", "shift_defensive_line", "contain", "block_shot", "press_receiver", "header", "challenge_header", "long_shot"],
+    CM: ["pass", "dribble", "long_shot", "through_ball", "tackle", "intercept", "counter_attack", "contain", "block_shot", "press_receiver", "header", "challenge_header"],
+    CAM: ["dribble", "pass", "through_ball", "shoot", "cut_inside", "skill_move", "block_shot", "press_receiver", "long_shot"],
     RM: ["cross", "dribble", "cut_inside", "pass", "long_shot", "skill_move", "block_cross", "press_receiver"],
     LW: ["cross", "dribble", "cut_inside", "pass", "shoot", "skill_move", "block_shot"],
     CF: ["shoot", "lay_off", "pass", "press_defender", "header", "dribble", "hold_up_play"],
@@ -381,35 +381,6 @@ function formatMatchTime(time) {
     };
 }
 
-function getRandPlayerFromTeam(action = "", team, player = "") {
-    let players = team.players;
-    let condition = true;
-    if (action === "exit") {
-        players = team.bench;
-    }
-    const filterPlayers = players.filter((p) => {
-        if (action === "save") {
-            condition = ["GK"].includes(p.position_in_match);
-        } else {
-            condition = !["GK"].includes(p.position_in_match);
-        }
-        if (player) {
-            return condition && (p.uuid !== player.uuid);
-        }
-        if (action === "block") {
-            return condition && (p.position_in_match !== "GK" || p.position_in_match !== "CB");
-        }
-        if (action === "intercept") {
-            return condition && (p.position_in_match !== "GK" || p.position_in_match !== "CB");
-        }
-        if (action === "exit") {
-            return condition && !p.isExit;
-        }
-        return condition;
-    });
-    return filterPlayers[Math.floor(Math.random() * filterPlayers.length)];
-}
-
 function performOutcomeAction(action, player) {
     let outcome;
     let opponentPlayer = '';
@@ -477,6 +448,9 @@ function performOutcomeAction(action, player) {
             outcome = substituteOutcome.outcome;
             opponentPlayer = substituteOutcome.opponentPlayer;
             break;
+        case "tap_in":
+            outcome = getHeaderOutcome(player);
+            break;
         default:
             outcome = '';
             break;
@@ -514,8 +488,9 @@ function getCatchCrossOutcome(player) {
     let chance = Math.random(); // Random chance for simplicity
     if (chance < 0.3) return "success"; // 30% chance of successful catch
     else if (chance < 0.6) return "fail"; // 30% chance of failure to catch
-    else if (chance < 0.8) return "punch"; // 20% chance of punching the ball away
-    else return ""; // 20% chance of the cross being intercepted by a defender
+    else if (chance < 0.75) return "punch"; // 15% chance of punching the ball away
+    else if (chance < 0.85) return "own_goal"; // 10% chance of own goal
+    else return ""; // 15% chance of the cross being intercepted by a defender
 }
 
 function getPassOutcome(player) {
@@ -544,19 +519,29 @@ function getDribbleOutcome(player) {
 }
 
 function getInterceptOutcome(player) {
-    let chance = Math.random(); // Random chance for simplicity
-    if (chance < 0.5) return "successful"; // 50% chance of successful interception
-    else if (chance < 0.75) return "missed"; // 25% chance of missing the interception
-    else if (chance < 0.9) return "deflection"; // 15% chance of deflecting the ball
-    else return "foul"; // 10% chance of committing a foul
+    let chance = Math.random(); // Generate a random chance
+    if (chance < 0.45) return "successful"; // 45% chance of successful interception
+    else if (chance < 0.7) return "missed"; // 25% chance of missing the interception
+    else if (chance < 0.85) return "deflection"; // 15% chance of deflecting the ball
+    else if (chance < 0.95) return "foul"; // 10% chance of committing a foul
+    else return "own_goal"; // 5% chance of an own goal
+}
+
+function getHeaderOutcome(player) {
+    let chance = Math.random(); // Generate a random chance
+    if (chance < 0.35) return "goal"; // 35% chance of scoring a goal
+    else if (chance < 0.6) return "saved"; // 25% chance of the goalkeeper making a save
+    else if (chance < 0.8) return "miss"; // 20% chance of missing the target
+    else return "blocked"; // 20% chance of a defender blocking the header
 }
 
 function getTackleOutcome(player) {
-    let chance = Math.random(); // Random chance for simplicity
-    if (chance < 0.5) return "successful"; // 50% chance of successful tackle
-    else if (chance < 0.8) return "missed"; // 30% chance of missing the tackle
-    else if (chance < 0.95) return "foul"; // 15% chance of committing a foul
-    else return "deflected"; // 5% chance of deflecting the ball
+    let chance = Math.random(); // Generate a random chance
+    if (chance < 0.45) return "successful"; // 45% chance of a successful tackle
+    else if (chance < 0.75) return "missed"; // 30% chance of missing the tackle
+    else if (chance < 0.9) return "foul"; // 15% chance of committing a foul
+    else if (chance < 0.97) return "deflected"; // 7% chance of deflecting the ball
+    else return "own_goal"; // 3% chance of an own goal
 }
 
 function getCutInsideOutcome(player) {
@@ -588,9 +573,11 @@ function getFoulOutcome(player) {
     let chance = Math.random(); // Random chance for simplicity
     if (chance < 0.1) return "red_card"; // 10% chance of a red card (serious foul)
     else if (chance < 0.3) return "yellow_card"; // 20% chance of a yellow card (reckless foul)
-    else if (chance < 0.5) return "penalty_kick"; // 20% chance of a penalty kick (foul in the box)
-    else if (chance < 0.7) return "free_kick"; // 20% chance of a free kick (foul outside the box)
-    else return "no_card"; // 30% chance of no card (minor foul)
+    else if (chance < 0.5) return "penalty_kick_success"; // 20% chance of a successful penalty kick (foul in the box)
+    else if (chance < 0.7) return "penalty_kick_fail"; // 20% chance of a failed penalty kick (foul in the box)
+    else if (chance < 0.85) return "free_kick_success"; // 15% chance of a successful free kick (foul outside the box)
+    else if (chance < 0.95) return "free_kick_fail"; // 10% chance of a failed free kick (foul outside the box)
+    else return "no_card"; // 5% chance of no card (minor foul)
 }
 
 function getRecoverBallOutcome(player) {
@@ -710,6 +697,17 @@ function simulatePlayerAction(action, player, currentTime, opponentPlayer) {
             player.score = Math.min(player.score + lowPlayerScore, 10);
             redraw();
             break;
+        case "catch_cross_own_goal":
+            logEvent(
+                currentTime,
+                action,
+                player,
+                `${player.name} disastrously mishandled the cross, resulting in an own goal!`
+            );
+            player.score = Math.max(player.score - mediumPlayerScore, 1);
+            teamsInMatch[player.teamIdx === 0 ? 1 : 0].score++;
+            redraw();
+            break;
         case "catch_cross_success":
             logEvent(
                 currentTime,
@@ -738,6 +736,47 @@ function simulatePlayerAction(action, player, currentTime, opponentPlayer) {
                 `${player.name} punched the cross away, clearing the danger.`
             );
             player.score = Math.min(player.score + lowPlayerScore, 10);
+            redraw();
+            break;
+        case "header_goal":
+            logEvent(
+                currentTime,
+                action,
+                player,
+                `${player.name} leapt high and delivered a powerful header into the back of the net!`
+            );
+            player.score = Math.min(player.score + highPlayerScore, 10);
+            player.goals_in_match++;
+            teamsInMatch[player.teamIdx].score++;
+            break;
+        case "header_saved":
+            logEvent(
+                currentTime,
+                action,
+                player,
+                `${player.name} aimed a header at the goal, but the goalkeeper made a stunning save!`
+            );
+            player.score = Math.min(player.score + lowPlayerScore, 10); 
+            redraw();
+            break;
+        case "header_miss":
+            logEvent(
+                currentTime,
+                action,
+                player,
+                `${player.name} tried a header but missed the target completely.`
+            );
+            redraw();
+            break;
+    
+        case "header_blocked":
+            logEvent(
+                currentTime,
+                action,
+                player,
+                `${player.name} directed a header toward goal, but a defender blocked it with a brave effort!`
+            );
+            player.score = Math.min(player.score + lowPlayerScore, 10); 
             redraw();
             break;
         case "punch":
@@ -846,6 +885,17 @@ function simulatePlayerAction(action, player, currentTime, opponentPlayer) {
             player.score = Math.min(player.score + lowPlayerScore, 10);
             redraw();
             break;
+        case "intercept_own_goal":
+            logEvent(
+                currentTime,
+                action,
+                player,
+                `${player.name} attempted an interception but accidentally deflected the ball into their own net!`
+            );
+            player.score = Math.max(player.score - mediumPlayerScore, 1);
+            teamsInMatch[player.teamIdx === 0 ? 1 : 0].score++;
+            redraw();
+            break;
         case "intercept_missed":
             logEvent(currentTime, action, player, `${player.name} attempted to intercept but missed, allowing the ball to continue.`);
             break;
@@ -882,6 +932,17 @@ function simulatePlayerAction(action, player, currentTime, opponentPlayer) {
             break;
         case "tackle_deflected":
             logEvent(currentTime, action, player, `${player.name}'s tackle deflected the ball into a neutral area.`);
+            break;
+        case "tackle_own_goal":
+            logEvent(
+                currentTime,
+                action,
+                player,
+                `${player.name} disastrously deflected the ball into their own net during the tackle!`
+            );
+            player.score = Math.max(player.score - mediumPlayerScore, 1);
+            teamsInMatch[player.teamIdx === 0 ? 1 : 0].score++;
+            redraw();
             break;
         case "overlap":
             // Handle overlap action
@@ -1214,14 +1275,46 @@ function simulatePlayerAction(action, player, currentTime, opponentPlayer) {
             player.score = Math.max(player.score - lowPlayerScore, 1);
             redraw();
             break;
-        case "foul_free_kick":
-            logEvent(currentTime, action, player, `${player.name} committed a foul and the opposing team is awarded a free kick.`);
+        case "foul_penalty_kick_success":
+            logEvent(
+                currentTime,
+                action,
+                player,
+                `${player.name} committed a foul in the box, and the penalty kick was successfully converted!`
+            );
+            player.score = Math.max(player.score - lowPlayerScore, 1);
+            teamsInMatch[player.teamIdx === 0 ? 1 : 0].score++;
+            redraw();
+            break;
+        case "foul_penalty_kick_fail":
+            logEvent(
+                currentTime,
+                action,
+                player,
+                `${player.name} committed a foul in the box, but the penalty kick was missed!`
+            );
             player.score = Math.max(player.score - lowPlayerScore, 1);
             redraw();
             break;
-        case "foul_penalty_kick":
-            logEvent(currentTime, action, player, `${player.name} committed a foul inside the penalty area, awarding a penalty kick.`);
-            player.score = Math.max(player.score - mediumPlayerScore, 1);
+        case "foul_free_kick_success":
+            logEvent(
+                currentTime,
+                action,
+                player,
+                `${player.name} committed a foul, and the free kick was successfully converted!`
+            );
+            player.score = Math.max(player.score - lowPlayerScore, 1);
+            teamsInMatch[player.teamIdx === 0 ? 1 : 0].score++;
+            redraw();
+            break;
+        case "foul_free_kick_fail":
+            logEvent(
+                currentTime,
+                action,
+                player,
+                `${player.name} committed a foul, but the free kick was wasted!`
+            );
+            player.score = Math.max(player.score - lowPlayerScore, 1);
             redraw();
             break;
         case "foul_yellow_card":
@@ -1567,39 +1660,6 @@ function simulatePlayerAction(action, player, currentTime, opponentPlayer) {
 
     team1score.innerText = teamsInMatch[0].score;
     team2score.innerText = teamsInMatch[1].score;
-}
-
-function handlePlayerExit(team, currentTime, player, reason) {
-    if (team.bench.length) {
-        // Attempt to get a substitute from the team's bench
-        const substitute = getRandPlayerFromTeam("exit", team, player);
-
-        if (substitute && (reason !== "red_card")) {
-            // Find the index of the exiting player
-            const playerIndex = team.players.findIndex(p => p.uuid === player.uuid);
-
-            if (playerIndex !== -1) {
-                // Replace the exiting player at the same index
-                team.players[playerIndex] = substitute;
-
-                // Remove the substitute from the bench
-                team.bench = team.bench.filter((p) => p !== substitute);
-
-                // Log the substitution event
-                logEvent(currentTime, "player-in", substitute, `${substitute.name} enters the field, replacing ${player.name}.`);
-            } else {
-                console.error(`Player ${player.name} not found in team.players.`);
-            }
-        } else {
-            if (reason !== "red_card") {
-                // Handle the scenario when no substitutes are available
-                logEvent(currentTime, "player-empty", `${team.name} has no substitutes left!`);
-            }
-
-            // Remove the exiting player from the active players list
-            team.players = team.players.filter((p) => p !== player);
-        }
-    }
 }
 
 function performActionSubstitute(player) {
