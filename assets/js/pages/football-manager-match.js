@@ -5,6 +5,7 @@ const teamsInMatch = groupTeams.map((team, teamIdx) => {
             teamIdx,
             position_in_match: pos.posName,
             score: 5,
+            goals_in_match: 0,
             playerColor,
             is_played: true,
             is_injury: false,
@@ -18,15 +19,16 @@ const teamsInMatch = groupTeams.map((team, teamIdx) => {
             playerColor,
             teamIdx,
             score: 5,
+            goals_in_match: 0,
             is_played: false,
             is_injury: false
         }
     });
-    return {...team, players, bench};
+    return { ...team, players, bench };
 });
 
 const redraw = () => {
-    renderTeamInFitch(teamsInMatch, {circleRadius: 8, isDisplayScore: true, isDisplayName: true, isTeamInMatch: true});
+    renderTeamInFitch(teamsInMatch, { circleRadius: 8, isDisplayScore: true, isDisplayName: true, isTeamInMatch: true, isDisplayBall: true });
 };
 redraw();
 
@@ -266,8 +268,8 @@ function simulateMatch(teamsInMatch) {
                     if (!prevAction) {
                         // Simulate an action
                         const team = Math.random() < 0.5 ? team1 : team2;
-                        player =
-                            team.players[Math.floor(Math.random() * team.players.length)];
+                        const teamPlayers = team.players.filter(player => !player?.is_off);
+                        player = teamPlayers[Math.floor(Math.random() * teamPlayers.length)];
                         const randAction = getActionFromPlayer(player, currentTimeInSeconds);
                         prevAction = randAction;
                         action = randAction;
@@ -281,7 +283,7 @@ function simulateMatch(teamsInMatch) {
                         }
                     }
                     if (player) {
-                        const {outcomeAction, opponentPlayer} = performOutcomeAction(action, player);
+                        const { outcomeAction, opponentPlayer } = performOutcomeAction(action, player);
                         simulatePlayerAction(outcomeAction, player, currentTimeInSeconds, opponentPlayer);
                     }
                 }
@@ -295,7 +297,7 @@ function simulateMatch(teamsInMatch) {
 }
 
 function getActionFromPlayer(player, currentTimeInSeconds) {
-    const {position_in_match} = player;
+    const { position_in_match } = player;
 
     // Select possible actions based on the player's position
     let actions = validActionsByPosition[position_in_match];
@@ -346,7 +348,7 @@ function performNextAction(currentAction, prevPlayer) {
             const opponentPlayers = teamsInMatch[prevPlayer.teamIdx === 0 ? 1 : 0].players.filter(p => p.position_in_match === randomPosition);
             const opponentPlayer = opponentPlayers[Math.floor(Math.random() * opponentPlayers.length)];
 
-            return {player: opponentPlayer, action: opponentAction};
+            return { player: opponentPlayer, action: opponentAction };
         }
     }
 
@@ -360,9 +362,9 @@ function performNextAction(currentAction, prevPlayer) {
         const randomPosition = positionsWithAction[Math.floor(Math.random() * positionsWithAction.length)];
         const teamPlayers = teamsInMatch[prevPlayer.teamIdx].players.filter(p => p.position_in_match === randomPosition);
         const teamPlayer = teamPlayers[Math.floor(Math.random() * teamPlayers.length)];
-        return {player: teamPlayer, action: nextAction};
+        return { player: teamPlayer, action: nextAction };
     } else {
-        return {player: null, action: null};
+        return { player: null, action: null };
     }
 }
 
@@ -645,7 +647,7 @@ function getInjuryOutcome(player) {
     if (outcome === "serious" || outcome === "stoppage" || outcome === "substitution") {
         substitutePlayer = performActionSubstitute(player)
     }
-    return {outcome, opponentPlayer: substitutePlayer};
+    return { outcome, opponentPlayer: substitutePlayer };
 }
 
 function getSubstituteOutcome(player) {
@@ -661,7 +663,7 @@ function getSubstituteOutcome(player) {
         else if (chance < 0.95) outcome = "performance"; // 5% chance of performance-based substitution
         else outcome = ""; // 5% chance of part of multiple substitutions
     }
-    return {outcome, opponentPlayer: substitutePlayer};
+    return { outcome, opponentPlayer: substitutePlayer };
 }
 
 // Generate random scores for players with updated ranges
@@ -942,6 +944,7 @@ function simulatePlayerAction(action, player, currentTime, opponentPlayer) {
         case "volley_goal":
             logEvent(currentTime, action, player, `${player.name} executed a stunning volley to score a spectacular goal!`);
             player.score = Math.min(player.score + highPlayerScore, 10);
+            player.goals_in_match++;
             teamsInMatch[player.teamIdx].score++;
             redraw();
             break;
@@ -968,6 +971,7 @@ function simulatePlayerAction(action, player, currentTime, opponentPlayer) {
         case "tap_in_goal":
             logEvent(currentTime, action, player, `${player.name} easily taps the ball into the goal to score!`);
             player.score = Math.min(player.score + highPlayerScore, 10);
+            player.goals_in_match++;
             teamsInMatch[player.teamIdx].score++;
             redraw();
             break;
@@ -1001,6 +1005,7 @@ function simulatePlayerAction(action, player, currentTime, opponentPlayer) {
                 `${player.name} took a shot and scored a fantastic goal!`
             );
             player.score = Math.min(player.score + highPlayerScore, 10);
+            player.goals_in_match++;
             teamsInMatch[player.teamIdx].score++;
             redraw();
             break;
@@ -1086,6 +1091,7 @@ function simulatePlayerAction(action, player, currentTime, opponentPlayer) {
                 `${player.name} took a long shot and scored a stunning goal from distance!`
             );
             player.score = Math.min(player.score + highPlayerScore, 10);
+            player.goals_in_match++;
             teamsInMatch[player.teamIdx].score++;
             redraw();
             break;
@@ -1220,14 +1226,14 @@ function simulatePlayerAction(action, player, currentTime, opponentPlayer) {
             break;
         case "foul_yellow_card":
             player.score = Math.max(player.score - mediumPlayerScore, 1);
-            if (!player.yellow_card){
-                player.yellow_card = 1;
+            if (!player.yellow_cards_in_match) {
+                player.yellow_cards_in_match = 1;
                 logEvent(currentTime, action, player, `${player.name} committed a foul and received a yellow card.`);
-            } else if (player.yellow_card === 1){
-                player.yellow_card = 2;
-                player.red_card = 1;
+            } else if (player.yellow_cards_in_match === 1) {
+                player.yellow_cards_in_match = 2;
+                player.red_cards_in_match = 1;
                 player.is_off = true;
-                logEvent(currentTime, action, player, 
+                logEvent(currentTime, action, player,
                     `${player.name} committed another foul, resulting in a second yellow card and a subsequent red card. ${player.name} has been sent off the field.`);
             }
             redraw();
@@ -1235,7 +1241,7 @@ function simulatePlayerAction(action, player, currentTime, opponentPlayer) {
         case "foul_red_card":
             logEvent(currentTime, action, player, `${player.name} committed a serious foul and received a red card, resulting in a sending off.`);
             player.score = Math.max(player.score - highPlayerScore, 1);
-            player.red_card = 1;
+            player.red_cards_in_match = 1;
             player.is_off = true;
             redraw();
             break;
@@ -1674,7 +1680,7 @@ function logEvent(time, action, player, message) {
     </div>
     <div class="flex-grow-1 ms-3 pt-1">
         <p class="text-muted mb-0 fs-12">${formatMatchTime(time)["minute"]}:${formatMatchTime(time)["second"]
-    }<span class="player-dot" style="background-color: ${player.playerColor}"></span></p>
+        }<span class="player-dot" style="background-color: ${player.playerColor}"></span></p>
         <h6 class="mb-1">${message}</h6>
     </div>`;
     const parentElement = document.getElementById("match-timeline");

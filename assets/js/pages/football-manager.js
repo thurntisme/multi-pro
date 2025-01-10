@@ -64,12 +64,30 @@ drawFootballPitch();
 
 // Draw a ball at a specific position
 function drawBall() {
+    const ballRadius = 6;
     ctx.beginPath();
-    ctx.arc(width / 2, height / 2, 5, 0, Math.PI * 2); // Ball with radius 5
+    ctx.arc(width / 2, height / 2, ballRadius, 0, Math.PI * 2); // Ball with radius 5
     ctx.fillStyle = "white";
     ctx.fill();
-    ctx.strokeStyle = "black";
-    ctx.stroke();
+
+    if (ballImagePath) {
+        const ballImage = new Image(); // Create a new Image object
+        ballImage.src = ballImagePath; // Set the path to your image file
+
+        // Once the image is loaded, draw it on the canvas
+        ballImage.onload = function () {
+            ctx.drawImage(
+                ballImage,
+                width / 2 - ballRadius, // x position (centered)
+                height / 2 - ballRadius, // y position (centered)
+                ballRadius * 2, // Width of the image
+                ballRadius * 2  // Height of the image
+            );
+        };
+    } else {
+        ctx.strokeStyle = "black";
+        ctx.stroke();
+    }
 }
 
 // Function to draw player names
@@ -141,7 +159,7 @@ function drawPlayerScore(player) {
     const {x, y, score} = player;
     // Draw circle around the score
     const scoreX = x;
-    const scoreY = y + 28;
+    const scoreY = y + 30;
     const maxScore = 10; // Maximum score
     const normalizedScore = score / maxScore; // Normalize score between 0 and 1
 
@@ -204,6 +222,15 @@ function renderTeamInFitch(
             if (pos?.is_off) {
                 playerColor = 'gray';
             }
+            if (pos?.yellow_cards_in_match === 1) {
+                drawFoulCard(pos, 'yellow');
+            }
+            if (pos?.red_cards_in_match === 1) {
+                drawFoulCard(pos, 'red');
+            }
+            if (pos?.goals_in_match) {
+                drawPlayerGoal(pos);
+            }
             drawCircle(
                 pos.x,
                 pos.y,
@@ -215,11 +242,56 @@ function renderTeamInFitch(
             }
             drawPlayerNumber(pos.x, pos.y, index + 1);
             if (conditions?.isDisplayName) {
-                drawPlayerName(pos.x, pos.y, pos.name);
+                drawPlayerName(pos.x, pos.y + 2, pos.name);
             }
             if (conditions?.isDisplayScore) {
                 drawPlayerScore(pos);
             }
         });
     });
+}
+
+function drawFoulCard(pos, type) {
+    const {x, y} = pos;
+    const cardImage = new Image();
+    cardImage.src = type === 'yellow' ? yellowCardImagePath : redCardImagePath;
+
+    cardImage.onload = function () {
+        const cardWidth = 12;
+        const cardHeight = 14; 
+        const cardX = x + 4; 
+        const cardY = y - 14; 
+
+        ctx.drawImage(
+            cardImage,
+            cardX,
+            cardY,
+            cardWidth,
+            cardHeight
+        );
+    };
+}
+function drawPlayerGoal(pos) {
+    const {x, y, goals_in_match} = pos;
+    const cardImage = new Image();
+    cardImage.src = goalImagePath;
+
+    cardImage.onload = function () {
+        const cardWidth = 12;
+        const cardHeight = 12;
+        const spacing = 15; // Space between goal markers
+
+        for (let i = 0; i < goals_in_match; i++) {
+            const cardX = x - cardWidth / 2;
+            const cardY = y + 4 + i * spacing; // Stack goals vertically
+
+            ctx.drawImage(
+                cardImage,
+                cardX,
+                cardY,
+                cardWidth,
+                cardHeight
+            );
+        }
+    };
 }
