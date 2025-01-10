@@ -49,14 +49,16 @@ ob_start();
             </div>
             <div class="col-4">
                 <div class="card card-height-100">
-                    <div class="card-header align-items-center d-flex">
-                        <h4 class="card-title mb-0 fs-14" id="curr-time">
+                    <div class="card-header align-items-center d-flex gap-1">
+                        <h4 class="card-title mb-0 fs-14 me-auto" id="curr-time">
                             <span id="minute" class="d-inline-block text-center"
                                 style="width: 20px">00</span>:<span
                                 id="second" class="d-inline-block text-center" style="width: 20px">00</span>
                         </h4>
-                        <button class="btn btn-sm btn-primary ms-auto" id="btn-start-match">Start</button>
-                        <button class="btn btn-sm btn-light ms-auto me-1 d-none" id="btn-cancel-match">Cancel</button>
+                        <button class="btn btn-sm btn-primary" id="btn-start-match">Start</button>
+                        <button class="btn btn-sm btn-info d-none" id="btn-info-match" data-bs-toggle="modal"
+                        data-bs-target="#matchInfoBackdrop">Match Info</button>
+                        <button class="btn btn-sm btn-light d-none" id="btn-cancel-match">Cancel</button>
                         <button class="btn btn-sm btn-success d-none" id="btn-accept-match" disabled>Next</button>
                     </div>
                     <div class="card-body">
@@ -173,6 +175,20 @@ ob_start();
     </div>
 </div>
 <!--end col-->
+
+<div class="modal modal-xl fade" id="matchInfoBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="playerDetailBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-body text-center p-5">
+                <h4 class="mb-2">Match Info</h4>
+                <div id="matchAttributes" class="py-3 mt-2"></div>
+                <div class="hstack gap-2 justify-content-center mt-2">
+                    <a href="javascript:void(0);" class="btn btn-link link-success fw-medium" data-bs-dismiss="modal"><i class="ri-close-line me-1 align-middle"></i> Close</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 <?php
 $pageContent = ob_get_clean();

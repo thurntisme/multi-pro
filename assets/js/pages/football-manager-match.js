@@ -239,7 +239,10 @@ function simulateMatch(teamsInMatch) {
                     `Match Over! Final Score: ${team1.name} ${team1.score} - ${team2.score} ${team2.name}`
                 );
                 $("#btn-accept-match").removeAttr("disabled");
-                $(document).on("click", function () {
+                $("#btn-info-match").removeClass("d-none");
+                $(document).on("click", "#btn-info-match", function () {
+                    const matchAttributes = $("#matchInfoBackdrop #matchAttributes");
+                    matchAttributes.html('<p class="mb-0">Data processing...</p>');
                     const result = teamsInMatch.map(team => {
                         return {
                             name: team.name,
@@ -248,11 +251,48 @@ function simulateMatch(teamsInMatch) {
                                 return {
                                     name: player.name,
                                     position: player.position_in_match,
-                                    score: player.score.toFixed(1)
+                                    score: player.score.toFixed(1),
+                                    goals: player?.goals_in_match || 0,
+                                    is_injury: player.is_injury,
+                                    yellow_cards: player?.yellow_cards_in_match || 0,
+                                    red_cards: player?.red_cards_in_match || 0
                                 }
                             })
                         }
                     });
+                    let playerAttrContent = '';
+                    result.forEach(team => {
+                        playerAttrContent += `<div class="col-6 pt-3 mt-3 border-top-dashed border-1 border-dark border-opacity-25">
+                            <h6 class="card-title flex-grow-1 mb-3 fs-15 text-capitalize">${team.name}</h6>
+                            <table class="table table-borderless mb-0">
+                                <tbody>`;
+
+                        team.players.forEach(function (player) {
+                            playerAttrContent += `<tr>
+                                            <th class="ps-0 text-capitalize text-start" scope="row">${player.name} :</th>
+                                            <td class="text-muted">${player.position}</td>
+                                            <td class="text-muted">${player.score}</td>
+                                            <td class="text-muted">${player.goals}</td>
+                                            <td class="text-muted">${player.yellow_cards} YC</td>
+                                            <td class="text-muted">${player.red_cards} RC</td>
+                                            <td class="text-muted">${player.is_injury ? 'Injury':''}</td>
+                                        </tr>`;
+                        })
+
+                        playerAttrContent += `</tbody>
+                            </table>
+                        </div>`;
+                    });
+                    matchAttributes.empty();
+                    const matchResult = `<p class="mb-1 fs-16">
+                    <span class="text-muted me-2 w-25 d-inline-block" style="text-align: right">${result[0].name}</span>
+                    <span class="text-black fs-20" style="width: 20px">${result[0].score}</span><span class="text-muted mx-1">:</span><span class="text-black fs-20" style="width: 20px">${result[1].score}</span>
+                    <span class="text-muted ms-2 w-25 d-inline-block" style="text-align: left">${result[1].name}</span>
+                    </p>`;
+                    matchAttributes.append(matchResult);
+                    const playerAttrHtml = `<div class="row">${playerAttrContent}</div>`;
+                    matchAttributes.append(playerAttrHtml);
+
                     console.log(result);
                 });
                 return;
@@ -571,13 +611,13 @@ function getTapInOutcome(player) {
 
 function getFoulOutcome(player) {
     let chance = Math.random(); // Random chance for simplicity
-    if (chance < 0.1) return "red_card"; // 10% chance of a red card (serious foul)
-    else if (chance < 0.3) return "yellow_card"; // 20% chance of a yellow card (reckless foul)
-    else if (chance < 0.5) return "penalty_kick_success"; // 20% chance of a successful penalty kick (foul in the box)
-    else if (chance < 0.7) return "penalty_kick_fail"; // 20% chance of a failed penalty kick (foul in the box)
-    else if (chance < 0.85) return "free_kick_success"; // 15% chance of a successful free kick (foul outside the box)
-    else if (chance < 0.95) return "free_kick_fail"; // 10% chance of a failed free kick (foul outside the box)
-    else return "no_card"; // 5% chance of no card (minor foul)
+    if (chance < 0.02) return "red_card"; // 2% chance of a red card (serious foul)
+    else if (chance < 0.08) return "yellow_card"; // 6% chance of a yellow card (reckless foul)
+    else if (chance < 0.14) return "penalty_kick_success"; // 6% chance of a successful penalty kick (foul in the box)
+    else if (chance < 0.26) return "penalty_kick_fail"; // 12% chance of a failed penalty kick (foul in the box)
+    else if (chance < 0.32) return "free_kick_success"; // 6% chance of a successful free kick (foul outside the box)
+    else if (chance < 0.42) return "free_kick_fail"; // 10% chance of a failed free kick (foul outside the box)
+    else return "no_card"; // 58% chance of no card (minor foul)
 }
 
 function getRecoverBallOutcome(player) {
