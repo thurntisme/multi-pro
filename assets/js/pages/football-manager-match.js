@@ -6,6 +6,7 @@ const teamsInMatch = groupTeams.map((team, teamIdx) => {
             position_in_match: pos.posName,
             score: 5,
             goals_in_match: 0,
+            own_goals_in_match: 0,
             playerColor,
             is_played: true,
             is_injury: false,
@@ -20,15 +21,22 @@ const teamsInMatch = groupTeams.map((team, teamIdx) => {
             teamIdx,
             score: 5,
             goals_in_match: 0,
+            own_goals_in_match: 0,
             is_played: false,
             is_injury: false
         }
     });
-    return { ...team, players, bench };
+    return {...team, players, bench};
 });
 
 const redraw = () => {
-    renderTeamInFitch(teamsInMatch, { circleRadius: 8, isDisplayScore: true, isDisplayName: true, isTeamInMatch: true, isDisplayBall: true });
+    renderTeamInFitch(teamsInMatch, {
+        circleRadius: 8,
+        isDisplayScore: true,
+        isDisplayName: true,
+        isTeamInMatch: true,
+        isDisplayBall: true
+    });
 };
 redraw();
 
@@ -97,7 +105,7 @@ const opponentReactions = {
     // Opponents press to regain possession or tightly mark strikers during a goal kick.
     goal_kick: ["press", "mark_strikers"], // Apply pressure to the defense or mark attackers to disrupt distribution.
     // After a save, opponents pressure the goalkeeper or mark attacking players to limit options.
-    save: ["pressure_goalkeeper", "mark_players"], // Prevent quick distribution or cover potential threats.
+    save: ["mark_players"], // Prevent quick distribution or cover potential threats.
     // When the goalkeeper catches a cross, opponents can challenge or maintain defensive positioning.
     catch_cross: ["challenge_goalkeeper", "mark"], // Contest the catch or mark nearby players.
     // Following a punch, opponents aim to recover loose balls or block the clearance.
@@ -154,7 +162,7 @@ const opponentReactions = {
 
 // Define valid actions for each position
 const validActionsByPosition = {
-    GK: ["goal_kick", "save", "catch_cross", "punch", "clearance", "distribute_ball", "pressure_goalkeeper", "mark_players", "block_shot"],
+    GK: ["goal_kick", "save", "catch_cross", "punch", "clearance", "distribute_ball", "mark_players", "block_shot"],
     LB: ["intercept", "tackle", "overlap", "cross", "cut_inside", "long_ball", "track_runner", "intercept_cross", "contain", "block_shot", "press_receiver", "long_shot"],
     CB: ["clearance", "intercept", "tackle", "block_shot", "header", "mark", "challenge_header", "recover_ball", "contain", "press_receiver"],
     RB: ["intercept", "tackle", "overlap", "cross", "cut_inside", "long_ball", "track_runner", "intercept_cross", "contain", "block_shot", "press_receiver", "long_shot"],
@@ -243,16 +251,24 @@ function simulateMatch(teamsInMatch) {
                 $(document).on("click", "#btn-info-match", function () {
                     const matchAttributes = $("#matchInfoBackdrop #matchAttributes");
                     matchAttributes.html('<p class="mb-0">Data processing...</p>');
+                    let bestPlayerUuid = null;
+                    let bestPlayerScore = 0;
                     const result = teamsInMatch.map(team => {
                         return {
                             name: team.name,
                             score: team.score,
                             players: [...team.players, ...team.bench].map(player => {
+                                if (player.score > bestPlayerScore) {
+                                    bestPlayerUuid = player.uuid;
+                                    bestPlayerScore = player.score;
+                                }
                                 return {
+                                    uuid: player.uuid,
                                     name: player.name,
                                     position: player.position_in_match,
                                     score: player.score.toFixed(1),
                                     goals: player?.goals_in_match || 0,
+                                    own_goals: player?.own_goals_in_match || 0,
                                     is_injury: player.is_injury,
                                     yellow_cards: player?.yellow_cards_in_match || 0,
                                     red_cards: player?.red_cards_in_match || 0
@@ -265,17 +281,29 @@ function simulateMatch(teamsInMatch) {
                         playerAttrContent += `<div class="col-6 pt-3 mt-3 border-top-dashed border-1 border-dark border-opacity-25">
                             <h6 class="card-title flex-grow-1 mb-3 fs-15 text-capitalize">${team.name}</h6>
                             <table class="table table-borderless mb-0">
-                                <tbody>`;
+                                <tbody>
+                                    <tr>
+                                       <th class="ps-0 text-capitalize text-start" scope="row"></th>
+                                            <td class="text-muted"></td>
+                                            <td class="text-muted"></td>
+                                            <td class="text-muted"></td>
+                                            <td class="text-muted">YC</td>
+                                            <td class="text-muted">RC</td>
+                                        </tr>`;
 
                         team.players.forEach(function (player) {
                             playerAttrContent += `<tr>
-                                            <th class="ps-0 text-capitalize text-start" scope="row">${player.name} :</th>
+                                            <th class="ps-0 text-capitalize text-start" scope="row">
+                                                ${player.name} ${player.is_injury ? '(Injury)' : ''}
+                                                ${player.uuid === bestPlayerUuid ? '<span class="badge bg-success">Best</span>' : ''}
+                                            </th>
                                             <td class="text-muted">${player.position}</td>
                                             <td class="text-muted">${player.score}</td>
-                                            <td class="text-muted">${player.goals}</td>
-                                            <td class="text-muted">${player.yellow_cards} YC</td>
-                                            <td class="text-muted">${player.red_cards} RC</td>
-                                            <td class="text-muted">${player.is_injury ? 'Injury':''}</td>
+                                            <td class="text-muted">
+                                                ${player.goals} ${player.own_goals ? `(${player.own_goals}G)` : ''}
+                                            </td>
+                                            <td class="text-muted">${player.yellow_cards}</td>
+                                            <td class="text-muted">${player.red_cards}</td>
                                         </tr>`;
                         })
 
@@ -292,8 +320,6 @@ function simulateMatch(teamsInMatch) {
                     matchAttributes.append(matchResult);
                     const playerAttrHtml = `<div class="row">${playerAttrContent}</div>`;
                     matchAttributes.append(playerAttrHtml);
-
-                    console.log(result);
                 });
                 return;
             }
@@ -323,7 +349,7 @@ function simulateMatch(teamsInMatch) {
                         }
                     }
                     if (player) {
-                        const { outcomeAction, opponentPlayer } = performOutcomeAction(action, player);
+                        const {outcomeAction, opponentPlayer} = performOutcomeAction(action, player);
                         simulatePlayerAction(outcomeAction, player, currentTimeInSeconds, opponentPlayer);
                     }
                 }
@@ -337,7 +363,7 @@ function simulateMatch(teamsInMatch) {
 }
 
 function getActionFromPlayer(player, currentTimeInSeconds) {
-    const { position_in_match } = player;
+    const {position_in_match} = player;
 
     // Select possible actions based on the player's position
     let actions = validActionsByPosition[position_in_match];
@@ -388,7 +414,7 @@ function performNextAction(currentAction, prevPlayer) {
             const opponentPlayers = teamsInMatch[prevPlayer.teamIdx === 0 ? 1 : 0].players.filter(p => p.position_in_match === randomPosition);
             const opponentPlayer = opponentPlayers[Math.floor(Math.random() * opponentPlayers.length)];
 
-            return { player: opponentPlayer, action: opponentAction };
+            return {player: opponentPlayer, action: opponentAction};
         }
     }
 
@@ -402,9 +428,9 @@ function performNextAction(currentAction, prevPlayer) {
         const randomPosition = positionsWithAction[Math.floor(Math.random() * positionsWithAction.length)];
         const teamPlayers = teamsInMatch[prevPlayer.teamIdx].players.filter(p => p.position_in_match === randomPosition);
         const teamPlayer = teamPlayers[Math.floor(Math.random() * teamPlayers.length)];
-        return { player: teamPlayer, action: nextAction };
+        return {player: teamPlayer, action: nextAction};
     } else {
-        return { player: null, action: null };
+        return {player: null, action: null};
     }
 }
 
@@ -463,7 +489,9 @@ function performOutcomeAction(action, player) {
             outcome = getTapInOutcome(player);
             break;
         case "foul":
-            outcome = getFoulOutcome(player);
+            const foulOutcome = getFoulOutcome(player);
+            outcome = foulOutcome.outcome;
+            opponentPlayer = foulOutcome.opponentPlayer;
             break;
         case "recover_ball":
             outcome = getRecoverBallOutcome(player);
@@ -478,7 +506,6 @@ function performOutcomeAction(action, player) {
             outcome = getChallengeHeaderOutcome(player);
             break;
         case "injury":
-            outcome = getInjuryOutcome(player);
             const injuryOutcome = getInjuryOutcome(player);
             outcome = injuryOutcome.outcome;
             opponentPlayer = injuryOutcome.opponentPlayer;
@@ -610,14 +637,26 @@ function getTapInOutcome(player) {
 }
 
 function getFoulOutcome(player) {
+    let outcome = '';
+    let opponentPlayer = '';
     let chance = Math.random(); // Random chance for simplicity
-    if (chance < 0.02) return "red_card"; // 2% chance of a red card (serious foul)
-    else if (chance < 0.08) return "yellow_card"; // 6% chance of a yellow card (reckless foul)
-    else if (chance < 0.14) return "penalty_kick_success"; // 6% chance of a successful penalty kick (foul in the box)
-    else if (chance < 0.26) return "penalty_kick_fail"; // 12% chance of a failed penalty kick (foul in the box)
-    else if (chance < 0.32) return "free_kick_success"; // 6% chance of a successful free kick (foul outside the box)
-    else if (chance < 0.42) return "free_kick_fail"; // 10% chance of a failed free kick (foul outside the box)
-    else return "no_card"; // 58% chance of no card (minor foul)
+    if (chance < 0.02) outcome = "red_card"; // 2% chance of a red card (serious foul)
+    else if (chance < 0.08) outcome = "yellow_card"; // 6% chance of a yellow card (reckless foul)
+    else if (chance < 0.14) outcome = "penalty_kick_success"; // 6% chance of a successful penalty kick (foul in the box)
+    else if (chance < 0.26) outcome = "penalty_kick_fail"; // 12% chance of a failed penalty kick (foul in the box)
+    else if (chance < 0.32) outcome = "free_kick_success"; // 6% chance of a successful free kick (foul outside the box)
+    else if (chance < 0.42) outcome = "free_kick_fail"; // 10% chance of a failed free kick (foul outside the box)
+    else outcome = "no_card"; // 58% chance of no card (minor foul)
+
+    if (outcome === 'penalty_kick_success' || outcome === 'free_kick_success') {
+        const opponentTeam = teamsInMatch[player.teamIdx === 0 ? 1 : 0].players.filter(p => !p?.is_off && p.position_in_match !== 'GK');
+        opponentPlayer = opponentTeam[Math.floor(Math.random() * opponentTeam.length)];
+    }
+
+    return {
+        outcome,
+        opponentPlayer,
+    };
 }
 
 function getRecoverBallOutcome(player) {
@@ -662,19 +701,17 @@ function getChallengeHeaderOutcome(player) {
 function getInjuryOutcome(player) {
     let outcome = '';
     let substitutePlayer = null;
-    if (substitutePlayer) {
-        let chance = Math.random(); // Random chance for simplicity
-        if (chance < 0.4) outcome = "minor"; // 40% chance of a minor injury
-        else if (chance < 0.6) outcome = "serious"; // 20% chance of a serious injury
-        else if (chance < 0.75) outcome = "fake"; // 15% chance of faking an injury
-        else if (chance < 0.85) outcome = "temporary"; // 10% chance of a temporary injury
-        else if (chance < 0.95) outcome = "rehabilitation"; // 10% chance of requiring rehabilitation but continuing
-        else outcome = "stoppage"; // 5% chance of an injury stoppage
-    }
+    let chance = Math.random(); // Random chance for simplicity
+    if (chance < 0.4) outcome = "minor"; // 40% chance of a minor injury
+    else if (chance < 0.6) outcome = "serious"; // 20% chance of a serious injury
+    else if (chance < 0.75) outcome = "fake"; // 15% chance of faking an injury
+    else if (chance < 0.85) outcome = "temporary"; // 10% chance of a temporary injury
+    else if (chance < 0.95) outcome = "rehabilitation"; // 10% chance of requiring rehabilitation but continuing
+    else outcome = "stoppage"; // 5% chance of an injury stoppage
     if (outcome === "serious" || outcome === "stoppage" || outcome === "substitution") {
         substitutePlayer = performActionSubstitute(player)
     }
-    return { outcome, opponentPlayer: substitutePlayer };
+    return {outcome, opponentPlayer: substitutePlayer};
 }
 
 function getSubstituteOutcome(player) {
@@ -690,7 +727,7 @@ function getSubstituteOutcome(player) {
         else if (chance < 0.95) outcome = "performance"; // 5% chance of performance-based substitution
         else outcome = ""; // 5% chance of part of multiple substitutions
     }
-    return { outcome, opponentPlayer: substitutePlayer };
+    return {outcome, opponentPlayer: substitutePlayer};
 }
 
 // Generate random scores for players with updated ranges
@@ -746,6 +783,7 @@ function simulatePlayerAction(action, player, currentTime, opponentPlayer) {
             );
             player.score = Math.max(player.score - mediumPlayerScore, 1);
             teamsInMatch[player.teamIdx === 0 ? 1 : 0].score++;
+            player.own_goals_in_match++;
             redraw();
             break;
         case "catch_cross_success":
@@ -796,7 +834,7 @@ function simulatePlayerAction(action, player, currentTime, opponentPlayer) {
                 player,
                 `${player.name} aimed a header at the goal, but the goalkeeper made a stunning save!`
             );
-            player.score = Math.min(player.score + lowPlayerScore, 10); 
+            player.score = Math.min(player.score + lowPlayerScore, 10);
             redraw();
             break;
         case "header_miss":
@@ -808,7 +846,7 @@ function simulatePlayerAction(action, player, currentTime, opponentPlayer) {
             );
             redraw();
             break;
-    
+
         case "header_blocked":
             logEvent(
                 currentTime,
@@ -816,7 +854,7 @@ function simulatePlayerAction(action, player, currentTime, opponentPlayer) {
                 player,
                 `${player.name} directed a header toward goal, but a defender blocked it with a brave effort!`
             );
-            player.score = Math.min(player.score + lowPlayerScore, 10); 
+            player.score = Math.min(player.score + lowPlayerScore, 10);
             redraw();
             break;
         case "punch":
@@ -849,6 +887,8 @@ function simulatePlayerAction(action, player, currentTime, opponentPlayer) {
             break;
         case "pass_successful":
             logEvent(currentTime, action, player, `${player.name} made a brilliant pass to their teammate.`);
+            player.score = Math.min(player.score + lowPlayerScore, 10);
+            redraw();
             break;
         case "pass_intercepted":
             logEvent(currentTime, action, player, `${player.name}'s pass was intercepted by the opposition.`);
@@ -934,6 +974,7 @@ function simulatePlayerAction(action, player, currentTime, opponentPlayer) {
             );
             player.score = Math.max(player.score - mediumPlayerScore, 1);
             teamsInMatch[player.teamIdx === 0 ? 1 : 0].score++;
+            player.own_goals_in_match++;
             redraw();
             break;
         case "intercept_missed":
@@ -982,6 +1023,7 @@ function simulatePlayerAction(action, player, currentTime, opponentPlayer) {
             );
             player.score = Math.max(player.score - mediumPlayerScore, 1);
             teamsInMatch[player.teamIdx === 0 ? 1 : 0].score++;
+            player.own_goals_in_match++;
             redraw();
             break;
         case "overlap":
@@ -1320,10 +1362,12 @@ function simulatePlayerAction(action, player, currentTime, opponentPlayer) {
                 currentTime,
                 action,
                 player,
-                `${player.name} committed a foul in the box, and the penalty kick was successfully converted!`
+                `${player.name} committed a foul in the penalty area. ${opponentPlayer.name} stepped up and confidently converted the penalty into a goal!`
             );
             player.score = Math.max(player.score - lowPlayerScore, 1);
             teamsInMatch[player.teamIdx === 0 ? 1 : 0].score++;
+            opponentPlayer.score = Math.min(opponentPlayer.score + highPlayerScore, 10);
+            opponentPlayer.goals_in_match++;
             redraw();
             break;
         case "foul_penalty_kick_fail":
@@ -1341,10 +1385,12 @@ function simulatePlayerAction(action, player, currentTime, opponentPlayer) {
                 currentTime,
                 action,
                 player,
-                `${player.name} committed a foul, and the free kick was successfully converted!`
+                `${player.name} committed a foul, leading to a free kick. ${opponentPlayer.name} took full advantage and scored a brilliant goal!`
             );
             player.score = Math.max(player.score - lowPlayerScore, 1);
             teamsInMatch[player.teamIdx === 0 ? 1 : 0].score++;
+            opponentPlayer.score = Math.min(opponentPlayer.score + highPlayerScore, 10);
+            opponentPlayer.goals_in_match++;
             redraw();
             break;
         case "foul_free_kick_fail":
@@ -1540,15 +1586,6 @@ function simulatePlayerAction(action, player, currentTime, opponentPlayer) {
             break;
         case "intercept_cross_handled":
             logEvent(currentTime, action, player, `${player.name} handled the ball while attempting to intercept the cross, resulting in a foul.`);
-            break;
-        case "pressure_goalkeeper":
-            // Handle pressure goalkeeper action
-            logEvent(
-                currentTime,
-                "pressure_goalkeeper",
-                player,
-                `${player.name} pressured the goalkeeper, forcing them into a rushed clearance.`
-            );
             break;
         case "challenge_header":
             logEvent(
@@ -1780,7 +1817,7 @@ function logEvent(time, action, player, message) {
     </div>
     <div class="flex-grow-1 ms-3 pt-1">
         <p class="text-muted mb-0 fs-12">${formatMatchTime(time)["minute"]}:${formatMatchTime(time)["second"]
-        }<span class="player-dot" style="background-color: ${player.playerColor}"></span></p>
+    }<span class="player-dot" style="background-color: ${player.playerColor}"></span></p>
         <h6 class="mb-1">${message}</h6>
     </div>`;
     const parentElement = document.getElementById("match-timeline");

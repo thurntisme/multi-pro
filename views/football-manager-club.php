@@ -217,14 +217,14 @@ ob_start();
                                         <table class="table align-middle table-nowrap mb-0">
                                             <thead class="table-light">
                                             <tr>
-                                                <th colspan="4">Subtitle</th>
+                                                <th colspan="4">Subtitle (<?= count($subPlayers) ?>)</th>
                                             </tr>
                                             </thead>
                                         </table>
                                         <div class="p-3">
                                             <?php if (count($subPlayers) > 0) { ?>
                                                 <div class="table-responsive table-card" data-simplebar
-                                                     style="max-height: 264px;">
+                                                     style="max-height: 261px;">
                                                     <table class="table align-middle table-nowrap mb-0" id="subtitle">
                                                         <tbody class="list form-check-all">
                                                         <?php foreach ($subPlayers as $index => $item) { ?>

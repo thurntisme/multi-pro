@@ -258,9 +258,9 @@ function drawFoulCard(pos, type) {
 
     cardImage.onload = function () {
         const cardWidth = 12;
-        const cardHeight = 14; 
-        const cardX = x + 4; 
-        const cardY = y - 14; 
+        const cardHeight = 14;
+        const cardX = x + 4;
+        const cardY = y - 14;
 
         ctx.drawImage(
             cardImage,
@@ -271,6 +271,7 @@ function drawFoulCard(pos, type) {
         );
     };
 }
+
 function drawPlayerGoal(pos) {
     const {x, y, goals_in_match} = pos;
     const cardImage = new Image();
@@ -279,11 +280,16 @@ function drawPlayerGoal(pos) {
     cardImage.onload = function () {
         const cardWidth = 12;
         const cardHeight = 12;
-        const spacing = 15; // Space between goal markers
+        const spacing = 2; // Space between goal markers
 
         for (let i = 0; i < goals_in_match; i++) {
-            const cardX = x - cardWidth / 2;
-            const cardY = y + 4 + i * spacing; // Stack goals vertically
+            // Calculate the total width of all images, including the spaces between them
+            const totalWidth = goals_in_match * cardWidth + (goals_in_match - 1) * spacing;
+
+            // Calculate the starting X position to center the images
+            const cardX = x - totalWidth / 2 + i * (cardWidth + spacing);
+
+            const cardY = y + 4;
 
             ctx.drawImage(
                 cardImage,
