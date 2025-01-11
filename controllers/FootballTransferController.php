@@ -29,11 +29,6 @@ class FootballTransferController
         $this->createTransfer('buy');
     }
 
-    public function createTransferSellPlayer()
-    {
-        $this->createTransfer('sell');
-    }
-
     public function createTransfer($type)
     {
         if ($type) {
@@ -76,8 +71,13 @@ class FootballTransferController
             $_SESSION['message'] = "Failed to create transfer";
         }
 
-        header("Location: " . home_url('football-manager/transfer/'.$type.'-list'));
+        header("Location: " . home_url('football-manager/transfer/' . $type . '-list'));
         exit;
+    }
+
+    public function createTransferSellPlayer()
+    {
+        $this->createTransfer('sell');
     }
 
     public function initializeTeams($teams)
@@ -128,20 +128,18 @@ class FootballTransferController
 
     // Get all transfers
 
-    public function listTransferPlayers($transferType)
+    public function listTransferPlayers($transferType): array
     {
-
         $list = array_map(function ($player) {
             $player_data = $this->footballPlayerController->viewPlayer($player['player_id']);
             return array_merge($player_data, $player);
         }, $this->getTransferSQL("result", $transferType));
         return [
             'list' => $list,
+            'successCount' => $this->getSuccessTransferCount(),
             'count' => $this->getTransferSQL("count", $transferType),
         ];
     }
-
-    // Handle listing all transfers
 
     public function getTransferSQL($queryType = "result", $transferType = '')
     {
@@ -180,4 +178,23 @@ class FootballTransferController
         $stmt->execute();
         return $queryType === "result" ? $stmt->fetchAll(PDO::FETCH_ASSOC) : $stmt->fetchColumn();
     }
+
+
+    public function getSuccessTransferCount()
+    {
+        $countTransfersSql = "SELECT COUNT(*) 
+                          FROM football_transfer 
+                          WHERE manager_id = :manager_id 
+                          AND is_success = :is_success 
+                          AND response_at < CURRENT_TIMESTAMP";
+        $countTransfersStmt = $this->pdo->prepare($countTransfersSql);
+        $countTransfersStmt->execute([
+            ':manager_id' => $this->user_id,
+            ':is_success' => 1,
+        ]);
+
+        // Fetch and return the count
+        return (int)$countTransfersStmt->fetchColumn();
+    }
+
 }

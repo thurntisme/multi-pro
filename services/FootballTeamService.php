@@ -240,17 +240,74 @@ class FootballTeamService
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
+    public function moveAllPlayersToTeam()
+    {
+        try {
+            // Get the current team data for the user
+            $team = $this->getMyTeamData();
+
+            if (!empty($team)) {
+                $transfers = $this->getAllSuccessTransfer();
+
+                // Loop through each transfer and move the player to the team
+                foreach ($transfers as $transfer) {
+                    $this->movePlayerToTeam($team['id'], $transfer['player_id'], $transfer['id']);
+                }
+            }
+            return true;
+        } catch (Exception $e) {
+            throw new Exception("Failed to move all players to the team: " . $e->getMessage());
+        }
+    }
+
+    public function getAllSuccessTransfer()
+    {
+        $fetchTransfersSql = "SELECT id, player_id 
+                                  FROM football_transfer 
+                                  WHERE manager_id = :manager_id 
+                                  AND is_success = :is_success 
+                                  AND response_at < CURRENT_TIMESTAMP";
+        $fetchTransfersStmt = $this->pdo->prepare($fetchTransfersSql);
+        $fetchTransfersStmt->execute([
+            ':manager_id' => $this->user_id,
+            ':is_success' => 1,
+        ]);
+
+        return $fetchTransfersStmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
     public function movePlayerToTeam($teamId, $playerId, $transferId)
     {
-        $sql = "UPDATE football_player SET status = :status, updated_at = CURRENT_TIMESTAMP WHERE team_id = :team_id AND id = :player_id";
-        $stmt = $this->pdo->prepare($sql);
-        $stmt->execute([':status' => 'players', ':team_id' => $teamId, ':player_id' => $playerId]);
+        try {
+            // Start a transaction to ensure data consistency
+            $this->pdo->beginTransaction();
 
-        $sql = "DELETE FROM football_transfer WHERE id = :id";
-        $stmt = $this->pdo->prepare($sql);
-        $stmt->execute([':id' => $transferId]);
+            // Update player's team and status
+            $updatePlayerSql = "UPDATE football_player 
+                            SET status = :status, updated_at = CURRENT_TIMESTAMP 
+                            WHERE team_id = :team_id AND id = :player_id";
+            $updatePlayerStmt = $this->pdo->prepare($updatePlayerSql);
+            $updatePlayerStmt->execute([
+                ':status' => 'players',
+                ':team_id' => $teamId,
+                ':player_id' => $playerId,
+            ]);
 
-        return $stmt->rowCount();
+            // Remove the transfer record
+            $deleteTransferSql = "DELETE FROM football_transfer WHERE id = :id";
+            $deleteTransferStmt = $this->pdo->prepare($deleteTransferSql);
+            $deleteTransferStmt->execute([':id' => $transferId]);
+
+            // Commit the transaction
+            $this->pdo->commit();
+
+            // Return the number of affected rows for validation
+            return $deleteTransferStmt->rowCount();
+        } catch (Exception $e) {
+            // Rollback the transaction in case of an error
+            $this->pdo->rollBack();
+            throw new Exception("Failed to move player to team: " . $e->getMessage());
+        }
     }
 
     public function updateMyClubFormation($formation)

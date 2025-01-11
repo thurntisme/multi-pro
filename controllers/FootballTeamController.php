@@ -41,11 +41,6 @@ class FootballTeamController
         exit;
     }
 
-    function randFormation()
-    {
-        return DEFAULT_FOOTBALL_FORMATION[array_rand(DEFAULT_FOOTBALL_FORMATION)];
-    }
-
     public function updateBudget($amount)
     {
         if ($amount) {
@@ -57,8 +52,6 @@ class FootballTeamController
     {
         return $this->footballTeamService->getAllTeams();
     }
-
-    // Get all teams
 
     public function getMyTeamInMatch($teamId): array
     {
@@ -92,32 +85,16 @@ class FootballTeamController
         }
     }
 
-    public function getRandTeamInMatch()
-    {
-        $formation = $this->randFormation();
-        $players = $this->randomTeamPlayers($formation);
-        $lineupPlayers = array_slice($players, 0, 11);
-        $subPlayers = array_slice($players, 11);
-        return [
-            'formation' => $formation['slug'],
-            'lineup' => $lineupPlayers,
-            'bench' => $subPlayers,
-            'myTeam' => false
-        ];
-    }
+    // Get all teams
 
     public function getMyTeam()
     {
         return $this->footballTeamService->getTeamByUserId();
     }
 
-    public function getRecommendPlayer($formation)
+    function randFormation()
     {
-        $formationData = array_filter(DEFAULT_FOOTBALL_FORMATION, function ($item) use ($formation) {
-            return $item['slug'] === $formation;
-        });
-        $players = $this->randomTeamPlayers(array_values($formationData)[0]);
-        return array_slice($players, 0, 11);
+        return DEFAULT_FOOTBALL_FORMATION[array_rand(DEFAULT_FOOTBALL_FORMATION)];
     }
 
     function randomTeamPlayers($formation)
@@ -168,6 +145,29 @@ class FootballTeamController
         }
 
         return $assignedPlayers;
+    }
+
+    public function getRandTeamInMatch()
+    {
+        $formation = $this->randFormation();
+        $players = $this->randomTeamPlayers($formation);
+        $lineupPlayers = array_slice($players, 0, 11);
+        $subPlayers = array_slice($players, 11);
+        return [
+            'formation' => $formation['slug'],
+            'lineup' => $lineupPlayers,
+            'bench' => $subPlayers,
+            'myTeam' => false
+        ];
+    }
+
+    public function getRecommendPlayer($formation)
+    {
+        $formationData = array_filter(DEFAULT_FOOTBALL_FORMATION, function ($item) use ($formation) {
+            return $item['slug'] === $formation;
+        });
+        $players = $this->randomTeamPlayers(array_values($formationData)[0]);
+        return array_slice($players, 0, 11);
     }
 
     public function getMyTeamPlayers()
@@ -227,6 +227,21 @@ class FootballTeamController
         } else {
             $_SESSION['message_type'] = 'danger';
             $_SESSION['message'] = "Failed to assign $playerName to your team.";
+        }
+
+        header("Location: " . $_SERVER['REQUEST_URI']);
+        exit;
+    }
+
+    function moveAllPlayersToTeam()
+    {
+        $rowsAffected = $this->footballTeamService->moveAllPlayersToTeam();
+        if ($rowsAffected) {
+            $_SESSION['message_type'] = 'success';
+            $_SESSION['message'] = "All players has been move successfully to your players.";
+        } else {
+            $_SESSION['message_type'] = 'danger';
+            $_SESSION['message'] = "Failed to assign move all players to your players.";
         }
 
         header("Location: " . $_SERVER['REQUEST_URI']);
