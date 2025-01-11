@@ -185,4 +185,18 @@ class FootballPlayerController
 
         return null;
     }
+
+    public function deletePlayerJson($player_uuid, $playerName)
+    {
+        if (deletePlayerJson($player_uuid)) {
+            $_SESSION['message_type'] = 'success';
+            $_SESSION['message'] = $playerName . " has been deleted successfully.";
+        } else {
+            $_SESSION['message_type'] = 'danger';
+            $_SESSION['message'] = "Failed to delete player.";
+        }
+
+        header("Location: " . $_SERVER['REQUEST_URI']);
+        exit;
+    }
 }

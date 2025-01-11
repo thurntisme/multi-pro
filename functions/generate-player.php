@@ -585,6 +585,56 @@ function getPlayerJsonByUuid($targetUuid)
     return $player;
 }
 
+function deletePlayerJson($targetUuid)
+{
+    // Set the file name
+    $fileName = "assets/json/players.json";
+
+    // Check if the JSON file exists
+    if (!file_exists($fileName)) {
+        error_log("File {$fileName} not found.");
+        return false;
+    }
+
+    $existingData = file_get_contents($fileName);
+    if ($existingData === false) {
+        error_log("Failed to read data from {$fileName}");
+        return false;
+    }
+
+    $oldData = json_decode($existingData, true);
+    if ($oldData === null) {
+        error_log("Failed to decode JSON from {$fileName}: " . json_last_error_msg());
+        return false;
+    }
+
+    // Filter out the player with the matching UUID
+    $filteredArray = array_filter($oldData, function ($item) use ($targetUuid) {
+        return $item['uuid'] !== $targetUuid;
+    });
+
+    // Check if the player was found and removed
+    if (count($filteredArray) === count($oldData)) {
+        error_log("Player with UUID {$targetUuid} not found.");
+        return false;
+    }
+
+    // Re-index the array and encode it back to JSON
+    $newData = json_encode(array_values($filteredArray), JSON_PRETTY_PRINT);
+    if ($newData === false) {
+        error_log("Failed to encode JSON: " . json_last_error_msg());
+        return false;
+    }
+
+    // Write the updated JSON back to the file
+    if (file_put_contents($fileName, $newData) === false) {
+        error_log("Failed to write updated data to {$fileName}");
+        return false;
+    }
+
+    return true;
+}
+
 function exportPlayersToJson($players): bool
 {
     // Set the file name
