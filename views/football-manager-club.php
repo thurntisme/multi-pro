@@ -205,10 +205,10 @@ ob_start();
                                                 </table>
                                             <?php } else { ?>
                                                 <div class="p-3">
-                                                    <div class="text-muted">Find player and register they into your
-                                                        team
+                                                    <div class="text-muted">Find players and register them for your
+                                                        team.
                                                     </div>
-                                                    <a href="<?= home_url('football-manager/transfer') ?>"
+                                                    <a href="<?= home_url('app/football-manager/transfer') ?>"
                                                        class="btn btn-soft-primary mt-2">Go to Market <i
                                                                 class="ri-arrow-right-line ms-1 align-middle"></i></a>
                                                 </div>
@@ -276,9 +276,9 @@ ob_start();
                                                     </table>
                                                 </div>
                                             <?php } else { ?>
-                                                <div class="text-muted">Find player and register they into your team
+                                                <div class="text-muted">Find players and register them for your team.
                                                 </div>
-                                                <a href="<?= home_url('football-manager/transfer') ?>"
+                                                <a href="<?= home_url('app/football-manager/transfer') ?>"
                                                    class="btn btn-soft-primary mt-2">Go to Market <i
                                                             class="ri-arrow-right-line ms-1 align-middle"></i></a>
                                             <?php } ?>

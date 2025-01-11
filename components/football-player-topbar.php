@@ -6,37 +6,66 @@ $slug = getLastSegmentFromUrl();
 
 $footballTeamController = new FootballTeamController();
 $myTeam = $footballTeamController->getMyTeam();
+
+$market_links = [
+    '' => 'Market',
+    'buy-list' => 'Buy List',
+    'sell-list' => 'Sell List',
+    'favorite' => 'Favorite',
+];
+$shopping_links = [
+    '' => 'Store',
+    'inventory' => 'Inventory',
+];
 ?>
 
 <div class="d-flex align-items-center flex-wrap gap-2">
     <div class="flex-grow-1">
         <a class="btn btn-<?= $slug !== 'football-manager' ? 'soft-' : '' ?>info add-btn"
-            href="<?= home_url("football-manager") ?>"><i
-                class="ri-add-fill me-1 align-bottom"></i> Home
+           href="<?= home_url("football-manager") ?>"><i
+                    class="ri-add-fill me-1 align-bottom"></i> Home
         </a>
         <a class="btn btn-<?= $slug !== 'my-club' ? 'soft-' : '' ?>info add-btn"
-            href="<?= home_url("football-manager/my-club") ?>"><i
-                class="ri-add-fill me-1 align-bottom"></i> My Club
+           href="<?= home_url("football-manager/my-club") ?>"><i
+                    class="ri-add-fill me-1 align-bottom"></i> My Club
         </a>
         <a class="btn btn-<?= $slug !== 'locker-room' ? 'soft-' : '' ?>info add-btn"
-            href="<?= home_url("football-manager/locker-room") ?>"><i
-                class="ri-add-fill me-1 align-bottom"></i> Locker Room
+           href="<?= home_url("football-manager/locker-room") ?>"><i
+                    class="ri-add-fill me-1 align-bottom"></i> Locker Room
         </a>
         <a class="btn btn-<?= $slug !== 'my-players' ? 'soft-' : '' ?>info add-btn"
-            href="<?= home_url("football-manager/my-players") ?>"><i
-                class="ri-add-fill me-1 align-bottom"></i> My Players
+           href="<?= home_url("football-manager/my-players") ?>"><i
+                    class="ri-add-fill me-1 align-bottom"></i> My Players
         </a>
     </div>
     <div class="flex-shrink-0">
         <div class="hstack text-nowrap gap-2">
-            <a class="btn btn-<?= $slug !== 'transfer' ? 'soft-' : '' ?>info add-btn"
-                href="<?= home_url("football-manager/transfer") ?>"><i
-                    class="ri-add-fill me-1 align-bottom"></i> Transfer
-            </a>
-            <a class="btn btn-<?= $slug !== 'store' ? 'soft-' : '' ?>info add-btn"
-                href="<?= home_url("football-manager/store") ?>"><i
-                    class="ri-add-fill me-1 align-bottom"></i> Store
-            </a>
+            <div class="dropdown">
+                <button class="btn btn-<?= $slug !== 'transfer' ? 'soft-' : '' ?>info dropdown-toggle" type="button"
+                        id="dropdownMenuButton"
+                        data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="ri-add-fill me-1 align-bottom"></i> Transfer
+                </button>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <?php foreach ($market_links as $link => $label) : ?>
+                        <a class="dropdown-item"
+                           href="<?= home_url("football-manager/transfer" . (!$link ? $link : '/' . $link)) ?>"><?= $label ?></a>
+                    <?php endforeach; ?>
+                </div>
+            </div>
+            <div class="dropdown">
+                <button class="btn btn-<?= $slug !== 'store' ? 'soft-' : '' ?>info dropdown-toggle" type="button"
+                        id="dropdownMenuButton"
+                        data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="ri-add-fill me-1 align-bottom"></i> Shopping
+                </button>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <?php foreach ($shopping_links as $link => $label) : ?>
+                        <a class="dropdown-item"
+                           href="<?= home_url("football-manager/store" . (!$link ? $link : '/' . $link)) ?>"><?= $label ?></a>
+                    <?php endforeach; ?>
+                </div>
+            </div>
             <?php if (!empty($myTeam['budget'])) { ?>
                 <div class="ms-2 d-flex align-items-center">
                     <span class="badge bg-warning-subtle text-warning badge-border fs-20 ms-1"><?= formatCurrency($myTeam['budget'] ?? 0) ?></span>
