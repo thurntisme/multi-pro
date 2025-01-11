@@ -3,9 +3,7 @@ $pageTitle = "Football Manager - My Club";
 
 require_once DIR . '/functions/generate-player.php';
 require_once DIR . '/controllers/FootballTeamController.php';
-require_once DIR . '/controllers/FootballPlayerController.php';
 
-$footballPlayerController = new FootballPlayerController();
 $footballTeamController = new FootballTeamController();
 
 $lineupPlayers = [];
@@ -21,6 +19,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_POST['action_name'])) {
         if ($_POST['action_name'] === 'update_my_club') {
             $footballTeamController->updateMyClub();
+        }
+        if ($_POST['action_name'] === 'renew_contract') {
+            $footballTeamController->renewPlayerContract($_POST['player_id'], $_POST['player_name']);
+        }
+        if ($_POST['action_name'] === 'terminate_contract') {
+            $footballTeamController->terminatePlayerContract($_POST['player_id'], $_POST['player_name']);
         }
     }
 }
@@ -420,18 +424,34 @@ ob_start();
                                                 </ul>
                                             </div>
                                             <div class="mt-3 hstack gap-2 justify-content-between px-1">
-                                                <button type="button"
-                                                        class="btn btn-info btn-sm btn-label waves-effect waves-light">
-                                                    <i
-                                                            class="ri-check-double-line label-icon align-middle fs-16 me-2"></i>
-                                                    Renew Contract
-                                                </button>
-                                                <button type="button"
-                                                        class="btn btn-danger btn-sm btn-label waves-effect waves-light">
-                                                    <i
-                                                            class="ri-check-double-line label-icon align-middle fs-16 me-2"></i>
-                                                    Terminate Contract
-                                                </button>
+                                                <form method="POST" action="<?= $_SERVER['REQUEST_URI'] ?>">
+                                                    <input type="hidden" name="action_name"
+                                                           value="renew_contract">
+                                                    <input type="hidden" name="player_id" class="contract-player-id"
+                                                           value="<?= $lineupPlayers[0]['id'] ?>">
+                                                    <input type="hidden" name="player_name" class="contract-player-name"
+                                                           value="<?= $lineupPlayers[0]['name'] ?>">
+                                                    <button type="submit"
+                                                            data-confirm-text="Do you want to renew contract?"
+                                                            class="btn btn-info btn-sm btn-label waves-effect waves-light btn-confirm-action">
+                                                        <i class="ri-check-double-line label-icon align-middle fs-16 me-2"></i>
+                                                        Renew Contract
+                                                    </button>
+                                                </form>
+                                                <form method="POST" action="<?= $_SERVER['REQUEST_URI'] ?>">
+                                                    <input type="hidden" name="action_name"
+                                                           value="terminate_contract">
+                                                    <input type="hidden" name="player_id" class="contract-player-id"
+                                                           value="<?= $lineupPlayers[0]['id'] ?>">
+                                                    <input type="hidden" name="player_name" class="contract-player-name"
+                                                           value="<?= $lineupPlayers[0]['name'] ?>">
+                                                    <button type="submit"
+                                                            data-confirm-text="Terminating player's contract will cost 25% of their contract wage. Are you sure you want to proceed?"
+                                                            class="btn btn-danger btn-sm btn-label waves-effect waves-light btn-confirm-action">
+                                                        <i class="ri-check-double-line label-icon align-middle fs-16 me-2"></i>
+                                                        Terminate Contract
+                                                    </button>
+                                                </form>
                                             </div>
                                         </div>
                                     </div>

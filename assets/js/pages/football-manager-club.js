@@ -72,7 +72,6 @@ const renderPlayerSelected = (player) => {
     const player_uuid = player.attr("data-player-uuid");
     const player_data = allPlayers.find((p) => p.player_uuid === player_uuid);
     if (player_data) {
-        console.log(player_data);
         $("#player-info #player-name").text(player_data.name || "");
         $("#player-info #player-nationality").text(player_data.nationality || "");
         $("#player-info #player-best_position").text(
@@ -110,6 +109,8 @@ const renderPlayerSelected = (player) => {
         $("#player-level-percent").attr("style", `width: ${player_data.level.percentageToNextLevel}%`);
         $("#player-level-percent").attr("aria-valuenow", player_data.level.percentageToNextLevel);
         $("#player-level-percent").attr("aria-valuemax", player_data.level.percentageToNextLevel);
+        $(".contract-player-id").val(player_data.id);
+        $(".contract-player-name").val(player_data.name);
     }
 };
 

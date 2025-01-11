@@ -6,6 +6,7 @@ require_once DIR . '/controllers/FootballPlayerController.php';
 class FootballTeamController
 {
     private $user_id;
+    private $pdo;
     private $footballTeamService;
     private $userController;
 
@@ -14,6 +15,7 @@ class FootballTeamController
         global $user_id;
         global $pdo;
         $this->user_id = $user_id;
+        $this->pdo = $pdo;
         $this->footballTeamService = new FootballTeamService($pdo);
         $this->userController = new UserController();
     }
@@ -48,10 +50,151 @@ class FootballTeamController
         }
     }
 
+    public function renewPlayerContract($playerId, $playerName)
+    {
+        try {
+            $myTeam = $this->getMyTeam();
+            $teamId = $myTeam['id'];
+            $teamBudget = $myTeam['budget'];
+
+            // Fetch player data
+            $sql = "SELECT player_uuid, contract_end_date FROM football_player WHERE id = :player_id AND team_id = :team_id";
+            $stmt = $this->pdo->prepare($sql);
+            $stmt->execute([
+                ':player_id' => $playerId,
+                ':team_id' => $teamId,
+            ]);
+            $playerData = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            if (!$playerData) {
+                $_SESSION['message_type'] = 'danger';
+                $_SESSION['message'] = "Player not found or does not belong to your team.";
+                header("Location: " . $_SERVER['REQUEST_URI']);
+                exit;
+            }
+
+            // Fetch player details from JSON
+            $playerJson = getPlayerJsonByUuid($playerData['player_uuid']);
+            $contractWage = $playerJson['contract_wage'];
+
+            if ($contractWage > $teamBudget) {
+                $_SESSION['message_type'] = 'danger';
+                $_SESSION['message'] = "Failed to renew contract. Your team's budget is insufficient.";
+                header("Location: " . $_SERVER['REQUEST_URI']);
+                exit;
+            }
+
+            // Update contract details
+            $contractEndDays = $playerJson['contract_end'] ?? 7; // Default to 7 days if 'contract_end' is not set
+            $contractEndDate = $playerData['contract_end_date'];
+            // Calculate the new contract end date
+            $newContractEndDate = date('Y-m-d H:i:s', strtotime($contractEndDate . ' +' . $contractEndDays . ' days'));
+
+            $updatePlayerSql = "
+            UPDATE football_player 
+            SET contract_end_date = :contract_end_date, updated_at = CURRENT_TIMESTAMP 
+            WHERE id = :player_id AND team_id = :team_id";
+            $updatePlayerStmt = $this->pdo->prepare($updatePlayerSql);
+            $updatePlayerStmt->execute([
+                ':contract_end_date' => $newContractEndDate,
+                ':player_id' => $playerId,
+                ':team_id' => $teamId,
+            ]);
+
+            // Deduct contract wage from budget
+            $remainingBudget = $teamBudget - $contractWage;
+            $updateTeamSql = "
+            UPDATE football_team 
+            SET budget = :budget, updated_at = CURRENT_TIMESTAMP 
+            WHERE id = :team_id";
+            $updateTeamStmt = $this->pdo->prepare($updateTeamSql);
+            $updateTeamStmt->execute([
+                ':budget' => $remainingBudget,
+                ':team_id' => $teamId,
+            ]);
+
+            // Success message
+            $_SESSION['message_type'] = 'success';
+            $_SESSION['message'] = "$playerName's contract has been renewed successfully.";
+        } catch (Exception $e) {
+            $_SESSION['message_type'] = 'danger';
+            $_SESSION['message'] = "Failed to renew contract for player $playerName. " . $e->getMessage();
+        }
+
+        // Redirect to the same page
+        header("Location: " . $_SERVER['REQUEST_URI']);
+        exit;
+    }
+
+    public function getMyTeam()
+    {
+        return $this->footballTeamService->getTeamByUserId();
+    }
+
+    public function terminatePlayerContract($playerId, $playerName)
+    {
+        try {
+            $myTeam = $this->getMyTeam();
+
+            // Check if the player belongs to the team
+            $sql = "SELECT * FROM football_player WHERE id = :player_id AND team_id = :team_id";
+            $stmt = $this->pdo->prepare($sql);
+            $stmt->execute([
+                ':player_id' => $playerId,
+                ':team_id' => $myTeam['id'],
+            ]);
+
+            $playerData = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            if (!$playerData) {
+                $_SESSION['message_type'] = 'danger';
+                $_SESSION['message'] = "Player not found in your team.";
+                header("Location: " . $_SERVER['REQUEST_URI']);
+                exit;
+            }
+
+            // Calculate termination cost (e.g., 25% of remaining wage)
+            $remainingWage = $playerData['contract_wage'] * 0.25;
+
+            if ($myTeam['budget'] < $remainingWage) {
+                $_SESSION['message_type'] = 'danger';
+                $_SESSION['message'] = "Not enough budget to terminate $playerName's contract.";
+                header("Location: " . $_SERVER['REQUEST_URI']);
+                exit;
+            }
+
+            // Deduct termination cost from the team budget
+            $teamBudget = $myTeam['budget'] - $remainingWage;
+            $updateTeamSql = "UPDATE football_team SET budget = :budget, updated_at = CURRENT_TIMESTAMP WHERE id = :team_id";
+            $updateTeamStmt = $this->pdo->prepare($updateTeamSql);
+            $updateTeamStmt->execute([
+                ':budget' => $teamBudget,
+                ':team_id' => $myTeam['id'],
+            ]);
+
+            // Terminate the player's contract by setting `team_id` to NULL
+            $terminateSql = "DELETE FROM football_player WHERE id = :player_id";
+            $terminateStmt = $this->pdo->prepare($terminateSql);
+            $terminateStmt->execute([':player_id' => $playerId]);
+
+            $_SESSION['message_type'] = 'success';
+            $_SESSION['message'] = "$playerName's contract has been successfully terminated.";
+
+        } catch (Exception $e) {
+            $_SESSION['message_type'] = 'danger';
+            $_SESSION['message'] = "Failed to terminate $playerName's contract.";
+        }
+
+        header("Location: " . $_SERVER['REQUEST_URI']);
+        exit;
+    }
+
     public function listTeams()
     {
         return $this->footballTeamService->getAllTeams();
     }
+
+    // Get all teams
 
     public function getMyTeamInMatch($teamId): array
     {
@@ -83,13 +226,6 @@ class FootballTeamController
                 'myTeam' => true
             ];
         }
-    }
-
-    // Get all teams
-
-    public function getMyTeam()
-    {
-        return $this->footballTeamService->getTeamByUserId();
     }
 
     function randFormation()
