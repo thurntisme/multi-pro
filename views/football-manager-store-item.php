@@ -13,7 +13,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 "nationality" => $_POST['player_nationality'],
                 "weight" => (int)$_POST['player_weight'],
                 "height" => (int)$_POST['player_height'],
-                "age" => (int)$_POST['player_age'],
                 "best_position" => $_POST['best_position'],
                 "playable_positions" => $_POST['playable_positions'],
             ];

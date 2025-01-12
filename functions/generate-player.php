@@ -111,7 +111,13 @@ function calculateAttributes($bestPosition, $weights, $minAttr, $maxAttr): array
                         $playerAttributes[$category][$attribute] = rand(44, 50);
                     }
                 } else {
-                    $playerAttributes[$category][$attribute] = rand($playerAttributes[$category][$attribute], $maxAttr);
+                    if (isset($weights[$category][$attribute])) {
+                        $playerAttr = $playerAttributes[$category][$attribute];
+                        $playerAttrAddon = $playerAttr * $weights[$category][$attribute];
+                        $playerAttributes[$category][$attribute] = rand(round($playerAttr + $playerAttrAddon), $maxAttr);
+                    } else {
+                        $playerAttributes[$category][$attribute] = rand($playerAttributes[$category][$attribute], $maxAttr);
+                    }
                 }
             }
         }
@@ -389,6 +395,12 @@ function generateRandomPlayers($type = '', $playerData = []): array
         $maxAttr = 90;
     }
 
+    if (empty($type)) {
+        $randAtr = mt_rand(96, 120) / 100;
+        $minAttr = round($minAttr * $randAtr);
+        $maxAttr = round($maxAttr * $randAtr);
+    }
+
     // Randomly select or generate player data
     $uuid = uniqid();
     $age = rand(16, 35);
@@ -448,7 +460,7 @@ function generateRandomPlayers($type = '', $playerData = []): array
     $market_value = calculateMarketValue($bestPosition, $playablePositions, $ability, $reputation);
     $special_skills = checkSpecialSkills($bestPosition, flattenAttributes($attributes));
 
-    if (!empty($type) && count($playerData) > 0) {
+    if (count($playerData) > 0) {
         $nationality = $playerData['nationality'];
         $name = $playerData['name'];
         $bestPosition = $playerData['best_position'];
@@ -592,7 +604,7 @@ function getPlayerJsonByUuid($targetUuid)
             });
 
             // Convert the filtered result into a re-indexed array (optional)
-            $player = array_values($filteredArray)[0];
+            $player = count($filteredArray) > 0 ? array_values($filteredArray)[0] : null;
         }
     } else {
         error_log("File {$fileName} not found.");
