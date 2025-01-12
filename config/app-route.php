@@ -83,6 +83,7 @@ function getPageData($slug, $role): array
         'football-manager/store' => ['url' => DIR . '/views/football-manager-store.php', 'title' => 'Football Manager - Store', 'role' => 0],
         'football-manager/store/inventory' => ['url' => DIR . '/views/football-manager-inventory.php', 'title' => 'Football Manager - Store Inventory', 'role' => 0],
         'football-manager/store/item' => ['url' => DIR . '/views/football-manager-store-item.php', 'title' => 'Football Manager - Store Item', 'role' => 0],
+        'football-manager/player' => ['url' => DIR . '/views/football-manager-player-detail.php', 'title' => 'Football Manager - Player Detail', 'role' => 0],
         'wordpress' => ['url' => DIR . '/views/search-results.php', 'title' => 'Wordpress', 'role' => 0],
         'reactjs' => ['url' => DIR . '/views/search-results.php', 'title' => 'ReactJS', 'role' => 0],
         'salesforce' => ['url' => DIR . '/views/search-results.php', 'title' => 'Salesforce', 'role' => 0],

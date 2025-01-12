@@ -105,7 +105,7 @@ function calculateAttributes($bestPosition, $weights, $minAttr, $maxAttr): array
                 }
             } else {
                 if ($bestPosition === 'GK') {
-                    if ($weights[$category][$attribute]) {
+                    if (isset($weights[$category][$attribute])) {
                         $playerAttributes[$category][$attribute] = rand(min($maxAttr - 20, $minAttr), $maxAttr);
                     } else {
                         $playerAttributes[$category][$attribute] = rand(44, 50);
@@ -171,11 +171,12 @@ function getPlayablePosition(string $specificPosition): array
 }
 
 function calculatePlayerWage(
-    string $position,
+    string $bestPosition,
     int    $ability,
+    int    $reputation,
 ): float
 {
-    $baseWage = rand(900, 1000);
+    $baseSalaryFactor = 5000;
 
     $positionModifiers = [
         'GK' => 0.9,
@@ -185,30 +186,37 @@ function calculatePlayerWage(
         'CM' => 1.2,
         'CDM' => 1.1,
         'CAM' => 1.3,
-        'ST' => 1.5,
-        'CF' => 1.5,
+        'ST' => 1.4,
+        'CF' => 1.4,
         'RW' => 1.3,
         'LW' => 1.3,
         'LM' => 1.2,
         'RM' => 1.2,
     ];
-    $positionModifier = $positionModifiers[$position] ?? 1.0;
 
-    $rate = $ability / 100 + $positionModifier;
-    $wage = $baseWage * $rate;
+    // Reputation multiplier formula: 1 + (Reputation / 100)
+    $reputationMultiplier = 1 + ($reputation / 100);
 
-    return round($wage, 2);
+    // Get the position multiplier or default to 1.0 if position not found
+    $positionModifier = $positionModifiers[$bestPosition] ?? 1.0;
+
+    // Calculate the wage
+    $wage = ($ability / 100) * $baseSalaryFactor * $positionModifier * $reputationMultiplier;
+
+    // Return the wage, rounded to the nearest integer
+    return round($wage);
 }
 
 
 function calculateMarketValue(
-    string $position,
+    string $bestPosition,
     array  $playablePositions,
     int    $ability,
     int    $reputation,
 ): float
 {
-    $basePrice = 1000000;
+    // Base market value factor (in millions of dollars)
+    $baseValueFactor = 2500000;
 
     $positionModifiers = [
         'GK' => 0.9,
@@ -218,20 +226,27 @@ function calculateMarketValue(
         'CM' => 1.2,
         'CDM' => 1.1,
         'CAM' => 1.3,
-        'ST' => 1.5,
-        'CF' => 1.5,
+        'ST' => 1.4,
+        'CF' => 1.4,
         'RW' => 1.3,
         'LW' => 1.3,
         'LM' => 1.2,
         'RM' => 1.2,
     ];
 
-    $positionModifier = $positionModifiers[$position] ?? 1.0;
-    $abilityModifier = $ability / 100;
-    $versatilityBonus = (count($playablePositions) > 1 ? count($playablePositions) / 10 : 0.1) + $reputation / 100;
-    $rate = ($positionModifier + $abilityModifier + $versatilityBonus);
-    $marketValue = $basePrice * $rate + rand(111, 999);
+    // Get the position multiplier or default to 1.0 if not found
+    $positionModifier = $positionModifiers[$bestPosition] ?? 1.0;
 
+    // Playable positions bonus (adds 5% value per additional position)
+    $playablePositionsBonus = 1 + (count($playablePositions) - 1) * 0.05;
+
+    // Reputation multiplier (1 + reputation/100)
+    $reputationMultiplier = 1 + ($reputation / 100);
+
+    // Calculate the market value
+    $marketValue = $baseValueFactor * ($ability / 100) * $positionModifier * $playablePositionsBonus * $reputationMultiplier;
+
+    // Return the market value, rounded to 2 decimal places
     return round($marketValue, 2);
 }
 
@@ -429,7 +444,7 @@ function generateRandomPlayers($type = '', $playerData = []): array
     $height = calPlayerHeightWeight($bestPosition)['height']; // in cm
     $weight = calPlayerHeightWeight($bestPosition)['weight']; // Proportional weight
     $reputation = rand(1, 5);
-    $contract_wage = calculatePlayerWage($bestPosition, $ability);
+    $contract_wage = calculatePlayerWage($bestPosition, $ability, $reputation);
     $market_value = calculateMarketValue($bestPosition, $playablePositions, $ability, $reputation);
     $special_skills = checkSpecialSkills($bestPosition, flattenAttributes($attributes));
 

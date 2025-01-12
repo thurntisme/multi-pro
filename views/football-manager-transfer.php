@@ -205,6 +205,9 @@ ob_start();
                                                                    data-bs-toggle="modal"
                                                                    data-bs-target="#playerDetailBackdrop"><i
                                                                             class="ri-eye-fill align-bottom me-2 text-muted"></i></a>
+                                                                <a href="<?= home_url('app/football-manager/player?uuid=' . $item['uuid']) ?>"
+                                                                   class="edit-item-btn cursor-pointer"><i
+                                                                            class="ri-user-settings-line align-bottom me-2 text-muted"></i></a>
                                                             </li>
                                                         </ul>
                                                     </div>
