@@ -384,6 +384,21 @@ class FootballTeamController
         exit;
     }
 
+    function joinAllPlayersToTeam()
+    {
+        $rowsAffected = $this->footballTeamService->joinAllPlayersToTeam();
+        if ($rowsAffected) {
+            $_SESSION['message_type'] = 'success';
+            $_SESSION['message'] = "All players has been joined successfully to your team.";
+        } else {
+            $_SESSION['message_type'] = 'danger';
+            $_SESSION['message'] = "Failed to assign joined all players to your team.";
+        }
+
+        header("Location: " . $_SERVER['REQUEST_URI']);
+        exit;
+    }
+
     function movePlayerToTeam($teamId, $playerId, $playerName, $transferId)
     {
         $rowsAffected = $this->footballTeamService->movePlayerToTeam($teamId, $playerId, $transferId);

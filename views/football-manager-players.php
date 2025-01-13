@@ -14,15 +14,20 @@ $sort_order = !empty($_GET['sort_order']) && $_GET['sort_order'] === 'asc' ? 'de
 $list = $commonController->convertResources($myTeam['players']);
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    if (isset($_POST['action_name']) && isset($_POST['player_id'])) {
-        if ($_POST['action_name'] === 'player_join_team') {
-            $footballTeamController->assignPlayerToTeam($myTeam['id'], $_POST['player_id'], $_POST['player_name']);
+    if (isset($_POST['action_name'])) {
+        if (isset($_POST['player_id'])){
+            if ($_POST['action_name'] === 'player_join_team') {
+                $footballTeamController->assignPlayerToTeam($myTeam['id'], $_POST['player_id'], $_POST['player_name']);
+            }
+            if ($_POST['action_name'] === 'player_in_market') {
+                $footballTransferController->createTransferSellPlayer();
+            }
+            if ($_POST['action_name'] === 'delete_player') {
+                $footballPlayerController->deletePlayer($myTeam['id'], $_POST['player_id'], $_POST['player_name']);
+            }
         }
-        if ($_POST['action_name'] === 'player_in_market') {
-            $footballTransferController->createTransferSellPlayer();
-        }
-        if ($_POST['action_name'] === 'delete_player') {
-            $footballPlayerController->deletePlayer($myTeam['id'], $_POST['player_id'], $_POST['player_name']);
+        if ($_POST['action_name'] === 'all_players_join_team') {
+            $footballTeamController->joinAllPlayersToTeam();
         }
     }
 }
@@ -65,7 +70,18 @@ ob_start();
                                         <th class="sort text-center" scope="col">Weight</th>
                                         <th class="sort text-center" scope="col">Contract Wage</th>
                                         <th class="sort text-center" scope="col">Market Price</th>
-                                        <th class="text-center" scope="col"></th>
+                                        <th class="text-center" scope="col">
+                                            <?php if ($list['resources'] > 0) { ?>
+                                                <form method="POST" action="<?= $_SERVER['REQUEST_URI'] ?>">
+                                                    <input type="hidden" name="action_name"
+                                                           value="all_players_join_team">
+                                                    <button type="submit"
+                                                            class="btn btn-soft-success btn-sm"><i
+                                                                class="ri ri-user-received-2-line"></i> Join All
+                                                    </button> 
+                                                </form>
+                                            <?php } ?>
+                                        </th>
                                     </tr>
                                     </thead>
                                     <tbody class="list form-check-all">
