@@ -5,6 +5,37 @@ $("#formation").on("change", (event) => {
     calculatePlayerAbility(formation, groupTeams[0]);
 });
 
+$("#btn-reset-club").on("click", (e) => {
+    e.preventDefault();
+    const $this = $(e.currentTarget);
+    console.log($this.find('.spinner-border'))
+    try {
+        $.ajax({
+            url: apiUrl + '/football-manager/my-club',
+            method: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify({}),
+            beforeSend: function(){
+                $this.find('.spinner-border').removeClass('d-none');
+            },
+            success: function (response) {
+                if (response.status === 'success') {
+                    const {formation, players} = response.data;
+                    redraw(formation);
+                    calculatePlayerAbility(formation, groupTeams[0]);
+                }
+                $this.find('.spinner-border').addClass('d-none');
+            },
+            error: function (xhr, status, error) {
+                console.error('Error:', error);
+                $this.find('.spinner-border').addClass('d-none');
+            },
+        });
+    } catch (error) {
+        console.error('Error fetching data:', error);
+    }
+});
+
 const redraw = (formation) => {
     const myTeam = groupTeams[0];
     myTeam.formation = formation;

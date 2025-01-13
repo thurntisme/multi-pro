@@ -71,7 +71,9 @@ try {
         }
         if (isset($_SESSION['token'])) {
             $token = $_SESSION['token'];
-            $userData = $authenticationController->checkUserDataByToken($token);
+            $userData = $authenticationController->checkUserDataByToken($token); 
+            $user_id = $userData['id'];
+            $systemController = new SystemController($user_id);
 
             if (!empty($userData['role'])) {
                 // Define mapping of API URLs to permissions and include files

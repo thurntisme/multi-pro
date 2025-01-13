@@ -1,6 +1,7 @@
 <?php
 include_once DIR . '/functions/generate-player.php';
-global $api_url, $payload, $method;
+require_once DIR . '/controllers/FootballTeamController.php';
+global $api_url, $payload, $method, $user_id;
 $slug = str_replace('football-manager/', '', $api_url);
 switch ($slug) {
     case 'inventory/item':
@@ -26,7 +27,14 @@ switch ($slug) {
         if ($method === 'POST') {
             $players = $payload['players'] ?? null;
             $result = getClubAnalysis($players);
-            sendResponse("success", 200, "Item retrieved successfully", $result);
+        } else {
+            sendResponse("error", 405, "Method Not Allowed");
+        }
+        break;
+
+    case 'my-club':
+        if ($method === 'POST') {
+            $result = getMyClubData();
         } else {
             sendResponse("error", 405, "Method Not Allowed");
         }
@@ -56,7 +64,8 @@ function getPlayerByInventory($item_uuid, $item_type, $item_slug): void
     sendResponse("success", 201, "Item not found.");
 }
 
-function getClubAnalysis($players) {
+function getClubAnalysis($players)
+{
     if ($players) {
         $result = array_map(function ($player) {
             $player['new_ability'] = getPlayerAbility($player['position_in_match'], $player['attributes']);
@@ -67,5 +76,22 @@ function getClubAnalysis($players) {
         sendResponse("success", 201, "Club data created successfully.", $result);
     } else {
         sendResponse("error", 405, "Failed to analysis club data.");
+    }
+}
+
+function getMyClubData() {
+    global $user_id;
+    try {
+        $footballTeamController = new FootballTeamController();
+        $teamData = $footballTeamController->getMyTeam();
+        if ($teamData) {
+            $result['formation'] = $teamData['formation'];
+            $result['players'] = $teamData['players'];
+            sendResponse("success", 201, "Get Club data successfully.", $result);
+        } else {
+            sendResponse("error", 405, "Failed to get club data. ".$user_id);
+        }
+    } catch (\Throwable $th) {
+        sendResponse("error", 500, "Failed to get club data.".$user_id);
     }
 }

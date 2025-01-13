@@ -78,7 +78,16 @@ ob_start();
                             </div>
                         </div>
                         <div class="d-flex justify-content-center">
-                            <button class="btn btn-light me-2">Reset</button>
+                            <button class="btn me-2 btn-load btn-outline-primary" id="btn-reset-club">
+                                <span class="d-flex align-items-center">
+                                    <span class="spinner-border flex-shrink-0 d-none me-2" role="status">
+                                        <span class="visually-hidden">Loading...</span>
+                                    </span>
+                                    <span class="flex-grow-1">
+                                        Reset
+                                    </span>
+                                </span>
+                            </button>
                             <form action="<?= $_SERVER['REQUEST_URI'] ?>" method="post" id="my-club-form">
                                 <input type="hidden" name="action_name" value="update_my_club">
                                 <input type="hidden" name="team_formation" value="<?= $myTeam['formation'] ?>">
