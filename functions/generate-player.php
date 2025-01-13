@@ -368,8 +368,9 @@ function generateRandomPlayers($type = '', $playerData = []): array
     $maxAttr = 78;
 
     if (str_contains($type, "-pack")) {
-        $level = ['level-1', 'level-2', 'level-3', 'level-4'];
-        $type = $level[array_rand($level)];
+        $randAtr = mt_rand(96, 126) / 100;
+        $minAttr = round($minAttr * $randAtr);
+        $maxAttr = round($maxAttr * $randAtr);
     }
 
     if (str_contains($type, "level-")) {
@@ -393,12 +394,6 @@ function generateRandomPlayers($type = '', $playerData = []): array
     if ($type === 'on-demand') {
         $minAttr = 60;
         $maxAttr = 90;
-    }
-
-    if (empty($type)) {
-        $randAtr = mt_rand(96, 120) / 100;
-        $minAttr = round($minAttr * $randAtr);
-        $maxAttr = round($maxAttr * $randAtr);
     }
 
     // Randomly select or generate player data
@@ -442,23 +437,6 @@ function generateRandomPlayers($type = '', $playerData = []): array
     if ($type === 'lw-rw-pack') {
         $bestPosition = rand(0, 1) > 0 ? 'LW' : 'RW';
     }
-    $playablePositions = getPlayablePosition($bestPosition);
-
-    $attributes = calculateAttributes($bestPosition, $positionWeights[$bestPosition], $minAttr, $maxAttr);
-
-    $positionAbility = calculateAbility($attributes, $positionWeights[$bestPosition]);
-    $generalAbility = calculateGeneralAbility($attributes);
-    $overallAbility = (int)round(($positionAbility * 0.7) + ($generalAbility * 0.3));
-
-    // Generate abilities with seasons
-    $season = getSeason($overallAbility);
-    $ability = (int)round($overallAbility);
-    $height = calPlayerHeightWeight($bestPosition)['height']; // in cm
-    $weight = calPlayerHeightWeight($bestPosition)['weight']; // Proportional weight
-    $reputation = rand(1, 5);
-    $contract_wage = calculatePlayerWage($bestPosition, $ability, $reputation);
-    $market_value = calculateMarketValue($bestPosition, $playablePositions, $ability, $reputation);
-    $special_skills = checkSpecialSkills($bestPosition, flattenAttributes($attributes));
 
     if (count($playerData) > 0) {
         $nationality = $playerData['nationality'];
@@ -471,6 +449,24 @@ function generateRandomPlayers($type = '', $playerData = []): array
     if ($type === 'young-star') {
         $age = rand(16, 19);
     }
+
+    $playablePositions = getPlayablePosition($bestPosition);
+
+    $attributes = calculateAttributes($bestPosition, $positionWeights[$bestPosition], $minAttr, $maxAttr);
+
+    $positionAbility = calculateAbility($attributes, $positionWeights[$bestPosition]);
+    $generalAbility = calculateGeneralAbility($attributes);
+    $overallAbility = (int)round($bestPosition === 'GK' ? $positionAbility : ($positionAbility * 0.7) + ($generalAbility * 0.3));
+
+    // Generate abilities with seasons
+    $season = getSeason($overallAbility);
+    $ability = (int)round($overallAbility);
+    $height = calPlayerHeightWeight($bestPosition)['height']; // in cm
+    $weight = calPlayerHeightWeight($bestPosition)['weight']; // Proportional weight
+    $reputation = rand(1, 5);
+    $contract_wage = calculatePlayerWage($bestPosition, $ability, $reputation);
+    $market_value = calculateMarketValue($bestPosition, $playablePositions, $ability, $reputation);
+    $special_skills = checkSpecialSkills($bestPosition, flattenAttributes($attributes));
 
     // Build player array
     $players[] = [
