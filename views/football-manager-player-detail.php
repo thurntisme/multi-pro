@@ -3,8 +3,7 @@ $pageTitle = "Football Manager - Player Detail";
 
 require_once DIR . '/functions/generate-player.php';
 
-// $player = !empty($_GET['uuid']) ? getPlayerJsonByUuid($_GET['uuid']) : null;
-$player = generateRandomPlayers('-pack')[0];
+$player = !empty($_GET['uuid']) ? getPlayerJsonByUuid($_GET['uuid']) : null;
 
 ob_start();
 ?>

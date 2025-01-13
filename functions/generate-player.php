@@ -1,13 +1,24 @@
 <?php
 
+function getRandomElement($array)
+{
+    return $array[array_rand($array)];
+}
+
 function getRandomFullName($nation, $namesByNation): string
 {
-    if (array_key_exists($nation, $namesByNation) && !empty($namesByNation[$nation])) {
-        $randomName = $namesByNation[$nation][array_rand($namesByNation[$nation])];
-        return $randomName['firstname'] . ' ' . $randomName['lastname'];
-    } else {
-        return "No names found.";
+    // Search for the nation data in the array
+    foreach ($namesByNation as $data) {
+        if ($data['nation'] === $nation) {
+            // Generate random first and last names
+            $firstName = getRandomElement($data['firstname']);
+            $lastName = getRandomElement($data['lastname']);
+            return "$firstName $lastName";
+        }
     }
+
+    // Return error message if nation not found
+    return "Nation \"$nation\" not found in name data.";
 }
 
 // Function to calculate ability based on position weights
@@ -28,7 +39,30 @@ function calculateAbility($attributes, $weights): float|int
     return $totalWeight > 0 ? $weightedScore / $totalWeight : 0; // Normalize
 }
 
-function calculateAttributes($bestPosition, $weights, $minAttr, $maxAttr): array
+function calculateHeadingAccuracy($height): float
+{
+    // Define the height range
+    $minHeight = 165; // Minimum height in cm
+    $maxHeight = 199; // Maximum height in cm
+
+    // Define the heading accuracy range
+    $minHeadingAccuracy = 60; // Minimum heading accuracy
+    $maxHeadingAccuracy = 90; // Maximum heading accuracy
+
+    // Check if height is within the valid range
+    if ($height < $minHeight) {
+        $height = $minHeight;
+    } elseif ($height > $maxHeight) {
+        $height = $maxHeight;
+    }
+
+    // Calculate heading accuracy
+    $headingAccuracy = $minHeadingAccuracy + (($height - $minHeight) / ($maxHeight - $minHeight)) * ($maxHeadingAccuracy - $minHeadingAccuracy);
+
+    return round($headingAccuracy); // Return rounded value
+}
+
+function calculateAttributes($bestPosition, $weights, $minAttr, $maxAttr, $height): array
 {
     // Generate random attributes
     $playerAttributes = [
@@ -41,7 +75,7 @@ function calculateAttributes($bestPosition, $weights, $minAttr, $maxAttr): array
             'long_shots' => $minAttr, // Skill in taking shots from distance
             'shot_power' => $minAttr, // The force behind the player's shots
             'free_kick_accuracy' => $minAttr, // Accuracy in taking free kicks
-            'heading_accuracy' => $minAttr, // Ability to head the ball accurately
+            'heading_accuracy' => calculateHeadingAccuracy($height), // Ability to head the ball accurately
             'tackling' => $minAttr, // The skill in challenging and taking the ball away from opponents
             'technique' => $minAttr, // General skill and finesse in ball control and execution
             'volleys' => $minAttr, // Skill in striking the ball while it's in the air (volley shots)
@@ -360,7 +394,8 @@ function calPlayerHeightWeight($position): array
     ];
 }
 
-function getPlayerAbility($bestPosition, $attributes){
+function getPlayerAbility($bestPosition, $attributes): int
+{
     global $positionWeights;
 
     $positionAbility = calculateAbility($attributes, $positionWeights[$bestPosition]);
@@ -410,11 +445,15 @@ function generateRandomPlayers($type = '', $playerData = []): array
     $player_name_nations = getJsonFileData('assets/json/football-player-name-nations.json');
     $nations = [];
     foreach ($player_name_nations as $item) {
-        $nations[$item['nation']] = $item['players'];
+        $nations[] = $item['nation'];
     }
-    $nationality = getRandomNation(array_keys($nations));
-    $name = getRandomFullName($nationality, $nations);
+    $nationality = getRandomNation($nations);
+    $name = getRandomFullName($nationality, $player_name_nations);
     $bestPosition = $positions[array_rand($positions)];
+    $playablePositions = getPlayablePosition($bestPosition);
+    $height = calPlayerHeightWeight($bestPosition)['height']; // in cm
+    $weight = calPlayerHeightWeight($bestPosition)['weight']; // Proportional weight
+
     if ($type === 'gk-pack') {
         $bestPosition = 'GK';
     }
@@ -445,6 +484,9 @@ function generateRandomPlayers($type = '', $playerData = []): array
     if ($type === 'lw-rw-pack') {
         $bestPosition = rand(0, 1) > 0 ? 'LW' : 'RW';
     }
+    if ($type === 'young-star') {
+        $age = rand(16, 19);
+    }
 
     if (count($playerData) > 0) {
         $nationality = $playerData['nationality'];
@@ -454,21 +496,11 @@ function generateRandomPlayers($type = '', $playerData = []): array
         $weight = $playerData['weight'];
         $height = $playerData['height'];
     }
-    if ($type === 'young-star') {
-        $age = rand(16, 19);
-    }
 
-    $playablePositions = getPlayablePosition($bestPosition);
-
-    $attributes = calculateAttributes($bestPosition, $positionWeights[$bestPosition], $minAttr, $maxAttr);
-
+    $attributes = calculateAttributes($bestPosition, $positionWeights[$bestPosition], $minAttr, $maxAttr, $height);
     $overallAbility = getPlayerAbility($bestPosition, $attributes);
-
-    // Generate abilities with seasons
     $season = getSeason($overallAbility);
     $ability = (int)round($overallAbility);
-    $height = calPlayerHeightWeight($bestPosition)['height']; // in cm
-    $weight = calPlayerHeightWeight($bestPosition)['weight']; // Proportional weight
     $reputation = rand(1, 5);
     $contract_wage = calculatePlayerWage($bestPosition, $ability, $reputation);
     $market_value = calculateMarketValue($bestPosition, $playablePositions, $ability, $reputation);
