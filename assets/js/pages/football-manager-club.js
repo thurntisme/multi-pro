@@ -64,6 +64,8 @@ $(document).on("click", playerRowEl, (e) => {
             playerSelected = null;
             changePlayer = null;
             groupTeams[0].playerSelected = null;
+
+            calculatePlayerAbility(formation, groupTeams[0].players);
         }
     }
 });
@@ -125,4 +127,43 @@ const updateArraysAndGetResult = (baseArray, updatedArray) => {
     }
 
     return result;
+}
+
+const calculatePlayerAbility = (formation, players) => {
+    const formationData = generateFormation(formation);
+    const positions = formationData.map(formation => formation.posName);
+    const playerInPosition = players.map((player, index) => {
+        const {player_uuid, name, ability, best_position, attributes} = player;
+        return {
+            player_uuid, name, ability, best_position, attributes, position_in_match: positions[index],
+        }
+    })
+    const payload = { players: playerInPosition };
+
+    try {
+        $.ajax({
+            url: apiUrl + '/football-manager/club/analysis',
+            method: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify(payload),
+            success: function (response) {
+                if (response.status === 'success') {
+                    response.data.forEach(player => {
+                        const row = $("#lineup").find(".my-club-player-row[data-player-uuid='" + player.player_uuid + "']");
+                        if (row.length) {
+                            row.attr('style', `background-color: ${player.bg_color}`);
+                            row.find('.position').text(player.position_in_match);
+                            row.find('.position').attr('style', `border-left: solid 4px ${player.position_color}`);
+                            row.find('.ability').text(player.new_ability);
+                        }
+                    });
+                }
+            },
+            error: function (xhr, status, error) {
+                console.error('Error:', error);
+            },
+        });
+    } catch (error) {
+        console.error('Error fetching data:', error);
+    }
 }

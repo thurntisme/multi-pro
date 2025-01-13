@@ -10,7 +10,6 @@ $lineupPlayers = [];
 $subPlayers = [];
 $myTeam = $footballTeamController->getMyTeam();
 if ($myTeam['players']) {
-    $teamPlayerData = getTeamPlayerData($myTeam['players']);
     $lineupPlayers = array_slice($myTeam['players'], 0, 11);
     $subPlayers = array_slice($myTeam['players'], 11);
 }
@@ -78,62 +77,6 @@ ob_start();
                                 </div>
                             </div>
                         </div>
-                        <?php if (!empty($teamPlayerData)) { ?>
-                            <div class="card crm-widget">
-                                <div class="card-body p-0">
-                                    <div class="row row-cols-md-3 row-cols-1">
-                                        <div class="col col-lg border-end">
-                                            <div class="py-2 px-3">
-                                                <div class="d-flex align-items-center">
-                                                    <div class="flex-shrink-0">
-                                                        <i class="mdi mdi-account-group-outline fs-24 text-muted"></i>
-                                                    </div>
-                                                    <div class="flex-grow-1 ms-3">
-                                                        <h2 class="mb-0 fs-24"><?= $teamPlayerData['total'] ?></h2>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col col-lg border-end">
-                                            <div class="py-2 px-3">
-                                                <div class="d-flex align-items-center">
-                                                    <div class="flex-shrink-0">
-                                                        <i class="mdi mdi-shield-outline fs-24 text-success"></i>
-                                                    </div>
-                                                    <div class="flex-grow-1 ms-3">
-                                                        <h2 class="mb-0 fs-24"><?= $teamPlayerData['Defenders']['averageRating'] ?></h2>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col col-lg border-end">
-                                            <div class="py-2 px-3">
-                                                <div class="d-flex align-items-center">
-                                                    <div class="flex-shrink-0">
-                                                        <i class="mdi mdi-target fs-24 text-primary"></i>
-                                                    </div>
-                                                    <div class="flex-grow-1 ms-3">
-                                                        <h2 class="mb-0 fs-24"><?= $teamPlayerData['Midfielders']['averageRating'] ?></h2>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col col-lg border-end">
-                                            <div class="py-2 px-3">
-                                                <div class="d-flex align-items-center">
-                                                    <div class="flex-shrink-0">
-                                                        <i class="mdi mdi-soccer fs-24 text-danger"></i>
-                                                    </div>
-                                                    <div class="flex-grow-1 ms-3">
-                                                        <h2 class="mb-0 fs-24"><?= $teamPlayerData['Attackers']['averageRating'] ?></h2>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div><!-- end row -->
-                                </div><!-- end card body -->
-                            </div>
-                        <?php } ?>
                         <div class="d-flex justify-content-center">
                             <button class="btn btn-light me-2">Reset</button>
                             <form action="<?= $_SERVER['REQUEST_URI'] ?>" method="post" id="my-club-form">
@@ -165,7 +108,7 @@ ob_start();
                                                             class="my-club-player-row"
                                                             data-player-uuid="<?= $item['player_uuid'] ?>">
                                                             <td style="width: 10%;">
-                                                                <span class="ps-2"
+                                                                <span class="ps-2 position"
                                                                       style="border-left: solid 4px <?= getPositionColor($item['best_position']) ?>"> <?= $item['best_position'] ?></span>
                                                             </td>
                                                             <td>
@@ -188,7 +131,7 @@ ob_start();
                                                                     </div>
                                                                 </div>
                                                             </td>
-                                                            <td class="text-center"><?= $item['ability'] ?></td>
+                                                            <td class="text-center"><span class="ability"><?= $item['ability'] ?></span></td>
                                                             <td class="text-center" style="width: 15%;">
                                                                 <div class="progress">
                                                                     <div class="progress-bar bg-success"

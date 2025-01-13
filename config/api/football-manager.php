@@ -22,6 +22,16 @@ switch ($slug) {
         }
         break;
 
+    case 'club/analysis':
+        if ($method === 'POST') {
+            $players = $payload['players'] ?? null;
+            $result = getClubAnalysis($players);
+            sendResponse("success", 200, "Item retrieved successfully", $result);
+        } else {
+            sendResponse("error", 405, "Method Not Allowed");
+        }
+        break;
+
     default:
         sendResponse("error", 404, "Endpoint not found");
         break;
@@ -44,4 +54,18 @@ function getPlayerByInventory($item_uuid, $item_type, $item_slug): void
         }
     }
     sendResponse("success", 201, "Item not found.");
+}
+
+function getClubAnalysis($players) {
+    if ($players) {
+        $result = array_map(function ($player) {
+            $player['new_ability'] = getPlayerAbility($player['position_in_match'], $player['attributes']);
+            $player['bg_color'] = getBackgroundColor($player['new_ability']);
+            $player['position_color'] = getPositionColor($player['position_in_match']);
+            return $player;
+        }, $players);
+        sendResponse("success", 201, "Club data created successfully.", $result);
+    } else {
+        sendResponse("error", 405, "Failed to analysis club data.");
+    }
 }

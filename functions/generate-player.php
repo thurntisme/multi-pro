@@ -360,6 +360,14 @@ function calPlayerHeightWeight($position): array
     ];
 }
 
+function getPlayerAbility($bestPosition, $attributes){
+    global $positionWeights;
+
+    $positionAbility = calculateAbility($attributes, $positionWeights[$bestPosition]);
+    $generalAbility = calculateGeneralAbility($attributes);
+    return (int)round($bestPosition === 'GK' ? $positionAbility : ($positionAbility * 0.7) + ($generalAbility * 0.3));
+}
+
 function generateRandomPlayers($type = '', $playerData = []): array
 {
     global $positions, $positionWeights;
@@ -454,9 +462,7 @@ function generateRandomPlayers($type = '', $playerData = []): array
 
     $attributes = calculateAttributes($bestPosition, $positionWeights[$bestPosition], $minAttr, $maxAttr);
 
-    $positionAbility = calculateAbility($attributes, $positionWeights[$bestPosition]);
-    $generalAbility = calculateGeneralAbility($attributes);
-    $overallAbility = (int)round($bestPosition === 'GK' ? $positionAbility : ($positionAbility * 0.7) + ($generalAbility * 0.3));
+    $overallAbility = getPlayerAbility($bestPosition, $attributes);
 
     // Generate abilities with seasons
     $season = getSeason($overallAbility);
