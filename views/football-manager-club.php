@@ -161,10 +161,10 @@ ob_start();
                                 </div>
                                 <div class="card">
                                     <div class="card-body p-0">
-                                        <table class="table align-middle table-nowrap mb-0">
+                                        <table class="table align-middle table-nowrap mb-0" id="substitute">
                                             <thead class="table-light">
                                             <tr>
-                                                <th colspan="4">Subtitle (<?= count($subPlayers) ?>)</th>
+                                                <th colspan="4">Substitute (<?= count($subPlayers) ?>)</th>
                                             </tr>
                                             </thead>
                                         </table>
@@ -179,8 +179,8 @@ ob_start();
                                                                 class="my-club-player-row"
                                                                 data-player-uuid="<?= $item['player_uuid'] ?>">
                                                                 <td style="width: 10%;">
-                                                                    <span class="ps-2"
-                                                                          style="border-left: solid 4px <?= getPositionColor($item['best_position']) ?>"> <?= $item['best_position'] ?></span>
+                                                                    <span class="ps-2 position"
+                                                                        style="border-left: solid 4px <?= getPositionColor($item['best_position']) ?>"> <?= $item['best_position'] ?></span>
                                                                 </td>
                                                                 <td>
                                                                     <div class="d-flex align-items-center">
@@ -189,8 +189,8 @@ ob_start();
                                                                         </div>
                                                                         <?php if ($item['remaining_contract_date'] <= 5): ?>
                                                                             <span class="btn rounded-pill btn-<?= $item['remaining_contract_date'] < 0 ? 'danger' : 'warning' ?> waves-effect waves-light mx-2 player-alert">
-                                                                            <i class="las la-user-<?= $item['remaining_contract_date'] < 0 ? 'slash' : 'clock' ?> fs-16"></i>
-                                                                        </span>
+                                                                                <i class="las la-user-<?= $item['remaining_contract_date'] < 0 ? 'slash' : 'clock' ?> fs-16"></i>
+                                                                            </span>
                                                                         <?php endif; ?>
                                                                         <div class="hstack btn-action">
                                                                             <button class="btn btn-info btn-sm btn-search ms-1">
@@ -202,15 +202,15 @@ ob_start();
                                                                         </div>
                                                                     </div>
                                                                 </td>
-                                                                <td class="text-center"><?= $item['ability'] ?></td>
+                                                                <td class="text-center"><span class="ability"><?= $item['ability'] ?></span></td>
                                                                 <td class="text-center" style="width: 15%;">
                                                                     <div class="progress">
                                                                         <div class="progress-bar bg-success"
-                                                                             role="progressbar"
-                                                                             style="width: <?= $item['stamina'] ?? 100 ?>%"
-                                                                             aria-valuenow="<?= $item['stamina'] ?? 100 ?>"
-                                                                             aria-valuemin="0"
-                                                                             aria-valuemax="100"></div>
+                                                                            role="progressbar"
+                                                                            style="width: <?= $item['stamina'] ?? 100 ?>%"
+                                                                            aria-valuenow="<?= $item['stamina'] ?? 100 ?>"
+                                                                            aria-valuemin="0"
+                                                                            aria-valuemax="100"></div>
                                                                     </div>
                                                                 </td>
                                                             </tr>
