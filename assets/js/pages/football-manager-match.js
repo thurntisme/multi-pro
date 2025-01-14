@@ -183,13 +183,14 @@ function simulateMatch(teamsInMatch) {
     const matchTime = 90 * 60; // Total match duration in minutes
     const maxHalfTime = 45 * 60; // Total match duration in minutes
     const maxExtraTime = 10; // Maximum possible extra time in minutes
-    const realTimeRate = 10;
+    const realTimeRate = 1;
     let currentTime = 0;
     let currentTimeInSeconds = 0;
     let matchTimeInSeconds = 0;
     let halfTimePassed = false;
     let extraTimePassed = false;
     let matchOver = false;
+    let totalMatchTime = 0;
 
     // Random extra time
     const extraHalfTime = Math.floor(Math.random() * maxExtraTime) * 60;
@@ -247,8 +248,8 @@ function simulateMatch(teamsInMatch) {
                     `Match Over! Final Score: ${team1.name} ${team1.score} - ${team2.score} ${team2.name}`
                 );
                 $("#btn-accept-match").removeAttr("disabled");
-                $("#btn-info-match").removeClass("d-none");
-                $(document).on("click", "#btn-info-match", function () {
+                $("#btn-match-info").removeClass("d-none");
+                $(document).on("click", "#btn-match-info", function () {
                     const matchAttributes = $("#matchInfoBackdrop #matchAttributes");
                     matchAttributes.html('<p class="mb-0">Data processing...</p>');
                     let bestPlayerUuid = null;
@@ -257,7 +258,9 @@ function simulateMatch(teamsInMatch) {
                         return {
                             name: team.name,
                             score: team.score,
-                            players: [...team.players, ...team.bench].map(player => {
+                            players: [...team.players, ...team.bench]
+                            .filter(player => player.is_played)
+                            .map(player => {
                                 if (player.score > bestPlayerScore) {
                                     bestPlayerUuid = player.uuid;
                                     bestPlayerScore = player.score;
@@ -271,11 +274,13 @@ function simulateMatch(teamsInMatch) {
                                     own_goals: player?.own_goals_in_match || 0,
                                     is_injury: player.is_injury,
                                     yellow_cards: player?.yellow_cards_in_match || 0,
-                                    red_cards: player?.red_cards_in_match || 0
+                                    red_cards: player?.red_cards_in_match || 0,
+                                    remaining_stamina: Math.round(player.player_stamina - (100 - player.attributes.physical.stamina) / 100 * formatMatchTime(totalMatchTime)['minute']),
                                 }
                             })
                         }
                     });
+                    console.log({result})
                     let playerAttrContent = '';
                     result.forEach(team => {
                         playerAttrContent += `<div class="col-6 pt-3 mt-3 border-top-dashed border-1 border-dark border-opacity-25">
@@ -355,6 +360,7 @@ function simulateMatch(teamsInMatch) {
                 }
             }
 
+            totalMatchTime++;
             currentTimeInSeconds++;
         }
         // Increment the total time

@@ -57,7 +57,7 @@ ob_start();
                                         id="second" class="d-inline-block text-center" style="width: 20px">00</span>
                             </h4>
                             <button class="btn btn-sm btn-primary" id="btn-start-match">Start</button>
-                            <button class="btn btn-sm btn-info d-none" id="btn-info-match" data-bs-toggle="modal"
+                            <button class="btn btn-sm btn-info d-none" id="btn-match-info" data-bs-toggle="modal"
                                     data-bs-target="#matchInfoBackdrop">Match Info
                             </button>
                             <button class="btn btn-sm btn-light d-none" id="btn-cancel-match">Cancel</button>
