@@ -230,7 +230,7 @@ echo "
         const ballImagePath = '" . home_url('assets/images/football-manager/ball.png') . "'; 
         const yellowCardImagePath = '" . home_url('assets/images/football-manager/yellow-card.png') . "'; 
         const redCardImagePath = '" . home_url('assets/images/football-manager/red-card.png') . "'; 
-        const goalImagePath = '" . home_url('assets/images/football-manager/goal.png') . "'; 
+        const goalImagePath = '" . home_url('assets/images/football-manager/goal.png') . "';  
     </script>
     <script src='" . home_url("/assets/js/pages/football-manager-formation.js") . "'></script>
     <script src='" . home_url("/assets/js/pages/football-manager.js") . "'></script>

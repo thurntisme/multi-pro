@@ -164,17 +164,17 @@ const opponentReactions = {
 const validActionsByPosition = {
     GK: ["goal_kick", "save", "catch_cross", "punch", "clearance", "distribute_ball", "mark_players", "block_shot"],
     LB: ["intercept", "tackle", "overlap", "cross", "cut_inside", "long_ball", "track_runner", "intercept_cross", "contain", "block_shot", "press_receiver", "long_shot"],
-    CB: ["clearance", "intercept", "tackle", "block_shot", "header", "mark", "challenge_header", "recover_ball", "contain", "press_receiver"],
+    CB: ["press", "mark_strikers", "clearance", "intercept", "tackle", "block_shot", "header", "mark", "challenge_header", "recover_ball", "contain", "press_receiver"],
     RB: ["intercept", "tackle", "overlap", "cross", "cut_inside", "long_ball", "track_runner", "intercept_cross", "contain", "block_shot", "press_receiver", "long_shot"],
     LM: ["cross", "dribble", "cut_inside", "pass", "long_shot", "skill_move", "block_cross", "press_receiver"],
-    CDM: ["intercept", "tackle", "pass", "long_ball", "shield_ball", "switch_play", "shift_defensive_line", "contain", "block_shot", "press_receiver", "header", "challenge_header", "long_shot"],
+    CDM: ["mark_strikers", "intercept", "tackle", "pass", "long_ball", "shield_ball", "switch_play", "shift_defensive_line", "contain", "block_shot", "press_receiver", "header", "challenge_header", "long_shot"],
     CM: ["pass", "dribble", "long_shot", "through_ball", "tackle", "intercept", "counter_attack", "contain", "block_shot", "press_receiver", "header", "challenge_header"],
-    CAM: ["dribble", "pass", "through_ball", "shoot", "cut_inside", "skill_move", "block_shot", "press_receiver", "long_shot"],
-    RM: ["cross", "dribble", "cut_inside", "pass", "long_shot", "skill_move", "block_cross", "press_receiver"],
-    LW: ["cross", "dribble", "cut_inside", "pass", "shoot", "skill_move", "block_shot"],
-    CF: ["shoot", "lay_off", "pass", "press_defender", "header", "dribble", "hold_up_play"],
-    ST: ["shoot", "header", "hold_up_play", "press_defender", "run_in_behind", "tap_in", "block_shot", "press_receiver"],
-    RW: ["cross", "dribble", "cut_inside", "pass", "shoot", "skill_move", "block_shot"],
+    CAM: ["rebound", "dribble", "pass", "through_ball", "shoot", "cut_inside", "skill_move", "block_shot", "press_receiver", "long_shot"],
+    RM: ["rebound", "cross", "dribble", "cut_inside", "pass", "long_shot", "skill_move", "block_cross", "press_receiver"],
+    LW: ["rebound", "cross", "dribble", "cut_inside", "pass", "shoot", "skill_move", "block_shot"],
+    CF: ["rebound", "shoot", "lay_off", "pass", "press_defender", "header", "dribble", "hold_up_play"],
+    ST: ["rebound", "shoot", "header", "hold_up_play", "press_defender", "run_in_behind", "tap_in", "block_shot", "press_receiver"],
+    RW: ["rebound", "cross", "dribble", "cut_inside", "pass", "shoot", "skill_move", "block_shot"],
 };
 
 function simulateMatch(teamsInMatch) {
@@ -183,7 +183,7 @@ function simulateMatch(teamsInMatch) {
     const matchTime = 90 * 60; // Total match duration in minutes
     const maxHalfTime = 45 * 60; // Total match duration in minutes
     const maxExtraTime = 10; // Maximum possible extra time in minutes
-    const realTimeRate = 1;
+    const realTimeRate = 10;
     let currentTime = 0;
     let currentTimeInSeconds = 0;
     let matchTimeInSeconds = 0;
@@ -259,25 +259,25 @@ function simulateMatch(teamsInMatch) {
                             name: team.name,
                             score: team.score,
                             players: [...team.players, ...team.bench]
-                            .filter(player => player.is_played)
-                            .map(player => {
-                                if (player.score > bestPlayerScore) {
-                                    bestPlayerUuid = player.uuid;
-                                    bestPlayerScore = player.score;
-                                }
-                                return {
-                                    uuid: player.uuid,
-                                    name: player.name,
-                                    position: player.position_in_match,
-                                    score: player.score.toFixed(1),
-                                    goals: player?.goals_in_match || 0,
-                                    own_goals: player?.own_goals_in_match || 0,
-                                    is_injury: player.is_injury,
-                                    yellow_cards: player?.yellow_cards_in_match || 0,
-                                    red_cards: player?.red_cards_in_match || 0,
-                                    remaining_stamina: Math.round(player.player_stamina - (100 - player.attributes.physical.stamina) / 100 * formatMatchTime(totalMatchTime)['minute']),
-                                }
-                            })
+                                .filter(player => player.is_played)
+                                .map(player => {
+                                    if (player.score > bestPlayerScore) {
+                                        bestPlayerUuid = player.uuid;
+                                        bestPlayerScore = player.score;
+                                    }
+                                    return {
+                                        uuid: player.uuid,
+                                        name: player.name,
+                                        position: player.position_in_match,
+                                        score: player.score.toFixed(1),
+                                        goals: player?.goals_in_match || 0,
+                                        own_goals: player?.own_goals_in_match || 0,
+                                        is_injury: player.is_injury,
+                                        yellow_cards: player?.yellow_cards_in_match || 0,
+                                        red_cards: player?.red_cards_in_match || 0,
+                                        remaining_stamina: Math.round(player.player_stamina - (100 - player.attributes.physical.stamina) / 100 * formatMatchTime(totalMatchTime)['minute']),
+                                    }
+                                })
                         }
                     });
                     console.log({result})
@@ -292,8 +292,15 @@ function simulateMatch(teamsInMatch) {
                                             <td class="text-muted"></td>
                                             <td class="text-muted"></td>
                                             <td class="text-muted"></td>
-                                            <td class="text-muted">YC</td>
-                                            <td class="text-muted">RC</td>
+                                            <th class="text-center px-1" style="width: 52px;">
+                                                <img src="${goalImagePath}" class="img-responsive avatar-xxs" alt="goals" />
+                                            </th>
+                                            <th class="text-center px-1" style="width: 52px;">
+                                                <img src="${yellowCardImagePath}" class="img-responsive avatar-xxs" alt="yellow card" />
+                                            </th>
+                                            <th class="text-center px-1" style="width: 52px;">
+                                                <img src="${redCardImagePath}" class="img-responsive avatar-xxs" alt="red card" />
+                                            </th>
                                         </tr>`;
 
                         team.players.forEach(function (player) {
@@ -736,14 +743,17 @@ function getSubstituteOutcome(player) {
     return {outcome, opponentPlayer: substitutePlayer};
 }
 
-// Generate random scores for players with updated ranges
-const lowPlayerScore = Math.random() * 0.5 + 0.5; // Range: 0.5 to 1.0
-const mediumPlayerScore = Math.random() + 1.0; // Range: 1.0 to 2.0
-const highPlayerScore = Math.random() * 0.5 + 2.0; // Range: 2.0 to 2.5
-
 function simulatePlayerAction(action, player, currentTime, opponentPlayer) {
     const team1score = document.getElementById("team-1-score");
     const team2score = document.getElementById("team-2-score");
+
+    // Generate random scores for players with updated ranges
+    const lowPlayerScore = 0.1 + Math.random() * 0.9; // Range: 0.1 to 1.0
+    const mediumPlayerScore = 1.0 + Math.random(); // Range: 1.0 to 2.0
+    const highPlayerScore = 2.0 + Math.random(); // Range: 2.0 to 3.0
+    teamsInMatch[0].playerSelected = null;
+    teamsInMatch[1].playerSelected = null;
+    teamsInMatch[player.teamIdx].playerSelected = player.uuid;
 
     switch (action) {
         case "goal_kick":
@@ -754,6 +764,24 @@ function simulatePlayerAction(action, player, currentTime, opponentPlayer) {
                 `${player.name} took a goal kick, sending the ball upfield to initiate an attack.`
             );
             break;
+        case "press":
+            logEvent(
+                currentTime,
+                "press",
+                player,
+                `${player.name} pressed high, trying to regain possession and disrupt the goal kick.`
+            );
+            player.score = Math.min(player.score + lowPlayerScore, 10);
+            break;
+        case "mark_strikers":
+            logEvent(
+                currentTime,
+                "mark_strikers",
+                player,
+                `${player.name} marked the striker closely, aiming to disrupt the goal kick distribution.`
+            );
+            player.score = Math.min(player.score + lowPlayerScore, 10);
+            break;
         case "distribute_ball":
             logEvent(
                 currentTime,
@@ -761,6 +789,7 @@ function simulatePlayerAction(action, player, currentTime, opponentPlayer) {
                 player,
                 `${player.name} distributed the ball with precision, finding a teammate to start the attack.`
             );
+            player.score = Math.min(player.score + lowPlayerScore, 10);
             break;
         case "long_ball":
             logEvent(
@@ -769,6 +798,7 @@ function simulatePlayerAction(action, player, currentTime, opponentPlayer) {
                 player,
                 `${player.name} launched a long ball upfield, aiming to bypass the opposition's defense.`
             );
+            player.score = Math.min(player.score + lowPlayerScore, 10);
             break;
         case "catch_cross":
             logEvent(
@@ -778,7 +808,6 @@ function simulatePlayerAction(action, player, currentTime, opponentPlayer) {
                 `${player.name} caught the cross with confidence, securing possession.`
             );
             player.score = Math.min(player.score + lowPlayerScore, 10);
-            redraw();
             break;
         case "catch_cross_own_goal":
             logEvent(
@@ -790,7 +819,6 @@ function simulatePlayerAction(action, player, currentTime, opponentPlayer) {
             player.score = Math.max(player.score - mediumPlayerScore, 1);
             teamsInMatch[player.teamIdx === 0 ? 1 : 0].score++;
             player.own_goals_in_match++;
-            redraw();
             break;
         case "catch_cross_success":
             logEvent(
@@ -800,7 +828,6 @@ function simulatePlayerAction(action, player, currentTime, opponentPlayer) {
                 `${player.name} caught the cross cleanly, ending the attack.`
             );
             player.score = Math.min(player.score + lowPlayerScore, 10);
-            redraw();
             break;
         case "catch_cross_fail":
             logEvent(
@@ -810,7 +837,6 @@ function simulatePlayerAction(action, player, currentTime, opponentPlayer) {
                 `${player.name} missed the cross! The ball is loose in the box.`
             );
             player.score = Math.max(player.score - lowPlayerScore, 1);
-            redraw();
             break;
         case "catch_cross_punch":
             logEvent(
@@ -820,7 +846,6 @@ function simulatePlayerAction(action, player, currentTime, opponentPlayer) {
                 `${player.name} punched the cross away, clearing the danger.`
             );
             player.score = Math.min(player.score + lowPlayerScore, 10);
-            redraw();
             break;
         case "header_goal":
             logEvent(
@@ -841,7 +866,6 @@ function simulatePlayerAction(action, player, currentTime, opponentPlayer) {
                 `${player.name} aimed a header at the goal, but the goalkeeper made a stunning save!`
             );
             player.score = Math.min(player.score + lowPlayerScore, 10);
-            redraw();
             break;
         case "header_miss":
             logEvent(
@@ -850,9 +874,8 @@ function simulatePlayerAction(action, player, currentTime, opponentPlayer) {
                 player,
                 `${player.name} tried a header but missed the target completely.`
             );
-            redraw();
+            player.score = Math.max(player.score - lowPlayerScore, 1);
             break;
-
         case "header_blocked":
             logEvent(
                 currentTime,
@@ -861,7 +884,6 @@ function simulatePlayerAction(action, player, currentTime, opponentPlayer) {
                 `${player.name} directed a header toward goal, but a defender blocked it with a brave effort!`
             );
             player.score = Math.min(player.score + lowPlayerScore, 10);
-            redraw();
             break;
         case "punch":
             logEvent(
@@ -871,7 +893,6 @@ function simulatePlayerAction(action, player, currentTime, opponentPlayer) {
                 `${player.name} punched the ball away, clearing the danger from the box.`
             );
             player.score = Math.min(player.score + lowPlayerScore, 10);
-            redraw();
             break;
         case "clearance":
             logEvent(
@@ -881,7 +902,6 @@ function simulatePlayerAction(action, player, currentTime, opponentPlayer) {
                 `${player.name} cleared the ball away from danger, ensuring no immediate threats.`
             );
             player.score = Math.min(player.score + lowPlayerScore, 10);
-            redraw();
             break;
         case "pass":
             logEvent(
@@ -890,22 +910,23 @@ function simulatePlayerAction(action, player, currentTime, opponentPlayer) {
                 player,
                 `${player.name} made a well-timed pass, setting up a potential attack.`
             );
+            player.score = Math.min(player.score + lowPlayerScore, 10);
             break;
         case "pass_successful":
             logEvent(currentTime, action, player, `${player.name} made a brilliant pass to their teammate.`);
             player.score = Math.min(player.score + lowPlayerScore, 10);
-            redraw();
             break;
         case "pass_intercepted":
             logEvent(currentTime, action, player, `${player.name}'s pass was intercepted by the opposition.`);
+            player.score = Math.max(player.score - lowPlayerScore, 1);
             break;
         case "pass_blocked":
             logEvent(currentTime, action, player, `${player.name}'s pass was blocked by a defender.`);
+            player.score = Math.max(player.score - lowPlayerScore, 1);
             break;
         case "pass_missed":
             logEvent(currentTime, action, player, `${player.name}'s pass went out of bounds.`);
             player.score = Math.max(player.score - lowPlayerScore, 1);
-            redraw();
             break;
         case "long_pass":
             logEvent(
@@ -914,23 +935,27 @@ function simulatePlayerAction(action, player, currentTime, opponentPlayer) {
                 player,
                 `${player.name} delivered a long pass, attempting to break the opposition's defensive line.`
             );
+            player.score = Math.min(player.score + lowPlayerScore, 10);
             break;
         case "long_pass_successful":
             logEvent(currentTime, action, player, `${player.name} made a successful long pass to their teammate.`);
+            player.score = Math.min(player.score + lowPlayerScore, 10);
             break;
         case "long_pass_intercepted":
             logEvent(currentTime, action, player, `${player.name}'s long pass was intercepted by the opposition.`);
+            player.score = Math.max(player.score - lowPlayerScore, 1);
             break;
         case "long_pass_blocked":
             logEvent(currentTime, action, player, `${player.name}'s long pass was blocked by a defender.`);
+            player.score = Math.max(player.score - lowPlayerScore, 1);
             break;
         case "long_pass_missed":
             logEvent(currentTime, action, player, `${player.name}'s long pass went out of bounds.`);
             player.score = Math.max(player.score - lowPlayerScore, 1);
-            redraw();
             break;
         case "long_pass_chipped":
             logEvent(currentTime, action, player, `${player.name} executed a brilliant chip pass over the defender.`);
+            player.score = Math.min(player.score + lowPlayerScore, 10);
             break;
         case "dribble":
             logEvent(
@@ -940,21 +965,22 @@ function simulatePlayerAction(action, player, currentTime, opponentPlayer) {
                 `${player.name} skillfully dribbled past the defender, advancing the ball forward.`
             );
             player.score = Math.min(player.score + lowPlayerScore, 10);
-            redraw();
             break;
         case "dribble_successful":
             logEvent(currentTime, action, player, `${player.name} dribbled past the defender successfully.`);
             player.score = Math.min(player.score + lowPlayerScore, 10);
-            redraw();
             break;
         case "dribble_tackled":
             logEvent(currentTime, action, player, `${player.name} was tackled and lost the ball.`);
+            player.score = Math.max(player.score - lowPlayerScore, 1);
             break;
         case "dribble_fouled":
             logEvent(currentTime, action, player, `${player.name} was fouled while attempting a dribble.`);
+            player.score = Math.max(player.score - lowPlayerScore, 1);
             break;
         case "dribble_lose_control":
             logEvent(currentTime, action, player, `${player.name} lost control of the ball during the dribble.`);
+            player.score = Math.max(player.score - lowPlayerScore, 1);
             break;
         case "intercept":
             logEvent(
@@ -964,12 +990,10 @@ function simulatePlayerAction(action, player, currentTime, opponentPlayer) {
                 `${player.name} intercepted the pass, regaining possession for the team.`
             );
             player.score = Math.min(player.score + lowPlayerScore, 10);
-            redraw();
             break;
         case "intercept_successful":
             logEvent(currentTime, action, player, `${player.name} successfully intercepted the ball and regained possession.`);
             player.score = Math.min(player.score + lowPlayerScore, 10);
-            redraw();
             break;
         case "intercept_own_goal":
             logEvent(
@@ -981,18 +1005,18 @@ function simulatePlayerAction(action, player, currentTime, opponentPlayer) {
             player.score = Math.max(player.score - mediumPlayerScore, 1);
             teamsInMatch[player.teamIdx === 0 ? 1 : 0].score++;
             player.own_goals_in_match++;
-            redraw();
             break;
         case "intercept_missed":
             logEvent(currentTime, action, player, `${player.name} attempted to intercept but missed, allowing the ball to continue.`);
+            player.score = Math.max(player.score - lowPlayerScore, 1);
             break;
         case "intercept_deflection":
             logEvent(currentTime, action, player, `${player.name} got a touch on the ball, causing a deflection but no possession.`);
+            player.score = Math.max(player.score - lowPlayerScore, 1);
             break;
         case "intercept_foul":
             logEvent(currentTime, action, player, `${player.name} fouled the opponent while trying to intercept.`);
             player.score = Math.max(player.score - lowPlayerScore, 1);
-            redraw();
             break;
         case "tackle":
             logEvent(
@@ -1002,23 +1026,22 @@ function simulatePlayerAction(action, player, currentTime, opponentPlayer) {
                 `${player.name} made a crucial tackle, winning the ball back for the team.`
             );
             player.score = Math.min(player.score + lowPlayerScore, 10);
-            redraw();
             break;
         case "tackle_successful":
             logEvent(currentTime, action, player, `${player.name} successfully tackled the opponent and regained possession.`);
             player.score = Math.min(player.score + lowPlayerScore, 10);
-            redraw();
             break;
         case "tackle_missed":
             logEvent(currentTime, action, player, `${player.name} attempted a tackle but missed, and the opponent retained possession.`);
+            player.score = Math.max(player.score - lowPlayerScore, 1);
             break;
         case "tackle_foul":
             logEvent(currentTime, action, player, `${player.name} committed a foul while attempting a tackle.`);
             player.score = Math.max(player.score - lowPlayerScore, 1);
-            redraw();
             break;
         case "tackle_deflected":
             logEvent(currentTime, action, player, `${player.name}'s tackle deflected the ball into a neutral area.`);
+            player.score = Math.max(player.score - lowPlayerScore, 1);
             break;
         case "tackle_own_goal":
             logEvent(
@@ -1030,7 +1053,6 @@ function simulatePlayerAction(action, player, currentTime, opponentPlayer) {
             player.score = Math.max(player.score - mediumPlayerScore, 1);
             teamsInMatch[player.teamIdx === 0 ? 1 : 0].score++;
             player.own_goals_in_match++;
-            redraw();
             break;
         case "overlap":
             // Handle overlap action
@@ -1040,6 +1062,7 @@ function simulatePlayerAction(action, player, currentTime, opponentPlayer) {
                 player,
                 `${player.name} made an overlapping run, providing an option for the ball carrier.`
             );
+            player.score = Math.min(player.score + lowPlayerScore, 10);
             break;
         case "cross":
             // Handle cross action
@@ -1049,6 +1072,7 @@ function simulatePlayerAction(action, player, currentTime, opponentPlayer) {
                 player,
                 `${player.name} delivered a dangerous cross into the box, looking for a teammate.`
             );
+            player.score = Math.min(player.score + lowPlayerScore, 10);
             break;
         case "cut_inside":
             logEvent(
@@ -1057,20 +1081,23 @@ function simulatePlayerAction(action, player, currentTime, opponentPlayer) {
                 player,
                 `${player.name} cut inside, looking for a shot or a pass to break the defense.`
             );
+            player.score = Math.min(player.score + lowPlayerScore, 10);
             break;
         case "cut_inside_successful":
             logEvent(currentTime, action, player, `${player.name} successfully cut inside, creating space for a pass or shot.`);
             player.score = Math.min(player.score + lowPlayerScore, 10);
-            redraw();
             break;
         case "cut_inside_blocked":
             logEvent(currentTime, action, player, `${player.name}'s attempt to cut inside was blocked by a defender.`);
+            player.score = Math.max(player.score - lowPlayerScore, 1);
             break;
         case "cut_inside_fouled":
             logEvent(currentTime, action, player, `${player.name} was fouled while attempting to cut inside.`);
+            player.score = Math.max(player.score - lowPlayerScore, 1);
             break;
         case "cut_inside_lost_possession":
             logEvent(currentTime, action, player, `${player.name} lost possession while trying to cut inside.`);
+            player.score = Math.max(player.score - lowPlayerScore, 1);
             break;
         case "header":
             logEvent(
@@ -1080,7 +1107,6 @@ function simulatePlayerAction(action, player, currentTime, opponentPlayer) {
                 `${player.name} went for a header, challenging for the ball in the air.`
             );
             player.score = Math.min(player.score + lowPlayerScore, 10);
-            redraw();
             break;
         case "volley":
             logEvent(
@@ -1089,25 +1115,28 @@ function simulatePlayerAction(action, player, currentTime, opponentPlayer) {
                 player,
                 `${player.name} took a powerful volley, attempting to score in a spectacular fashion.`
             );
+            player.score = Math.min(player.score + lowPlayerScore, 10);
             break;
         case "volley_goal":
             logEvent(currentTime, action, player, `${player.name} executed a stunning volley to score a spectacular goal!`);
             player.score = Math.min(player.score + highPlayerScore, 10);
             player.goals_in_match++;
             teamsInMatch[player.teamIdx].score++;
-            redraw();
             break;
         case "volley_saved":
             logEvent(currentTime, action, player, `${player.name} struck a volley on target, but the goalkeeper made an excellent save.`);
             break;
         case "volley_missed":
             logEvent(currentTime, action, player, `${player.name} attempted a volley but missed the target.`);
+            player.score = Math.max(player.score - lowPlayerScore, 1);
             break;
         case "volley_blocked":
             logEvent(currentTime, action, player, `${player.name}'s volley was blocked by a defender.`);
+            player.score = Math.max(player.score - lowPlayerScore, 1);
             break;
         case "volley_rebound":
             logEvent(currentTime, action, player, `${player.name}'s volley was deflected, and the ball is now in play as a rebound.`);
+            player.score = Math.max(player.score - lowPlayerScore, 1);
             break;
         case "tap_in":
             logEvent(
@@ -1116,24 +1145,24 @@ function simulatePlayerAction(action, player, currentTime, opponentPlayer) {
                 player,
                 `${player.name} calmly tapped the ball into the net to finish off a great team move.`
             );
+            player.score = Math.min(player.score + lowPlayerScore, 10);
             break;
         case "tap_in_goal":
             logEvent(currentTime, action, player, `${player.name} easily taps the ball into the goal to score!`);
             player.score = Math.min(player.score + highPlayerScore, 10);
             player.goals_in_match++;
             teamsInMatch[player.teamIdx].score++;
-            redraw();
             break;
         case "tap_in_missed":
             logEvent(currentTime, action, player, `${player.name} missed the tap-in opportunity, sending the ball wide.`);
             player.score = Math.max(player.score - lowPlayerScore, 1);
-            redraw();
             break;
         case "tap_in_saved":
             logEvent(currentTime, action, player, `${player.name} attempted a tap-in, but the goalkeeper made a quick save.`);
             break;
         case "tap_in_blocked":
             logEvent(currentTime, action, player, `${player.name}'s tap-in attempt was blocked by a defender.`);
+            player.score = Math.max(player.score - lowPlayerScore, 1);
             break;
         case "tap_in_offside":
             logEvent(currentTime, action, player, `${player.name} was caught offside during the tap-in attempt.`);
@@ -1145,6 +1174,7 @@ function simulatePlayerAction(action, player, currentTime, opponentPlayer) {
                 player,
                 `${player.name} took a shot at goal, trying to score from distance.`
             );
+            player.score = Math.min(player.score + lowPlayerScore, 10);
             break;
         case "shoot_goal":
             logEvent(
@@ -1156,7 +1186,6 @@ function simulatePlayerAction(action, player, currentTime, opponentPlayer) {
             player.score = Math.min(player.score + highPlayerScore, 10);
             player.goals_in_match++;
             teamsInMatch[player.teamIdx].score++;
-            redraw();
             break;
         case "shoot_save":
             logEvent(
@@ -1174,7 +1203,6 @@ function simulatePlayerAction(action, player, currentTime, opponentPlayer) {
                 `${player.name} took a shot, but it went wide of the goal.`
             );
             player.score = Math.max(player.score - lowPlayerScore, 1);
-            redraw();
             break;
         case "shoot_blocked":
             logEvent(
@@ -1183,6 +1211,7 @@ function simulatePlayerAction(action, player, currentTime, opponentPlayer) {
                 player,
                 `${player.name}'s shot was blocked by a defender, stopping a potential goal.`
             );
+            player.score = Math.max(player.score - lowPlayerScore, 1);
             break;
         case "lay_off":
             // Handle lay off action
@@ -1192,6 +1221,7 @@ function simulatePlayerAction(action, player, currentTime, opponentPlayer) {
                 player,
                 `${player.name} laid off the ball to a teammate, setting up a potential shot.`
             );
+            player.score = Math.min(player.score + lowPlayerScore, 10);
             break;
         case "control":
             // Handle control action
@@ -1202,7 +1232,6 @@ function simulatePlayerAction(action, player, currentTime, opponentPlayer) {
                 `${player.name} took control of the ball, settling it to prepare for the next move.`
             );
             player.score = Math.min(player.score + lowPlayerScore, 10);
-            redraw();
             break;
         case "block_shot":
             // Handle block shot action
@@ -1213,7 +1242,6 @@ function simulatePlayerAction(action, player, currentTime, opponentPlayer) {
                 `${player.name} made a crucial block to stop the shot and keep the team in the game.`
             );
             player.score = Math.min(player.score + lowPlayerScore, 10);
-            redraw();
             break;
         case "mark":
             // Handle mark action
@@ -1223,6 +1251,7 @@ function simulatePlayerAction(action, player, currentTime, opponentPlayer) {
                 player,
                 `${player.name} marked the opposition closely, preventing them from receiving the ball.`
             );
+            player.score = Math.min(player.score + lowPlayerScore, 10);
             break;
         case "long_shot":
             logEvent(
@@ -1231,6 +1260,7 @@ function simulatePlayerAction(action, player, currentTime, opponentPlayer) {
                 player,
                 `${player.name} took a powerful long shot, testing the goalkeeper from a distance.`
             );
+            player.score = Math.min(player.score + lowPlayerScore, 10);
             break;
         case "long_shot_goal":
             logEvent(
@@ -1242,7 +1272,6 @@ function simulatePlayerAction(action, player, currentTime, opponentPlayer) {
             player.score = Math.min(player.score + highPlayerScore, 10);
             player.goals_in_match++;
             teamsInMatch[player.teamIdx].score++;
-            redraw();
             break;
         case "long_shot_save":
             logEvent(
@@ -1259,6 +1288,7 @@ function simulatePlayerAction(action, player, currentTime, opponentPlayer) {
                 player,
                 `${player.name}'s long shot missed the target and went over the crossbar.`
             );
+            player.score = Math.max(player.score - lowPlayerScore, 1);
             break;
         case "long_shot_blocked":
             logEvent(
@@ -1267,15 +1297,18 @@ function simulatePlayerAction(action, player, currentTime, opponentPlayer) {
                 player,
                 `${player.name}'s long shot was blocked by a defender, stopping a potential threat.`
             );
+            player.score = Math.max(player.score - lowPlayerScore, 1);
             break;
         case "rebound":
-            // Handle rebound action
             logEvent(
                 currentTime,
                 "rebound",
                 player,
                 `${player.name} capitalized on the rebound, pouncing on the loose ball to score.`
             );
+            player.score = Math.min(player.score + highPlayerScore, 10);
+            player.goals_in_match++;
+            teamsInMatch[player.teamIdx].score++;
             break;
         case "press_defender":
             // Handle press defender action
@@ -1283,8 +1316,9 @@ function simulatePlayerAction(action, player, currentTime, opponentPlayer) {
                 currentTime,
                 "press_defender",
                 player,
-                `${player.name} applied pressure on the defender, forcing a mistake or pass.`
+                `${player.name} applied pressure on the defender, forcing a mistake or rushed pass.`
             );
+            player.score = Math.min(player.score + lowPlayerScore, 10);
             break;
         case "skill_move":
             // Handle skill move action
@@ -1295,7 +1329,6 @@ function simulatePlayerAction(action, player, currentTime, opponentPlayer) {
                 `${player.name} performed a skill move, dazzling the defender and advancing with the ball.`
             );
             player.score = Math.min(player.score + lowPlayerScore, 10);
-            redraw();
             break;
         case "shield_ball":
             // Handle shield ball action
@@ -1306,7 +1339,6 @@ function simulatePlayerAction(action, player, currentTime, opponentPlayer) {
                 `${player.name} shielded the ball from the defender, maintaining possession under pressure.`
             );
             player.score = Math.min(player.score + lowPlayerScore, 10);
-            redraw();
             break;
         case "switch_play":
             // Handle switch play action
@@ -1316,6 +1348,7 @@ function simulatePlayerAction(action, player, currentTime, opponentPlayer) {
                 player,
                 `${player.name} switched the play to the opposite side, looking for space and an attacking option.`
             );
+            player.score = Math.min(player.score + lowPlayerScore, 10);
             break;
         case "through_ball":
             // Handle through ball action
@@ -1334,6 +1367,7 @@ function simulatePlayerAction(action, player, currentTime, opponentPlayer) {
                 player,
                 `${player.name} held up the ball, waiting for support before making the next move.`
             );
+            player.score = Math.min(player.score + lowPlayerScore, 10);
             break;
         case "run_in_behind":
             // Handle run in behind action
@@ -1343,6 +1377,7 @@ function simulatePlayerAction(action, player, currentTime, opponentPlayer) {
                 player,
                 `${player.name} made a run in behind the defense, looking to receive a through ball or cross.`
             );
+            player.score = Math.min(player.score + lowPlayerScore, 10);
             break;
         case "counter_attack":
             // Handle counter attack action
@@ -1352,6 +1387,7 @@ function simulatePlayerAction(action, player, currentTime, opponentPlayer) {
                 player,
                 `${player.name} launched a counter-attack, exploiting the space left by the opposition.`
             );
+            player.score = Math.min(player.score + lowPlayerScore, 10);
             break;
         case "foul":
             logEvent(
@@ -1361,7 +1397,6 @@ function simulatePlayerAction(action, player, currentTime, opponentPlayer) {
                 `${player.name} committed a foul, giving away a free kick to the opposition.`
             );
             player.score = Math.max(player.score - lowPlayerScore, 1);
-            redraw();
             break;
         case "foul_penalty_kick_success":
             logEvent(
@@ -1374,7 +1409,6 @@ function simulatePlayerAction(action, player, currentTime, opponentPlayer) {
             teamsInMatch[player.teamIdx === 0 ? 1 : 0].score++;
             opponentPlayer.score = Math.min(opponentPlayer.score + highPlayerScore, 10);
             opponentPlayer.goals_in_match++;
-            redraw();
             break;
         case "foul_penalty_kick_fail":
             logEvent(
@@ -1384,7 +1418,6 @@ function simulatePlayerAction(action, player, currentTime, opponentPlayer) {
                 `${player.name} committed a foul in the box, but the penalty kick was missed!`
             );
             player.score = Math.max(player.score - lowPlayerScore, 1);
-            redraw();
             break;
         case "foul_free_kick_success":
             logEvent(
@@ -1397,7 +1430,6 @@ function simulatePlayerAction(action, player, currentTime, opponentPlayer) {
             teamsInMatch[player.teamIdx === 0 ? 1 : 0].score++;
             opponentPlayer.score = Math.min(opponentPlayer.score + highPlayerScore, 10);
             opponentPlayer.goals_in_match++;
-            redraw();
             break;
         case "foul_free_kick_fail":
             logEvent(
@@ -1407,7 +1439,6 @@ function simulatePlayerAction(action, player, currentTime, opponentPlayer) {
                 `${player.name} committed a foul, but the free kick was wasted!`
             );
             player.score = Math.max(player.score - lowPlayerScore, 1);
-            redraw();
             break;
         case "foul_yellow_card":
             player.score = Math.max(player.score - mediumPlayerScore, 1);
@@ -1421,14 +1452,12 @@ function simulatePlayerAction(action, player, currentTime, opponentPlayer) {
                 logEvent(currentTime, action, player,
                     `${player.name} committed another foul, resulting in a second yellow card and a subsequent red card. ${player.name} has been sent off the field.`);
             }
-            redraw();
             break;
         case "foul_red_card":
             logEvent(currentTime, action, player, `${player.name} committed a serious foul and received a red card, resulting in a sending off.`);
             player.score = Math.max(player.score - highPlayerScore, 1);
             player.red_cards_in_match = 1;
             player.is_off = true;
-            redraw();
             break;
         case "foul_no_card":
             logEvent(currentTime, action, player, `${player.name} committed a foul, but the referee decided no card would be issued.`);
@@ -1441,17 +1470,14 @@ function simulatePlayerAction(action, player, currentTime, opponentPlayer) {
                 `${player.name} won the ball back, recovering possession for the team.`
             );
             player.score = Math.min(player.score + lowPlayerScore, 10);
-            redraw();
             break;
         case "recover_ball_success":
             logEvent(currentTime, action, player, `${player.name} successfully recovered the ball and gained possession.`);
             player.score = Math.min(player.score + lowPlayerScore, 10);
-            redraw();
             break;
         case "recover_ball_failed":
             logEvent(currentTime, action, player, `${player.name} attempted to recover the ball but was unsuccessful.`);
             player.score = Math.max(player.score - lowPlayerScore, 1);
-            redraw();
             break;
         case "recover_ball_tackle":
             logEvent(currentTime, action, player, `${player.name} successfully tackled the opponent, but the ball remains contested.`);
@@ -1461,6 +1487,7 @@ function simulatePlayerAction(action, player, currentTime, opponentPlayer) {
             break;
         case "recover_ball_pressured":
             logEvent(currentTime, action, player, `${player.name} was pressured by the opponent and lost possession.`);
+            player.score = Math.max(player.score - lowPlayerScore, 1);
             break;
         case "save":
             logEvent(
@@ -1470,7 +1497,6 @@ function simulatePlayerAction(action, player, currentTime, opponentPlayer) {
                 `${player.name} made a crucial save, denying the opposition from scoring.`
             );
             player.score = Math.min(player.score + mediumPlayerScore, 10);
-            redraw();
             break;
         case "save_success":
             logEvent(
@@ -1480,7 +1506,6 @@ function simulatePlayerAction(action, player, currentTime, opponentPlayer) {
                 `${player.name} made a great save, denying the striker a goal!`
             );
             player.score = Math.min(player.score + mediumPlayerScore, 10);
-            redraw();
             break;
         case "contain":
             logEvent(
@@ -1490,7 +1515,6 @@ function simulatePlayerAction(action, player, currentTime, opponentPlayer) {
                 `${player.name} contained the attacker, preventing them from advancing further.`
             );
             player.score = Math.min(player.score + lowPlayerScore, 10);
-            redraw();
             break;
         case "substitute":
             // Handle substitute action
@@ -1509,6 +1533,7 @@ function simulatePlayerAction(action, player, currentTime, opponentPlayer) {
                 player,
                 `${player.name} pressed the ball receiver, putting pressure on them to make a mistake.`
             );
+            player.score = Math.min(player.score + lowPlayerScore, 10);
             break;
         case "track_runner":
             // Handle track runner action
@@ -1518,6 +1543,7 @@ function simulatePlayerAction(action, player, currentTime, opponentPlayer) {
                 player,
                 `${player.name} tracked the opposing runner, staying close to prevent a dangerous move.`
             );
+            player.score = Math.min(player.score + lowPlayerScore, 10);
             break;
         case "block_cross":
             // Handle block cross action
@@ -1528,38 +1554,39 @@ function simulatePlayerAction(action, player, currentTime, opponentPlayer) {
                 `${player.name} blocked the cross, preventing any attacking opportunity from the wing.`
             );
             player.score = Math.min(player.score + lowPlayerScore, 10);
-            redraw();
             break;
         case "block_cross_success":
             logEvent(currentTime, action, player, `${player.name} successfully blocked the cross and denied the attacking team.`);
             player.score = Math.min(player.score + lowPlayerScore, 10);
-            redraw();
             break;
         case "block_cross_deflected":
             logEvent(currentTime, action, player, `${player.name} got a touch on the cross, but it deflected into a dangerous area.`);
+            player.score = Math.max(player.score - lowPlayerScore, 1);
             break;
         case "block_cross_cleared":
             logEvent(currentTime, action, player, `${player.name} blocked the cross, but the ball remains in play and needs to be cleared.`);
+            player.score = Math.max(player.score - lowPlayerScore, 1);
             break;
         case "block_cross_failed":
             logEvent(currentTime, action, player, `${player.name} missed the block, and the cross reached its intended target.`);
             player.score = Math.max(player.score - lowPlayerScore, 1);
-            redraw();
             break;
         case "block_cross_offside":
             logEvent(currentTime, action, player, `${player.name} blocked the cross, but the attacking player was offside.`);
+            player.score = Math.min(player.score + lowPlayerScore, 10);
             break;
         case "block_cross_handled":
             logEvent(currentTime, action, player, `${player.name} handled the ball while attempting to block the cross, resulting in a foul.`);
+            player.score = Math.max(player.score - lowPlayerScore, 1);
             break;
         case "shift_defensive_line":
-            // Handle shift defensive line action
             logEvent(
                 currentTime,
                 "shift_defensive_line",
                 player,
                 `${player.name} shifted the defensive line, ensuring better coverage against the opposition's attack.`
             );
+            player.score = Math.min(player.score + lowPlayerScore, 10);
             break;
         case "intercept_cross":
             logEvent(
@@ -1569,29 +1596,30 @@ function simulatePlayerAction(action, player, currentTime, opponentPlayer) {
                 `${player.name} intercepted the cross, preventing any threat in the box.`
             );
             player.score = Math.min(player.score + lowPlayerScore, 10);
-            redraw();
             break;
         case "intercept_cross_success":
             logEvent(currentTime, action, player, `${player.name} successfully intercepted the cross and denied the attack.`);
             player.score = Math.min(player.score + lowPlayerScore, 10);
-            redraw();
             break;
         case "intercept_cross_deflected":
             logEvent(currentTime, action, player, `${player.name} got a touch on the cross, but it deflected into a dangerous area.`);
+            player.score = Math.max(player.score - lowPlayerScore, 1);
             break;
         case "intercept_cross_cleared":
             logEvent(currentTime, action, player, `${player.name} intercepted the cross, but the ball needs to be cleared.`);
+            player.score = Math.max(player.score - lowPlayerScore, 1);
             break;
         case "intercept_cross_failed":
             logEvent(currentTime, action, player, `${player.name} missed the interception, and the cross reached its target.`);
             player.score = Math.max(player.score - lowPlayerScore, 1);
-            redraw();
             break;
         case "intercept_cross_offside":
             logEvent(currentTime, action, player, `${player.name} intercepted the cross, but the attacking player was offside.`);
+            player.score = Math.min(player.score + lowPlayerScore, 10);
             break;
         case "intercept_cross_handled":
             logEvent(currentTime, action, player, `${player.name} handled the ball while attempting to intercept the cross, resulting in a foul.`);
+            player.score = Math.max(player.score - lowPlayerScore, 1);
             break;
         case "challenge_header":
             logEvent(
@@ -1600,35 +1628,40 @@ function simulatePlayerAction(action, player, currentTime, opponentPlayer) {
                 player,
                 `${player.name} challenged for the header, competing in the air for possession.`
             );
+            player.score = Math.min(player.score + lowPlayerScore, 10);
             break;
         case "challenge_header_success":
             logEvent(currentTime, action, player, `${player.name} successfully won the header and gained possession.`);
             player.score = Math.min(player.score + lowPlayerScore, 10);
-            redraw();
             break;
         case "challenge_header_failed":
             logEvent(currentTime, action, player, `${player.name} missed the header, and the opponent won possession.`);
+            player.score = Math.max(player.score - lowPlayerScore, 1);
             break;
         case "challenge_header_foul":
             logEvent(currentTime, action, player, `${player.name} committed a foul while challenging for the header.`);
+            player.score = Math.max(player.score - lowPlayerScore, 1);
             break;
         case "challenge_header_deflected":
             logEvent(currentTime, action, player, `${player.name} touched the ball, but it deflected into a dangerous area.`);
+            player.score = Math.max(player.score - lowPlayerScore, 1);
             break;
         case "challenge_header_cleared":
             logEvent(currentTime, action, player, `${player.name} won the header, but the ball was not controlled and needs to be cleared.`);
+            player.score = Math.max(player.score - lowPlayerScore, 1);
             break;
         case "challenge_header_offside":
             logEvent(currentTime, action, player, `${player.name} won the header, but the attacking player was offside.`);
+            player.score = Math.min(player.score + lowPlayerScore, 10);
             break;
         case "mark_players":
-            // Handle mark players action
             logEvent(
                 currentTime,
                 "mark_players",
                 player,
                 `${player.name} marked the opposition players tightly, denying them space to receive the ball.`
             );
+            player.score = Math.min(player.score + lowPlayerScore, 10);
             break;
         case "injury":
             logEvent(currentTime, action, player, `${player.name} has sustained an injury during the match and is receiving medical attention. The extent of the injury is yet to be determined.`);
@@ -1644,7 +1677,9 @@ function simulatePlayerAction(action, player, currentTime, opponentPlayer) {
                 `${player.name} sustained a serious injury and is unable to continue the game.` +
                 (opponentPlayer?.name ? ` Opponent involved: ${opponentPlayer.name}.` : "")
             );
-            redraw();
+            if (opponentPlayer) {
+                teamsInMatch[player.teamIdx].playerSelected = opponentPlayer.uuid;
+            }
             break;
         case "injury_fake":
             logEvent(currentTime, action, player, `${player.name} appeared injured but was faking it.`);
@@ -1663,7 +1698,9 @@ function simulatePlayerAction(action, player, currentTime, opponentPlayer) {
                 `${player.name} is injured, and the match is temporarily stopped for treatment.` +
                 (opponentPlayer?.name ? ` Opponent involved: ${opponentPlayer.name}.` : "")
             );
-            redraw();
+            if (opponentPlayer) {
+                teamsInMatch[player.teamIdx].playerSelected = opponentPlayer.uuid;
+            }
             break;
         case "injury_substitution":
             logEvent(
@@ -1673,7 +1710,9 @@ function simulatePlayerAction(action, player, currentTime, opponentPlayer) {
                 `${player.name} is forced to be substituted due to injury.` +
                 (opponentPlayer?.name ? ` Opponent involved: ${opponentPlayer.name}.` : "")
             );
-            redraw();
+            if (opponentPlayer) {
+                teamsInMatch[player.teamIdx].playerSelected = opponentPlayer.uuid;
+            }
             break;
         case "substitute_injury":
             logEvent(
@@ -1683,7 +1722,9 @@ function simulatePlayerAction(action, player, currentTime, opponentPlayer) {
                 `${player.name} is substituted due to an injury.` +
                 (opponentPlayer?.name ? ` Opponent involved: ${opponentPlayer.name}.` : "")
             );
-            redraw();
+            if (opponentPlayer) {
+                teamsInMatch[player.teamIdx].playerSelected = opponentPlayer.uuid;
+            }
             break;
         case "substitute_tactical":
             logEvent(
@@ -1693,7 +1734,9 @@ function simulatePlayerAction(action, player, currentTime, opponentPlayer) {
                 `${player.name} is substituted for tactical reasons.` +
                 (opponentPlayer?.name ? ` Opponent involved: ${opponentPlayer.name}.` : "")
             );
-            redraw();
+            if (opponentPlayer) {
+                teamsInMatch[player.teamIdx].playerSelected = opponentPlayer.uuid;
+            }
             break;
         case "substitute_fatigue":
             logEvent(
@@ -1703,7 +1746,9 @@ function simulatePlayerAction(action, player, currentTime, opponentPlayer) {
                 `${player.name} is substituted due to fatigue.` +
                 (opponentPlayer?.name ? ` Opponent involved: ${opponentPlayer.name}.` : "")
             );
-            redraw();
+            if (opponentPlayer) {
+                teamsInMatch[player.teamIdx].playerSelected = opponentPlayer.uuid;
+            }
             break;
         case "substitute_strategic":
             logEvent(
@@ -1713,7 +1758,9 @@ function simulatePlayerAction(action, player, currentTime, opponentPlayer) {
                 `${player.name} is substituted as part of a strategic move.` +
                 (opponentPlayer?.name ? ` Opponent involved: ${opponentPlayer.name}.` : "")
             );
-            redraw();
+            if (opponentPlayer) {
+                teamsInMatch[player.teamIdx].playerSelected = opponentPlayer.uuid;
+            }
             break;
         case "substitute_time_wasting":
             logEvent(
@@ -1723,7 +1770,9 @@ function simulatePlayerAction(action, player, currentTime, opponentPlayer) {
                 `${player.name} is substituted to waste time.` +
                 (opponentPlayer?.name ? ` Opponent involved: ${opponentPlayer.name}.` : "")
             );
-            redraw();
+            if (opponentPlayer) {
+                teamsInMatch[player.teamIdx].playerSelected = opponentPlayer.uuid;
+            }
             break;
         case "substitute_performance":
             logEvent(
@@ -1733,13 +1782,17 @@ function simulatePlayerAction(action, player, currentTime, opponentPlayer) {
                 `${player.name} is substituted due to poor performance.` +
                 (opponentPlayer?.name ? ` Opponent involved: ${opponentPlayer.name}.` : "")
             );
-            redraw();
+            if (opponentPlayer) {
+                teamsInMatch[player.teamIdx].playerSelected = opponentPlayer.uuid;
+            }
             break;
 
         default:
             console.log(action, player, currentTime)
             break;
     }
+
+    redraw();
 
     team1score.innerText = teamsInMatch[0].score;
     team2score.innerText = teamsInMatch[1].score;
