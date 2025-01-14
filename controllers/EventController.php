@@ -43,7 +43,7 @@ class EventController
         if ($title) {
             $this->eventService->createEvent($title, $description, $type, $start_date, $end_date, $start_time, $end_time, $location);
             $_SESSION['message_type'] = 'success';
-            $_SESSION['message'] = "Event <b>" . htmlspecialchars($title, ENT_QUOTES, 'UTF-8') . "</b> has been added successfully to your calendar.";
+            $_SESSION['message'] = "Event " . htmlspecialchars($title, ENT_QUOTES, 'UTF-8') . " has been added successfully to your calendar.";
         } else {
             $_SESSION['message_type'] = 'danger';
             $_SESSION['message'] = "Failed to create event";
@@ -81,7 +81,7 @@ class EventController
             $rowsAffected = $this->eventService->updateEvent($id, $description, $type, $start_date, $end_date, $start_time, $end_time, $location);
             if ($rowsAffected) {
                 $_SESSION['message_type'] = 'success';
-                $_SESSION['message'] = "Event <b>" . htmlspecialchars($title, ENT_QUOTES, 'UTF-8') . "</b> has been updated successfully.";
+                $_SESSION['message'] = "Event " . htmlspecialchars($title, ENT_QUOTES, 'UTF-8') . " has been updated successfully.";
             } else {
                 $_SESSION['message_type'] = 'danger';
                 $_SESSION['message'] = "Failed to update event.";
