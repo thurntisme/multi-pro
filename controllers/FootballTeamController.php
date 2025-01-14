@@ -179,7 +179,6 @@ class FootballTeamController
 
             $_SESSION['message_type'] = 'success';
             $_SESSION['message'] = "$playerName's contract has been successfully terminated.";
-
         } catch (Exception $e) {
             $_SESSION['message_type'] = 'danger';
             $_SESSION['message'] = "Failed to terminate $playerName's contract.";
@@ -351,6 +350,66 @@ class FootballTeamController
         }
 
         header("Location: " . home_url("football-manager/my-club"));
+        exit;
+    }
+
+
+    function updateMyPlayers()
+    {
+        // Retrieve the current team details
+        $myTeam = $this->getMyTeam();
+        $players = isset($_POST['team_players']) ? json_decode($_POST['team_players'], true) : [];
+        $isSuccess = false;
+
+        // Ensure there are players to update
+        if ($players && count($players) > 0) {
+            try {
+                // Begin a single transaction for all updates
+                $this->pdo->beginTransaction();
+
+                // Prepare the SQL statement
+                $stmt = $this->pdo->prepare("
+                UPDATE football_player 
+                SET shirt_number = :shirt_number, 
+                    updated_at = CURRENT_TIMESTAMP 
+                WHERE team_id = :team_id 
+                  AND player_uuid = :player_uuid 
+                  AND id = :player_id
+            ");
+
+                // Execute the update for each player
+                foreach ($players as $player) {
+                    $stmt->execute([
+                        ':team_id' => $myTeam['id'],
+                        ':shirt_number' => $player['shirt_number'],
+                        ':player_id' => $player['id'],
+                        ':player_uuid' => $player['uuid'],
+                    ]);
+                }
+
+                // Commit the transaction
+                $this->pdo->commit();
+                $isSuccess = true;
+            } catch (Exception $e) {
+                // Rollback the transaction if any update fails
+                if ($this->pdo->inTransaction()) {
+                    $this->pdo->rollBack();
+                }
+                error_log("Error updating players: " . $e->getMessage());
+            }
+        }
+
+        // Set success or error messages
+        if ($isSuccess) {
+            $_SESSION['message_type'] = 'success';
+            $_SESSION['message'] = "Your players were updated successfully.";
+        } else {
+            $_SESSION['message_type'] = 'danger';
+            $_SESSION['message'] = "Failed to update your players.";
+        }
+
+        // Redirect to the current page
+        header("Location: " . $_SERVER['REQUEST_URI']);
         exit;
     }
 

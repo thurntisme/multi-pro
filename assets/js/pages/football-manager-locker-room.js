@@ -1,65 +1,49 @@
-let playerSelected, changePlayer;
+let playerElSelected, changePlayer;
 const playerRowEl = ".my-club-player-row";
+
+let playerUuidSelected = allPlayers[0].uuid;
+
 $(document).on("click", playerRowEl, (e) => {
   $(".my-club-player-row").each((idx, item) => {
     $(item).removeClass("selected");
   });
-  const formation = $("[name='team_formation']").val();
   $(e.currentTarget).addClass("selected");
-  playerSelected = $(e.currentTarget);
-  renderPlayerSelected(playerSelected);
-
-  //   if (!$(e.currentTarget).find(".btn-action")[0].contains(e.target)) {
-  //     $(e.currentTarget).addClass("selected");
-  //     playerSelected = $(e.currentTarget);
-  //     renderPlayerSelected(playerSelected);
-  //     groupTeams[0].playerSelected = playerSelected.attr("data-player-uuid");
-  //     redraw(formation);
-  //   } else {
-  //     if ($(e.currentTarget).find(".btn-change")[0].contains(e.target)) {
-  //       changePlayer = $(e.currentTarget);
-
-  //       const playerSelectedUuid = playerSelected.attr("data-player-uuid");
-  //       const playerSelectedIndex = allPlayers.findIndex(
-  //         (p) => p.uuid === playerSelectedUuid
-  //       );
-  //       const changePlayerUuid = changePlayer.attr("data-player-uuid");
-  //       const changePlayerIndex = allPlayers.findIndex(
-  //         (p) => p.uuid === changePlayerUuid
-  //       );
-
-  //       if (playerSelectedIndex !== -1 && changePlayerIndex !== -1) {
-  //         [allPlayers[playerSelectedIndex], allPlayers[changePlayerIndex]] = [
-  //           allPlayers[changePlayerIndex],
-  //           allPlayers[playerSelectedIndex],
-  //         ];
-  //       }
-  //       groupTeams[0].players = allPlayers.slice(0, 11);
-  //       groupTeams[0].bench = allPlayers.slice(11);
-  //       redraw(formation);
-  //       const newPlayers = [...groupTeams[0].players, ...groupTeams[0].bench];
-  //       $("[name='team_players']").val(
-  //         JSON.stringify(updateArraysAndGetResult(allBasePlayers, newPlayers))
-  //       );
-
-  //       const cloneRow1 = playerSelected.clone(true);
-  //       const cloneRow2 = changePlayer.clone(true);
-
-  //       playerSelected.replaceWith(cloneRow2);
-  //       changePlayer.replaceWith(cloneRow1);
-
-  //       playerSelected = null;
-  //       changePlayer = null;
-  //       groupTeams[0].playerSelected = null;
-  //     }
-  //   }
+  playerElSelected = $(e.currentTarget);
+  renderPlayerSelected(playerElSelected);
+  $("#shirt_number").val("");
 });
 
-const renderPlayerSelected = (player) => {
-  const player_uuid = player.attr("data-player-uuid");
-  const player_data = allPlayers.find((p) => p.player_uuid === player_uuid);
+$(document).on("change", "#shirt_number", () => {
+  const num = $("#shirt_number").val(); // Get the selected value
+  const prevPlayerSelected = allPlayers.find(
+    (player) => player.shirt_number === +num // Ensure `num` is a number for comparison
+  );
+  const playerSelected = allPlayers.find(
+    (player) => player.uuid === playerUuidSelected
+  );
+
+  if (playerSelected) {
+    if (prevPlayerSelected) {
+      const prevNum = playerSelected.shirt_number;
+      prevPlayerSelected.shirt_number = prevNum; // Swap shirt numbers
+    }
+    playerSelected.shirt_number = +num;
+
+    // Update the UI
+    allPlayers.forEach((player) => {
+      $(`tr[data-player-uuid="${player.uuid}"]`)
+        .find(".shirt_number")
+        .text(player.shirt_number);
+    });
+  }
+});
+
+const renderPlayerSelected = (playerEl) => {
+  playerUuidSelected = playerEl.attr("data-player-uuid");
+  const player_data = allPlayers.find(
+    (p) => p.player_uuid === playerUuidSelected
+  );
   if (player_data) {
-    console.log(player_data);
     $("#player-info #player-name").text(player_data.name || "");
     $("#player-info #player-nationality").text(player_data.nationality || "");
     $("#player-info #player-best_position").text(
@@ -71,20 +55,6 @@ const renderPlayerSelected = (player) => {
         ? player_data.playable_positions.join(", ")
         : ""
     );
-
-    const results = {};
-    $.each(player_data.attributes, function (category, attributes) {
-      const sum = Object.values(attributes).reduce((a, b) => a + b, 0); // Calculate sum
-      const maxPossible = 120 * Object.keys(attributes).length; // Calculate max possible value
-      const percentage = (sum / maxPossible) * 100; // Calculate percentage
-      results[category] = { sum, percentage: percentage.toFixed(2) }; // Store results
-    });
-    Object.keys(results).forEach((key) => {
-      $(`#${key}-label`).text(results[key].sum);
-      $(`#${key}-value`).attr("style", `width: ${results[key].percentage}%`);
-      $(`#${key}-value`).attr("aria-valuenow", results[key].percentage);
-      $(`#${key}-value`).attr("aria-valuemax", results[key].percentage);
-    });
 
     $("#player-age").text(player_data.age);
     $("#player-height").text(player_data.height);
@@ -122,3 +92,39 @@ const updateArraysAndGetResult = (baseArray, updatedArray) => {
 
   return result;
 };
+
+$("#my-players-form").on("submit", function (e) {
+  e.preventDefault();
+  const team_players = allPlayers.filter(
+    (player, index) =>
+      JSON.stringify(player) !== JSON.stringify(allBasePlayers[index])
+  );
+  $("[name=team_players]").val(
+    JSON.stringify(
+      team_players.map((player) => {
+        return {
+          id: player.id,
+          uuid: player.uuid,
+          shirt_number: player.shirt_number,
+        };
+      })
+    )
+  );
+  if (!team_players.length) {
+    Swal.fire({
+      title: "Nothing to update!",
+      icon: "warning",
+      showCancelButton: !0,
+      customClass: {
+        cancelButton: "btn btn-primary w-xs mt-2",
+      },
+      cancelButtonText: "Dismiss",
+      buttonsStyling: !1,
+      showCancelButton: !0,
+      showConfirmButton: !1,
+      showCloseButton: !0,
+    });
+  } else {
+    this.submit();
+  }
+});

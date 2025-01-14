@@ -1272,3 +1272,15 @@ $specialSkills = [
         'Fast Striker' => ['pace', 'acceleration'], // A fast forward who uses their speed to outrun defenders and create goal-scoring opportunities (Physical)
     ],
 ];
+
+$teamRoles = [
+    "captain" => "Captain 👑",
+    "penaltyTaker" => "Penalty Taker ⚽️",
+    "directFreeKickTaker" => "Direct Free Kick Taker 🔥",
+    "indirectFreeKickTaker" => "Indirect Free Kick Taker 💡",
+    "leftCornerKickTaker" => "Left Corner Kick Taker ↖️",
+    "rightCornerKickTaker" => "Right Corner Kick Taker ↗️",
+    "throwInSpecialist" => "Throw-In Specialist 📥",
+    "longRangeShooter" => "Long-Range Shooter 🏹",
+    "penaltyBackup" => "Penalty Backup 🛑",
+];
