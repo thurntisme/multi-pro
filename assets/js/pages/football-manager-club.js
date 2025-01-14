@@ -133,6 +133,7 @@ const renderPlayerSelected = (player) => {
         });
 
         $("#player-age").text(player_data.age);
+        $("#player-shirt_number").text(player_data.shirt_number);
         $("#player-height").text(player_data.height);
         $("#player-weight").text(player_data.weight);
         $("#player-nationality").text(player_data.nationality);

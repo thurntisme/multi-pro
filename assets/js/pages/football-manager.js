@@ -240,7 +240,7 @@ function renderTeamInFitch(
             if (team?.playerSelected && team?.playerSelected === pos.uuid) {
                 drawCircle(pos.x, pos.y, "#fff", 12, false);
             }
-            drawPlayerNumber(pos.x, pos.y, index + 1);
+            drawPlayerNumber(pos.x, pos.y, pos.shirt_number ?? index + 1);
             if (conditions?.isDisplayName) {
                 drawPlayerName(pos.x, pos.y + 2, pos.name);
             }

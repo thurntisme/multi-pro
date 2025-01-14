@@ -331,6 +331,12 @@ ob_start();
                                                             <span class="fs-12"
                                                                   id="player-age"><?= $lineupPlayers[0]['age'] ?></span>
                                                         </div>
+                                                        |
+                                                        <div class="w-50 d-flex justify-content-between">
+                                                            <span class="fs-12">Shirt</span>
+                                                            <span class="fs-12"
+                                                                  id="player-shirt_number"><?= $lineupPlayers[0]['shirt_number'] ?></span>
+                                                        </div>
                                                     </li>
                                                     <li class="list-group-item hstack gap-2">
                                                         <div class="w-50 d-flex justify-content-between">
