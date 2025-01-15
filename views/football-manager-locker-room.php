@@ -108,8 +108,12 @@ ob_start();
                                                         <td class="d-flex align-items-center px-1">
                                                             <span class="ps-2"
                                                                   style="width: 58px; border-left: solid 4px <?= getPositionColor($item['best_position']) ?>"> <?= $item['best_position'] ?></span>
-                                                            <div class="d-flex">
-                                                                <div class="me-2"><?= $item['name'] ?></div>
+                                                            <div class="d-flex align-items-center">
+                                                                <div class="me-2"><?= $item['name'] ?>
+                                                                </div>
+                                                                <?php if ($item['is_lock'] === 1) { ?>
+                                                                    <i class="bx bxs-lock-alt me-2"></i>
+                                                                <?php } ?>
                                                                 <ul class="list-inline tasks-list-menu mb-0 pe-4">
                                                                     <li class="list-inline-item">
                                                                         <a href="#"

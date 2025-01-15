@@ -124,6 +124,9 @@ ob_start();
                                                                 <div class="d-flex align-items-center">
                                                                     <div class="me-auto">
                                                                         <?= $item['name'] ?>
+                                                                        <?php if ($item['is_lock'] === 1) { ?>
+                                                                            <i class="bx bxs-lock-alt me-2"></i>
+                                                                        <?php } ?>
                                                                     </div>
                                                                     <?php if ($item['remaining_contract_date'] <= 5): ?>
                                                                         <span class="btn rounded-pill btn-<?= $item['remaining_contract_date'] < 0 ? 'danger' : 'warning' ?> waves-effect waves-light mx-2 player-alert">
@@ -203,6 +206,9 @@ ob_start();
                                                                     <div class="d-flex align-items-center">
                                                                         <div class="me-auto">
                                                                             <?= $item['name'] ?>
+                                                                            <?php if ($item['is_lock'] === 1) { ?>
+                                                                                <i class="bx bxs-lock-alt me-2"></i>
+                                                                            <?php } ?>
                                                                         </div>
                                                                         <?php if ($item['remaining_contract_date'] <= 5): ?>
                                                                             <span class="btn rounded-pill btn-<?= $item['remaining_contract_date'] < 0 ? 'danger' : 'warning' ?> waves-effect waves-light mx-2 player-alert">

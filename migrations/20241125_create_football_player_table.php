@@ -23,6 +23,7 @@ return function (PDO $pdo) {
         'avg_score FLOAT DEFAULT 0.0',
         'player_stamina INTEGER DEFAULT 100',
         'shirt_number INTEGER',
+        'is_lock BOOLEAN DEFAULT 0',
         'created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP',
         'updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP',
         'team_id INTEGER NOT NULL',
