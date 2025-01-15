@@ -226,4 +226,74 @@ class FootballMatchController
         // Return null if no match is found
         return null;
     }
+
+    public function saveMatchResult($match_uuid, $result) {
+        $match = $this->getTeamInMatch($match_uuid);
+        if (empty($match)) {
+            $_SESSION['message_type'] = 'danger';
+            $_SESSION['message'] = "Failed to save this match.";
+            header("Location: " . $_SERVER['REQUEST_URI']);
+            exit;
+        }
+        $resultData = json_decode($result)[$match['is_home'] === 1 ? 0 : 1] ?? [];
+        $myPlayers = array_values($resultData->players);
+        $isSuccess = false;
+
+        // Ensure there are players to update
+        if ($myPlayers && count($myPlayers) > 0) {
+            try {
+                // Begin a single transaction for all updates
+                $this->pdo->beginTransaction();
+
+                // Prepare the SQL statement
+                $stmt = $this->pdo->prepare("
+                    UPDATE football_player 
+                    SET goals_scored = :goals_scored, 
+                        yellow_cards = :yellow_cards, 
+                        red_cards = :red_cards, 
+                        player_stamina = :player_stamina, 
+                        assists = :assists, 
+                        level = :level, 
+                        updated_at = CURRENT_TIMESTAMP 
+                    WHERE team_id = :team_id 
+                    AND player_uuid = :player_uuid
+                ");
+
+                // Execute the update for each player
+                foreach ($myPlayers as $player) {
+                    $stmt->execute([
+                        ':goals_scored' => $player->goals,
+                        ':yellow_cards' => $player->yellow_cards,
+                        ':red_cards' => $player->red_cards,
+                        ':player_stamina' => $player->remaining_stamina,
+                        ':assists' => 0,
+                        ':level' => 100,
+                        ':team_id' => $match['team_id'],
+                        ':player_uuid' => $player->uuid,
+                    ]);
+                }
+
+                // Commit the transaction
+                $this->pdo->commit();
+                $isSuccess = true;
+            } catch (Exception $e) {
+                // Rollback the transaction if any update fails
+                if ($this->pdo->inTransaction()) {
+                    $this->pdo->rollBack();
+                }
+                error_log("Error updating players: " . $e->getMessage());
+            }
+        }
+
+        if ($isSuccess) {
+            $_SESSION['message_type'] = 'success';
+            $_SESSION['message'] = "Your players were updated successfully.";
+        } else {
+            $_SESSION['message_type'] = 'danger';
+            $_SESSION['message'] = "Failed to save this match.";
+        }
+        
+        header("Location: " . $_SERVER['REQUEST_URI']);
+        exit;
+    }
 }

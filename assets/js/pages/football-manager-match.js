@@ -288,37 +288,37 @@ function simulateMatch(teamsInMatch) {
                 );
                 $("#btn-accept-match").removeAttr("disabled");
                 $("#btn-match-info").removeClass("d-none");
+                let bestPlayerUuid = null;
+                let bestPlayerScore = 0;
+                const result = teamsInMatch.map(team => {
+                    return {
+                        name: team.name,
+                        score: team.score,
+                        players: [...team.players, ...team.bench]
+                            .filter(player => player.is_played)
+                            .map(player => {
+                                if (player.score > bestPlayerScore) {
+                                    bestPlayerUuid = player.uuid;
+                                    bestPlayerScore = player.score;
+                                }
+                                return {
+                                    uuid: player.uuid,
+                                    name: player.name,
+                                    position: player.position_in_match,
+                                    score: player.score.toFixed(1),
+                                    goals: player?.goals_in_match || 0,
+                                    own_goals: player?.own_goals_in_match || 0,
+                                    is_injury: player.is_injury,
+                                    yellow_cards: player?.yellow_cards_in_match || 0,
+                                    red_cards: player?.red_cards_in_match || 0,
+                                    remaining_stamina: Math.round(player.player_stamina - (100 - player.attributes.physical.stamina) / 100 * formatMatchTime(totalMatchTime)['minute']),
+                                }
+                            })
+                    }
+                });
                 $(document).on("click", "#btn-match-info", function () {
                     const matchAttributes = $("#matchInfoBackdrop #matchAttributes");
                     matchAttributes.html('<p class="mb-0">Data processing...</p>');
-                    let bestPlayerUuid = null;
-                    let bestPlayerScore = 0;
-                    const result = teamsInMatch.map(team => {
-                        return {
-                            name: team.name,
-                            score: team.score,
-                            players: [...team.players, ...team.bench]
-                                .filter(player => player.is_played)
-                                .map(player => {
-                                    if (player.score > bestPlayerScore) {
-                                        bestPlayerUuid = player.uuid;
-                                        bestPlayerScore = player.score;
-                                    }
-                                    return {
-                                        uuid: player.uuid,
-                                        name: player.name,
-                                        position: player.position_in_match,
-                                        score: player.score.toFixed(1),
-                                        goals: player?.goals_in_match || 0,
-                                        own_goals: player?.own_goals_in_match || 0,
-                                        is_injury: player.is_injury,
-                                        yellow_cards: player?.yellow_cards_in_match || 0,
-                                        red_cards: player?.red_cards_in_match || 0,
-                                        remaining_stamina: Math.round(player.player_stamina - (100 - player.attributes.physical.stamina) / 100 * formatMatchTime(totalMatchTime)['minute']),
-                                    }
-                                })
-                        }
-                    });
                     let playerAttrContent = '';
                     result.forEach(team => {
                         playerAttrContent += `<div class="col-6 pt-3 mt-3 border-top-dashed border-1 border-dark border-opacity-25">
@@ -371,6 +371,14 @@ function simulateMatch(teamsInMatch) {
                     const playerAttrHtml = `<div class="row">${playerAttrContent}</div>`;
                     matchAttributes.append(playerAttrHtml);
                 });
+                setTimeout(() =>{
+                    $('#match-form').removeClass('d-none');
+                },2000);
+                $("#match-form").on("submit", function (e) {
+                    e.preventDefault();
+                    $("[name=match_result]").val(JSON.stringify(result));
+                    this.submit();
+                  });
                 return;
             }
 

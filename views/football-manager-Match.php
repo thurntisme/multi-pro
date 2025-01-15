@@ -15,6 +15,16 @@ $match = $footballMatchController->getTeamInMatch($match_uuid);
 $home_team = $match['home_team_data'];
 $away_team = $match['away_team_data'];
 
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    if (isset($_POST['action_name'])) {
+        if ($_POST['action_name'] === 'accept_match') {
+            $footballMatchController->saveMatchResult($match_uuid, $_POST['match_result']);
+            var_dump($_POST);
+            die();
+        }
+    }
+}
+
 ob_start();
 ?>
 
@@ -25,6 +35,10 @@ ob_start();
                     <?php includeFileWithVariables('components/football-player-topbar.php'); ?>
                 </div>
             </div>
+
+            <?php
+            include_once DIR . '/components/alert.php';
+            ?>
         </div>
         <!--end col-->
         <div class="col-lg-12">
@@ -61,7 +75,11 @@ ob_start();
                                     data-bs-target="#matchInfoBackdrop">Match Info
                             </button>
                             <button class="btn btn-sm btn-light d-none" id="btn-cancel-match">Cancel</button>
-                            <button class="btn btn-sm btn-success d-none" id="btn-accept-match" disabled>Next</button>
+                            <form action="<?= $_SERVER['REQUEST_URI'] ?>" class="d-none" method="post" id="match-form">
+                                <input type="hidden" name="action_name" value="accept_match">
+                                <input type="hidden" name="match_result" value="">
+                                <button class="btn btn-sm btn-success" type="submit">Next</button>
+                            </form>
                         </div>
                         <div class="card-body">
                             <div class="profile-timeline" data-simplebar style="height: 370px;">
