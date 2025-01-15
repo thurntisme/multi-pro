@@ -57,6 +57,9 @@ ob_start();
                                             <th class="text-center px-1" style="width: 40px;">#</th>
                                             <th style="padding-left: 62px;">Name</th>
                                             <th class="text-center px-1" style="width: 52px;">
+                                                <img src="<?= home_url('assets/images/football-manager/player-ability.png') ?>" class="img-responsive avatar-xxs" alt="player ability" />
+                                            </th>
+                                            <th class="text-center px-1" style="width: 52px;">
                                                 <img src="<?= home_url('assets/images/football-manager/shirt.png') ?>" class="img-responsive avatar-xxs" alt="shirt number" />
                                             </th>
                                             <th class="text-center px-1" style="width: 52px;">
@@ -70,9 +73,6 @@ ob_start();
                                             </th>
                                             <th class="text-center px-1" style="width: 52px;">
                                                 <img src="<?= home_url('assets/images/football-manager/red-card.png') ?>" class="img-responsive avatar-xxs" alt="red card" />
-                                            </th>
-                                            <th class="text-center px-1" style="width: 52px;">
-                                                <img src="<?= home_url('assets/images/football-manager/player-ability.png') ?>" class="img-responsive avatar-xxs" alt="player ability" />
                                             </th>
                                             <th class="text-center px-1" style="width: 52px;">
                                                 <img src="<?= home_url('assets/images/football-manager/contract-time.png') ?>" class="img-responsive avatar-xxs" alt="contract time" />
@@ -113,12 +113,12 @@ ob_start();
                                                                 </ul>
                                                             </div>
                                                         </td>
+                                                        <td class="text-center px-1" style="width: 52px;"><?= $item['ability'] ?></td>
                                                         <td class="text-center px-1" style="width: 52px;"><span class="shirt_number"><?= $item['shirt_number'] ?></span></td>
                                                         <td class="text-center px-1" style="width: 52px;"><?= $item['assists'] ?></td>
                                                         <td class="text-center px-1" style="width: 52px;"><?= $item['goals_scored'] ?></td>
                                                         <td class="text-center px-1" style="width: 52px;"><?= $item['yellow_cards'] ?></td>
                                                         <td class="text-center px-1" style="width: 52px;"><?= $item['red_cards'] ?></td>
-                                                        <td class="text-center px-1" style="width: 52px;"><?= $item['ability'] ?></td>
                                                         <td class="text-center px-1" style="width: 52px;"><?= $item['remaining_contract_date'] > 0 ? $item['remaining_contract_date'] : 0 ?></td>
                                                         <td class="text-center" style="width: 80px;">
                                                             <div class="progress">
@@ -245,6 +245,13 @@ ob_start();
                                                 <span class="fs-12">Contract End Date</span>
                                                 <span class="fs-12"
                                                     id="player-contract_end_date"><?= $myTeam['players'][0]['contract_end_date'] ?></span>
+                                            </div>
+                                        </li>
+                                        <li class="list-group-item hstack gap-2">
+                                            <div class="w-100 d-flex justify-content-between">
+                                                <span class="fs-12">Special Skills</span>
+                                                <span class="fs-12"
+                                                    id="player-special_skills"><?= implode(", ", $myTeam['players'][0]['special_skills']) ?></span>
                                             </div>
                                         </li>
                                     </ul>

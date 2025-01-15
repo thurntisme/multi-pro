@@ -77,6 +77,7 @@ const renderPlayerSelected = (playerEl) => {
       player_data.level.percentageToNextLevel
     );
     $("#player-shirt_number").text(player_data.shirt_number);
+    $("#player-special_skills").text(player_data.special_skills.join(", "));
   }
 };
 
