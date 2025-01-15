@@ -137,6 +137,24 @@ class FootballMatchController
         exit;
     }
 
+    public function getMatch()
+    {
+        $myTeamId = $this->myTeam['id'];
+        // Corrected: use prepare instead of query
+        $sql = "SELECT * FROM football_match WHERE team_id = :team_id AND status = 'scheduled' ORDER BY created_at DESC LIMIT 1";
+
+        // Prepare the statement
+        $stmt = $this->pdo->prepare($sql);
+
+        // Execute the statement with bound parameters
+        $stmt->execute([
+            ':team_id' => $myTeamId
+        ]);
+
+        // Fetch the result
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+
     public function createMatch()
     {
         // Prepare the SQL insert statement
@@ -180,22 +198,90 @@ class FootballMatchController
         exit;
     }
 
-    public function getMatch()
+    public function saveMatchResult($match_uuid, $result): void
     {
-        $myTeamId = $this->myTeam['id'];
-        // Corrected: use prepare instead of query
-        $sql = "SELECT * FROM football_match WHERE team_id = :team_id AND status = 'scheduled' ORDER BY created_at DESC LIMIT 1";
+        $match = $this->getTeamInMatch($match_uuid);
+        if (empty($match)) {
+            $_SESSION['message_type'] = 'danger';
+            $_SESSION['message'] = "Failed to save this match.";
+            header("Location: " . $_SERVER['REQUEST_URI']);
+            exit;
+        }
+        $resultData = json_decode($result)[$match['is_home'] === 1 ? 0 : 1] ?? [];
+        $myPlayers = array_values($resultData->players);
+        $isSuccess = false;
 
-        // Prepare the statement
-        $stmt = $this->pdo->prepare($sql);
+        if ($myPlayers && count($myPlayers) > 0) {
+            try {
+                // Begin a single transaction for all updates
+                $this->pdo->beginTransaction();
 
-        // Execute the statement with bound parameters
-        $stmt->execute([
-            ':team_id' => $myTeamId
-        ]);
+                // Prepare the SQL statement
+                $stmt = $this->pdo->prepare("
+                    UPDATE football_player
+                    SET goals_scored = :goals_scored,
+                        yellow_cards = :yellow_cards,
+                        red_cards = :red_cards,
+                        player_stamina = :player_stamina,
+                        assists = :assists,
+                        level = :level,
+                        match_played = :match_played,
+                        updated_at = CURRENT_TIMESTAMP
+                    WHERE team_id = :team_id
+                        AND player_uuid = :player_uuid
+                ");
 
-        // Fetch the result
-        return $stmt->fetch(PDO::FETCH_ASSOC);
+                // Prepare the SQL statement for fetching player data
+                $playerStmt = $this->pdo->prepare("SELECT *  FROM football_player WHERE player_uuid = :player_uuid");
+
+                // Execute the update for each player
+                foreach ($myPlayers as $player) {
+                    // Fetch existing player data
+                    $playerStmt->execute([':player_uuid' => $player->uuid]);
+                    $playerData = $playerStmt->fetch(PDO::FETCH_ASSOC);
+
+                    // Calculate updated stats
+                    $goals_scored = (int)$playerData['goals_scored'] + (int)$player->goals;
+                    $yellow_cards = (int)$playerData['yellow_cards'] + (int)$player->yellow_cards;
+                    $red_cards = (int)$playerData['red_cards'] + (int)$player->red_cards;
+                    $match_played = (int)$playerData['match_played'] + 1;
+
+                    // Execute the update statement
+                    $stmt->execute([
+                        ':goals_scored' => $goals_scored,
+                        ':yellow_cards' => $yellow_cards,
+                        ':red_cards' => $red_cards,
+                        ':player_stamina' => $player->remaining_stamina,
+                        ':assists' => 0, // Assuming assists are not updated from the input
+                        ':level' => $this->updatePlayerLevel($playerData['level'], $player->score),
+                        ':team_id' => $match['team_id'],
+                        ':match_played' => $match_played,
+                        ':player_uuid' => $player->uuid,
+                    ]);
+                }
+
+                // Commit the transaction
+                $this->pdo->commit();
+                $isSuccess = true;
+            } catch (Exception $e) {
+                // Rollback the transaction if any update fails
+                if ($this->pdo->inTransaction()) {
+                    $this->pdo->rollBack();
+                }
+                error_log("Error updating players: " . $e->getMessage());
+            }
+        }
+
+        if ($isSuccess) {
+            $_SESSION['message_type'] = 'success';
+            $_SESSION['message'] = "Your players were updated successfully.";
+        } else {
+            $_SESSION['message_type'] = 'danger';
+            $_SESSION['message'] = "Failed to save this match.";
+        }
+
+        header("Location: " . $_SERVER['REQUEST_URI']);
+        exit;
     }
 
     public function getTeamInMatch($match_uuid)
@@ -227,80 +313,11 @@ class FootballMatchController
         return null;
     }
 
-    function updatePlayerLevel($currentLevel, $score) {
-        $score = max(1.0, min($score, 10.0));        
+    function updatePlayerLevel($currentLevel, $score)
+    {
+        $score = max(1.0, min($score, 10.0));
         $scalingFactor = 1 / (1 + $currentLevel / 100);
         $levelIncrease = $score * $scalingFactor * rand(10, 20);
         return round($currentLevel + $levelIncrease);
-    }
-
-    public function saveMatchResult($match_uuid, $result) {
-        $match = $this->getTeamInMatch($match_uuid);
-        if (empty($match)) {
-            $_SESSION['message_type'] = 'danger';
-            $_SESSION['message'] = "Failed to save this match.";
-            header("Location: " . $_SERVER['REQUEST_URI']);
-            exit;
-        }
-        $resultData = json_decode($result)[$match['is_home'] === 1 ? 0 : 1] ?? [];
-        $myPlayers = array_values($resultData->players);
-        $isSuccess = false;
-
-        // Ensure there are players to update
-        if ($myPlayers && count($myPlayers) > 0) {
-            try {
-                // Begin a single transaction for all updates
-                $this->pdo->beginTransaction();
-
-                // Prepare the SQL statement
-                $stmt = $this->pdo->prepare("
-                    UPDATE football_player 
-                    SET goals_scored = :goals_scored, 
-                        yellow_cards = :yellow_cards, 
-                        red_cards = :red_cards, 
-                        player_stamina = :player_stamina, 
-                        assists = :assists, 
-                        level = :level, 
-                        updated_at = CURRENT_TIMESTAMP 
-                    WHERE team_id = :team_id 
-                    AND player_uuid = :player_uuid
-                ");
-
-                // Execute the update for each player
-                foreach ($myPlayers as $player) {
-                    $stmt->execute([
-                        ':goals_scored' => $player->goals,
-                        ':yellow_cards' => $player->yellow_cards,
-                        ':red_cards' => $player->red_cards,
-                        ':player_stamina' => $player->remaining_stamina,
-                        ':assists' => 0,
-                        ':level' => $this->updatePlayerLevel($player->level, $player->score),
-                        ':team_id' => $match['team_id'],
-                        ':player_uuid' => $player->uuid,
-                    ]);
-                }
-
-                // Commit the transaction
-                $this->pdo->commit();
-                $isSuccess = true;
-            } catch (Exception $e) {
-                // Rollback the transaction if any update fails
-                if ($this->pdo->inTransaction()) {
-                    $this->pdo->rollBack();
-                }
-                error_log("Error updating players: " . $e->getMessage());
-            }
-        }
-
-        if ($isSuccess) {
-            $_SESSION['message_type'] = 'success';
-            $_SESSION['message'] = "Your players were updated successfully.";
-        } else {
-            $_SESSION['message_type'] = 'danger';
-            $_SESSION['message'] = "Failed to save this match.";
-        }
-        
-        header("Location: " . $_SERVER['REQUEST_URI']);
-        exit;
     }
 }
