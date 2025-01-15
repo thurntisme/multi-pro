@@ -97,7 +97,27 @@ const playerActions = {
     // Running in behind aims to exploit defensive gaps for scoring or crossing.
     run_in_behind: ["shoot", "cross"], // Take advantage of space behind defenders.
     // Tap-ins follow up on close-range opportunities, with rebounds or pressing defenders as logical next steps.
-    tap_in: ["rebound", "press_defender"] // Capitalize on close chances or press after misses.
+    tap_in: ["rebound", "press_defender"], // Capitalize on close chances or press after misses.
+    // After recovering the ball, the player can either distribute it quickly or attempt to dribble forward.
+    recover_ball: ["distribute_ball", "dribble"],
+    long_pass: ["target_teammate", "clear_pressure", "switch_play"],
+    rebound: ["shoot", "control_ball", "pass"],
+    contain: ["block_pass", "force_wide"],
+    block: ["block_shot", "block_pass", "block_cross"],
+    block_cross: ["distribute_ball", "pass"],
+    counter_attack: ["sprint_forward", "pass"],
+    long_pass: ["dribble", "switch_play", "shoot"],
+    press_receiver: ["pass", "dribble", "shield_ball"],
+    skill_move: ["step_over", "nutmeg", "fake_shot"],
+    step_over: ["cut_inside", "pass", "dribble", "shoot"],
+    sprint_forward: ["pass", "skill_move"],
+    track_runner: ["cross", "pass", "skill_move", "dribble"],
+    shift_defensive_line: ["clearance"],
+    mark_players: ["block_pass"],
+    block_pass: ["long_shot", "long_pass", "pass"],
+    press: ["block"],
+    make_decoy_run: ["shoot", "overlap"],
+    intercept_cross: ["pass", "long_pass", "distribute_ball"]
 };
 
 // Define possible opponent reactions
@@ -107,9 +127,9 @@ const opponentReactions = {
     // After a save, opponents pressure the goalkeeper or mark attacking players to limit options.
     save: ["mark_players"], // Prevent quick distribution or cover potential threats.
     // When the goalkeeper catches a cross, opponents can challenge or maintain defensive positioning.
-    catch_cross: ["challenge_goalkeeper", "mark"], // Contest the catch or mark nearby players.
+    catch_cross: ["mark"], // Contest the catch or mark nearby players.
     // Following a punch, opponents aim to recover loose balls or block the clearance.
-    punch: ["collect_loose_ball", "block_clearance"], // Quickly react to second balls or stop the follow-up clearance.
+    punch: ["clearance"], // Quickly react to second balls or stop the follow-up clearance.
     // After a clearance, opponents focus on blocking passes or regaining possession.
     clearance: ["block", "recover_ball"], // Prevent progression or regain control.
     // When the ball is distributed, opponents press receivers or intercept the pass.
@@ -151,30 +171,49 @@ const opponentReactions = {
     // Lay-offs are met with interception attempts or immediate pressure.
     lay_off: ["intercept", "press"], // Cut off the pass or apply pressure.
     // Pressing defenders leads to dribbling away or a quick pass to avoid pressure.
-    press_defender: ["dribble_away", "pass"], // Evade pressure or find a teammate.
+    press_defender: ["dribble", "pass"], // Evade pressure or find a teammate.
     // Holding up play is countered by tackles or pressing the ball carrier.
     hold_up_play: ["tackle", "press"], // Regain possession or disrupt the player.
     // Runs in behind trigger defensive tracking or attempts to block the pass.
     run_in_behind: ["track_run", "block_pass"], // Prevent the run or cut off the supply
     // Tap-ins are defended by blocking the shot or making a save.
-    tap_in: ["block_shot", "save"] // Stop the close-range attempt or rely on the goalkeeper.
+    tap_in: ["block_shot", "save"], // Stop the close-range attempt or rely on the goalkeeper.
+    recover_ball: ["press"],
+    long_pass: ["intercept", "mark_receiver"],
+    rebound: ["clearance", "block_shot"],
+    contain: ["dribble", "switch_play"],
+    block: ["press"],
+    counter_attack: ["press", "foul"],
+    long_pass: ["intercept", "press_receiver"],
+    press_receiver: ["block_pass"],
+    skill_move: ["intercept", "tackle"],
+    step_over: ["intercept", "tackle", "intercept"],
+    sprint_forward: ["track_back", "tackle"],
+    track_runner: ["block_pass"],
+    shift_defensive_line: ["exploit_space", "test_high_line"],
+    mark_players: ["make_decoy_run"],
+    block_pass: ["press"],
+    press: ["dribble", "pass", "shield_ball"],
+    make_decoy_run: ["mark"],
+    intercept_cross: ["press"],
+    block_cross: ["press"],
 };
 
 // Define valid actions for each position
 const validActionsByPosition = {
     GK: ["goal_kick", "save", "catch_cross", "punch", "clearance", "distribute_ball", "mark_players", "block_shot"],
-    LB: ["intercept", "tackle", "overlap", "cross", "cut_inside", "long_ball", "track_runner", "intercept_cross", "contain", "block_shot", "press_receiver", "long_shot"],
-    CB: ["press", "mark_strikers", "clearance", "intercept", "tackle", "block_shot", "header", "mark", "challenge_header", "recover_ball", "contain", "press_receiver"],
-    RB: ["intercept", "tackle", "overlap", "cross", "cut_inside", "long_ball", "track_runner", "intercept_cross", "contain", "block_shot", "press_receiver", "long_shot"],
+    LB: ["intercept", "tackle", "overlap", "cross", "cut_inside", "long_ball", "block_cross", "track_runner", "intercept_cross", "contain", "block_shot", "press_receiver", "long_shot"],
+    CB: ["press", "mark_strikers", "clearance", "intercept", "tackle", "block_shot", "block_cross", "header", "mark", "challenge_header", "recover_ball", "contain", "press_receiver"],
+    RB: ["intercept", "tackle", "overlap", "cross", "cut_inside", "long_ball", "block_cross", "track_runner", "intercept_cross", "contain", "block_shot", "press_receiver", "long_shot"],
     LM: ["cross", "dribble", "cut_inside", "pass", "long_shot", "skill_move", "block_cross", "press_receiver"],
-    CDM: ["mark_strikers", "intercept", "tackle", "pass", "long_ball", "shield_ball", "switch_play", "shift_defensive_line", "contain", "block_shot", "press_receiver", "header", "challenge_header", "long_shot"],
-    CM: ["pass", "dribble", "long_shot", "through_ball", "tackle", "intercept", "counter_attack", "contain", "block_shot", "press_receiver", "header", "challenge_header"],
-    CAM: ["rebound", "dribble", "pass", "through_ball", "shoot", "cut_inside", "skill_move", "block_shot", "press_receiver", "long_shot"],
+    CDM: ["mark_strikers", "block_pass", "intercept", "tackle", "pass", "long_ball", "shield_ball", "switch_play", "shift_defensive_line", "contain", "block_shot", "press_receiver", "header", "challenge_header", "long_shot"],
+    CM: ["pass", "block_pass", "dribble", "long_shot", "through_ball", "tackle", "intercept", "counter_attack", "contain", "block_shot", "press_receiver", "header", "challenge_header"],
+    CAM: ["rebound", "step_over", "block_pass", "dribble", "pass", "through_ball", "shoot", "cut_inside", "skill_move", "block_shot", "press_receiver", "long_shot"],
     RM: ["rebound", "cross", "dribble", "cut_inside", "pass", "long_shot", "skill_move", "block_cross", "press_receiver"],
-    LW: ["rebound", "cross", "dribble", "cut_inside", "pass", "shoot", "skill_move", "block_shot"],
-    CF: ["rebound", "shoot", "lay_off", "pass", "press_defender", "header", "dribble", "hold_up_play"],
-    ST: ["rebound", "shoot", "header", "hold_up_play", "press_defender", "run_in_behind", "tap_in", "block_shot", "press_receiver"],
-    RW: ["rebound", "cross", "dribble", "cut_inside", "pass", "shoot", "skill_move", "block_shot"],
+    LW: ["rebound", "step_over", "cross", "dribble", "cut_inside", "pass", "shoot", "skill_move", "block_shot"],
+    CF: ["rebound", "step_over", "shoot", "lay_off", "pass", "press_defender", "header", "dribble", "hold_up_play"],
+    ST: ["rebound", "step_over", "shoot", "header", "hold_up_play", "press_defender", "run_in_behind", "tap_in", "block_shot", "press_receiver"],
+    RW: ["rebound", "step_over", "cross", "dribble", "cut_inside", "pass", "shoot", "skill_move", "block_shot"],
 };
 
 function simulateMatch(teamsInMatch) {
@@ -183,7 +222,7 @@ function simulateMatch(teamsInMatch) {
     const matchTime = 90 * 60; // Total match duration in minutes
     const maxHalfTime = 45 * 60; // Total match duration in minutes
     const maxExtraTime = 10; // Maximum possible extra time in minutes
-    const realTimeRate = 10;
+    const realTimeRate = 1;
     let currentTime = 0;
     let currentTimeInSeconds = 0;
     let matchTimeInSeconds = 0;
@@ -280,7 +319,6 @@ function simulateMatch(teamsInMatch) {
                                 })
                         }
                     });
-                    console.log({result})
                     let playerAttrContent = '';
                     result.forEach(team => {
                         playerAttrContent += `<div class="col-6 pt-3 mt-3 border-top-dashed border-1 border-dark border-opacity-25">
@@ -354,6 +392,9 @@ function simulateMatch(teamsInMatch) {
                         prevPlayer = player;
                     } else {
                         const nextAction = performNextAction(prevAction, prevPlayer);
+                        if (!nextAction.action){
+                            console.log(prevAction, nextAction)
+                        }
                         action = nextAction.action;
                         prevAction = action;
                         if (nextAction.player) {
@@ -533,6 +574,7 @@ function performOutcomeAction(action, player) {
             break;
         default:
             outcome = '';
+            // console.log(action)
             break;
     }
 
@@ -781,6 +823,23 @@ function simulatePlayerAction(action, player, currentTime, opponentPlayer) {
                 `${player.name} marked the striker closely, aiming to disrupt the goal kick distribution.`
             );
             player.score = Math.min(player.score + lowPlayerScore, 10);
+            break;
+        case "step_over":
+            logEvent(
+                currentTime,
+                "step_over",
+                player,
+                `${player.name} performed a step-over to deceive the defender and create space for a potential attack.`
+            );
+            player.score = Math.min(player.score + lowPlayerScore, 10);
+            break;
+        case "block_pass":
+            logEvent(
+                currentTime,
+                "block_pass",
+                player,
+                `${player.name} blocked a pass attempt, intercepting the ball to regain possession for the team.`
+            );
             break;
         case "distribute_ball":
             logEvent(
@@ -1053,6 +1112,15 @@ function simulatePlayerAction(action, player, currentTime, opponentPlayer) {
             player.score = Math.max(player.score - mediumPlayerScore, 1);
             teamsInMatch[player.teamIdx === 0 ? 1 : 0].score++;
             player.own_goals_in_match++;
+            break;
+        case "make_decoy_run":
+            logEvent(
+                currentTime,
+                "make_decoy_run",
+                player,
+                `${player.name} made a decoy run, drawing defenders away from the ball carrier to create space for a teammate.`
+            );
+            player.score = Math.min(player.score + lowPlayerScore, 10);
             break;
         case "overlap":
             // Handle overlap action
