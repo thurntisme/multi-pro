@@ -19,8 +19,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_POST['action_name'])) {
         if ($_POST['action_name'] === 'accept_match') {
             $footballMatchController->saveMatchResult($match_uuid, $_POST['match_result']);
-            var_dump($_POST);
-            die();
         }
     }
 }

@@ -191,7 +191,7 @@ ob_start();
                                     </div>
                                 </div>
                                 <div class="row mt-2">
-                                    <ul class="list-group px-3">
+                                    <ul class="list-group px-1">
                                         <li class="list-group-item hstack gap-2">
                                             <div class="w-50 d-flex justify-content-between">
                                                 <span class="fs-12">Age</span>
@@ -250,7 +250,7 @@ ob_start();
                                     </ul>
                                 </div>
                                 <div class="row mt-3">
-                                    <div class="col-12">
+                                    <div class="col-12 px-1">
                                         <div class="mb-3">
                                             <label for="choices-text-input" class="form-label">Player Roles</label>
                                             <select class="js-example-basic-multiple" name="player_roles[]" multiple="multiple">

@@ -227,6 +227,13 @@ class FootballMatchController
         return null;
     }
 
+    function updatePlayerLevel($currentLevel, $score) {
+        $score = max(1.0, min($score, 10.0));        
+        $scalingFactor = 1 / (1 + $currentLevel / 100);
+        $levelIncrease = $score * $scalingFactor * rand(10, 20);
+        return round($currentLevel + $levelIncrease);
+    }
+
     public function saveMatchResult($match_uuid, $result) {
         $match = $this->getTeamInMatch($match_uuid);
         if (empty($match)) {
@@ -267,7 +274,7 @@ class FootballMatchController
                         ':red_cards' => $player->red_cards,
                         ':player_stamina' => $player->remaining_stamina,
                         ':assists' => 0,
-                        ':level' => 100,
+                        ':level' => $this->updatePlayerLevel($player->level, $player->score),
                         ':team_id' => $match['team_id'],
                         ':player_uuid' => $player->uuid,
                     ]);

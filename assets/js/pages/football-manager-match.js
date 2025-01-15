@@ -304,6 +304,7 @@ function simulateMatch(teamsInMatch) {
                                 return {
                                     uuid: player.uuid,
                                     name: player.name,
+                                    level: player.level,
                                     position: player.position_in_match,
                                     score: player.score.toFixed(1),
                                     goals: player?.goals_in_match || 0,
@@ -326,35 +327,34 @@ function simulateMatch(teamsInMatch) {
                             <table class="table table-borderless mb-0">
                                 <tbody>
                                     <tr>
-                                       <th class="ps-0 text-capitalize text-start" scope="row"></th>
-                                            <td class="text-muted"></td>
-                                            <td class="text-muted"></td>
-                                            <td class="text-muted"></td>
-                                            <th class="text-center px-1" style="width: 52px;">
-                                                <img src="${goalImagePath}" class="img-responsive avatar-xxs" alt="goals" />
-                                            </th>
-                                            <th class="text-center px-1" style="width: 52px;">
-                                                <img src="${yellowCardImagePath}" class="img-responsive avatar-xxs" alt="yellow card" />
-                                            </th>
-                                            <th class="text-center px-1" style="width: 52px;">
-                                                <img src="${redCardImagePath}" class="img-responsive avatar-xxs" alt="red card" />
-                                            </th>
-                                        </tr>`;
+                                        <td class="text-muted"></td>
+                                        <td class="text-muted"></td>
+                                        <td class="text-muted"></td>
+                                        <th class="text-center px-1" style="width: 52px;">
+                                            <img src="${goalImagePath}" class="img-responsive avatar-xxs" alt="goals" />
+                                        </th>
+                                        <th class="text-center px-1" style="width: 52px;">
+                                            <img src="${yellowCardImagePath}" class="img-responsive avatar-xxs" alt="yellow card" />
+                                        </th>
+                                        <th class="text-center px-1" style="width: 52px;">
+                                            <img src="${redCardImagePath}" class="img-responsive avatar-xxs" alt="red card" />
+                                        </th>
+                                    </tr>`;
 
-                        team.players.forEach(function (player) {
-                            playerAttrContent += `<tr>
-                                            <th class="ps-0 text-capitalize text-start" scope="row">
-                                                ${player.name} ${player.is_injury ? '(Injury)' : ''}
-                                                ${player.uuid === bestPlayerUuid ? '<span class="badge bg-success">Best</span>' : ''}
-                                            </th>
-                                            <td class="text-muted">${player.position}</td>
-                                            <td class="text-muted">${player.score}</td>
-                                            <td class="text-muted">
-                                                ${player.goals} ${player.own_goals ? `(${player.own_goals}G)` : ''}
-                                            </td>
-                                            <td class="text-muted">${player.yellow_cards}</td>
-                                            <td class="text-muted">${player.red_cards}</td>
-                                        </tr>`;
+                    team.players.forEach(function (player) {
+                        playerAttrContent += `<tr>
+                                        <th class="ps-0 text-capitalize text-start" scope="row">
+                                            ${player.name} ${player.is_injury ? '(Injury)' : ''}
+                                            ${player.uuid === bestPlayerUuid ? '<span class="badge bg-success">Best</span>' : ''}
+                                        </th>
+                                        <td class="text-muted">${player.position}</td>
+                                        <td class="text-muted">${player.score}</td>
+                                        <td class="text-muted">
+                                            ${player.goals} ${player.own_goals ? `(${player.own_goals}G)` : ''}
+                                        </td>
+                                        <td class="text-muted">${player.yellow_cards}</td>
+                                        <td class="text-muted">${player.red_cards}</td>
+                                    </tr>`;
                         })
 
                         playerAttrContent += `</tbody>
