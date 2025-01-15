@@ -245,7 +245,7 @@ class FootballMatchController
                     $yellow_cards = (int)$playerData['yellow_cards'] + (int)$player->yellow_cards;
                     $red_cards = (int)$playerData['red_cards'] + (int)$player->red_cards;
                     $match_played = (int)$playerData['match_played'] + 1;
-                    $avg_score = (int)$playerData['match_played'] > 0 ? ((float)$playerData['avg_score'] * (float)$playerData['match_played'] + (float)$player->score) / $match_played : 0;
+                    $avg_score = (int)$playerData['match_played'] > 0 ? ((float)$playerData['avg_score'] * (float)$playerData['match_played'] + (float)$player->score) / $match_played : $player->score;
                     $is_injury = $player->is_injury || ($player->remaining_stamina <= 0);
                     $injury_end_date = is_null($playerData['injury_end_date']) && $is_injury ? date('Y-m-d H:i:s', strtotime(' +' . rand(1, 3) . ' days')) : null;
 
