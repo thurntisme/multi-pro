@@ -18,7 +18,7 @@ $away_team = $match['away_team_data'];
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_POST['action_name'])) {
         if ($_POST['action_name'] === 'accept_match') {
-            $footballMatchController->saveMatchResult($match_uuid, $_POST['match_result']);
+            $footballMatchController->acceptMatchResult($match_uuid);
         }
     }
 }
@@ -216,6 +216,7 @@ $pageContent = ob_get_clean();
 ob_start();
 echo "
     <script type='text/javascript'>
+        let apiUrl = '" . home_url("/api") . "';
         const canvas = document.getElementById('footballPitch');
         const ctx = canvas.getContext('2d');
 

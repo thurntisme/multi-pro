@@ -198,14 +198,11 @@ class FootballMatchController
         exit;
     }
 
-    public function saveMatchResult($match_uuid, $result): void
+    public function saveMatchResult($match_uuid, $result): bool
     {
         $match = $this->getTeamInMatch($match_uuid);
         if (empty($match)) {
-            $_SESSION['message_type'] = 'danger';
-            $_SESSION['message'] = "Failed to save this match.";
-            header("Location: " . $_SERVER['REQUEST_URI']);
-            exit;
+            return false;
         }
         $resultData = json_decode($result)[$match['is_home'] === 1 ? 0 : 1] ?? [];
         $myPlayers = array_values($resultData->players);
@@ -272,16 +269,7 @@ class FootballMatchController
             }
         }
 
-        if ($isSuccess) {
-            $_SESSION['message_type'] = 'success';
-            $_SESSION['message'] = "Your players were updated successfully.";
-        } else {
-            $_SESSION['message_type'] = 'danger';
-            $_SESSION['message'] = "Failed to save this match.";
-        }
-
-        header("Location: " . $_SERVER['REQUEST_URI']);
-        exit;
+        return $isSuccess;
     }
 
     public function getTeamInMatch($match_uuid)

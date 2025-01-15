@@ -1,6 +1,7 @@
 <?php
 include_once DIR . '/functions/generate-player.php';
 require_once DIR . '/controllers/FootballTeamController.php';
+require_once DIR . '/controllers/FootballMatchController.php';
 global $api_url, $payload, $method, $user_id;
 $slug = str_replace('football-manager/', '', $api_url);
 switch ($slug) {
@@ -40,6 +41,16 @@ switch ($slug) {
         }
         break;
 
+    case 'match/result':
+        if ($method === 'POST') {
+            $match_uuid = $payload['match_uuid'] ?? null;
+            $result = $payload['result'] ?? null;
+            saveMatchResult($match_uuid, $result);
+        } else {
+            sendResponse("error", 405, "Method Not Allowed");
+        }
+        break;
+
     default:
         sendResponse("error", 404, "Endpoint not found");
         break;
@@ -54,7 +65,7 @@ function getPlayerByInventory($item_uuid, $item_type, $item_slug): void
             try {
                 exportPlayersToJson($players);
                 sendResponse("success", 201, "Player created successfully.", $players[0]);
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 sendResponse("error", 405, "Failed to create a new player.");
                 $_SESSION['message_type'] = 'danger';
             }
@@ -79,7 +90,8 @@ function getClubAnalysis($players)
     }
 }
 
-function getMyClubData() {
+function getMyClubData()
+{
     global $user_id;
     try {
         $footballTeamController = new FootballTeamController();
@@ -89,9 +101,24 @@ function getMyClubData() {
             $result['players'] = $teamData['players'];
             sendResponse("success", 201, "Get Club data successfully.", $result);
         } else {
-            sendResponse("error", 405, "Failed to get club data. ".$user_id);
+            sendResponse("error", 405, "Failed to get club data. " . $user_id);
         }
-    } catch (\Throwable $th) {
-        sendResponse("error", 500, "Failed to get club data.".$user_id);
+    } catch (Throwable $th) {
+        sendResponse("error", 500, "Failed to get club data." . $user_id);
+    }
+}
+
+function saveMatchResult($match_uuid, $result): void
+{
+    try {
+        $footballMatchController = new FootballMatchController();
+        $matchData = $footballMatchController->saveMatchResult($match_uuid, $result);
+        if ($matchData) {
+            sendResponse("success", 201, "Save match data successfully.");
+        } else {
+            sendResponse("error", 405, "Failed to save match data.");
+        }
+    } catch (Throwable $th) {
+        sendResponse("error", 500, "Failed to save match data.");
     }
 }

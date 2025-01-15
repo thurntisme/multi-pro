@@ -341,8 +341,8 @@ function simulateMatch(teamsInMatch) {
                                         </th>
                                     </tr>`;
 
-                    team.players.forEach(function (player) {
-                        playerAttrContent += `<tr>
+                        team.players.forEach(function (player) {
+                            playerAttrContent += `<tr>
                                         <th class="ps-0 text-capitalize text-start" scope="row">
                                             ${player.name} ${player.is_injury ? '(Injury)' : ''}
                                             ${player.uuid === bestPlayerUuid ? '<span class="badge bg-success">Best</span>' : ''}
@@ -371,14 +371,31 @@ function simulateMatch(teamsInMatch) {
                     const playerAttrHtml = `<div class="row">${playerAttrContent}</div>`;
                     matchAttributes.append(playerAttrHtml);
                 });
-                setTimeout(() =>{
-                    $('#match-form').removeClass('d-none');
-                },2000);
+                const url = new URL(window.location.href);
+                const payload = {result: JSON.stringify(result), match_uuid: url.searchParams.get('uuid')};
+                try {
+                    $.ajax({
+                        url: apiUrl + '/football-manager/match/result',
+                        method: 'POST',
+                        contentType: 'application/json',
+                        data: JSON.stringify(payload),
+                        success: function (response) {
+                            if (response.status === "success") {
+                                $('#match-form').removeClass('d-none');
+                            }
+                        },
+                        error: function (xhr, status, error) {
+                            console.error('Error:', error);
+                        },
+                    });
+                } catch (error) {
+                    console.error('Error fetching data:', error);
+                }
                 $("#match-form").on("submit", function (e) {
                     e.preventDefault();
                     $("[name=match_result]").val(JSON.stringify(result));
                     this.submit();
-                  });
+                });
                 return;
             }
 
@@ -400,7 +417,7 @@ function simulateMatch(teamsInMatch) {
                         prevPlayer = player;
                     } else {
                         const nextAction = performNextAction(prevAction, prevPlayer);
-                        if (!nextAction.action){
+                        if (!nextAction.action) {
                             console.log(prevAction, nextAction)
                         }
                         action = nextAction.action;
