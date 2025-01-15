@@ -223,6 +223,9 @@ class FootballMatchController
                         assists = :assists,
                         level = :level,
                         match_played = :match_played,
+                        avg_score = :avg_score,
+                        is_injury = :is_injury,
+                        injury_end_date = :injury_end_date,
                         updated_at = CURRENT_TIMESTAMP
                     WHERE team_id = :team_id
                         AND player_uuid = :player_uuid
@@ -242,17 +245,23 @@ class FootballMatchController
                     $yellow_cards = (int)$playerData['yellow_cards'] + (int)$player->yellow_cards;
                     $red_cards = (int)$playerData['red_cards'] + (int)$player->red_cards;
                     $match_played = (int)$playerData['match_played'] + 1;
+                    $avg_score = (int)$playerData['match_played'] > 0 ? ((float)$playerData['avg_score'] * (float)$playerData['match_played'] + (float)$player->score) / $match_played : 0;
+                    $is_injury = $player->is_injury || ($player->remaining_stamina <= 0);
+                    $injury_end_date = is_null($playerData['injury_end_date']) && $is_injury ? date('Y-m-d H:i:s', strtotime(' +' . rand(1, 3) . ' days')) : null;
 
                     // Execute the update statement
                     $stmt->execute([
                         ':goals_scored' => $goals_scored,
                         ':yellow_cards' => $yellow_cards,
                         ':red_cards' => $red_cards,
-                        ':player_stamina' => $player->remaining_stamina,
+                        ':player_stamina' => max($player->remaining_stamina, 0),
                         ':assists' => 0, // Assuming assists are not updated from the input
                         ':level' => $this->updatePlayerLevel($playerData['level'], $player->score),
                         ':team_id' => $match['team_id'],
                         ':match_played' => $match_played,
+                        ':avg_score' => round($avg_score, 1),
+                        ':is_injury' => $is_injury,
+                        ':injury_end_date' => $injury_end_date,
                         ':player_uuid' => $player->uuid,
                     ]);
                 }

@@ -61,6 +61,10 @@ ob_start();
                                                      class="img-responsive avatar-xxs" alt="stamina"/>
                                             </th>
                                             <th class="text-center px-1" style="width: 52px;">
+                                                <img src="<?= home_url('assets/images/football-manager/star.png') ?>"
+                                                     class="img-responsive avatar-xxs" alt="average score">
+                                            </th>
+                                            <th class="text-center px-1" style="width: 52px;">
                                                 <img src="<?= home_url('assets/images/football-manager/player-ability.png') ?>"
                                                      class="img-responsive avatar-xxs" alt="player ability"/>
                                             </th>
@@ -126,6 +130,8 @@ ob_start();
                                                         <td class="text-center px-1"
                                                             style="width: 52px;"><?= $item['match_played'] ?></td>
                                                         <td class="text-center px-1"
+                                                            style="width: 52px;"><?= $item['avg_score'] ?></td>
+                                                        <td class="text-center px-1"
                                                             style="width: 52px;"><?= $item['ability'] ?></td>
                                                         <td class="text-center px-1" style="width: 52px;"><span
                                                                     class="shirt_number"><?= $item['shirt_number'] ?></span>
@@ -141,14 +147,18 @@ ob_start();
                                                         <td class="text-center px-1"
                                                             style="width: 52px;"><?= $item['remaining_contract_date'] > 0 ? $item['remaining_contract_date'] : 0 ?></td>
                                                         <td class="text-center" style="width: 80px;">
-                                                            <div class="progress">
-                                                                <div class="progress-bar bg-success"
-                                                                     role="progressbar"
-                                                                     style="width: <?= $item['player_stamina'] ?? 100 ?>%"
-                                                                     aria-valuenow="<?= $item['player_stamina'] ?? 100 ?>"
-                                                                     aria-valuemin="0"
-                                                                     aria-valuemax="100"></div>
-                                                            </div>
+                                                            <?php if ($item['is_injury']) { ?>
+                                                                <i class="bx bx-first-aid text-danger"></i>
+                                                            <?php } else { ?>
+                                                                <div class="progress">
+                                                                    <div class="progress-bar bg-success"
+                                                                         role="progressbar"
+                                                                         style="width: <?= $item['player_stamina'] ?? 100 ?>%"
+                                                                         aria-valuenow="<?= $item['player_stamina'] ?? 100 ?>"
+                                                                         aria-valuemin="0"
+                                                                         aria-valuemax="100"></div>
+                                                                </div>
+                                                            <?php } ?>
                                                         </td>
                                                     </tr>
                                                 <?php } ?>

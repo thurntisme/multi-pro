@@ -140,16 +140,24 @@ ob_start();
                                                                     </div>
                                                                 </div>
                                                             </td>
-                                                            <td class="text-center"><span class="ability"><?= $item['ability'] ?></span></td>
+                                                            <td class="text-center"><span
+                                                                        class="ability"><?= $item['ability'] ?></span>
+                                                            </td>
                                                             <td class="text-center" style="width: 15%;">
-                                                                <div class="progress">
-                                                                    <div class="progress-bar bg-success"
-                                                                         role="progressbar"
-                                                                         style="width: <?= $item['player_stamina'] ?? 100 ?>%"
-                                                                         aria-valuenow="<?= $item['player_stamina'] ?? 100 ?>"
-                                                                         aria-valuemin="0"
-                                                                         aria-valuemax="100"></div>
-                                                                </div>
+                                                                <?php if ($item['is_injury']) { ?>
+                                                                    <span class="btn rounded-pill btn-danger waves-effect waves-light mx-auto player-alert">
+                                                                        <i class="bx bx-first-aid text-white"></i>
+                                                                    </span>
+                                                                <?php } else { ?>
+                                                                    <div class="progress">
+                                                                        <div class="progress-bar bg-success"
+                                                                             role="progressbar"
+                                                                             style="width: <?= $item['player_stamina'] ?? 100 ?>%"
+                                                                             aria-valuenow="<?= $item['player_stamina'] ?? 100 ?>"
+                                                                             aria-valuemin="0"
+                                                                             aria-valuemax="100"></div>
+                                                                    </div>
+                                                                <?php } ?>
                                                             </td>
                                                         </tr>
                                                     <?php } ?>
@@ -189,7 +197,7 @@ ob_start();
                                                                 data-player-uuid="<?= $item['player_uuid'] ?>">
                                                                 <td style="width: 10%;">
                                                                     <span class="ps-2 position"
-                                                                        style="border-left: solid 4px <?= getPositionColor($item['best_position']) ?>"> <?= $item['best_position'] ?></span>
+                                                                          style="border-left: solid 4px <?= getPositionColor($item['best_position']) ?>"> <?= $item['best_position'] ?></span>
                                                                 </td>
                                                                 <td>
                                                                     <div class="d-flex align-items-center">
@@ -211,16 +219,24 @@ ob_start();
                                                                         </div>
                                                                     </div>
                                                                 </td>
-                                                                <td class="text-center"><span class="ability"><?= $item['ability'] ?></span></td>
+                                                                <td class="text-center"><span
+                                                                            class="ability"><?= $item['ability'] ?></span>
+                                                                </td>
                                                                 <td class="text-center" style="width: 15%;">
-                                                                    <div class="progress">
-                                                                        <div class="progress-bar bg-success"
-                                                                            role="progressbar"
-                                                                            style="width: <?= $item['player_stamina'] ?? 100 ?>%"
-                                                                            aria-valuenow="<?= $item['player_stamina'] ?? 100 ?>"
-                                                                            aria-valuemin="0"
-                                                                            aria-valuemax="100"></div>
-                                                                    </div>
+                                                                    <?php if ($item['is_injury']) { ?>
+                                                                        <span class="btn rounded-pill btn-danger waves-effect waves-light mx-auto player-alert">
+                                                                            <i class="bx bx-first-aid text-white"></i>
+                                                                        </span>
+                                                                    <?php } else { ?>
+                                                                        <div class="progress">
+                                                                            <div class="progress-bar bg-success"
+                                                                                 role="progressbar"
+                                                                                 style="width: <?= $item['player_stamina'] ?? 100 ?>%"
+                                                                                 aria-valuenow="<?= $item['player_stamina'] ?? 100 ?>"
+                                                                                 aria-valuemin="0"
+                                                                                 aria-valuemax="100"></div>
+                                                                        </div>
+                                                                    <?php } ?>
                                                                 </td>
                                                             </tr>
                                                         <?php } ?>

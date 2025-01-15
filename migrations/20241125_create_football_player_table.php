@@ -10,6 +10,7 @@ return function (PDO $pdo) {
         'status TEXT DEFAULT "active"',  // Player's status (active, injured, etc.)
         'level INTEGER DEFAULT 100',  // Player's level (default 100)
         'card_level INTEGER DEFAULT 0',  // Player's card level (+0, +1, +2, etc.)
+        'is_injury BOOLEAN DEFAULT 0',
         'injury_end_date TIMESTAMP NULL',  // Nullable injury end date
         'joining_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP',  // Date the player joined
         'contract_end_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP',  // Date the player's contract ends
@@ -19,6 +20,7 @@ return function (PDO $pdo) {
         'red_cards INTEGER DEFAULT 0',  // Tracks red cards
         'age_in_team_days INTEGER DEFAULT 0',  // Tracks the number of days the player has been in the team
         'match_played INTEGER DEFAULT 0',
+        'avg_score FLOAT DEFAULT 0.0',
         'player_stamina INTEGER DEFAULT 100',
         'shirt_number INTEGER',
         'created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP',
