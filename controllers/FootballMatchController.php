@@ -342,30 +342,43 @@ class FootballMatchController
         exit;
     }
 
-    function updatePlayerStamina($team_id, $players){
+    function updatePlayerStamina($team_id, $players_in_match) {
+        $team_players = $this->footballTeamController->getTeamPlayersInClub($team_id);
         try {
             // Begin a transaction for all updates
             $this->pdo->beginTransaction();
-
+    
             // Update players
-            foreach ($players as $player) {
-                // Prepare statements
-                $updatePlayerStmt = $this->pdo->prepare("
-                    UPDATE football_player
-                    SET player_stamina = :player_stamina,
-                        updated_at = CURRENT_TIMESTAMP
-                    WHERE id = :id
-                        AND player_uuid = :player_uuid
-                ");
-
-                // Execute player update
-                $updatePlayerStmt->execute([
-                    ':player_stamina' => 100,
-                    ':id' => $player['id'],
-                    ':player_uuid' => $player['uuid'],
-                ]);
+            foreach ($team_players as $player) {
+                // Check if the player is in the players_in_match array
+                $isInMatch = false;
+                foreach ($players_in_match as $player_in_match) {
+                    if ($player_in_match['id'] === $player['id']) {
+                        $isInMatch = true;
+                        break;
+                    }
+                }
+    
+                // If player is not in match, update their stamina
+                if (!$isInMatch) {
+                    // Prepare statements
+                    $updatePlayerStmt = $this->pdo->prepare("
+                        UPDATE football_player
+                        SET player_stamina = :player_stamina,
+                            updated_at = CURRENT_TIMESTAMP
+                        WHERE id = :id
+                            AND player_uuid = :player_uuid
+                    ");
+    
+                    // Execute player update
+                    $updatePlayerStmt->execute([
+                        ':player_stamina' => 100,
+                        ':id' => $player['id'],
+                        ':player_uuid' => $player['uuid'],
+                    ]);
+                }
             }
-
+    
             // Commit the transaction
             $this->pdo->commit();
             return true;
@@ -377,7 +390,7 @@ class FootballMatchController
             error_log("Failed to save match result: " . $e->getMessage());
             return false;
         }
-    }
+    }    
 
     public function recordMatch($match_uuid, $players)
     {

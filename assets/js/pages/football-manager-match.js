@@ -258,7 +258,7 @@ function simulateMatch(teamsInMatch) {
                         url: apiUrl + '/football-manager/match/record',
                         method: 'POST',
                         contentType: 'application/json',
-                        data: JSON.stringify({...payload, players: teamsInMatch[teamsInMatch[0].is_my_team ? 0 : 1].bench}),
+                        data: JSON.stringify({...payload, players: teamsInMatch[teamsInMatch[0].is_my_team ? 0 : 1].players}),
                         success: function (response) {
                             console.log(response);
                         },
