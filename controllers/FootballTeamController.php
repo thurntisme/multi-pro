@@ -8,7 +8,6 @@ class FootballTeamController
     private $user_id;
     private $pdo;
     private $footballTeamService;
-    private $userController;
 
     public function __construct()
     {
@@ -17,7 +16,6 @@ class FootballTeamController
         $this->user_id = $user_id;
         $this->pdo = $pdo;
         $this->footballTeamService = new FootballTeamService($pdo);
-        $this->userController = new UserController();
     }
 
     // Handle creating a new team
@@ -128,7 +126,11 @@ class FootballTeamController
 
     public function getMyTeam()
     {
-        return $this->footballTeamService->getTeamByUserId();
+        $sql = "SELECT * FROM football_team WHERE manager_id = :manager_id";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute([':manager_id' => $this->user_id]);
+
+        return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
     public function terminatePlayerContract($playerId, $playerName)
@@ -193,15 +195,59 @@ class FootballTeamController
         return $this->footballTeamService->getAllTeams();
     }
 
-    // Get all teams
-
-    public function getMyTeamInMatch($teamId): array
+    function getPlayerById($id)
     {
-        $myTeamId = $this->getMyTeam()['id'];
-        $team = $this->footballTeamService->getTeamById($teamId);
-        if (!empty($myTeamId) && $myTeamId == $teamId) {
-            $lineupPlayers = array_slice($team['players'], 0, 11);
-            $subPlayers = array_slice($team['players'], 11);
+        $sql = "SELECT * FROM football_player WHERE  id = :id";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute([':id' => $id]);
+
+        $player = $stmt->fetch(PDO::FETCH_ASSOC);
+        if ($player) {
+            $player_uuid = $player['player_uuid'];
+            $playerJsonData = getPlayerJsonByUuid($player_uuid);
+            return array_merge($playerJsonData, $player, ['score' => 5]);
+        } else {
+            return null;
+        }
+    }
+
+    public function getPlayersInMatch($teamId){
+
+    }
+
+    public function getTeamPlayersInMatch($teamId)
+    {
+        $query = "";
+        $params = [':team_id' => $teamId];
+
+        $query = "AND joining_date < CURRENT_TIMESTAMP 
+        AND (injury_end_date IS NULL OR injury_end_date < CURRENT_TIMESTAMP) 
+        AND player_stamina >= 50 
+        AND status = 'club'";
+
+        $sql = "SELECT * FROM football_player WHERE team_id = :team_id $query ORDER BY starting_order ASC";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute($params);
+
+        $players = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        if (count($players) > 0) {
+            $players = array_map(function ($player){
+                $playerJsonData = getPlayerJsonByUuid($player['player_uuid']);
+                return array_merge($playerJsonData, $player, ['score' => 5]);
+            }, $players);
+        }
+
+        return $players;
+    }
+
+    public function getMyTeamInMatch()
+    {
+        $team = $this->getMyTeam();
+        if (!empty($team)) {
+            $players = $this->getTeamPlayersInMatch($team['id']);
+            $lineupPlayers = array_slice($players, 0, 11);
+            $subPlayers = array_slice($players, 11);
 
             return [
                 'team_id' => $team['id'],
@@ -211,20 +257,8 @@ class FootballTeamController
                 'bench' => $subPlayers,
                 'myTeam' => true
             ];
-        } else {
-            $formation = $this->randFormation();
-            $players = $this->randomTeamPlayers($formation);
-            $lineupPlayers = array_slice($players, 0, 11);
-            $subPlayers = array_slice($players, 11);
-            return [
-                'team_id' => $teamId,
-                'team_name' => $team['team_name'],
-                'formation' => $formation['slug'],
-                'lineup' => $lineupPlayers,
-                'bench' => $subPlayers,
-                'myTeam' => true
-            ];
-        }
+        } 
+        return [];
     }
 
     function randFormation()

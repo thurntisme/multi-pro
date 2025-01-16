@@ -224,7 +224,6 @@ class FootballMatchController
                         level = :level,
                         match_played = :match_played,
                         avg_score = :avg_score,
-                        is_injury = :is_injury,
                         injury_end_date = :injury_end_date,
                         updated_at = CURRENT_TIMESTAMP
                     WHERE team_id = :team_id
@@ -247,7 +246,7 @@ class FootballMatchController
                     $match_played = (int)$playerData['match_played'] + 1;
                     $avg_score = (int)$playerData['match_played'] > 0 ? ((float)$playerData['avg_score'] * (float)$playerData['match_played'] + (float)$player->score) / $match_played : $player->score;
                     $is_injury = $player->is_injury || ($player->remaining_stamina <= 0);
-                    $injury_end_date = is_null($playerData['injury_end_date']) && $is_injury ? date('Y-m-d H:i:s', strtotime(' +' . rand(1, 3) . ' days')) : null;
+                    $injury_end_date = is_null($playerData['injury_end_date']) && $is_injury ? date('Y-m-d H:i:s', strtotime(' +' . $player->recovery_time . ' days')) : null;
 
                     // Execute the update statement
                     $stmt->execute([
@@ -255,12 +254,11 @@ class FootballMatchController
                         ':yellow_cards' => $yellow_cards,
                         ':red_cards' => $red_cards,
                         ':player_stamina' => max($player->remaining_stamina, 0),
-                        ':assists' => 0, // Assuming assists are not updated from the input
+                        ':assists' => 0, 
                         ':level' => $this->updatePlayerLevel($playerData['level'], $player->score),
                         ':team_id' => $match['team_id'],
                         ':match_played' => $match_played,
                         ':avg_score' => round($avg_score, 1),
-                        ':is_injury' => $is_injury,
                         ':injury_end_date' => $injury_end_date,
                         ':player_uuid' => $player->uuid,
                     ]);
@@ -283,13 +281,10 @@ class FootballMatchController
 
     public function getTeamInMatch($match_uuid)
     {
-        // Corrected: use prepare instead of query
-        $sql = "SELECT * FROM football_match WHERE match_uuid = :match_uuid AND status = 'scheduled' ORDER BY created_at DESC LIMIT 1";
+        $sql = "SELECT * FROM football_match WHERE match_uuid = :match_uuid ORDER BY created_at DESC LIMIT 1";
 
-        // Prepare the statement
         $stmt = $this->pdo->prepare($sql);
 
-        // Execute the statement with bound parameters
         $stmt->execute([
             ':match_uuid' => $match_uuid
         ]);
@@ -297,13 +292,19 @@ class FootballMatchController
         // Fetch the result
         $match = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        if (!empty($match)) {
-            $players = [
-                'home_team_data' => $match['is_home'] ? $this->footballTeamController->getMyTeamInMatch($match['team_id']) : $this->footballTeamController->getRandTeamInMatch(),
-                'away_team_data' => $match['is_home'] ? $this->footballTeamController->getRandTeamInMatch() : $this->footballTeamController->getMyTeamInMatch($match['team_id']),
-            ];
+        if (!empty($match) && ($match['status'] == 'scheduled')) {
+            $myTeamInMatch = $this->footballTeamController->getMyTeamInMatch();
+            $randTeam = $this->footballTeamController->getRandTeamInMatch();
 
-            return array_merge($match, $players);
+            if (count($myTeamInMatch) > 0 && count($randTeam) > 0) {
+                $players = [
+                    'home_team_data' => $match['is_home'] ? $myTeamInMatch : $randTeam,
+                    'away_team_data' => $match['is_home'] ? $randTeam : $myTeamInMatch,
+                ];
+
+                return array_merge($match, $players);
+            }
+            return null;
         }
 
         // Return null if no match is found

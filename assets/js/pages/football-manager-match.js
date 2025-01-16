@@ -310,6 +310,7 @@ function simulateMatch(teamsInMatch) {
                                     goals: player?.goals_in_match || 0,
                                     own_goals: player?.own_goals_in_match || 0,
                                     is_injury: player.is_injury,
+                                    recovery_time: player.recovery_time,
                                     yellow_cards: player?.yellow_cards_in_match || 0,
                                     red_cards: player?.red_cards_in_match || 0,
                                     remaining_stamina: Math.round(player.player_stamina - (100 - player.attributes.physical.stamina) / 100 * formatMatchTime(totalMatchTime)['minute']),
