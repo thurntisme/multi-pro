@@ -342,7 +342,44 @@ class FootballMatchController
         exit;
     }
 
-    public function recordMatch($match_uuid)
+    function updatePlayerStamina($team_id, $players){
+        try {
+            // Begin a transaction for all updates
+            $this->pdo->beginTransaction();
+
+            // Update players
+            foreach ($players as $player) {
+                // Prepare statements
+                $updatePlayerStmt = $this->pdo->prepare("
+                    UPDATE football_player
+                    SET player_stamina = :player_stamina,
+                        updated_at = CURRENT_TIMESTAMP
+                    WHERE id = :id
+                        AND player_uuid = :player_uuid
+                ");
+
+                // Execute player update
+                $updatePlayerStmt->execute([
+                    ':player_stamina' => 100,
+                    ':id' => $player['id'],
+                    ':player_uuid' => $player['uuid'],
+                ]);
+            }
+
+            // Commit the transaction
+            $this->pdo->commit();
+            return true;
+        } catch (Exception $e) {
+            // Roll back the transaction on failure
+            if ($this->pdo->inTransaction()) {
+                $this->pdo->rollBack();
+            }
+            error_log("Failed to save match result: " . $e->getMessage());
+            return false;
+        }
+    }
+
+    public function recordMatch($match_uuid, $players)
     {
         $sql = "SELECT * FROM football_match WHERE match_uuid = :match_uuid AND status = 'scheduled' ORDER BY created_at DESC LIMIT 1";
 
@@ -359,7 +396,7 @@ class FootballMatchController
             $recordStmt = $this->pdo->prepare($recordSql);
             $recordStmt->execute([':status' => 'recorded', ':match_uuid' => $match_uuid]);
 
-            return ($recordStmt->rowCount() > 0) && $this->generateMatch();
+            return ($recordStmt->rowCount() > 0) && $this->generateMatch() && $this->updatePlayerStamina($match['team_id'], $players);
         }
         return false;
     }

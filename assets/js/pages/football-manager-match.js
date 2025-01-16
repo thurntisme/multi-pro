@@ -258,7 +258,7 @@ function simulateMatch(teamsInMatch) {
                         url: apiUrl + '/football-manager/match/record',
                         method: 'POST',
                         contentType: 'application/json',
-                        data: JSON.stringify(payload),
+                        data: JSON.stringify({...payload, players: teamsInMatch[teamsInMatch[0].is_my_team ? 0 : 1].bench}),
                         success: function (response) {
                             console.log(response);
                         },
@@ -403,29 +403,29 @@ function simulateMatch(teamsInMatch) {
                     matchAttributes.append(playerAttrHtml);
                 });
                 payload.result = JSON.stringify(match_result);
-                try {
-                    $.ajax({
-                        url: apiUrl + '/football-manager/match/result',
-                        method: 'POST',
-                        contentType: 'application/json',
-                        data: JSON.stringify(payload),
-                        success: function (response) {
-                            if (response.status === "success") {
-                                $('#match-form').removeClass('d-none');
-                            }
-                        },
-                        error: function (xhr, status, error) {
-                            console.error('Error:', error);
-                        },
-                    });
-                } catch (error) {
-                    console.error('Error fetching data:', error);
-                }
-                $("#match-form").on("submit", function (e) {
-                    e.preventDefault();
-                    $("[name=match_result]").val(JSON.stringify(result));
-                    this.submit();
-                });
+                // try {
+                //     $.ajax({
+                //         url: apiUrl + '/football-manager/match/result',
+                //         method: 'POST',
+                //         contentType: 'application/json',
+                //         data: JSON.stringify(payload),
+                //         success: function (response) {
+                //             if (response.status === "success") {
+                //                 $('#match-form').removeClass('d-none');
+                //             }
+                //         },
+                //         error: function (xhr, status, error) {
+                //             console.error('Error:', error);
+                //         },
+                //     });
+                // } catch (error) {
+                //     console.error('Error fetching data:', error);
+                // }
+                // $("#match-form").on("submit", function (e) {
+                //     e.preventDefault();
+                //     $("[name=match_result]").val(JSON.stringify(result));
+                //     this.submit();
+                // });
                 return;
             }
 
