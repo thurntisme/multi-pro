@@ -8,7 +8,7 @@ $footballTeamController = new FootballTeamController();
 
 $lineupPlayers = [];
 $subPlayers = [];
-$myTeam = $footballTeamController->getMyTeam();
+$myTeam = $footballTeamController->getMyTeamInClub();
 if ($myTeam['players']) {
     $lineupPlayers = array_slice($myTeam['players'], 0, 11);
     $subPlayers = array_slice($myTeam['players'], 11);

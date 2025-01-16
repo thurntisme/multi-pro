@@ -8,14 +8,17 @@ class FootballTeamController
     private $user_id;
     private $pdo;
     private $footballTeamService;
+    private $systemController;
 
     public function __construct()
     {
         global $user_id;
         global $pdo;
+        global $systemController;
         $this->user_id = $user_id;
         $this->pdo = $pdo;
         $this->footballTeamService = new FootballTeamService($pdo);
+        $this->systemController = $systemController;
     }
 
     // Handle creating a new team
@@ -241,6 +244,74 @@ class FootballTeamController
         return $players;
     }
 
+    public function calRemainingContractDate($date): int
+    {
+        // Convert both $now and $date to DateTime objects
+        try {
+            $nowDateTime = $this->systemController->getDateTime('now');
+            $convertedDate = $this->systemController->getDateTime($date);
+        } catch (Exception $e) {
+            throw new InvalidArgumentException("Invalid date format provided: " . $e->getMessage());
+        }
+
+        $nowDateTime->setTime(0, 0);
+        $convertedDate->setTime(0, 0);
+
+        // Calculate the difference
+        $diff = $nowDateTime->diff($convertedDate);
+
+        // Determine the sign of the difference using $diff->invert
+        $days = (int)$diff->format('%a');
+        if ($diff->invert === 1) {
+            $days = -$days; // Make the difference negative if the date is in the future
+        }
+
+        return $days;
+    }
+
+    function getLevelDetails($points): array
+    {
+        $pointsPerLevel = 100; // Points required for one level
+        $level = floor($points / $pointsPerLevel); // Current level
+        $progress = $points % $pointsPerLevel; // Points towards the next level
+        $percentageToNextLevel = ($progress / $pointsPerLevel) * 100; // Progress percentage
+
+        return [
+            'num' => $level,
+            'percentageToNextLevel' => number_format($percentageToNextLevel, 2)
+        ];
+    }
+
+    public function getTeamPlayersInClub($teamId)
+    {
+        $query = "";
+        $params = [':team_id' => $teamId];
+
+        $query = "AND joining_date < CURRENT_TIMESTAMP 
+        AND status = 'club'";
+
+        $sql = "SELECT * FROM football_player WHERE team_id = :team_id $query ORDER BY starting_order ASC";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute($params);
+
+        $players = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        if (count($players) > 0) {
+            $players = array_map(function ($player){
+                $playerJsonData = getPlayerJsonByUuid($player['player_uuid']);
+                $playerJsonData['remaining_contract_date'] = $this->calRemainingContractDate($player['contract_end_date']);
+                $playerJsonData['market_value'] = formatCurrency($playerJsonData['market_value']);
+                $playerJsonData['contract_wage'] = formatCurrency($playerJsonData['contract_wage']);
+                $player['contract_end_date'] = $this->systemController->convertDate($player['contract_end_date']);
+                $playerJsonData['is_expired'] = $playerJsonData['remaining_contract_date'] < 0;
+                $player['level'] = $this->getLevelDetails($player['level']);
+                return array_merge($playerJsonData, $player);
+            }, $players);
+        }
+
+        return $players;
+    }
+
     public function getMyTeamInMatch()
     {
         $team = $this->getMyTeam();
@@ -253,9 +324,25 @@ class FootballTeamController
                 'team_id' => $team['id'],
                 'team_name' => $team['team_name'],
                 'formation' => $team['formation'],
-                'lineup' => $lineupPlayers,
+                'players' => $lineupPlayers,
                 'bench' => $subPlayers,
                 'myTeam' => true
+            ];
+        } 
+        return [];
+    }
+
+    public function getMyTeamInClub()
+    {
+        $team = $this->getMyTeam();
+        if (!empty($team)) {
+            $players = $this->getTeamPlayersInClub($team['id']);
+
+            return [
+                'team_name' => $team['team_name'],
+                'team_id' => $team['id'],
+                'formation' => $team['formation'],
+                'players' => $players,
             ];
         } 
         return [];
