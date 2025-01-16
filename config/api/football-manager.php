@@ -128,7 +128,7 @@ function saveMatchResult($match_uuid, $result): void
             sendResponse("error", 405, "Failed to save match data.");
         }
     } catch (Throwable $th) {
-        sendResponse("error", 500, "Failed to save match data.");
+        sendResponse("error", 500, "Failed to save match data. " . $th->getMessage());
     }
 }
 

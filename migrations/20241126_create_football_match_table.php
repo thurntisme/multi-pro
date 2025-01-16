@@ -11,6 +11,8 @@ return function (PDO $pdo) {
         'away_team TEXT',
         'home_score INTEGER DEFAULT 0',
         'away_score INTEGER DEFAULT 0',
+        'draft_home_score INTEGER DEFAULT 0',
+        'draft_away_score INTEGER DEFAULT 0',
         'is_home TINYINT(1) DEFAULT 1',
         'status TEXT DEFAULT "scheduled"',
         'created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP',
