@@ -305,6 +305,7 @@ class FootballTeamController
                 $player['contract_end_date'] = $this->systemController->convertDate($player['contract_end_date']);
                 $playerJsonData['is_expired'] = $playerJsonData['remaining_contract_date'] < 0;
                 $player['level'] = $this->getLevelDetails($player['level']);
+                $player['is_injury'] = !empty($player['injury_end_date']) ? !$this->systemController->checkPreviousDateTime($player['injury_end_date']) : false;
                 return array_merge($playerJsonData, $player);
             }, $players);
         }

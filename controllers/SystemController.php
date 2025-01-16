@@ -48,6 +48,11 @@ class SystemController
         return $dateTime->format($format);
     }
 
+    public function checkPreviousDateTime($dateTime)
+    {
+        return $this->getDateTime($dateTime) < $this->getCurrentDateTimeStr();
+    }
+
     function getTimezoneOffset()
     {
         $localTimezone = $this->getTimezone();
