@@ -325,7 +325,7 @@ class FootballTeamController
                 'team_id' => $team['id'],
                 'team_name' => $team['team_name'],
                 'formation' => $team['formation'],
-                'players' => $lineupPlayers,
+                'lineup' => $lineupPlayers,
                 'bench' => $subPlayers,
                 'myTeam' => true
             ];

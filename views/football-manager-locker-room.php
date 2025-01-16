@@ -8,7 +8,7 @@ require_once DIR . '/controllers/FootballPlayerController.php';
 $footballPlayerController = new FootballPlayerController();
 $footballTeamController = new FootballTeamController();
 
-$myTeam = $footballTeamController->getMyTeam();
+$myTeam = $footballTeamController->getMyTeamInClub();
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_POST['action_name'])) {

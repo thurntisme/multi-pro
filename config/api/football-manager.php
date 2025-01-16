@@ -51,6 +51,15 @@ switch ($slug) {
         }
         break;
 
+    case 'match/record':
+        if ($method === 'POST') {
+            $match_uuid = $payload['match_uuid'] ?? null;
+            recordMatch($match_uuid, $user_id);
+        } else {
+            sendResponse("error", 405, "Method Not Allowed");
+        }
+        break;
+
     default:
         sendResponse("error", 404, "Endpoint not found");
         break;
@@ -120,5 +129,20 @@ function saveMatchResult($match_uuid, $result): void
         }
     } catch (Throwable $th) {
         sendResponse("error", 500, "Failed to save match data.");
+    }
+}
+
+function recordMatch($match_uuid, $user_id): void
+{
+    try {
+        $footballMatchController = new FootballMatchController();
+        $matchData = $footballMatchController->recordMatch($match_uuid);
+        if ($matchData) {
+            sendResponse("success", 201, "Record match data successfully.");
+        } else {
+            sendResponse("error", 405, "Failed to record match data.");
+        }
+    } catch (Throwable $th) {
+        sendResponse("error", 500, "Failed to record match data. " . $th->getMessage());
     }
 }

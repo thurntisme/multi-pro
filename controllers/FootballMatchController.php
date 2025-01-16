@@ -155,7 +155,7 @@ class FootballMatchController
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
-    public function createMatch()
+    function generateMatch()
     {
         // Prepare the SQL insert statement
         $stmt = $this->pdo->prepare("
@@ -186,7 +186,13 @@ class FootballMatchController
             ':away_score' => $away_score,
             ':is_home' => $is_home,
         ]);
-        $rowAffect = $this->pdo->lastInsertId();
+
+        return $this->pdo->lastInsertId();
+    }
+
+    public function createMatch()
+    {
+        $rowAffect = $this->generateMatch();
         if ($rowAffect) {
             $_SESSION['message_type'] = 'success';
             $_SESSION['message'] = "A new match created successfully";
@@ -200,8 +206,11 @@ class FootballMatchController
 
     public function saveMatchResult($match_uuid, $result): bool
     {
-        $match = $this->getTeamInMatch($match_uuid);
+        $match = $this->getLatestMatch($match_uuid);
         if (empty($match)) {
+            return false;
+        }
+        if (!empty($match) && $match['status'] !== 'recorded') {
             return false;
         }
         $resultData = json_decode($result)[$match['is_home'] === 1 ? 0 : 1] ?? [];
@@ -256,7 +265,7 @@ class FootballMatchController
                         ':player_stamina' => max($player->remaining_stamina, 0),
                         ':assists' => 0, 
                         ':level' => $this->updatePlayerLevel($playerData['level'], $player->score),
-                        ':team_id' => $match['team_id'],
+                        ':team_id' => $match['id'],
                         ':match_played' => $match_played,
                         ':avg_score' => round($avg_score, 1),
                         ':injury_end_date' => $injury_end_date,
@@ -279,7 +288,29 @@ class FootballMatchController
         return $isSuccess;
     }
 
-    public function getTeamInMatch($match_uuid)
+    public function recordMatch($match_uuid)
+    {
+        $sql = "SELECT * FROM football_match WHERE match_uuid = :match_uuid AND status = 'scheduled' ORDER BY created_at DESC LIMIT 1";
+
+        $stmt = $this->pdo->prepare($sql);
+
+        $stmt->execute([
+            ':match_uuid' => $match_uuid
+        ]);
+
+        $match = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if (!empty($match)) {
+            $recordSql = "UPDATE football_match SET status = :status WHERE match_uuid = :match_uuid";
+            $recordStmt = $this->pdo->prepare($recordSql);
+            $recordStmt->execute([':status' => 'recorded', ':match_uuid' => $match_uuid]);
+
+            return ($recordStmt->rowCount() > 0) && $this->generateMatch();
+        }
+        return false;
+    }
+
+    function getLatestMatch($match_uuid)
     {
         $sql = "SELECT * FROM football_match WHERE match_uuid = :match_uuid ORDER BY created_at DESC LIMIT 1";
 
@@ -289,8 +320,12 @@ class FootballMatchController
             ':match_uuid' => $match_uuid
         ]);
 
-        // Fetch the result
-        $match = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+
+    public function getTeamInMatch($match_uuid)
+    {
+        $match = $this->getLatestMatch($match_uuid);
 
         if (!empty($match) && ($match['status'] == 'scheduled')) {
             $myTeamInMatch = $this->footballTeamController->getMyTeamInMatch();

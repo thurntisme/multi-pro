@@ -1,3 +1,6 @@
+const url = new URL(window.location.href);
+const payload = {match_uuid: url.searchParams.get('uuid')};
+
 const teamsInMatch = groupTeams.map((team, teamIdx) => {
     const playerColor = teamIdx === 0 ? homeTeamColor : awayTeamColor;
     const players = generateFormation(team.formation).map((pos, idx) => {
@@ -231,6 +234,7 @@ function simulateMatch(teamsInMatch) {
     let matchOver = false;
     let totalMatchTime = 0;
 
+    const recordTime = Math.floor(Math.random() * (2642 - 275 + 1)) + 275;
     // Random extra time
     const extraHalfTime = Math.floor(Math.random() * maxExtraTime) * 60;
     const extraTime = Math.floor(Math.random() * maxExtraTime) * 60;
@@ -248,6 +252,25 @@ function simulateMatch(teamsInMatch) {
             formatMatchTime(currentTimeInSeconds)["second"];
 
         if (matchTimeInSeconds % realTimeRate === 0) {
+            if (totalMatchTime === recordTime){
+                try {
+                    $.ajax({
+                        url: apiUrl + '/football-manager/match/record',
+                        method: 'POST',
+                        contentType: 'application/json',
+                        data: JSON.stringify(payload),
+                        success: function (response) {
+                            console.log(response);
+                        },
+                        error: function (xhr, status, error) {
+                            console.error('Error:', error);
+                        },
+                    });
+                } catch (error) {
+                    console.error('Error fetching data:', error);
+                }
+            }
+
             if (currentTimeInSeconds === maxHalfTime && extraHalfTime > 0) {
                 logEvent(
                     currentTimeInSeconds,
@@ -372,8 +395,7 @@ function simulateMatch(teamsInMatch) {
                     const playerAttrHtml = `<div class="row">${playerAttrContent}</div>`;
                     matchAttributes.append(playerAttrHtml);
                 });
-                const url = new URL(window.location.href);
-                const payload = {result: JSON.stringify(result), match_uuid: url.searchParams.get('uuid')};
+                payload.result = JSON.stringify(result);
                 try {
                     $.ajax({
                         url: apiUrl + '/football-manager/match/result',

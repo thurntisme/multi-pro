@@ -51,7 +51,7 @@ ob_start();
             <?php } else {
             $home_team = $match['home_team_data'];
             $away_team = $match['away_team_data'];
-            if (count($home_team['lineup']) > 11 && count($away_team['lineup']) > 11) {
+            if (count($home_team['bench']) > 5 && count($away_team['bench']) > 5) {
             ?>
                 <div class="row" id="match-progress">
                     <div class="col-8">
@@ -241,7 +241,7 @@ ob_start();
 <?php
 $pageContent = ob_get_clean();
 
-if (!empty($match) && (count($home_team['lineup']) > 11 && count($away_team['lineup']) > 11)) {
+if (!empty($match) && (count($home_team['bench']) > 5 && count($away_team['bench']) > 5)) {
     ob_start();
     echo "
     <script type='text/javascript'>
