@@ -204,98 +204,110 @@ class FootballMatchController
         exit;
     }
 
-    public function saveMatchResult($match_uuid, $result): bool
+    public
+    function saveMatchResult($match_uuid, $result): bool
     {
+        // Fetch the latest match details
         $match = $this->getLatestMatch($match_uuid);
-        if (empty($match)) {
+        if (empty($match) || $match['status'] !== 'recorded') {
             return false;
         }
-        if (!empty($match) && $match['status'] !== 'recorded') {
-            return false;
-        }
-        $resultData = json_decode($result) ?? [];
-        $isSuccess = false;
 
-        if (count($resultData) > 0){
-            $myPlayers = array_values($resultData[$match['is_home'] === 1 ? 0 : 1]->players);
-            if ($myPlayers && count($myPlayers) > 0) {
-                try {
-                    // Begin a single transaction for all updates
-                    $this->pdo->beginTransaction();
-    
-                    // Prepare the SQL statement
-                    $stmt = $this->pdo->prepare("
-                        UPDATE football_player
-                        SET goals_scored = :goals_scored,
-                            yellow_cards = :yellow_cards,
-                            red_cards = :red_cards,
-                            player_stamina = :player_stamina,
-                            assists = :assists,
-                            level = :level,
-                            match_played = :match_played,
-                            avg_score = :avg_score,
-                            injury_end_date = :injury_end_date,
-                            updated_at = CURRENT_TIMESTAMP
-                        WHERE team_id = :team_id
-                            AND player_uuid = :player_uuid
-                    ");
-    
-                    // Prepare the SQL statement for fetching player data
-                    $playerStmt = $this->pdo->prepare("SELECT *  FROM football_player WHERE player_uuid = :player_uuid");
-    
-                    // Execute the update for each player
-                    foreach ($myPlayers as $player) {
-                        // Fetch existing player data
-                        $playerStmt->execute([':player_uuid' => $player->uuid]);
-                        $playerData = $playerStmt->fetch(PDO::FETCH_ASSOC);
-    
-                        // Calculate updated stats
-                        $goals_scored = (int)$playerData['goals_scored'] + (int)$player->goals;
-                        $yellow_cards = (int)$playerData['yellow_cards'] + (int)$player->yellow_cards;
-                        $red_cards = (int)$playerData['red_cards'] + (int)$player->red_cards;
-                        $match_played = (int)$playerData['match_played'] + 1;
-                        $avg_score = (int)$playerData['match_played'] > 0 ? ((float)$playerData['avg_score'] * (float)$playerData['match_played'] + (float)$player->score) / $match_played : $player->score;
-                        $is_injury = $player->is_injury || ($player->remaining_stamina <= 0);
-                        $injury_end_date = is_null($playerData['injury_end_date']) && $is_injury ? date('Y-m-d H:i:s', strtotime(' +' . $player->recovery_time . ' days')) : null;
-    
-                        // Execute the update statement
-                        $stmt->execute([
-                            ':goals_scored' => $goals_scored,
-                            ':yellow_cards' => $yellow_cards,
-                            ':red_cards' => $red_cards,
-                            ':player_stamina' => max($player->remaining_stamina, 0),
-                            ':assists' => 0, 
-                            ':level' => $this->updatePlayerLevel($playerData['level'], $player->score),
-                            ':team_id' => $match['id'],
-                            ':match_played' => $match_played,
-                            ':avg_score' => round($avg_score, 1),
-                            ':injury_end_date' => $injury_end_date,
-                            ':player_uuid' => $player->uuid,
-                        ]);
-                    }
-    
-                    // Commit the transaction
-                    $this->pdo->commit();
-                    $isSuccess = true;
-                } catch (Exception $e) {
-                    // Rollback the transaction if any update fails
-                    if ($this->pdo->inTransaction()) {
-                        $this->pdo->rollBack();
-                    }
-                    error_log("Error updating players: " . $e->getMessage());
+        $resultData = json_decode($result);
+        if (!$resultData || empty($resultData->players)) {
+            return false;
+        }
+
+        $players = array_values($resultData->players);
+
+        try {
+            // Begin a transaction for all updates
+            $this->pdo->beginTransaction();
+
+            // Prepare statements
+            $updatePlayerStmt = $this->pdo->prepare("
+                UPDATE football_player
+                SET goals_scored = :goals_scored,
+                    yellow_cards = :yellow_cards,
+                    red_cards = :red_cards,
+                    player_stamina = :player_stamina,
+                    assists = :assists,
+                    level = :level,
+                    match_played = :match_played,
+                    avg_score = :avg_score,
+                    injury_end_date = :injury_end_date,
+                    updated_at = CURRENT_TIMESTAMP
+                WHERE team_id = :team_id
+                    AND player_uuid = :player_uuid
+            ");
+
+            $fetchPlayerStmt = $this->pdo->prepare("
+                SELECT * FROM football_player WHERE player_uuid = :player_uuid
+            ");
+
+            // Update players
+            foreach ($players as $player) {
+                $fetchPlayerStmt->execute([':player_uuid' => $player->uuid]);
+                $playerData = $fetchPlayerStmt->fetch(PDO::FETCH_ASSOC);
+
+                if (!$playerData) {
+                    throw new Exception("Player not found: {$player->uuid}");
                 }
+
+                // Calculate updated stats
+                $goalsScored = (int)$playerData['goals_scored'] + (int)$player->goals;
+                $yellowCards = (int)$playerData['yellow_cards'] + (int)$player->yellow_cards;
+                $redCards = (int)$playerData['red_cards'] + (int)$player->red_cards;
+                $matchPlayed = (int)$playerData['match_played'] + 1;
+                $avgScore = $playerData['match_played'] > 0
+                ? ((float)$playerData['avg_score'] * (float)$playerData['match_played'] + (float)$player->score) / $matchPlayed
+                    : $player->score;
+
+                $isInjury = $player->is_injury || ($player->remaining_stamina <= 0);
+                $injuryEndDate = $isInjury && is_null($playerData['injury_end_date'])
+                ? date('Y-m-d H:i:s', strtotime('+' . $player->recovery_time . ' days'))
+                : $playerData['injury_end_date'];
+
+                // Execute player update
+                $updatePlayerStmt->execute([
+                    ':goals_scored' => $goalsScored,
+                    ':yellow_cards' => $yellowCards,
+                    ':red_cards' => $redCards,
+                    ':player_stamina' => max($player->remaining_stamina, 0),
+                    ':assists' => $player->assists,
+                    ':level' => $this->updatePlayerLevel($playerData['level'], $player->score),
+                    ':team_id' => $match['team_id'],
+                    ':match_played' => $matchPlayed,
+                    ':avg_score' => round($avgScore, 1),
+                    ':injury_end_date' => $injuryEndDate,
+                    ':player_uuid' => $player->uuid,
+                ]);
             }
 
-            $draft_home_score = $resultData[$match['is_home'] === 0 ? 0 : 1]->score;
-            $draft_away_score = $resultData[$match['is_home'] === 0 ? 1 : 0]->score;
-            $matchScoreSql = "UPDATE football_match SET draft_home_score = :draft_home_score, draft_away_score = :draft_away_score WHERE match_uuid = :match_uuid";
-            $matchScoreStmt = $this->pdo->prepare($matchScoreSql);
-            $matchScoreStmt->execute([':draft_home_score' => $draft_home_score, ':draft_away_score' => $draft_away_score, ':match_uuid' => $match_uuid]);
+            // Update match score
+            $updateMatchStmt = $this->pdo->prepare("
+                UPDATE football_match
+                SET draft_home_score = :draft_home_score,
+                    draft_away_score = :draft_away_score
+                WHERE match_uuid = :match_uuid
+            ");
+            $updateMatchStmt->execute([
+                ':draft_home_score' => $resultData->draft_home_score,
+                ':draft_away_score' => $resultData->draft_away_score,
+                ':match_uuid' => $match_uuid,
+            ]);
 
-            return ($matchScoreStmt->rowCount() > 0) && $isSuccess;
+            // Commit the transaction
+            $this->pdo->commit();
+            return true;
+        } catch (Exception $e) {
+            // Roll back the transaction on failure
+            if ($this->pdo->inTransaction()) {
+                $this->pdo->rollBack();
+            }
+            error_log("Failed to save match result: " . $e->getMessage());
+            return false;
         }
-
-        return $isSuccess;
     }
 
     public function acceptMatchResult($match_uuid)

@@ -116,7 +116,7 @@ ob_start();
                                     <table class="table align-middle table-nowrap mb-0">
                                         <tbody class="list form-check-all">
                                             <?php foreach (array_merge($home_team['lineup'], $home_team['bench']) as $item) { ?>
-                                                <tr data-player-uuid="<?= $item['player_uuid'] ?>">
+                                                <tr data-player-uuid="<?= $item['uuid'] ?>">
                                                     <td style="width: 10%;">
                                                         <span class="ps-2"
                                                             style="border-left: solid 4px <?= getPositionColor($item['best_position']) ?>"> <?= $item['best_position'] ?></span>
@@ -259,6 +259,7 @@ if (!empty($match) && (count($home_team['bench']) > 5 && count($away_team['bench
             score: 0,
             players: " . json_encode($home_team['lineup']) . ",
             bench: " . json_encode($home_team['bench']) . ",
+            is_my_team: " . json_encode($match['is_home']) . " === 1,
         }
 
         const team2 = {
@@ -267,6 +268,7 @@ if (!empty($match) && (count($home_team['bench']) > 5 && count($away_team['bench
             score: 0,
             players: " . json_encode($away_team['lineup']) . ",
             bench: " . json_encode($away_team['bench']) . ",
+            is_my_team: " . json_encode($match['is_home']) . " === 0,
         }
         const groupTeams = [team1, team2];
         const pitchX = 50 * groupTeams.length;

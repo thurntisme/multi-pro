@@ -331,6 +331,7 @@ function simulateMatch(teamsInMatch) {
                                     position: player.position_in_match,
                                     score: player.score.toFixed(1),
                                     goals: player?.goals_in_match || 0,
+                                    assists: 0,
                                     own_goals: player?.own_goals_in_match || 0,
                                     is_injury: player.is_injury,
                                     recovery_time: player.recovery_time,
@@ -341,6 +342,12 @@ function simulateMatch(teamsInMatch) {
                             })
                     }
                 });
+                const match_result = {
+                    draft_home_score: result[0].score,
+                    draft_away_score: result[1].score,
+                    players: result[teamsInMatch[0].is_my_team ? 0 : 1].players
+                };
+                console.log(match_result)
                 $(document).on("click", "#btn-match-info", function () {
                     const matchAttributes = $("#matchInfoBackdrop #matchAttributes");
                     matchAttributes.html('<p class="mb-0">Data processing...</p>');
@@ -395,7 +402,7 @@ function simulateMatch(teamsInMatch) {
                     const playerAttrHtml = `<div class="row">${playerAttrContent}</div>`;
                     matchAttributes.append(playerAttrHtml);
                 });
-                payload.result = JSON.stringify(result);
+                payload.result = JSON.stringify(match_result);
                 try {
                     $.ajax({
                         url: apiUrl + '/football-manager/match/result',
