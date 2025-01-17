@@ -2,6 +2,7 @@
 
 require_once DIR . '/services/FootballLeagueService.php';
 require_once DIR . '/controllers/FootballTeamController.php';
+require_once DIR . '/functions/generate-player.php';
 
 class FootballMatchController
 {
@@ -334,11 +335,12 @@ class FootballMatchController
         if ($matchScoreStmt->rowCount()) {
             $_SESSION['message_type'] = 'success';
             $_SESSION['message'] = "Your match saved successfully";
+            header("Location: " . home_url("app/football-manager/match-result?uuid=".$match_uuid));
         } else {
             $_SESSION['message_type'] = 'danger';
             $_SESSION['message'] = "Failed to save the match";
+            header("Location: " . home_url("app/football-manager"));
         }
-        header("Location: " . home_url("app/football-manager"));
         exit;
     }
 
@@ -419,6 +421,47 @@ class FootballMatchController
             return ($recordStmt->rowCount() > 0) && $this->generateMatch() && $this->updatePlayerStamina($match['team_id'], $players);
         }
         return false;
+    }  
+
+    function randMatchGift($item_idx)
+    {
+        $players = [];
+        for($i = 0; $i < 3; $i++){
+            $players[] = generateRandomPlayers()[0];
+        }
+        if (isset($players[$item_idx])) {
+            $maxAbility = max(array_column($players, 'ability'));
+            do {
+                $randomAbility = rand(0, $maxAbility);
+            } while ($randomAbility == $maxAbility);
+            $players[$item_idx]['ability'] = $randomAbility;
+        }
+        return $players;
+    }
+
+    public function getMatchGift($match_uuid, $item_idx)
+    {
+        $sql = "SELECT * FROM football_match WHERE match_uuid = :match_uuid AND status = 'finished' ORDER BY created_at DESC LIMIT 1";
+
+        $stmt = $this->pdo->prepare($sql);
+
+        $stmt->execute([
+            ':match_uuid' => $match_uuid
+        ]);
+
+        $match = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if (!empty($match)) {
+            // $recordSql = "UPDATE football_match SET status = :status WHERE match_uuid = :match_uuid";
+            // $recordStmt = $this->pdo->prepare($recordSql);
+            // $recordStmt->execute([':status' => 'archived', ':match_uuid' => $match_uuid]);
+
+            return [
+                'list' => $this->randMatchGift($item_idx),
+                'item_idx' => $item_idx,
+            ];
+        }
+        return [];
     }
 
     function getLatestMatch($match_uuid)
@@ -463,5 +506,17 @@ class FootballMatchController
         $scalingFactor = 1 / (1 + $currentLevel / 100);
         $levelIncrease = $score * $scalingFactor * rand(10, 20);
         return round($currentLevel + $levelIncrease);
+    }
+
+    public function getMatchResult($match_uuid)
+    {
+        $match = $this->getLatestMatch($match_uuid);
+        if (!$match) {
+            return null;
+        }
+        if ($match['status'] !== 'finished') {
+            return null;
+        }
+        return $match;
     }
 }

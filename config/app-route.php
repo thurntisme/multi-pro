@@ -80,6 +80,7 @@ function getPageData($slug, $role): array
         'football-manager/my-players' => ['url' => DIR . '/views/football-manager-players.php', 'title' => 'Football Manager - My Players', 'role' => 0],
         'football-manager/locker-room' => ['url' => DIR . '/views/football-manager-locker-room.php', 'title' => 'Football Manager - Locker Room', 'role' => 0],
         'football-manager/match' => ['url' => DIR . '/views/football-manager-match.php', 'title' => 'Football Manager - Match', 'role' => 0],
+        'football-manager/match-result' => ['url' => DIR . '/views/football-manager-match-result.php', 'title' => 'Football Manager - Match Result', 'role' => 0],
         'football-manager/store' => ['url' => DIR . '/views/football-manager-store.php', 'title' => 'Football Manager - Store', 'role' => 0],
         'football-manager/store/inventory' => ['url' => DIR . '/views/football-manager-inventory.php', 'title' => 'Football Manager - Store Inventory', 'role' => 0],
         'football-manager/store/item' => ['url' => DIR . '/views/football-manager-store-item.php', 'title' => 'Football Manager - Store Item', 'role' => 0],

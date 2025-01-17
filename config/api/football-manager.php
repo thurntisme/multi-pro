@@ -60,6 +60,15 @@ switch ($slug) {
             sendResponse("error", 405, "Method Not Allowed");
         }
         break;
+    case 'match/gift':
+        if ($method === 'POST') {
+            $match_uuid = $payload['match_uuid'] ?? null;
+            $item_idx = $payload['item_idx'] ?? null;
+            getMatchGift($match_uuid, $item_idx);
+        } else {
+            sendResponse("error", 405, "Method Not Allowed");
+        }
+        break;
 
     default:
         sendResponse("error", 404, "Endpoint not found");
@@ -145,5 +154,20 @@ function recordMatch($match_uuid, $players): void
         }
     } catch (Throwable $th) {
         sendResponse("error", 500, "Failed to record match data. " . $th->getMessage());
+    }
+}
+
+function getMatchGift($match_uuid, $item_idx): void
+{
+    try {
+        $footballMatchController = new FootballMatchController();
+        $giftData = $footballMatchController->getMatchGift($match_uuid, $item_idx);
+        if ($giftData) {
+            sendResponse("success", 201, "Get the match gift successfully.", $giftData);
+        } else {
+            sendResponse("error", 405, "Failed to get the match gift.");
+        }
+    } catch (Throwable $th) {
+        sendResponse("error", 500, "Failed to get the match gift. " . $th->getMessage());
     }
 }
