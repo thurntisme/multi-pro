@@ -343,6 +343,29 @@ class FootballTeamController
         return $myTeam;
     }
 
+    public function getMyTeamInTransfer()
+    {
+        $myTeam = $this->getMyTeam();
+
+        $sql = "SELECT * FROM football_player WHERE team_id = :team_id";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute([':team_id' => $myTeam['id']]);
+
+        $players = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        if (count($players) > 0) {
+            $players = array_map(function ($player){
+                $playerJsonData = getPlayerJsonByUuid($player['player_uuid']);
+                return array_merge($playerJsonData, $player);
+            }, $players); 
+            $myTeam['players'] = $players;
+        } else {
+            $myTeam['players'] = [];
+        }
+
+        return $myTeam;
+    }
+
     public function getMyTeamInMatch()
     {
         $team = $this->getMyTeam();

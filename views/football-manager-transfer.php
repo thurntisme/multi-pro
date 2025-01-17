@@ -10,7 +10,7 @@ $commonController = new CommonController();
 $footballPlayerController = new FootballPlayerController();
 $footballTeamController = new FootballTeamController();
 $list = $commonController->convertResources($players);
-$myTeam = $footballTeamController->getMyTeam();
+$myTeam = $footballTeamController->getMyTeamInTransfer();
 $sort_order = !empty($_GET['sort_order']) && $_GET['sort_order'] === 'desc' ? 'asc' : 'desc';
 
 function isFilter($array): array
