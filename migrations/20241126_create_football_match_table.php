@@ -15,6 +15,7 @@ return function (PDO $pdo) {
         'draft_away_score INTEGER DEFAULT 0',
         'is_home TINYINT(1) DEFAULT 1',
         'status TEXT DEFAULT "scheduled"',
+        'draft_budget INTEGER DEFAULT 0',
         'created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP',
         'played_at TIMESTAMP',
         'FOREIGN KEY(team_id) REFERENCES football_team(id)',
