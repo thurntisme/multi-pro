@@ -429,7 +429,27 @@ class FootballTeamController
 
     public function getMyTeamPlayers()
     {
-        return $this->footballTeamService->getTeamPlayersByUserId();
+        $team = $this->getMyTeam();
+        if (!$team) {
+            return null; 
+        }
+
+        $sql = "SELECT * FROM football_player WHERE team_id = :team_id AND status = 'players' ORDER BY starting_order ASC";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute([':team_id' => $team['id']]);
+
+        $players = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        if (!empty($players)) {
+            $team['players'] = array_map(function ($player) {
+                $playerJsonData = getPlayerJsonByUuid($player['player_uuid']);
+                return array_merge($playerJsonData, $player);
+            }, $players);
+        } else {
+            $team['players'] = []; 
+        }
+    
+        return $team;
     }
 
     function updateMyClub()

@@ -119,6 +119,9 @@ ob_start();
                             </div>
                         </div>
                     </div>
+                    <div class="text-center mb-4">
+                        <a href="<?= home_url("app/football-manager") ?>" class="btn btn-primary">Next</a>
+                    </div>
                 <?php
                 } ?>
             </div>

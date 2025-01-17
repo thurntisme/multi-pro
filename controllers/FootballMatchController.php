@@ -421,23 +421,38 @@ class FootballMatchController
             return ($recordStmt->rowCount() > 0) && $this->generateMatch() && $this->updatePlayerStamina($match['team_id'], $players);
         }
         return false;
-    }  
+    }
 
     function randMatchGift($item_idx)
     {
         $players = [];
-        for($i = 0; $i < 3; $i++){
+
+        // Generate random players
+        for ($i = 0; $i < 3; $i++) {
             $players[] = generateRandomPlayers()[0];
         }
-        if (isset($players[$item_idx])) {
-            $maxAbility = max(array_column($players, 'ability'));
-            do {
-                $randomAbility = rand(0, $maxAbility);
-            } while ($randomAbility == $maxAbility);
-            $players[$item_idx]['ability'] = $randomAbility;
+
+        // Identify the strongest player (highest ability)
+        $strongestIndex = array_reduce(
+            array_keys($players),
+            function ($carry, $key) use ($players) {
+                return $players[$key]['ability'] > $players[$carry]['ability'] ? $key : $carry;
+            },
+            0
+        );
+
+        // Ensure the strongest player is not at the specified index
+        if ($strongestIndex === $item_idx) {
+            // Find another position to swap with
+            $swapIndex = ($item_idx === 0) ? 1 : 0; // Swap with the first or second player
+            $temp = $players[$strongestIndex];
+            $players[$strongestIndex] = $players[$swapIndex];
+            $players[$swapIndex] = $temp;
         }
+
         return $players;
     }
+
 
     public function getMatchGift($match_uuid, $item_idx)
     {
@@ -450,18 +465,32 @@ class FootballMatchController
         ]);
 
         $match = $stmt->fetch(PDO::FETCH_ASSOC);
-
-        if (!empty($match)) {
-            // $recordSql = "UPDATE football_match SET status = :status WHERE match_uuid = :match_uuid";
-            // $recordStmt = $this->pdo->prepare($recordSql);
-            // $recordStmt->execute([':status' => 'archived', ':match_uuid' => $match_uuid]);
-
-            return [
-                'list' => $this->randMatchGift($item_idx),
-                'item_idx' => $item_idx,
-            ];
+        if (empty($match)) {
+            return []; 
         }
-        return [];
+
+        $list_players = $this->randMatchGift($item_idx);
+        $my_player = $list_players[$item_idx];
+        exportPlayersToJson([$my_player]);
+
+        // Archive the match by updating its status
+        $updateMatchSql = "UPDATE football_match SET status = :status WHERE match_uuid = :match_uuid";
+        $updateMatchStmt = $this->pdo->prepare($updateMatchSql);
+        $updateMatchStmt->execute([':status' => 'archived', ':match_uuid' => $match_uuid]);
+
+        // Insert the selected player into the football_player table
+        $insertPlayerSql = "INSERT INTO football_player (team_id, player_uuid, status) VALUES (:team_id, :player_uuid, :status)";
+        $insertPlayerStmt = $this->pdo->prepare($insertPlayerSql);
+        $insertPlayerStmt->execute([
+            ':team_id' => $this->myTeam['id'],
+            ':player_uuid' => $my_player['uuid'],
+            ':status' => 'players'
+        ]);
+
+        return [
+            'list' => $list_players,
+            'item_idx' => $item_idx,
+        ];
     }
 
     function getLatestMatch($match_uuid)

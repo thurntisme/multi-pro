@@ -16,7 +16,6 @@ $(document).on("click", "#gift-box .btn-open-gift", function () {
             });
         },
         success: function (response) {
-            console.log(response);
             if (response.status === "success") {
                 $("#gift-box .gift-item").each(function(idx, el){
                     if (idx !== response.data.item_idx) {

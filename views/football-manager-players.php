@@ -11,7 +11,7 @@ $footballTransferController = new FootballTransferController();
 $myTeam = $footballTeamController->getMyTeamPlayers();
 
 $sort_order = !empty($_GET['sort_order']) && $_GET['sort_order'] === 'asc' ? 'desc' : 'asc';
-$list = $commonController->convertResources($myTeam['players']);
+$list = $commonController->convertResources($myTeam['players'] ?? []);
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_POST['action_name'])) {
