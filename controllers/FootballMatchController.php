@@ -342,6 +342,13 @@ class FootballMatchController
         exit;
     }
 
+    function calculateNewStamina($old_stamina, $player_attributes_physical_stamina) {
+        $scaling_factor = 0.5; 
+        $new_stamina = $old_stamina + ($player_attributes_physical_stamina * $scaling_factor);
+        $new_stamina = min($new_stamina, 100);
+        return $new_stamina;
+    }
+
     function updatePlayerStamina($team_id, $players_in_match) {
         $team_players = $this->footballTeamController->getTeamPlayersInClub($team_id);
         try {
@@ -372,7 +379,7 @@ class FootballMatchController
     
                     // Execute player update
                     $updatePlayerStmt->execute([
-                        ':player_stamina' => 100,
+                        ':player_stamina' => $this->calculateNewStamina($player['player_stamina'], $player['attributes']['physical']['stamina']),
                         ':id' => $player['id'],
                         ':player_uuid' => $player['uuid'],
                     ]);
