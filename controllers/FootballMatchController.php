@@ -156,6 +156,20 @@ class FootballMatchController
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
+    public function createMatch()
+    {
+        $rowAffect = $this->generateMatch();
+        if ($rowAffect) {
+            $_SESSION['message_type'] = 'success';
+            $_SESSION['message'] = "A new match created successfully";
+        } else {
+            $_SESSION['message_type'] = 'danger';
+            $_SESSION['message'] = "Failed to create match";
+        }
+        header("Location: " . home_url("football-manager"));
+        exit;
+    }
+
     function generateMatch()
     {
         // Prepare the SQL insert statement
@@ -190,49 +204,6 @@ class FootballMatchController
 
         return $this->pdo->lastInsertId();
     }
-
-    public function createMatch()
-    {
-        $rowAffect = $this->generateMatch();
-        if ($rowAffect) {
-            $_SESSION['message_type'] = 'success';
-            $_SESSION['message'] = "A new match created successfully";
-        } else {
-            $_SESSION['message_type'] = 'danger';
-            $_SESSION['message'] = "Failed to create match";
-        }
-        header("Location: " . home_url("football-manager"));
-        exit;
-    }
-
-    function calculateBonusBudget($yellow_cards, $red_cards, $draft_home_score, $draft_away_score, $is_home_team) {
-        // Define the minimum and maximum budget
-        $min_budget = 999;
-        $max_budget = 4444;
-    
-        // Base penalties and multipliers
-        $yellow_penalty = 50;     // Penalty per yellow card
-        $red_penalty = 150;       // Penalty per red card
-        $goal_diff_multiplier = 777; // Multiplier for goal difference
-    
-        // Determine goal difference based on whether the team is home or away
-        if ($is_home_team) {
-            $goal_difference = $draft_home_score - $draft_away_score;
-        } else {
-            $goal_difference = $draft_away_score - $draft_home_score;
-        }
-    
-        // Calculate the budget
-        $budget = $min_budget
-                  - ($yellow_cards * $yellow_penalty)
-                  - ($red_cards * $red_penalty)
-                  + ($goal_difference * $goal_diff_multiplier);
-    
-        // Ensure the budget is within the allowed range
-        $budget = max($min_budget, min($budget, $max_budget));
-    
-        return $budget + rand(111, 199);
-    } 
 
     public function saveMatchResult($match_uuid, $result): bool
     {
@@ -293,13 +264,13 @@ class FootballMatchController
                 $redCards = (int)$playerData['red_cards'] + (int)$player->red_cards;
                 $matchPlayed = (int)$playerData['match_played'] + 1;
                 $avgScore = $playerData['match_played'] > 0
-                ? ((float)$playerData['avg_score'] * (float)$playerData['match_played'] + (float)$player->score) / $matchPlayed
+                    ? ((float)$playerData['avg_score'] * (float)$playerData['match_played'] + (float)$player->score) / $matchPlayed
                     : $player->score;
 
                 $isInjury = $player->is_injury || ($player->remaining_stamina <= 0);
                 $injuryEndDate = $isInjury && is_null($playerData['injury_end_date'])
-                ? date('Y-m-d H:i:s', strtotime('+' . $player->recovery_time . ' days'))
-                : $playerData['injury_end_date'];
+                    ? date('Y-m-d H:i:s', strtotime('+' . $player->recovery_time . ' days'))
+                    : $playerData['injury_end_date'];
 
                 // Execute player update
                 $updatePlayerStmt->execute([
@@ -346,6 +317,57 @@ class FootballMatchController
         }
     }
 
+    function getLatestMatch($match_uuid)
+    {
+        $sql = "SELECT * FROM football_match WHERE match_uuid = :match_uuid ORDER BY created_at DESC LIMIT 1";
+
+        $stmt = $this->pdo->prepare($sql);
+
+        $stmt->execute([
+            ':match_uuid' => $match_uuid
+        ]);
+
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+
+    function updatePlayerLevel($currentLevel, $score)
+    {
+        $score = max(1.0, min($score, 10.0));
+        $scalingFactor = 1 / (1 + $currentLevel / 100);
+        $levelIncrease = $score * $scalingFactor * rand(10, 20);
+        return round($currentLevel + $levelIncrease);
+    }
+
+    function calculateBonusBudget($yellow_cards, $red_cards, $draft_home_score, $draft_away_score, $is_home_team)
+    {
+        // Define the minimum and maximum budget
+        $min_budget = 999;
+        $max_budget = 4444;
+
+        // Base penalties and multipliers
+        $yellow_penalty = 50;     // Penalty per yellow card
+        $red_penalty = 150;       // Penalty per red card
+        $goal_diff_multiplier = 777; // Multiplier for goal difference
+
+        // Determine goal difference based on whether the team is home or away
+        if ($is_home_team) {
+            $goal_difference = $draft_home_score - $draft_away_score;
+        } else {
+            $goal_difference = $draft_away_score - $draft_home_score;
+        }
+
+        // Calculate the budget
+        $budget = $min_budget
+            - ($yellow_cards * $yellow_penalty)
+            - ($red_cards * $red_penalty)
+            + ($goal_difference * $goal_diff_multiplier);
+
+        // Ensure the budget is within the allowed range
+        $budget = max($min_budget, min($budget, $max_budget));
+
+        return $budget + rand(111, 199);
+    }
+
     public function acceptMatchResult($match_uuid)
     {
         $sql = "SELECT * FROM football_match WHERE match_uuid = :match_uuid";
@@ -370,7 +392,7 @@ class FootballMatchController
         if ($matchScoreStmt->rowCount()) {
             $_SESSION['message_type'] = 'success';
             $_SESSION['message'] = "Your match saved successfully";
-            header("Location: " . home_url("app/football-manager/match-result?uuid=".$match_uuid));
+            header("Location: " . home_url("app/football-manager/match-result?uuid=" . $match_uuid));
         } else {
             $_SESSION['message_type'] = 'danger';
             $_SESSION['message'] = "Failed to save the match";
@@ -378,63 +400,6 @@ class FootballMatchController
         }
         exit;
     }
-
-    function calculateNewStamina($old_stamina, $player_attributes_physical_stamina) {
-        $scaling_factor = 0.5; 
-        $new_stamina = $old_stamina + ($player_attributes_physical_stamina * $scaling_factor);
-        $new_stamina = min($new_stamina, 100);
-        return $new_stamina;
-    }
-
-    function updatePlayerStamina($team_id, $players_in_match) {
-        $team_players = $this->footballTeamController->getTeamPlayersInClub($team_id);
-        try {
-            // Begin a transaction for all updates
-            $this->pdo->beginTransaction();
-    
-            // Update players
-            foreach ($team_players as $player) {
-                // Check if the player is in the players_in_match array
-                $isInMatch = false;
-                foreach ($players_in_match as $player_in_match) {
-                    if ($player_in_match['id'] === $player['id']) {
-                        $isInMatch = true;
-                        break;
-                    }
-                }
-    
-                // If player is not in match, update their stamina
-                if (!$isInMatch) {
-                    // Prepare statements
-                    $updatePlayerStmt = $this->pdo->prepare("
-                        UPDATE football_player
-                        SET player_stamina = :player_stamina,
-                            updated_at = CURRENT_TIMESTAMP
-                        WHERE id = :id
-                            AND player_uuid = :player_uuid
-                    ");
-    
-                    // Execute player update
-                    $updatePlayerStmt->execute([
-                        ':player_stamina' => $this->calculateNewStamina($player['player_stamina'], $player['attributes']['physical']['stamina']),
-                        ':id' => $player['id'],
-                        ':player_uuid' => $player['uuid'],
-                    ]);
-                }
-            }
-    
-            // Commit the transaction
-            $this->pdo->commit();
-            return true;
-        } catch (Exception $e) {
-            // Roll back the transaction on failure
-            if ($this->pdo->inTransaction()) {
-                $this->pdo->rollBack();
-            }
-            error_log("Failed to save match result: " . $e->getMessage());
-            return false;
-        }
-    }    
 
     public function recordMatch($match_uuid, $players)
     {
@@ -456,6 +421,109 @@ class FootballMatchController
             return ($recordStmt->rowCount() > 0) && $this->generateMatch() && $this->updatePlayerStamina($match['team_id'], $players);
         }
         return false;
+    }
+
+    function updatePlayerStamina($team_id, $players_in_match)
+    {
+        $team_players = $this->footballTeamController->getTeamPlayersInClub($team_id);
+        try {
+            // Begin a transaction for all updates
+            $this->pdo->beginTransaction();
+
+            // Update players
+            foreach ($team_players as $player) {
+                // Check if the player is in the players_in_match array
+                $isInMatch = false;
+                foreach ($players_in_match as $player_in_match) {
+                    if ($player_in_match['id'] === $player['id']) {
+                        $isInMatch = true;
+                        break;
+                    }
+                }
+
+                // If player is not in match, update their stamina
+                if (!$isInMatch) {
+                    // Prepare statements
+                    $updatePlayerStmt = $this->pdo->prepare("
+                        UPDATE football_player
+                        SET player_stamina = :player_stamina,
+                            updated_at = CURRENT_TIMESTAMP
+                        WHERE id = :id
+                            AND player_uuid = :player_uuid
+                    ");
+
+                    // Execute player update
+                    $updatePlayerStmt->execute([
+                        ':player_stamina' => $this->calculateNewStamina($player['player_stamina'], $player['attributes']['physical']['stamina']),
+                        ':id' => $player['id'],
+                        ':player_uuid' => $player['uuid'],
+                    ]);
+                }
+            }
+
+            // Commit the transaction
+            $this->pdo->commit();
+            return true;
+        } catch (Exception $e) {
+            // Roll back the transaction on failure
+            if ($this->pdo->inTransaction()) {
+                $this->pdo->rollBack();
+            }
+            error_log("Failed to save match result: " . $e->getMessage());
+            return false;
+        }
+    }
+
+    function calculateNewStamina($old_stamina, $player_attributes_physical_stamina)
+    {
+        $scaling_factor = 0.5;
+        $new_stamina = $old_stamina + ($player_attributes_physical_stamina * $scaling_factor);
+        $new_stamina = min($new_stamina, 100);
+        return $new_stamina;
+    }
+
+    public function getMatchGift($match_uuid, $item_idx)
+    {
+        $sql = "SELECT * FROM football_match WHERE match_uuid = :match_uuid AND status = 'finished' ORDER BY created_at DESC LIMIT 1";
+
+        $stmt = $this->pdo->prepare($sql);
+
+        $stmt->execute([
+            ':match_uuid' => $match_uuid
+        ]);
+
+        $match = $stmt->fetch(PDO::FETCH_ASSOC);
+        if (empty($match)) {
+            return [];
+        }
+
+        $list_players = $this->randMatchGift($item_idx);
+        $my_player = $list_players[$item_idx];
+        exportPlayersToJson([$my_player]);
+
+        // Archive the match by updating its status
+        $updateMatchSql = "UPDATE football_match SET status = :status WHERE match_uuid = :match_uuid";
+        $updateMatchStmt = $this->pdo->prepare($updateMatchSql);
+        $updateMatchStmt->execute([':status' => 'archived', ':match_uuid' => $match_uuid]);
+
+        // Insert the selected player into the football_player table
+        $insertPlayerSql = "INSERT INTO football_player (team_id, player_uuid, status) VALUES (:team_id, :player_uuid, :status)";
+        $insertPlayerStmt = $this->pdo->prepare($insertPlayerSql);
+        $insertPlayerStmt->execute([
+            ':team_id' => $this->myTeam['id'],
+            ':player_uuid' => $my_player['uuid'],
+            ':status' => 'players'
+        ]);
+
+        $budget = $this->myTeam['budget'] + $match['draft_budget'];
+        $updateBudgetSql = "UPDATE football_team SET budget = :budget WHERE id = :team_id";
+        $updateBudgetStmt = $this->pdo->prepare($updateBudgetSql);
+        $updateBudgetStmt->execute([':budget' => $budget, ':team_id' => $this->myTeam['id']]);
+
+        return [
+            'list' => $list_players,
+            'item_idx' => $item_idx,
+        ];
     }
 
     function randMatchGift($item_idx)
@@ -488,59 +556,6 @@ class FootballMatchController
         return $players;
     }
 
-
-    public function getMatchGift($match_uuid, $item_idx)
-    {
-        $sql = "SELECT * FROM football_match WHERE match_uuid = :match_uuid AND status = 'finished' ORDER BY created_at DESC LIMIT 1";
-
-        $stmt = $this->pdo->prepare($sql);
-
-        $stmt->execute([
-            ':match_uuid' => $match_uuid
-        ]);
-
-        $match = $stmt->fetch(PDO::FETCH_ASSOC);
-        if (empty($match)) {
-            return []; 
-        }
-
-        $list_players = $this->randMatchGift($item_idx);
-        $my_player = $list_players[$item_idx];
-        exportPlayersToJson([$my_player]);
-
-        // Archive the match by updating its status
-        $updateMatchSql = "UPDATE football_match SET status = :status WHERE match_uuid = :match_uuid";
-        $updateMatchStmt = $this->pdo->prepare($updateMatchSql);
-        $updateMatchStmt->execute([':status' => 'archived', ':match_uuid' => $match_uuid]);
-
-        // Insert the selected player into the football_player table
-        $insertPlayerSql = "INSERT INTO football_player (team_id, player_uuid, status) VALUES (:team_id, :player_uuid, :status)";
-        $insertPlayerStmt = $this->pdo->prepare($insertPlayerSql);
-        $insertPlayerStmt->execute([
-            ':team_id' => $this->myTeam['id'],
-            ':player_uuid' => $my_player['uuid'],
-            ':status' => 'players'
-        ]);
-
-        return [
-            'list' => $list_players,
-            'item_idx' => $item_idx,
-        ];
-    }
-
-    function getLatestMatch($match_uuid)
-    {
-        $sql = "SELECT * FROM football_match WHERE match_uuid = :match_uuid ORDER BY created_at DESC LIMIT 1";
-
-        $stmt = $this->pdo->prepare($sql);
-
-        $stmt->execute([
-            ':match_uuid' => $match_uuid
-        ]);
-
-        return $stmt->fetch(PDO::FETCH_ASSOC);
-    }
-
     public function getTeamInMatch($match_uuid)
     {
         $match = $this->getLatestMatch($match_uuid);
@@ -562,14 +577,6 @@ class FootballMatchController
 
         // Return null if no match is found
         return null;
-    }
-
-    function updatePlayerLevel($currentLevel, $score)
-    {
-        $score = max(1.0, min($score, 10.0));
-        $scalingFactor = 1 / (1 + $currentLevel / 100);
-        $levelIncrease = $score * $scalingFactor * rand(10, 20);
-        return round($currentLevel + $levelIncrease);
     }
 
     public function getMatchResult($match_uuid)
