@@ -53,6 +53,13 @@ class SystemController
         return $this->getDateTime($dateTime) < $this->getCurrentDateTimeStr();
     }
 
+    public function isBeforeCurrentUTCDateTime($dateTime)
+    {
+        $providedDateTime = new \DateTime($dateTime, new \DateTimeZone('UTC'));
+        $currentDateTime = new \DateTime('now', new \DateTimeZone('UTC'));
+        return $providedDateTime < $currentDateTime;
+    }
+
     function getTimezoneOffset()
     {
         $localTimezone = $this->getTimezone();
