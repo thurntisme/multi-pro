@@ -321,7 +321,7 @@ class FootballMatchController
             $updateMatchStmt = $this->pdo->prepare("
                 UPDATE football_match
                 SET draft_home_score = :draft_home_score,
-                    draft_away_score = :draft_away_score
+                    draft_away_score = :draft_away_score,
                     draft_budget = :draft_budget
                 WHERE match_uuid = :match_uuid
             ");
