@@ -313,6 +313,36 @@ class FootballTeamController
         return $players;
     }
 
+    public function getMyTeamInHome()
+    {
+        $myTeam = $this->getMyTeam();
+        $query = "";
+        $params = [':team_id' => $myTeam['id']];
+
+        $query = "AND joining_date < CURRENT_TIMESTAMP 
+        AND status = 'club'";
+
+        $sql = "SELECT * FROM football_player WHERE team_id = :team_id $query ORDER BY avg_score DESC";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute($params);
+
+        $players = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        if (count($players) > 0) {
+            $players = array_map(function ($player){
+                $playerJsonData = getPlayerJsonByUuid($player['player_uuid']);
+                return array_merge($playerJsonData, $player);
+            }, $players); 
+            $myTeam['players'] = $players;
+        } else {
+            $myTeam['players'] = [];
+        }
+
+        $myTeam['rcm_players'] = $this->getRecommendPlayer($myTeam['formation']);
+
+        return $myTeam;
+    }
+
     public function getMyTeamInMatch()
     {
         $team = $this->getMyTeam();
@@ -418,13 +448,13 @@ class FootballTeamController
         ];
     }
 
-    public function getRecommendPlayer($formation)
+    function getRecommendPlayer($formation)
     {
         $formationData = array_filter(DEFAULT_FOOTBALL_FORMATION, function ($item) use ($formation) {
             return $item['slug'] === $formation;
         });
         $players = $this->randomTeamPlayers(array_values($formationData)[0]);
-        return array_slice($players, 0, 11);
+        return array_slice($players, 0, 8);
     }
 
     public function getMyTeamPlayers()

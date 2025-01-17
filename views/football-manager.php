@@ -5,14 +5,11 @@ $pageTitle = "Football Manager";
 
 require_once DIR . '/controllers/FootballMatchController.php';
 require_once DIR . '/controllers/FootballTeamController.php';
-require_once DIR . '/controllers/FootballPlayerController.php';
 
 $footballMatchController = new FootballMatchController();
 $footballTeamController = new FootballTeamController();
-$footballPlayerController = new FootballPlayerController();
-$myTeam = $footballTeamController->getMyTeam();
+$myTeam = $footballTeamController->getMyTeamInHome();
 $mySchedule = $footballMatchController->getMatch();
-$rcm_players = $footballTeamController->getRecommendPlayer($myTeam['formation']);
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_POST['action_name'])) {
@@ -43,13 +40,13 @@ ob_start();
         <div class="col-lg-4">
             <div class="card">
                 <div class="card-header">
-                    <div class="card-title mb-0">
+                    <h4 class="card-title mb-0">
                         Recommend Players
-                    </div>
+                    </h4>
                 </div>
                 <div class="card-body">
                     <div class="list-group" data-simplebar style="max-height: 560px;">
-                        <?php foreach ($rcm_players as $player) { ?>
+                        <?php foreach ($myTeam['rcm_players'] as $player) { ?>
                             <div class="list-group-item list-group-item-action">
                                 <div class="float-end">
                                     <div class="d-flex flex-column align-items-end">
@@ -61,7 +58,7 @@ ob_start();
                                 </div>
                                 <div class="d-flex align-items-center">
                                     <div class="flex-shrink-0">
-                                        <img src="assets/images/users/avatar-1.jpg" alt=""
+                                        <img src="<?= home_url("assets/images/users/avatar-1.jpg") ?>" alt="<?= $player['name'] ?>"
                                             class="avatar-sm rounded-circle" />
                                     </div>
                                     <div class="flex-grow-1 ms-3">
@@ -135,9 +132,9 @@ ob_start();
         <div class="col-lg-4">
             <div class="card card-height-100">
                 <div class="card-header">
-                    <div class="card-title mb-0">
+                    <h4 class="card-title mb-0">
                         My Player
-                    </div>
+                    </h4>
                 </div>
                 <div class="card-body p-0">
                     <table class="table align-middle table-nowrap mb-0">
@@ -147,7 +144,7 @@ ob_start();
                                 <th class="fs-12">Name</th>
                                 <th class="text-center fs-12 px-1" style="width: 52px">Match</th>
                                 <th class="text-center fs-12 px-1" style="width: 52px">Goals</th>
-                                <th class="text-center fs-12 px-1" style="width: 52px">Assists</th>
+                                <th class="text-center fs-12 px-1" style="width: 52px">Score</th>
                             </tr>
                         </thead>
                     </table>
@@ -161,7 +158,7 @@ ob_start();
                                             <td class="fs-12"><?= $player['name'] ?></td>
                                             <td class="text-center fs-12 px-1" style="width: 52px"><?= $player['match_played'] ?></td>
                                             <td class="text-center fs-12 px-1" style="width: 52px"><?= $player['goals_scored'] ?></td>
-                                            <td class="text-center fs-12 px-1" style="width: 52px"><?= $player['assists'] ?></td>
+                                            <td class="text-center fs-12 px-1" style="width: 52px"><?= $player['avg_score'] ?></td>
                                         </tr>
                                 <?php }
                                 } ?>
