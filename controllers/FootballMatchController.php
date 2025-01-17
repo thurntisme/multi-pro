@@ -205,8 +205,36 @@ class FootballMatchController
         exit;
     }
 
-    public
-    function saveMatchResult($match_uuid, $result): bool
+    function calculateBonusBudget($yellow_cards, $red_cards, $draft_home_score, $draft_away_score, $is_home_team) {
+        // Define the minimum and maximum budget
+        $min_budget = 999;
+        $max_budget = 4444;
+    
+        // Base penalties and multipliers
+        $yellow_penalty = 50;     // Penalty per yellow card
+        $red_penalty = 150;       // Penalty per red card
+        $goal_diff_multiplier = 777; // Multiplier for goal difference
+    
+        // Determine goal difference based on whether the team is home or away
+        if ($is_home_team) {
+            $goal_difference = $draft_home_score - $draft_away_score;
+        } else {
+            $goal_difference = $draft_away_score - $draft_home_score;
+        }
+    
+        // Calculate the budget
+        $budget = $min_budget
+                  - ($yellow_cards * $yellow_penalty)
+                  - ($red_cards * $red_penalty)
+                  + ($goal_difference * $goal_diff_multiplier);
+    
+        // Ensure the budget is within the allowed range
+        $budget = max($min_budget, min($budget, $max_budget));
+    
+        return $budget + rand(111, 199);
+    } 
+
+    public function saveMatchResult($match_uuid, $result): bool
     {
         // Fetch the latest match details
         $match = $this->getLatestMatch($match_uuid);
@@ -246,6 +274,8 @@ class FootballMatchController
                 SELECT * FROM football_player WHERE player_uuid = :player_uuid
             ");
 
+            $team_yellow_cards = 0;
+            $team_red_cards = 0;
             // Update players
             foreach ($players as $player) {
                 $fetchPlayerStmt->execute([':player_uuid' => $player->uuid]);
@@ -255,6 +285,8 @@ class FootballMatchController
                     throw new Exception("Player not found: {$player->uuid}");
                 }
 
+                $team_yellow_cards += (int)$playerData['yellow_cards'];
+                $team_red_cards += (int)$playerData['yellow_cards'];
                 // Calculate updated stats
                 $goalsScored = (int)$playerData['goals_scored'] + (int)$player->goals;
                 $yellowCards = (int)$playerData['yellow_cards'] + (int)$player->yellow_cards;
@@ -290,11 +322,14 @@ class FootballMatchController
                 UPDATE football_match
                 SET draft_home_score = :draft_home_score,
                     draft_away_score = :draft_away_score
+                    draft_budget = :draft_budget
                 WHERE match_uuid = :match_uuid
             ");
+            $draft_budget = $this->calculateBonusBudget($team_yellow_cards, $team_red_cards, $resultData->draft_home_score, $resultData->draft_away_score, $match['is_home']);
             $updateMatchStmt->execute([
                 ':draft_home_score' => $resultData->draft_home_score,
                 ':draft_away_score' => $resultData->draft_away_score,
+                ':draft_budget' => $draft_budget,
                 ':match_uuid' => $match_uuid,
             ]);
 
