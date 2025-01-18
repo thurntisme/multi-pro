@@ -24,12 +24,12 @@ class FootballTransferController
         $this->footballTransferService = new FootballTransferService($pdo);
     }
 
-    public function createTransferBuyPlayer()
+    public function createTransferBuyPlayer(): void
     {
         $this->createTransfer('buy');
     }
 
-    public function createTransfer($type)
+    public function createTransfer($type): void
     {
         if ($type) {
             if ($type == 'buy') {
@@ -54,7 +54,7 @@ class FootballTransferController
             if ($type == 'sell') {
                 $player_id = $_POST['player_id'];
                 $player = $this->footballPlayerController->viewPlayer($player_id);
-                $amount = $player['market_value'] * 80 / 100;
+                $amount = $player['market_value'] * 85 / 100;
                 try {
                     $this->footballTransferService->createTransfer($type, $player_id, (int)$amount);
                 } catch (Throwable $th) {
@@ -71,11 +71,11 @@ class FootballTransferController
             $_SESSION['message'] = "Failed to create transfer";
         }
 
-        header("Location: " . home_url('football-manager/transfer/' . $type . '-list'));
+        header("Location: " . home_url('app/football-manager/transfer/' . $type . '-list'));
         exit;
     }
 
-    public function createTransferSellPlayer()
+    public function createTransferSellPlayer(): void
     {
         $this->createTransfer('sell');
     }

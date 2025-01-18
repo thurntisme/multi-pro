@@ -15,7 +15,7 @@ $list = $commonController->convertResources($myTeam['players'] ?? []);
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_POST['action_name'])) {
-        if (isset($_POST['player_id'])){
+        if (isset($_POST['player_id'])) {
             if ($_POST['action_name'] === 'player_join_team') {
                 $footballTeamController->assignPlayerToTeam($myTeam['id'], $_POST['player_id'], $_POST['player_name']);
             }
@@ -78,7 +78,7 @@ ob_start();
                                                     <button type="submit"
                                                             class="btn btn-soft-success btn-sm"><i
                                                                 class="ri ri-user-received-2-line"></i> Join All
-                                                    </button> 
+                                                    </button>
                                                 </form>
                                             <?php } ?>
                                         </th>
@@ -134,8 +134,11 @@ ob_start();
                                                                value="player_in_market">
                                                         <input type="hidden" name="player_id"
                                                                value="<?= $item['id'] ?>">
-                                                        <button class="btn btn-soft-danger btn-sm"><i
-                                                                    class="ri ri-user-shared-2-line"></i> Sell
+                                                        <button type="submit"
+                                                                data-confirm-text="You will earn 85% of the player's market value upon a successful sale."
+                                                                class="btn btn-soft-danger btn-sm btn-confirm-action">
+                                                            <i class="ri ri-user-shared-2-line"></i>
+                                                            Sell
                                                         </button>
                                                     </form>
                                                     <form method="POST" action="<?= $_SERVER['REQUEST_URI'] ?>">
