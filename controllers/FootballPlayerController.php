@@ -121,10 +121,9 @@ class FootballPlayerController
 
     // Get all favorite players
 
-    public function listFavoritePlayers()
+    public function listFavoritePlayers(): array
     {
         $resources = array_map(function ($player) {
-            // return $this->viewPlayer($player['id']);
             return getPlayerJsonByUuid($player['player_uuid']);
         }, $this->getFavoritePlayerSQL("result"));
         return [
@@ -142,14 +141,11 @@ class FootballPlayerController
         $page = isset($_GET['page']) ? (int)$_GET['page'] : 1; // Current page number
         $offset = ($page - 1) * $itemsPerPage; // Offset for LIMIT clause
 
-        // Filter last updated
-        $lastUpdated = isset($_GET['last_updated']) ? $_GET['last_updated'] : '';
-
         $selectSql = $queryType === "result" ? "SELECT * FROM football_favorite_player" : "SELECT COUNT(*) FROM football_favorite_player";
         $sql = $selectSql . " WHERE manager_id = $this->user_id ";
 
         // Sorting parameters (optional)
-        $sortColumn = isset($_GET['sort']) ? $_GET['sort'] : 'updated_at'; // Default sort by updated_at
+        $sortColumn = isset($_GET['sort']) ? $_GET['sort'] : 'created_at'; // Default sort by updated_at
         $sortOrder = isset($_GET['order']) && in_array(strtoupper($_GET['order']), ['ASC', 'DESC']) ? strtoupper($_GET['order']) : 'DESC'; // Default to DESC
 
         // Add the ORDER BY clause dynamically
