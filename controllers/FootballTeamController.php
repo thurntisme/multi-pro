@@ -40,7 +40,7 @@ class FootballTeamController
             $_SESSION['message'] = "Failed to create team";
         }
 
-        header("Location: " . home_url("football-manager"));
+        header("Location: " . home_url("app/football-manager"));
         exit;
     }
 
@@ -214,103 +214,9 @@ class FootballTeamController
         }
     }
 
-    public function getPlayersInMatch($teamId){
-
-    }
-
-    public function getTeamPlayersInMatch($teamId)
+    public function getPlayersInMatch($teamId)
     {
-        $query = "";
-        $params = [':team_id' => $teamId];
 
-        $query = "AND joining_date < CURRENT_TIMESTAMP 
-        AND (injury_end_date IS NULL OR injury_end_date < CURRENT_TIMESTAMP) 
-        AND player_stamina >= 50 
-        AND status = 'club'";
-
-        $sql = "SELECT * FROM football_player WHERE team_id = :team_id $query ORDER BY starting_order ASC";
-        $stmt = $this->pdo->prepare($sql);
-        $stmt->execute($params);
-
-        $players = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-        if (count($players) > 0) {
-            $players = array_map(function ($player){
-                $playerJsonData = getPlayerJsonByUuid($player['player_uuid']);
-                return array_merge($playerJsonData, $player, ['score' => 5]);
-            }, $players);
-        }
-
-        return $players;
-    }
-
-    public function calRemainingContractDate($date): int
-    {
-        // Convert both $now and $date to DateTime objects
-        try {
-            $nowDateTime = $this->systemController->getDateTime('now');
-            $convertedDate = $this->systemController->getDateTime($date);
-        } catch (Exception $e) {
-            throw new InvalidArgumentException("Invalid date format provided: " . $e->getMessage());
-        }
-
-        $nowDateTime->setTime(0, 0);
-        $convertedDate->setTime(0, 0);
-
-        // Calculate the difference
-        $diff = $nowDateTime->diff($convertedDate);
-
-        // Determine the sign of the difference using $diff->invert
-        $days = (int)$diff->format('%a');
-        if ($diff->invert === 1) {
-            $days = -$days; // Make the difference negative if the date is in the future
-        }
-
-        return $days;
-    }
-
-    function getLevelDetails($points): array
-    {
-        $pointsPerLevel = 100; // Points required for one level
-        $level = floor($points / $pointsPerLevel); // Current level
-        $progress = $points % $pointsPerLevel; // Points towards the next level
-        $percentageToNextLevel = ($progress / $pointsPerLevel) * 100; // Progress percentage
-
-        return [
-            'num' => $level,
-            'percentageToNextLevel' => number_format($percentageToNextLevel, 2)
-        ];
-    }
-
-    public function getTeamPlayersInClub($teamId)
-    {
-        $query = "";
-        $params = [':team_id' => $teamId];
-
-        $query = "AND joining_date < CURRENT_TIMESTAMP 
-        AND status = 'club'";
-
-        $sql = "SELECT * FROM football_player WHERE team_id = :team_id $query ORDER BY starting_order ASC";
-        $stmt = $this->pdo->prepare($sql);
-        $stmt->execute($params);
-
-        $players = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-        if (count($players) > 0) {
-            $players = array_map(function ($player){
-                $playerJsonData = getPlayerJsonByUuid($player['player_uuid']);
-                $playerJsonData['remaining_contract_date'] = $this->calRemainingContractDate($player['contract_end_date']);
-                $playerJsonData['market_value'] = formatCurrency($playerJsonData['market_value']);
-                $playerJsonData['contract_wage'] = formatCurrency($playerJsonData['contract_wage']);
-                $player['contract_end_date'] = $this->systemController->convertDate($player['contract_end_date']);
-                $playerJsonData['is_expired'] = $playerJsonData['remaining_contract_date'] < 0;
-                $player['level'] = $this->getLevelDetails($player['level']);
-                $player['is_injury'] = !empty($player['injury_end_date']) ? !$this->systemController->isBeforeCurrentUTCDateTime($player['injury_end_date']) : false;
-                return array_merge($playerJsonData, $player);
-            }, $players); 
-        }
-
-        return $players;
     }
 
     public function getMyTeamInHome()
@@ -329,10 +235,10 @@ class FootballTeamController
         $players = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
         if (count($players) > 0) {
-            $players = array_map(function ($player){
+            $players = array_map(function ($player) {
                 $playerJsonData = getPlayerJsonByUuid($player['player_uuid']);
                 return array_merge($playerJsonData, $player);
-            }, $players); 
+            }, $players);
             $myTeam['players'] = $players;
         } else {
             $myTeam['players'] = [];
@@ -343,68 +249,13 @@ class FootballTeamController
         return $myTeam;
     }
 
-    public function getMyTeamInTransfer()
+    function getRecommendPlayer($formation)
     {
-        $myTeam = $this->getMyTeam();
-
-        $sql = "SELECT * FROM football_player WHERE team_id = :team_id";
-        $stmt = $this->pdo->prepare($sql);
-        $stmt->execute([':team_id' => $myTeam['id']]);
-
-        $players = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-        if (count($players) > 0) {
-            $players = array_map(function ($player){
-                $playerJsonData = getPlayerJsonByUuid($player['player_uuid']);
-                return array_merge($playerJsonData, $player);
-            }, $players); 
-            $myTeam['players'] = $players;
-        } else {
-            $myTeam['players'] = [];
-        }
-
-        return $myTeam;
-    }
-
-    public function getMyTeamInMatch()
-    {
-        $team = $this->getMyTeam();
-        if (!empty($team)) {
-            $players = $this->getTeamPlayersInMatch($team['id']);
-            $lineupPlayers = array_slice($players, 0, 11);
-            $subPlayers = array_slice($players, 11);
-
-            return [
-                'team_id' => $team['id'],
-                'team_name' => $team['team_name'],
-                'formation' => $team['formation'],
-                'lineup' => $lineupPlayers,
-                'bench' => $subPlayers,
-                'myTeam' => true
-            ];
-        } 
-        return [];
-    }
-
-    public function getMyTeamInClub()
-    {
-        $team = $this->getMyTeam();
-        if (!empty($team)) {
-            $players = $this->getTeamPlayersInClub($team['id']);
-
-            return [
-                'team_name' => $team['team_name'],
-                'team_id' => $team['id'],
-                'formation' => $team['formation'],
-                'players' => $players,
-            ];
-        } 
-        return [];
-    }
-
-    function randFormation()
-    {
-        return DEFAULT_FOOTBALL_FORMATION[array_rand(DEFAULT_FOOTBALL_FORMATION)];
+        $formationData = array_filter(DEFAULT_FOOTBALL_FORMATION, function ($item) use ($formation) {
+            return $item['slug'] === $formation;
+        });
+        $players = $this->randomTeamPlayers(array_values($formationData)[0]);
+        return array_slice($players, 0, 8);
     }
 
     function randomTeamPlayers($formation)
@@ -457,6 +308,177 @@ class FootballTeamController
         return $assignedPlayers;
     }
 
+    public function getMyTeamInTransfer()
+    {
+        $myTeam = $this->getMyTeam();
+
+        $sql = "SELECT * FROM football_player WHERE team_id = :team_id";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute([':team_id' => $myTeam['id']]);
+
+        $players = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        if (count($players) > 0) {
+            $players = array_map(function ($player) {
+                $playerJsonData = getPlayerJsonByUuid($player['player_uuid']);
+                return array_merge($playerJsonData, $player);
+            }, $players);
+            $myTeam['players'] = $players;
+        } else {
+            $myTeam['players'] = [];
+        }
+
+        return $myTeam;
+    }
+
+    public function getMyTeamInMatch()
+    {
+        $team = $this->getMyTeam();
+        if (!empty($team)) {
+            $players = $this->getTeamPlayersInMatch($team['id']);
+            $lineupPlayers = array_slice($players, 0, 11);
+            $subPlayers = array_slice($players, 11);
+
+            return [
+                'team_id' => $team['id'],
+                'team_name' => $team['team_name'],
+                'formation' => $team['formation'],
+                'lineup' => $lineupPlayers,
+                'bench' => $subPlayers,
+                'myTeam' => true
+            ];
+        }
+        return [];
+    }
+
+    public function getTeamPlayersInMatch($teamId)
+    {
+        $query = "";
+        $params = [':team_id' => $teamId];
+
+        $query = "AND joining_date < CURRENT_TIMESTAMP 
+        AND (injury_end_date IS NULL OR injury_end_date < CURRENT_TIMESTAMP) 
+        AND player_stamina >= 50 
+        AND status = 'club'";
+
+        $sql = "SELECT * FROM football_player WHERE team_id = :team_id $query ORDER BY starting_order ASC";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute($params);
+
+        $players = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        if (count($players) > 0) {
+            $players = array_map(function ($player) {
+                $playerJsonData = getPlayerJsonByUuid($player['player_uuid']);
+                return array_merge($playerJsonData, $player, ['score' => 5]);
+            }, $players);
+        }
+
+        return $players;
+    }
+
+    public function getMyTeamInClub(): array
+    {
+        $team = $this->getMyTeam();
+        if (!empty($team)) {
+            $players = $this->getTeamPlayersInClub($team['id'], $team['formation']);
+
+            return [
+                'team_name' => $team['team_name'],
+                'team_id' => $team['id'],
+                'formation' => $team['formation'],
+                'players' => $players,
+            ];
+        }
+        return [];
+    }
+
+    public function getTeamPlayersInClub($teamId, $formation = ''): array
+    {
+        $sql = "SELECT * FROM football_player WHERE team_id = :team_id AND joining_date < CURRENT_TIMESTAMP 
+        AND status = 'club' ORDER BY starting_order ASC";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute([':team_id' => $teamId]);
+
+        $players = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        $positionsArr = [];
+        if (!empty($formation)) {
+            $positionsArr = $this->getPlayerPositionsBySlug($formation);
+        }
+
+        if (count($players) > 0) {
+            $players = array_map(function ($player, $index) use ($positionsArr) {
+                $playerJsonData = getPlayerJsonByUuid($player['player_uuid']);
+                $playerJsonData['remaining_contract_date'] = $this->calRemainingContractDate($player['contract_end_date']);
+                $playerJsonData['market_value'] = formatCurrency($playerJsonData['market_value']);
+                $playerJsonData['contract_wage'] = formatCurrency($playerJsonData['contract_wage']);
+                $player['contract_end_date'] = $this->systemController->convertDate($player['contract_end_date']);
+                $playerJsonData['is_expired'] = $playerJsonData['remaining_contract_date'] < 0;
+                $player['level'] = $this->getLevelDetails($player['level']);
+                $player['is_injury'] = !empty($player['injury_end_date']) && !$this->systemController->isBeforeCurrentUTCDateTime($player['injury_end_date']);
+                $player['position_in_formation'] = $positionsArr[$index] ?? null; // Use index here
+                return array_merge($playerJsonData, $player);
+            }, $players, array_keys($players));
+        }
+
+        return $players;
+    }
+
+    function getPlayerPositionsBySlug($slug): ?array
+    {
+        global $formations;
+        $filtered = array_filter($formations, function ($formation) use ($slug) {
+            return $formation['slug'] === $slug;
+        });
+
+        if (!empty($filtered)) {
+            // Flatten the player_positions array
+            $formation = array_values($filtered)[0];
+            return array_merge(["GK"], ...array_values($formation['player_positions']));
+        }
+
+        return null;
+    }
+
+    public function calRemainingContractDate($date): int
+    {
+        // Convert both $now and $date to DateTime objects
+        try {
+            $nowDateTime = $this->systemController->getDateTime('now');
+            $convertedDate = $this->systemController->getDateTime($date);
+        } catch (Exception $e) {
+            throw new InvalidArgumentException("Invalid date format provided: " . $e->getMessage());
+        }
+
+        $nowDateTime->setTime(0, 0);
+        $convertedDate->setTime(0, 0);
+
+        // Calculate the difference
+        $diff = $nowDateTime->diff($convertedDate);
+
+        // Determine the sign of the difference using $diff->invert
+        $days = (int)$diff->format('%a');
+        if ($diff->invert === 1) {
+            $days = -$days; // Make the difference negative if the date is in the future
+        }
+
+        return $days;
+    }
+
+    function getLevelDetails($points): array
+    {
+        $pointsPerLevel = 100; // Points required for one level
+        $level = floor($points / $pointsPerLevel); // Current level
+        $progress = $points % $pointsPerLevel; // Points towards the next level
+        $percentageToNextLevel = ($progress / $pointsPerLevel) * 100; // Progress percentage
+
+        return [
+            'num' => $level,
+            'percentageToNextLevel' => number_format($percentageToNextLevel, 2)
+        ];
+    }
+
     public function getRandTeamInMatch()
     {
         $formation = $this->randFormation();
@@ -471,20 +493,16 @@ class FootballTeamController
         ];
     }
 
-    function getRecommendPlayer($formation)
+    function randFormation()
     {
-        $formationData = array_filter(DEFAULT_FOOTBALL_FORMATION, function ($item) use ($formation) {
-            return $item['slug'] === $formation;
-        });
-        $players = $this->randomTeamPlayers(array_values($formationData)[0]);
-        return array_slice($players, 0, 8);
+        return DEFAULT_FOOTBALL_FORMATION[array_rand(DEFAULT_FOOTBALL_FORMATION)];
     }
 
     public function getMyTeamPlayers()
     {
         $team = $this->getMyTeam();
         if (!$team) {
-            return null; 
+            return null;
         }
 
         $sql = "SELECT * FROM football_player WHERE team_id = :team_id AND status = 'players' ORDER BY starting_order ASC";
@@ -499,13 +517,13 @@ class FootballTeamController
                 return array_merge($playerJsonData, $player);
             }, $players);
         } else {
-            $team['players'] = []; 
+            $team['players'] = [];
         }
-    
+
         return $team;
     }
 
-    function updateMyClub()
+    function updateMyClub(): void
     {
         $myTeam = $this->getMyTeam();
         $formation = $_POST['team_formation'] ?? '';
@@ -520,13 +538,13 @@ class FootballTeamController
                     $isSuccess = false;
                 }
             } catch (Throwable $th) {
-                $isSuccess = true;
+                $isSuccess = false;
             }
         }
         if ($players && count($players) > 0) {
             try {
                 foreach ($players as $player) {
-                    $this->footballTeamService->updateMyClubPlayer($player);
+                    $this->updateMyClubPlayers($player);
                 }
                 $isSuccess = true;
             } catch (Throwable $th) {
@@ -544,10 +562,40 @@ class FootballTeamController
             }
         }
 
-        header("Location: " . home_url("football-manager/my-club"));
+        header("Location: " . home_url("app/football-manager/my-club"));
         exit;
     }
 
+    function updateMyClubPlayers($players)
+    {
+        // Begin transaction for bulk update
+        $this->pdo->beginTransaction();
+
+        try {
+            $sql = "UPDATE football_player 
+                SET starting_order = :starting_order, updated_at = CURRENT_TIMESTAMP 
+                WHERE id = :id";
+            $stmt = $this->pdo->prepare($sql);
+
+            foreach ($players as $player) {
+                if (!isset($player['new_starting_order'], $player['id'])) {
+                    throw new InvalidArgumentException("Invalid player data");
+                }
+
+                $stmt->execute([
+                    ':starting_order' => $player['new_starting_order'],
+                    ':id' => $player['id']
+                ]);
+            }
+
+            // Commit transaction
+            $this->pdo->commit();
+        } catch (Exception $e) {
+            // Rollback transaction on error
+            $this->pdo->rollBack();
+            throw $e;
+        }
+    }
 
     function updateMyPlayers()
     {

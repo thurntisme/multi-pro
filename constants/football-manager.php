@@ -62,7 +62,7 @@ $formations = [
         "name" => "3-5-2",
         "player_positions" => [
             "defenders" => ["CB", "CB", "CB"],
-            "midfielders" => ["LM", "CDM", "CAM", "CDM", "RM"],
+            "midfielders" => ["CDM", "CDM", "LM", "RM", "CAM"],
             "forwards" => ["ST", "ST"]
         ]
     ],
@@ -1284,3 +1284,4 @@ $teamRoles = [
     "longRangeShooter" => "Long-Range Shooter 🏹",
     "penaltyBackup" => "Penalty Backup 🛑",
 ];
+
