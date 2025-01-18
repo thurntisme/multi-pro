@@ -525,9 +525,10 @@ class FootballTeamController
 
     function updateMyClub(): void
     {
+        $msg = '';
         $myTeam = $this->getMyTeam();
         $formation = $_POST['team_formation'] ?? '';
-        $players = $_POST['team_players'] ? json_decode($_POST['team_players'], true) : '';
+        $players = $_POST['team_players'] ? json_decode($_POST['team_players'], true) : [];
         $isSuccess = null;
         if ($formation !== $myTeam['formation']) {
             try {
@@ -539,16 +540,16 @@ class FootballTeamController
                 }
             } catch (Throwable $th) {
                 $isSuccess = false;
+                $msg = $th->getMessage();
             }
         }
         if ($players && count($players) > 0) {
             try {
-                foreach ($players as $player) {
-                    $this->updateMyClubPlayers($player);
-                }
+                $this->updateMyClubPlayers($players);
                 $isSuccess = true;
             } catch (Throwable $th) {
                 $isSuccess = false;
+                $msg = $th->getMessage();
             }
         }
 
@@ -558,7 +559,7 @@ class FootballTeamController
                 $_SESSION['message'] = "Your club updated successfully.";
             } else {
                 $_SESSION['message_type'] = 'danger';
-                $_SESSION['message'] = "Failed to update your club.";
+                $_SESSION['message'] = "Failed to update your club. " . $msg;
             }
         }
 
@@ -566,7 +567,7 @@ class FootballTeamController
         exit;
     }
 
-    function updateMyClubPlayers($players)
+    function updateMyClubPlayers($players): void
     {
         // Begin transaction for bulk update
         $this->pdo->beginTransaction();

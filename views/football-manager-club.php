@@ -112,8 +112,10 @@ ob_start();
                                             <?php if (count($lineupPlayers) > 0) { ?>
                                                 <table class="table align-middle table-nowrap mb-0" id="lineup">
                                                     <tbody class="list form-check-all">
-                                                    <?php foreach ($lineupPlayers as $item) { ?>
-                                                        <tr style="background-color: <?= getBackgroundColor($item['ability']) ?>"
+                                                    <?php foreach ($lineupPlayers as $item) {
+                                                        $player_ability = getPlayerAbility($item['position_in_formation'] ?? $item['ability'], $item['attributes']);
+                                                        ?>
+                                                        <tr style="background-color: <?= getBackgroundColor($player_ability) ?>"
                                                             class="my-club-player-row"
                                                             data-player-uuid="<?= $item['player_uuid'] ?>">
                                                             <td style="width: 10%;">
@@ -144,7 +146,7 @@ ob_start();
                                                                 </div>
                                                             </td>
                                                             <td class="text-center"><span
-                                                                        class="ability"><?= $item['position_in_formation'] ? getPlayerAbility($item['position_in_formation'], $item['attributes']) : $item['ability'] ?></span>
+                                                                        class="ability"><?= $player_ability ?></span>
                                                             </td>
                                                             <td class="text-center" style="width: 15%;">
                                                                 <?php if ($item['is_injury']) { ?>
