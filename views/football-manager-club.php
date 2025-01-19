@@ -78,22 +78,27 @@ ob_start();
                             </div>
                         </div>
                         <div class="d-flex justify-content-center">
-                            <button class="btn me-2 btn-load btn-outline-primary" id="btn-reset-club">
-                            <span class="d-flex align-items-center">
-                                <span class="spinner-border flex-shrink-0 d-none me-2" role="status">
-                                    <span class="visually-hidden">Loading...</span>
-                                </span>
-                                <span class="flex-grow-1">
-                                    Reset
-                                </span>
-                            </span>
-                            </button>
                             <form action="<?= $_SERVER['REQUEST_URI'] ?>" method="post" id="my-club-form">
                                 <input type="hidden" name="action_name" value="update_my_club">
                                 <input type="hidden" name="team_formation" value="<?= $myTeam['formation'] ?>">
                                 <input type="hidden" name="team_players" value="">
                                 <button class="btn btn-success" type="submit">Save</button>
                             </form>
+                        </div>
+                        <div class="card mt-3">
+                            <div class="card-body pt-4 pb-2">
+                                <div class="row">
+                                    <div class="col-3 text-center">
+                                        <button id="btn-apply-stamina"
+                                                class="btn btn-outline-primary btn-confirm-action"
+                                                data-confirm-text="Would you like to invest <?= formatCurrency(1000) ?> to boost this player's stamina?">
+                                            <img src="<?= home_url('assets/images/football-manager/stamina.png') ?>"
+                                                 class="img-responsive avatar-xxs" alt="stamina"/>
+                                        </button>
+                                        <div class="text-muted text-center mt-2 fw-500 fs-12"><?= formatCurrency(1000) ?></div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div class="col-8">
