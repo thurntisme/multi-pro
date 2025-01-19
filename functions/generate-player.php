@@ -822,3 +822,31 @@ function getFormDirection(float $form): string
         return '<i class="mdi mdi-arrow-down-bold-box text-danger fs-22"></i>';
     }
 }
+
+function displayContractAlert($remainingContractDate): string
+{
+    if ($remainingContractDate > 5) return '';
+
+    // Define the start and end colors in RGB
+    $startColor = [247, 184, 75];   // #f7b84b
+    $endColor = [255, 43, 43];    // #ff2b2b
+
+    // Normalize the value between 0 and 5
+    $normalizedValue = max(0, min(5, $remainingContractDate)) / 5;
+
+    // Interpolate the color components
+    $r = round($startColor[0] + ($endColor[0] - $startColor[0]) * $normalizedValue);
+    $g = round($startColor[1] + ($endColor[1] - $startColor[1]) * $normalizedValue);
+    $b = round($startColor[2] + ($endColor[2] - $startColor[2]) * $normalizedValue);
+
+    // Convert the RGB color to a hex value
+    $btnColor = sprintf('#%02x%02x%02x', $r, $g, $b);
+
+    // Determine icon based on the remaining contract date
+    $iconClass = $remainingContractDate < 0 ? 'slash' : 'clock';
+
+    // Return the HTML with inline color
+    return '<span class="btn rounded-pill waves-effect waves-light mx-2 player-alert" style="background-color:' . $btnColor . '; color: white;">' .
+        '<i class="las la-user-' . $iconClass . ' fs-16"></i>' .
+        '</span>';
+}

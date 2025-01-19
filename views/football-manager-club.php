@@ -135,11 +135,7 @@ ob_start();
                                                                             <i class="bx bxs-lock-alt me-2"></i>
                                                                         <?php } ?>
                                                                     </div>
-                                                                    <?php if ($item['remaining_contract_date'] <= 5): ?>
-                                                                        <span class="btn rounded-pill btn-<?= $item['remaining_contract_date'] < 0 ? 'danger' : 'warning' ?> waves-effect waves-light mx-2 player-alert">
-                                                                            <i class="las la-user-<?= $item['remaining_contract_date'] < 0 ? 'slash' : 'clock' ?> fs-16"></i>
-                                                                        </span>
-                                                                    <?php endif; ?>
+                                                                    <?= displayContractAlert($item['remaining_contract_date']); ?>
                                                                     <div class="hstack btn-action">
                                                                         <button class="btn btn-info btn-sm btn-search ms-1">
                                                                             <i class="las la-search fs-14"></i>
@@ -220,11 +216,7 @@ ob_start();
                                                                                 <i class="bx bxs-lock-alt me-2"></i>
                                                                             <?php } ?>
                                                                         </div>
-                                                                        <?php if ($item['remaining_contract_date'] <= 5): ?>
-                                                                            <span class="btn rounded-pill btn-<?= $item['remaining_contract_date'] < 0 ? 'danger' : 'warning' ?> waves-effect waves-light mx-2 player-alert">
-                                                                                <i class="las la-user-<?= $item['remaining_contract_date'] < 0 ? 'slash' : 'clock' ?> fs-16"></i>
-                                                                            </span>
-                                                                        <?php endif; ?>
+                                                                        <?= displayContractAlert($item['remaining_contract_date']); ?>
                                                                         <div class="hstack btn-action">
                                                                             <button class="btn btn-info btn-sm btn-search ms-1">
                                                                                 <i class="las la-search fs-14"></i>
