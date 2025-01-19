@@ -105,7 +105,12 @@ ob_start();
                                             <table class="table align-middle table-nowrap mb-0">
                                                 <thead class="table-light">
                                                 <tr>
-                                                    <th colspan="4">Lineup</th>
+                                                    <th colspan="4"
+                                                        class="d-flex justify-content-between align-items-center">Lineup
+                                                        <button class="btn btn-sm btn-info" id="btn-best-players">Best
+                                                            Players
+                                                        </button>
+                                                    </th>
                                                 </tr>
                                                 </thead>
                                             </table>

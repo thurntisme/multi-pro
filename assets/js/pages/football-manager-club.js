@@ -15,7 +15,7 @@ $("#btn-reset-club").on("click", (e) => {
             method: 'POST',
             contentType: 'application/json',
             data: JSON.stringify({}),
-            beforeSend: function(){
+            beforeSend: function () {
                 $this.find('.spinner-border').removeClass('d-none');
             },
             success: function (response) {
@@ -67,40 +67,47 @@ $(document).on("click", playerRowEl, (e) => {
             changePlayer = $(e.currentTarget);
 
             const playerSelectedUuid = playerSelected.attr("data-player-uuid");
-            const playerSelectedIndex = allPlayers.findIndex(
-                (p) => p.uuid === playerSelectedUuid
-            );
             const changePlayerUuid = changePlayer.attr("data-player-uuid");
-            const changePlayerIndex = allPlayers.findIndex(
-                (p) => p.uuid === changePlayerUuid
-            );
-
-            if (playerSelectedIndex !== -1 && changePlayerIndex !== -1) {
-                [allPlayers[playerSelectedIndex], allPlayers[changePlayerIndex]] = [
-                    allPlayers[changePlayerIndex],
-                    allPlayers[playerSelectedIndex],
-                ];
-            }
-            groupTeams[0].players = allPlayers.slice(0, 11);
-            groupTeams[0].bench = allPlayers.slice(11);
-            redraw(formation);
-            const newPlayers = [...groupTeams[0].players, ...groupTeams[0].bench];
-            $("[name='team_players']").val(JSON.stringify(updateArraysAndGetResult(allBasePlayers, newPlayers)));
-
-            const cloneRow1 = playerSelected.clone(true);
-            const cloneRow2 = changePlayer.clone(true);
-
-            playerSelected.replaceWith(cloneRow2);
-            changePlayer.replaceWith(cloneRow1);
-
-            playerSelected = null;
-            changePlayer = null;
-            groupTeams[0].playerSelected = null;
-
-            calculatePlayerAbility(formation, groupTeams[0]);
+            handleChangePlayerIndex(formation, playerSelectedUuid, changePlayerUuid);
         }
     }
 });
+
+const handleChangePlayerIndex = (formation, playerSelectedUuid, changePlayerUuid) => {
+    let playerSelected = $(`[data-player-uuid="${playerSelectedUuid}"]`);
+    let changePlayer = $(`[data-player-uuid="${changePlayerUuid}"]`);
+
+    const playerSelectedIndex = allPlayers.findIndex(
+        (p) => p.uuid === playerSelectedUuid
+    );
+    const changePlayerIndex = allPlayers.findIndex(
+        (p) => p.uuid === changePlayerUuid
+    );
+
+    if (playerSelectedIndex !== -1 && changePlayerIndex !== -1) {
+        [allPlayers[playerSelectedIndex], allPlayers[changePlayerIndex]] = [
+            allPlayers[changePlayerIndex],
+            allPlayers[playerSelectedIndex],
+        ];
+    }
+    groupTeams[0].players = allPlayers.slice(0, 11);
+    groupTeams[0].bench = allPlayers.slice(11);
+    redraw(formation);
+    const newPlayers = [...groupTeams[0].players, ...groupTeams[0].bench];
+    $("[name='team_players']").val(JSON.stringify(updateArraysAndGetResult(allBasePlayers, newPlayers)));
+
+    const cloneRow1 = playerSelected.clone(true);
+    const cloneRow2 = changePlayer.clone(true);
+
+    playerSelected.replaceWith(cloneRow2);
+    changePlayer.replaceWith(cloneRow1);
+
+    playerSelected = null;
+    changePlayer = null;
+    groupTeams[0].playerSelected = null;
+
+    calculatePlayerAbility(formation, groupTeams[0]);
+}
 
 const renderPlayerSelected = (player) => {
     const player_uuid = player.attr("data-player-uuid");
@@ -169,10 +176,15 @@ const calculatePlayerAbility = (formation, team) => {
     const playerInPosition = players.map((player, index) => {
         const {player_uuid, name, ability, best_position, attributes} = player;
         return {
-            player_uuid, name, ability, best_position, attributes, position_in_match: index < 11 ? positions[index] : player.best_position,
+            player_uuid,
+            name,
+            ability,
+            best_position,
+            attributes,
+            position_in_match: index < 11 ? positions[index] : player.best_position,
         }
     })
-    const payload = { players: playerInPosition };
+    const payload = {players: playerInPosition};
 
     try {
         $.ajax({
@@ -201,3 +213,61 @@ const calculatePlayerAbility = (formation, team) => {
         console.error('Error fetching data:', error);
     }
 }
+
+// Function to filter players based on conditions
+function getFilteredPlayers(players, type = 'sub') {
+    const now = new Date();
+
+    return players.filter(player => {
+        const joiningDate = new Date(player.joining_date);
+        const injuryEndDate = player.injury_end_date ? new Date(player.injury_end_date) : null;
+
+        const isGoodCondition = (
+            joiningDate < now && // Joining date is in the past
+            (!injuryEndDate || injuryEndDate < now) && // Injury end date is either null or in the past
+            player.player_stamina >= 50 && // Stamina is 50 or above
+            player.status === 'club' // Status is 'club'
+        );
+
+        // Return based on the type ('sub' includes good players, 'lineup' includes others)
+        return !player.is_expired && (type === 'sub' ? isGoodCondition : !isGoodCondition);
+    });
+}
+
+// Event listener
+$(document).on("click", "#btn-best-players", (e) => {
+    const myLineUp = groupTeams[0].players;
+    const bench = groupTeams[0].bench;
+    const formation = $("[name='team_formation']").val();
+
+    // Use the filtering function
+    const filteredBadPlayers = getFilteredPlayers(myLineUp, 'lineup'); // Players in bad condition
+    let filteredGoodPlayers = getFilteredPlayers(bench, 'sub'); // Players in good condition
+    const newMyLineUp = JSON.parse(JSON.stringify(myLineUp));
+
+    // Sort filteredGoodPlayers by player_stamina and ability (both descending)
+    filteredGoodPlayers.sort((a, b) => {
+        if (b.player_stamina === a.player_stamina) {
+            return b.ability - a.ability; // If stamina is equal, compare ability
+        }
+        return b.player_stamina - a.player_stamina;
+    });
+
+    // Replace bad players with good players based on positions
+    filteredBadPlayers.forEach(badPlayer => {
+        const badPlayerIndex = newMyLineUp.findIndex(player => player.id === badPlayer.id);
+
+        if (badPlayerIndex !== -1) {
+            // Find the best good player for the bad player's position
+            const goodPlayerIndex = filteredGoodPlayers.findIndex(goodPlayer => goodPlayer.best_position === badPlayer.position_in_formation);
+
+            if (goodPlayerIndex !== -1) {
+                // Replace bad player with the good player
+                handleChangePlayerIndex(formation, newMyLineUp[badPlayerIndex].uuid, filteredGoodPlayers[goodPlayerIndex].uuid)
+                newMyLineUp[badPlayerIndex] = filteredGoodPlayers[goodPlayerIndex];
+                // Remove the used good player from the list
+                filteredGoodPlayers.splice(goodPlayerIndex, 1);
+            }
+        }
+    });
+});
