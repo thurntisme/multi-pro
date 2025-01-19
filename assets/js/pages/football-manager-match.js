@@ -225,7 +225,7 @@ function simulateMatch(teamsInMatch) {
     const matchTime = 90 * 60; // Total match duration in minutes
     const maxHalfTime = 45 * 60; // Total match duration in minutes
     const maxExtraTime = 10; // Maximum possible extra time in minutes
-    const realTimeRate = 10;
+    const realTimeRate = 1;
     let currentTime = 0;
     let currentTimeInSeconds = 0;
     let matchTimeInSeconds = 0;
@@ -337,6 +337,7 @@ function simulateMatch(teamsInMatch) {
                                     assists: 0,
                                     own_goals: player?.own_goals_in_match || 0,
                                     is_injury: player.is_injury,
+                                    form: player.form,
                                     recovery_time: player.recovery_time,
                                     yellow_cards: player?.yellow_cards_in_match || 0,
                                     red_cards: player?.red_cards_in_match || 0,

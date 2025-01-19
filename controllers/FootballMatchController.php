@@ -236,6 +236,7 @@ class FootballMatchController
                     match_played = :match_played,
                     avg_score = :avg_score,
                     injury_end_date = :injury_end_date,
+                    player_form = :player_form,
                     updated_at = CURRENT_TIMESTAMP
                 WHERE team_id = :team_id
                     AND player_uuid = :player_uuid
@@ -271,6 +272,7 @@ class FootballMatchController
                 $injuryEndDate = $isInjury && is_null($playerData['injury_end_date'])
                     ? date('Y-m-d H:i:s', strtotime('+' . $player->recovery_time . ' days'))
                     : $playerData['injury_end_date'];
+                $player_form = $this->calculatePlayerForm($avgScore, $player->score, $player->form);
 
                 // Execute player update
                 $updatePlayerStmt->execute([
@@ -284,6 +286,7 @@ class FootballMatchController
                     ':match_played' => $matchPlayed,
                     ':avg_score' => round($avgScore, 1),
                     ':injury_end_date' => $injuryEndDate,
+                    ':player_form' => $player_form,
                     ':player_uuid' => $player->uuid,
                 ]);
             }
@@ -328,6 +331,28 @@ class FootballMatchController
         ]);
 
         return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+
+    function calculatePlayerForm($avg_score, $score, $form_rate): float
+    {
+        // Calculate form based on score vs average score
+        if ($avg_score == 0) {
+            $form = 0; // No previous data to compare, set form to 0
+        } else {
+            $form = ($score / $avg_score) - 1; // Form = (score / avg_score) - 1
+        }
+
+        // Normalize the form to be between 0 and 1
+        $normalized_form = ($form + 1) / 2; // Normalize form to range 0 to 1 (if form is negative or positive)
+
+        // Normalize form_rate (1 to 5) to range 0 to 1
+        $normalized_form_rate = $form_rate / 5;
+
+        // Weighted average: 70% form, 30% form_rate
+        $overall_form = ($normalized_form * 0.7) + ($normalized_form_rate * 0.3);
+
+        // Scale back the overall form to a range of 1 to 5 for easy interpretation
+        return round($overall_form * 5, 2);
     }
 
     function updatePlayerLevel($currentLevel, $score)

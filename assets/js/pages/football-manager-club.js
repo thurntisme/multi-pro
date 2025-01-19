@@ -69,6 +69,7 @@ $(document).on("click", playerRowEl, (e) => {
             const playerSelectedUuid = playerSelected.attr("data-player-uuid");
             const changePlayerUuid = changePlayer.attr("data-player-uuid");
             handleChangePlayerIndex(formation, playerSelectedUuid, changePlayerUuid);
+            calculatePlayerAbility(formation, groupTeams[0]);
         }
     }
 });
@@ -105,8 +106,6 @@ const handleChangePlayerIndex = (formation, playerSelectedUuid, changePlayerUuid
     playerSelected = null;
     changePlayer = null;
     groupTeams[0].playerSelected = null;
-
-    calculatePlayerAbility(formation, groupTeams[0]);
 }
 
 const renderPlayerSelected = (player) => {
@@ -259,7 +258,7 @@ $(document).on("click", "#btn-best-players", (e) => {
 
         if (badPlayerIndex !== -1) {
             // Find the best good player for the bad player's position
-            const goodPlayerIndex = filteredGoodPlayers.findIndex(goodPlayer => goodPlayer.best_position === badPlayer.position_in_formation);
+            const goodPlayerIndex = filteredGoodPlayers.findIndex(goodPlayer => goodPlayer.best_position === badPlayer.position_in_formation || goodPlayer.playable_positions.includes(badPlayer.position_in_formation));
 
             if (goodPlayerIndex !== -1) {
                 // Replace bad player with the good player
@@ -270,4 +269,6 @@ $(document).on("click", "#btn-best-players", (e) => {
             }
         }
     });
+
+    calculatePlayerAbility(formation, groupTeams[0]);
 });

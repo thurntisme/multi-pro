@@ -150,6 +150,9 @@ ob_start();
                                                                     </div>
                                                                 </div>
                                                             </td>
+                                                            <td class="text-center" style="width: 42px;">
+                                                                <?php echo getFormDirection($item['player_form']) ?>
+                                                            </td>
                                                             <td class="text-center"><span
                                                                         class="ability"><?= $player_ability ?></span>
                                                             </td>
@@ -231,6 +234,9 @@ ob_start();
                                                                             </button>
                                                                         </div>
                                                                     </div>
+                                                                </td>
+                                                                <td class="text-center" style="width: 42px;">
+                                                                    <?php echo getFormDirection($item['player_form']) ?>
                                                                 </td>
                                                                 <td class="text-center"><span
                                                                             class="ability"><?= $item['ability'] ?></span>

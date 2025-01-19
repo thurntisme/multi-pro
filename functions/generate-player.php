@@ -801,3 +801,24 @@ function getPositionColor($position): string
 
     return "gray"; // Default color if position is not found
 }
+
+function getFormDirection(float $form): string
+{
+    // Determine the form direction based on the value of $form (scaled 1 to 5)
+    if ($form >= 4.5) {
+        // Excellent form (arrow up)
+        return '<i class="mdi mdi-arrow-up-bold-box text-success fs-22"></i>';
+    } elseif ($form >= 3.5 && $form < 4.5) {
+        // Good form (arrow top-right)
+        return '<i class="mdi mdi-arrow-top-right-bold-box text-info fs-22"></i>';
+    } elseif ($form >= 2.5 && $form < 3.5) {
+        // Average form (arrow right)
+        return '<i class="mdi mdi-arrow-right-bold-box text-muted fs-22"></i>';
+    } elseif ($form >= 1.5 && $form < 2.5) {
+        // Poor form (arrow bottom-right)
+        return '<i class="mdi mdi-arrow-bottom-right-bold-box text-danger fs-22"></i>';
+    } else {
+        // Very poor form (arrow down)
+        return '<i class="mdi mdi-arrow-down-bold-box text-danger fs-22"></i>';
+    }
+}

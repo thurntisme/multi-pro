@@ -20,6 +20,7 @@ return function (PDO $pdo) {
         'age_in_team_days INTEGER DEFAULT 0',  // Tracks the number of days the player has been in the team
         'match_played INTEGER DEFAULT 0',
         'avg_score FLOAT DEFAULT 0.0',
+        'player_form FLOAT DEFAULT 0.0',
         'player_stamina INTEGER DEFAULT 100',
         'shirt_number INTEGER',
         'is_lock BOOLEAN DEFAULT 0',
