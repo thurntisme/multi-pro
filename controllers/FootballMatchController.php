@@ -482,7 +482,7 @@ class FootballMatchController
         return $new_stamina;
     }
 
-    public function getMatchGift($match_uuid, $item_idx)
+    public function getMatchGift($match_uuid, $item_idx): array
     {
         $sql = "SELECT * FROM football_match WHERE match_uuid = :match_uuid AND status = 'finished' ORDER BY created_at DESC LIMIT 1";
 
@@ -499,7 +499,6 @@ class FootballMatchController
 
         $list_players = $this->randMatchGift($item_idx);
         $my_player = $list_players[$item_idx];
-        exportPlayersToJson([$my_player]);
 
         // Archive the match by updating its status
         $updateMatchSql = "UPDATE football_match SET status = :status WHERE match_uuid = :match_uuid";
@@ -526,13 +525,13 @@ class FootballMatchController
         ];
     }
 
-    function randMatchGift($item_idx)
+    function randMatchGift($item_idx): array
     {
         $players = [];
 
         // Generate random players
         for ($i = 0; $i < 3; $i++) {
-            $players[] = generateRandomPlayers()[0];
+            $players[] = getRandomPlayer();
         }
 
         // Identify the strongest player (highest ability)

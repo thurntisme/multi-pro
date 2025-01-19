@@ -258,7 +258,7 @@ class FootballTeamController
         return array_slice($players, 0, 8);
     }
 
-    function randomTeamPlayers($formation)
+    function randomTeamPlayers($formation): array
     {
         $players = getPlayersJson();
 
@@ -479,7 +479,7 @@ class FootballTeamController
         ];
     }
 
-    public function getRandTeamInMatch()
+    public function getRandTeamInMatch(): array
     {
         $formation = $this->randFormation();
         $players = $this->randomTeamPlayers($formation);

@@ -562,6 +562,17 @@ function getPlayersJson($fileName = ''): false|array
     return array_reverse($oldData);
 }
 
+function getRandomPlayer()
+{
+    $players = getPlayersJson();
+    if (is_array($players) && count($players) > 0) {
+        $randomIndex = array_rand($players);
+        return $players[$randomIndex];
+    } else {
+        return null;
+    }
+}
+
 function getTransferPlayerJson(): false|array
 {
     $players = getPlayersJson();
