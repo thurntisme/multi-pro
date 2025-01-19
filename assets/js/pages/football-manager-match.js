@@ -225,7 +225,7 @@ function simulateMatch(teamsInMatch) {
     const matchTime = 90 * 60; // Total match duration in minutes
     const maxHalfTime = 45 * 60; // Total match duration in minutes
     const maxExtraTime = 10; // Maximum possible extra time in minutes
-    const realTimeRate = 1;
+    const realTimeRate = 10;
     let currentTime = 0;
     let currentTimeInSeconds = 0;
     let matchTimeInSeconds = 0;
@@ -252,13 +252,16 @@ function simulateMatch(teamsInMatch) {
             formatMatchTime(currentTimeInSeconds)["second"];
 
         if (matchTimeInSeconds % realTimeRate === 0) {
-            if (totalMatchTime === recordTime){
+            if (totalMatchTime === recordTime) {
                 try {
                     $.ajax({
                         url: apiUrl + '/football-manager/match/record',
                         method: 'POST',
                         contentType: 'application/json',
-                        data: JSON.stringify({...payload, players: teamsInMatch[teamsInMatch[0].is_my_team ? 0 : 1].players}),
+                        data: JSON.stringify({
+                            ...payload,
+                            players: teamsInMatch[teamsInMatch[0].is_my_team ? 0 : 1].players
+                        }),
                         success: function (response) {
                             console.log(response);
                         },

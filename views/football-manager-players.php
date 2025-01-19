@@ -60,14 +60,16 @@ ob_start();
                                     <tr>
                                         <th class="sort" scope="col">Title</th>
                                         <th class="sort text-center" scope="col">Nationality</th>
+                                        <th class="sort text-center" scope="col"><a
+                                                    href="?sort_by=age&sort_order=<?= $sort_order ?>">Age</a></th>
+                                        <th class="sort text-center" scope="col">Height</th>
+                                        <th class="sort text-center" scope="col">Weight</th>
                                         <th class="sort text-center" scope="col">Position</th>
                                         <th class="sort text-center" scope="col">Playable</th>
                                         <th class="sort text-center" scope="col">Season</th>
                                         <th class="sort text-center" scope="col"><a
                                                     href="<?= generatePageUrl(['sort_by' => 'ability', 'sort_order' => $sort_order]) ?>">Ability</a>
                                         </th>
-                                        <th class="sort text-center" scope="col">Height</th>
-                                        <th class="sort text-center" scope="col">Weight</th>
                                         <th class="sort text-center" scope="col">Contract Wage</th>
                                         <th class="sort text-center" scope="col">Market Price</th>
                                         <th class="text-center" scope="col">
@@ -109,12 +111,13 @@ ob_start();
                                                     </div>
                                                 </td>
                                                 <td class="text-center"><?= $item['nationality'] ?></td>
+                                                <td class="text-center"><?= $item['age'] ?></td>
+                                                <td class="text-center"><?= $item['height'] ?> cm</td>
+                                                <td class="text-center"><?= $item['weight'] ?> kg</td>
                                                 <td class="text-center"><?= $item['best_position'] ?></td>
                                                 <td class="text-center"><?= implode(", ", $item['playable_positions']) ?></td>
                                                 <td class="text-center"><?= $item['season'] ?></td>
                                                 <td class="text-center"><?= $item['ability'] ?></td>
-                                                <td class="text-center"><?= $item['height'] ?> cm</td>
-                                                <td class="text-center"><?= $item['weight'] ?> kg</td>
                                                 <td class="text-center"><?= formatCurrency($item['contract_wage']) ?></td>
                                                 <td class="text-center"><?= formatCurrency($item['market_value']) ?></td>
                                                 <td class="text-center hstack gap-1">
