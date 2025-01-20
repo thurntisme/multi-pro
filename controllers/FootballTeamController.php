@@ -315,8 +315,12 @@ class FootballTeamController
         $sql = "SELECT * FROM football_player WHERE team_id = :team_id";
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute([':team_id' => $myTeam['id']]);
-
         $players = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        $favoritesSql = "SELECT * FROM football_favorite_player WHERE manager_id = :manager_id";
+        $favoritesStmt = $this->pdo->prepare($favoritesSql);
+        $favoritesStmt->execute([':manager_id' => $this->user_id]);
+        $favorites = $favoritesStmt->fetchAll(PDO::FETCH_ASSOC);
 
         if (count($players) > 0) {
             $players = array_map(function ($player) {
@@ -327,6 +331,8 @@ class FootballTeamController
         } else {
             $myTeam['players'] = [];
         }
+
+        $myTeam['favorites'] = $favorites;
 
         return $myTeam;
     }
