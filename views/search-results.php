@@ -6,7 +6,7 @@ $parts = explode("/", $url);
 $firstSlug = $parts[1] ?? '';
 
 $pageTitle = "Search Results";
-$keyword = $firstSlug !== 'search' ? $firstSlug : $_GET['s'];
+$keyword = $firstSlug !== 'search' ? $firstSlug : ($_GET['s'] ?? '');
 
 $searchController = new SearchController();
 $result = $searchController->listSearchResults($keyword);
@@ -111,8 +111,8 @@ ob_start();
                 <ul class="nav nav-tabs nav-tabs-custom">
                     <li class="nav-item">
                         <a class="nav-link"
-                            href="<?= home_url('app/search?s=' . $_GET['s']) ?>">
-                            <i class="ri-search-2-line text-muted align-bottom me-1"></i> All Results
+                            href="<?= home_url('app/search?s=' . trim($keyword) ?? '') ?>">
+                            <i class="ri-search-2-line text-muted align-bottom me-1"></i> All Results <?= $result['count'] ? '(' . $result['count'] . ')' : '' ?>
                         </a>
                     </li>
                     <li class="nav-item ms-auto">
