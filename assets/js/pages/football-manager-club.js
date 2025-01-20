@@ -247,10 +247,13 @@ $(document).on("click", "#btn-best-players", (e) => {
     // Sort filteredGoodPlayers by player_stamina and ability (both descending)
     filteredGoodPlayers.sort((a, b) => {
         if (b.player_stamina === a.player_stamina) {
-            return b.ability - a.ability; // If stamina is equal, compare ability
+            if (b.player_form === a.player_form) {
+                return b.ability - a.ability; // If stamina and form are equal, compare ability
+            }
+            return b.player_form - a.player_form; // Compare form if stamina is equal
         }
-        return b.player_stamina - a.player_stamina;
-    });
+        return b.player_stamina - a.player_stamina; // Compare stamina first
+    });    
 
     // Replace bad players with good players based on positions
     filteredBadPlayers.forEach(badPlayer => {
@@ -301,21 +304,23 @@ $(document).on("click", ".btn-player-action", (e) => {
                         contentType: 'application/json',
                         data: JSON.stringify(payload),
                         success: function (response) {
-                            console.log(response);
                             const {item_slug, budget} = response.data;
                             if (response.status === 'success') {
                                 const row = $(".my-club-player-row[data-player-uuid='" + player_uuid + "']");
+                                const action_player = groupTeams[0].players.find(p => p.uuid === player_uuid);
                                 $("#team-budget").text(budget);
                                 if (item_slug === 'stamina'){
                                     row.find(".progress-bar").attr("style", "width: 100%");
                                     row.find(".progress-bar").attr("aria-valuenow", 100);
                                     row.find(".progress-bar").attr("aria-valuemax", 100);
+                                    action_player.player_stamina = 100;
                                 }
                                 if (item_slug === 'form'){
                                     row.find(".form").html('<i class="mdi mdi-arrow-up-bold-box text-success fs-22"></i>');
+                                    action_player.form = 5;
                                 }
                                 if (item_slug === 'injury') {
-                                    const injury_player = groupTeams[0].players.find(p => p.uuid === player_uuid);
+                                    action_player.injury_end_date = null;
                                     row.find(".player_stamina")
                                         .html(`<div class="progress">
                                                     <div class="progress-bar bg-success"
