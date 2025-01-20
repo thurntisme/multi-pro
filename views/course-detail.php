@@ -41,6 +41,13 @@ ob_start();
                         </div>
                     <?php } ?>
 
+                    <?php if (!empty($postData['url'])) { ?>
+                        <h6 class="mb-3 fw-semibold text-uppercase">Url</h6>
+                        <div class="mb-3">
+                            <?= $postData['url'] ?>
+                        </div>
+                    <?php } ?>
+
                     <?php if (!empty($postData['due_date']) && $postData['due_date'] != '0000-00-00') { ?>
                         <h6 class="mb-3 fw-semibold text-uppercase">Due Date </h6>
                         <div class="mb-3">
@@ -70,12 +77,6 @@ ob_start();
                                 <div>
                                     <p class="mb-2 text-uppercase fw-medium">Status :</p>
                                     <?= $postData['status'] ? renderStatusBadge($postData['status'], 'div', 12) : '' ?>
-                                </div>
-                            </div>
-                            <div class="col-lg-3 col-sm-6">
-                                <div>
-                                    <p class="mb-2 text-uppercase fw-medium">Priority :</p>
-                                    <?= $postData['priority'] ? renderPriorityBadge($postData['priority'], 'div', 12) : '' ?>
                                 </div>
                             </div>
                         </div>
