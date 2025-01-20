@@ -206,9 +206,6 @@ document.addEventListener("DOMContentLoaded", function () {
             }
             newEventData = null;
             modalTitle.innerText = selectedEvent.title;
-
-            // formEvent.classList.add("view-event");
-            document.getElementById("btn-delete-event").removeAttribute("hidden");
         },
         events: defaultEvents,
         eventReceive: function (info) {
@@ -343,39 +340,6 @@ document.addEventListener("DOMContentLoaded", function () {
             upcomingEvent(defaultEvents);
         }
     });
-
-    document
-        .getElementById("btn-delete-event")
-        .addEventListener("click", function (e) {
-            if (selectedEvent) {
-                Swal.fire({
-                    title: 'Are you sure?',
-                    text: "You won't be able to revert this!",
-                    icon: 'warning',
-                    showCancelButton: !0,
-                    customClass: {
-                        confirmButton: 'btn btn-primary w-xs me-2 mt-2',
-                        cancelButton: 'btn btn-danger w-xs mt-2',
-                    },
-                    confirmButtonText: 'Yes, delete it!',
-                    buttonsStyling: !1,
-                    showCloseButton: !0
-                })
-                    .then(function (t) {
-                        t.value && console.log(selectedEvent.id);
-                    })
-                // for (var i = 0; i < defaultEvents.length; i++) {
-                //     if (defaultEvents[i].id == selectedEvent.id) {
-                //         defaultEvents.splice(i, 1);
-                //         i--;
-                //     }
-                // }
-                // upcomingEvent(defaultEvents);
-                // selectedEvent.remove();
-                // selectedEvent = null;
-                // addEvent.hide();
-            }
-        });
 });
 
 function flatPickrInit() {
@@ -531,10 +495,10 @@ function upcomingEvent(a) {
                                   <div class='d-flex mb-3'>\
                                       <div class='flex-grow-1'><i class='mdi mdi-checkbox-blank-circle me-2 text-" +
             category[1] +
-            "'></i><span class='fw-medium'>" +
+            "'></i><span class='fw-medium'><a href='" + calendar_edit_page + element.id + "'>" +
             startDate +
             end_dt +
-            " </span></div>\
+            "</a></span></div>\
                                       <div class='flex-shrink-0'><small class='badge bg-primary-subtle text-primary ms-auto'>" +
             e_time_s +
             e_time_e +

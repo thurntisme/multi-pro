@@ -4,7 +4,7 @@ require_once 'controllers/EventController.php';
 $pageTitle = "Calendar";
 
 $eventController = new EventController();
-$list = $eventController->listEvents('');
+$list = $eventController->listEvents('month');
 
 ob_start();
 ?>
@@ -93,7 +93,7 @@ ob_start();
                                         <i class="ri-discuss-line text-muted fs-16"></i>
                                     </div>
                                     <div class="flex-grow-1">
-                                        <p class="d-block text-muted mb-0" id="event-description-tag"></p>
+                                        <p class="d-block text-muted mb-0" id="event-description-tag" style="word-break: break-all;"></p>
                                     </div>
                                 </div>
                             </div>
@@ -188,9 +188,6 @@ ob_start();
                             </div>
                             <!--end row-->
                             <div class="hstack gap-2 justify-content-end">
-                                <button type="button" class="btn btn-soft-danger" id="btn-delete-event"><i
-                                        class="ri-close-line align-bottom"></i> Delete
-                                </button>
                                 <button type="submit" class="btn btn-success" id="btn-save-event">Add Event</button>
                             </div>
                         </form>
@@ -210,6 +207,7 @@ ob_start(); ?>
 <script type="text/javascript">
     const eventData = '<?= json_encode($list) ?>';
     const events = JSON.parse(eventData);
+    const calendar_edit_page = '<?= home_url("app/calendar/edit?id=") ?>';
 </script>
 <script type="text/javascript" src="<?= home_url('assets/js/pages/calendar.js') ?>"></script>
 <?php
