@@ -139,7 +139,7 @@ class SearchController
             'blogs' AS table_name,
             'blog' AS slug
         FROM blogs
-        WHERE title LIKE :keyword OR content LIKE :keyword OR tags LIKE :keyword
+        WHERE title LIKE :keyword OR content LIKE :keyword OR tags LIKE :keyword OR ref_url LIKE :keyword
         
         UNION ALL
         
@@ -152,7 +152,7 @@ class SearchController
             'books' AS table_name,
             'book' AS slug
         FROM books
-        WHERE title LIKE :keyword OR content LIKE :keyword OR tags LIKE :keyword
+        WHERE title LIKE :keyword OR content LIKE :keyword OR tags LIKE :keyword OR url LIKE :keyword
         
         UNION ALL
         
@@ -165,7 +165,7 @@ class SearchController
             'courses' AS table_name,
             'course' AS slug
         FROM courses
-        WHERE title LIKE :keyword OR content LIKE :keyword OR tags LIKE :keyword
+        WHERE title LIKE :keyword OR content LIKE :keyword OR tags LIKE :keyword OR url LIKE :keyword
         
         UNION ALL
         
@@ -178,7 +178,7 @@ class SearchController
             'gits' AS table_name,
             'git' AS slug
         FROM gits
-        WHERE title LIKE :keyword OR content LIKE :keyword OR tags LIKE :keyword
+        WHERE title LIKE :keyword OR content LIKE :keyword OR tags LIKE :keyword OR url LIKE :keyword
         
         UNION ALL
         

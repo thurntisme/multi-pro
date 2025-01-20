@@ -136,12 +136,6 @@ ob_start();
                                     <?= generateShortDescription($item['content']) ?>
                                 </p>
                                 <ul class="list-inline d-flex align-items-center g-3 text-muted fs-14 mb-0">
-                                    <li class="list-inline-item me-3"><i
-                                            class="ri-thumb-up-line align-middle me-1"></i>10
-                                    </li>
-                                    <li class="list-inline-item me-3"><i
-                                            class="ri-question-answer-line align-middle me-1"></i>8
-                                    </li>
                                     <li class="list-inline-item">
                                         <div class="d-flex align-items-center">
                                             <div class="flex-shrink-0">
