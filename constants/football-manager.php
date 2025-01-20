@@ -1285,3 +1285,26 @@ $teamRoles = [
     "penaltyBackup" => "Penalty Backup 🛑",
 ];
 
+$playerItems = [
+    [
+        'uuid' => 'iBC3Hv2CrfVnaWYo',
+        'slug' => 'stamina',
+        'msg' => "Invest $1000 to enhance this player's stamina significantly.",
+        'image' => 'player_item_stamina.png',
+        'price' => 1000,
+    ],
+    [
+        'uuid' => 'C8BYNgh7QRhO2uzv',
+        'slug' => 'form',
+        'msg' => "Spend $1,200 to boost this player's form and morale.",
+        'image' => 'player_item_form.png',
+        'price' => 1200,
+    ],
+    [
+        'uuid' => 'k7i09Npk4BumJmBI',
+        'slug' => 'injury',
+        'msg' => "Pay $2000 to fully heal this player's injury and restore fitness.",
+        'image' => 'player_item_injury.png',
+        'price' => 1600,
+    ]
+];

@@ -68,7 +68,7 @@ $shopping_links = [
             </div>
             <?php if (!empty($myTeam['budget'])) { ?>
                 <div class="ms-2 d-flex align-items-center">
-                    <span class="badge bg-warning-subtle text-warning badge-border fs-20 ms-1"><?= formatCurrency($myTeam['budget'] ?? 0) ?></span>
+                    <span class="badge bg-warning-subtle text-warning badge-border fs-20 ms-1" id="team-budget"><?= formatCurrency($myTeam['budget'] ?? 0) ?></span>
                 </div>
             <?php } ?>
         </div>

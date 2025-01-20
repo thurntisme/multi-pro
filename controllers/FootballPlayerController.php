@@ -34,32 +34,79 @@ class FootballPlayerController
         return $this->footballPlayerService->getTeamByUserId();
     }
 
-    // Handle deleting a code
-
-    public function updateCode()
+    function getItemByUuid($uuid)
     {
-        $id = $_POST['code_id'] ?? '';
-        $title = $_POST['title'] ?? '';
-        $content = $_POST['content'] ?? '';
-        $tags = $_POST['tags'] ?? '';
-        $url = $_POST['url'] ?? '';
+        global $playerItems;
+        $filteredItems = array_filter($playerItems, function ($item) use ($uuid) {
+            return $item['uuid'] === $uuid;
+        });
 
-        if ($id && $title) {
-            $rowsAffected = $this->footballPlayerService->updateCode($id, $title, $content, $tags, $url);
-            if ($rowsAffected) {
-                $_SESSION['message_type'] = 'success';
-                $_SESSION['message'] = "Code updated successfully.";
-            } else {
-                $_SESSION['message_type'] = 'danger';
-                $_SESSION['message'] = "Failed to update code.";
+        return !empty($filteredItems) ? array_values($filteredItems)[0] : null;
+    }
+
+    function getMyTeamData()
+    {
+        $sql = "SELECT * FROM football_team WHERE manager_id = :manager_id";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute([':manager_id' => $this->user_id]);
+
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+
+    public function upgradePlayer($item_uuid, $player_uuid)
+    {
+        $teamData = $this->getMyTeamData();
+        $item = $this->getItemByUuid($item_uuid);
+        $is_success = false;
+
+        // Ensure item and player exist and budget is sufficient
+        if ($item && $player_uuid && $teamData['budget'] >= $item['price']) {
+            $updates = [];
+            $params = [
+                ':player_uuid' => $player_uuid,
+                ':team_id' => $teamData['id']
+            ];
+
+            // Determine the update query and parameters based on item slug
+            switch ($item['slug']) {
+                case 'stamina':
+                    $updates['query'] = "UPDATE football_player SET player_stamina = :player_stamina, updated_at = CURRENT_TIMESTAMP WHERE player_uuid = :player_uuid AND team_id = :team_id";
+                    $updates['params'] = [':player_stamina' => 100];
+                    break;
+
+                case 'form':
+                    $updates['query'] = "UPDATE football_player SET player_form = :player_form, updated_at = CURRENT_TIMESTAMP WHERE player_uuid = :player_uuid AND team_id = :team_id";
+                    $updates['params'] = [':player_form' => 5];
+                    break;
+
+                case 'injury':
+                    $updates['query'] = "UPDATE football_player SET injury_end_date = :injury_end_date, updated_at = CURRENT_TIMESTAMP WHERE player_uuid = :player_uuid AND team_id = :team_id";
+                    $updates['params'] = [':injury_end_date' => null];
+                    break;
+
+                default:
+                    return $is_success;
             }
-        } else {
-            $_SESSION['message_type'] = 'danger';
-            $_SESSION['message'] = "Code ID and service name are required.";
+
+            // Execute the player update
+            $playerStmt = $this->pdo->prepare($updates['query']);
+            $playerStmt->execute(array_merge($params, $updates['params']));
+
+            if ($playerStmt->rowCount()) {
+                $newBudget = $teamData['budget'] - $item['price'];
+                $updateBudgetSql = "UPDATE football_team SET budget = :budget WHERE id = :team_id";
+                $updateBudgetStmt = $this->pdo->prepare($updateBudgetSql);
+                $updateBudgetStmt->execute([':budget' => $newBudget, ':team_id' => $teamData['id']]);
+
+                $is_success = true;
+            }
         }
 
-        header("Location: " . home_url("code/edit") . '?id=' . $id);
-        exit;
+        return [
+            'success' => $is_success,
+            'item_slug' => $item['slug'] ?? '',
+            'budget' => $newBudget ? formatCurrency($newBudget) : ''
+        ];
     }
 
     // Get all teams

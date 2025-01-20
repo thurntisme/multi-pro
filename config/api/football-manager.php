@@ -2,6 +2,7 @@
 include_once DIR . '/functions/generate-player.php';
 require_once DIR . '/controllers/FootballTeamController.php';
 require_once DIR . '/controllers/FootballMatchController.php';
+require_once DIR . '/controllers/FootballPlayerController.php';
 global $api_url, $payload, $method, $user_id;
 $slug = str_replace('football-manager/', '', $api_url);
 switch ($slug) {
@@ -65,6 +66,15 @@ switch ($slug) {
             $match_uuid = $payload['match_uuid'] ?? null;
             $item_idx = $payload['item_idx'] ?? null;
             getMatchGift($match_uuid, $item_idx);
+        } else {
+            sendResponse("error", 405, "Method Not Allowed");
+        }
+        break;
+    case 'club/player-upgrade':
+        if ($method === 'POST') {
+            $item_uuid = $payload['item_uuid'] ?? null;
+            $player_uuid = $payload['player_uuid'] ?? null;
+            upgradePlayer($item_uuid, $player_uuid);
         } else {
             sendResponse("error", 405, "Method Not Allowed");
         }
@@ -169,5 +179,20 @@ function getMatchGift($match_uuid, $item_idx): void
         }
     } catch (Throwable $th) {
         sendResponse("error", 500, "Failed to get the match gift. " . $th->getMessage());
+    }
+}
+
+function upgradePlayer($item_uuid, $player_uuid): void
+{
+    try {
+        $footballPlayerController = new FootballPlayerController();
+        $giftData = $footballPlayerController->upgradePlayer($item_uuid, $player_uuid);
+        if ($giftData['success']) {
+            sendResponse("success", 201, "Upgrade player successfully.", $giftData);
+        } else {
+            sendResponse("error", 405, "Failed to upgrade player.");
+        }
+    } catch (Throwable $th) {
+        sendResponse("error", 500, "Failed to upgrade player. " . $th->getMessage());
     }
 }

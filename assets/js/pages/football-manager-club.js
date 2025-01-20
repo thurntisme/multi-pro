@@ -272,3 +272,69 @@ $(document).on("click", "#btn-best-players", (e) => {
 
     calculatePlayerAbility(formation, groupTeams[0]);
 });
+
+$(document).on("click", ".btn-player-action", (e) => {
+    const text = $(e.currentTarget).data('confirm-text');
+    const item_uuid = $(e.currentTarget).attr("data-item-uuid");
+    const player_uuid = $(playerSelected).attr("data-player-uuid");
+    const payload = {item_uuid, player_uuid};
+    
+    try {
+        Swal.fire({
+            title: 'Are you sure?',
+            text: text,
+            icon: 'warning',
+            showCancelButton: !0,
+            customClass: {
+                confirmButton: 'btn btn-primary w-xs me-2 mt-2',
+                cancelButton: 'btn btn-danger w-xs mt-2',
+            },
+            confirmButtonText: 'Yes, confirm it!',
+            buttonsStyling: !1,
+            showCloseButton: !0
+        })
+            .then(function (t) {
+                t.value && (
+                    $.ajax({
+                        url: apiUrl + '/football-manager/club/player-upgrade',
+                        method: 'POST',
+                        contentType: 'application/json',
+                        data: JSON.stringify(payload),
+                        success: function (response) {
+                            console.log(response);
+                            const {item_slug, budget} = response.data;
+                            if (response.status === 'success') {
+                                const row = $(".my-club-player-row[data-player-uuid='" + player_uuid + "']");
+                                $("#team-budget").text(budget);
+                                if (item_slug === 'stamina'){
+                                    row.find(".progress-bar").attr("style", "width: 100%");
+                                    row.find(".progress-bar").attr("aria-valuenow", 100);
+                                    row.find(".progress-bar").attr("aria-valuemax", 100);
+                                }
+                                if (item_slug === 'form'){
+                                    row.find(".form").html('<i class="mdi mdi-arrow-up-bold-box text-success fs-22"></i>');
+                                }
+                                if (item_slug === 'injury') {
+                                    const injury_player = groupTeams[0].players.find(p => p.uuid === player_uuid);
+                                    row.find(".player_stamina")
+                                        .html(`<div class="progress">
+                                                    <div class="progress-bar bg-success"
+                                                        role="progressbar"
+                                                        style="width: ${injury_player.player_stamina}%"
+                                                        aria-valuenow="${injury_player.player_stamina}"
+                                                        aria-valuemin="0"
+                                                        aria-valuemax="100"></div>
+                                                </div>`);
+                                }
+                            }
+                        },
+                        error: function (xhr, status, error) {
+                            console.error('Error:', error);
+                        },
+                    })
+                );
+            })
+    } catch (error) {
+        console.error('Error fetching data:', error);
+    }
+});
