@@ -34,7 +34,7 @@ include_once DIR . '/components/alert.php';
                 <div class="col-xxl-4 col-sm-12">
                     <div class="search-box">
                         <input type="text" name="s" class="form-control search bg-light border-light"
-                            placeholder="Search for notification or something..." value="<?= $_GET['s'] ?? '' ?>">
+                            placeholder="Search for api log or something..." value="<?= $_GET['s'] ?? '' ?>">
                         <i class="ri-search-line search-icon"></i>
                     </div>
                 </div>
@@ -79,7 +79,14 @@ include_once DIR . '/components/alert.php';
                             <tr>
                                 <td>
                                     <div class="d-flex align-items-center">
-                                        <?= get_api_log_badge($item['status']) ?><span class="text-muted"><?= $item['message'] ?></span>
+                                        <?= get_api_log_badge($item['status']) ?><span class="text-muted"><?= truncateString($item['message']) ?></span>
+                                        <ul class="list-inline tasks-list-menu mb-0 ms-3">
+                                            <li class="list-inline-item m-0"><a
+                                                    class="btn-view-msg btn btn-link btn-sm"
+                                                    href="#" data-status="<?= $item['status'] ?>" data-msg="<?= $item['message'] ?>"><i
+                                                        class="ri-eye-fill align-bottom text-muted"></i></a>
+                                            </li>
+                                        </ul>
                                     </div>
                                 </td>
                                 <td class="text-center"><?= $item['method'] ?></td>
@@ -111,6 +118,20 @@ include_once DIR . '/components/alert.php';
     <!--end card-body-->
 </div>
 
-
 <?php
+ob_start(); ?>
+<script type="text/javascript">
+    $(document).on("click", ".btn-view-msg", function(e) {
+        e.preventDefault();
+        Swal.fire({
+            title: 'API log message',
+            text: $(this).attr("data-msg"),
+            icon: $(this).attr("data-status"),
+            confirmButtonText: 'Okay'
+        });
+    })
+</script>
+<?php
+$additionJs = ob_get_clean();
+
 $pageContent = ob_get_clean();
