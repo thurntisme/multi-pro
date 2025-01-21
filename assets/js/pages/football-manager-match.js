@@ -461,6 +461,7 @@ function simulateMatch(teamsInMatch) {
                     }
                     if (player) {
                         const {outcomeAction, opponentPlayer} = performOutcomeAction(action, player);
+                        console.log({player: player.name, outcomeAction, opponentPlayer: opponentPlayer.name ?? ''})
                         simulatePlayerAction(outcomeAction, player, currentTimeInSeconds, opponentPlayer);
                     }
                 }
@@ -523,7 +524,7 @@ function performNextAction(currentAction, prevPlayer) {
                 validActionsByPosition[position].includes(opponentAction)
             );
             const randomPosition = positionsWithAction[Math.floor(Math.random() * positionsWithAction.length)];
-            const opponentPlayers = teamsInMatch[prevPlayer.teamIdx === 0 ? 1 : 0].players.filter(p => p.position_in_match === randomPosition);
+            const opponentPlayers = teamsInMatch[prevPlayer.teamIdx === 0 ? 1 : 0].players.filter(p => p.position_in_match === randomPosition && !p?.is_off);
             const opponentPlayer = opponentPlayers[Math.floor(Math.random() * opponentPlayers.length)];
 
             return {player: opponentPlayer, action: opponentAction};
@@ -538,7 +539,7 @@ function performNextAction(currentAction, prevPlayer) {
             validActionsByPosition[position].includes(nextAction)
         );
         const randomPosition = positionsWithAction[Math.floor(Math.random() * positionsWithAction.length)];
-        const teamPlayers = teamsInMatch[prevPlayer.teamIdx].players.filter(p => p.position_in_match === randomPosition);
+        const teamPlayers = teamsInMatch[prevPlayer.teamIdx].players.filter(p => p.position_in_match === randomPosition && !p?.is_off);
         const teamPlayer = teamPlayers[Math.floor(Math.random() * teamPlayers.length)];
         return {player: teamPlayer, action: nextAction};
     } else {
@@ -570,7 +571,9 @@ function performOutcomeAction(action, player) {
             opponentPlayer = shootOutcome.opponentPlayer;
             break;
         case "long_shot":
-            outcome = getLongShotOutcome(player);
+            const longShotOutcome = getShootOutcome(player);
+            outcome = longShotOutcome.outcome;
+            opponentPlayer = longShotOutcome.opponentPlayer;
             break;
         case "save":
             outcome = getSaveOutcome(player);
@@ -673,7 +676,6 @@ function getShootOutcome(player) {
     const adjustedGoalChance = goalChance / total;
     const adjustedSaveChance = saveChance / total;
     const adjustedMissChance = missChance / total;
-    const adjustedBlockedChance = blockedChance / total;
 
     let outcome;
     // Random outcome based on probabilities
@@ -689,13 +691,56 @@ function getShootOutcome(player) {
     }
 }
 
-
 function getLongShotOutcome(player) {
-    let chance = Math.random();  // Random chance for simplicity
-    if (chance < 0.1) return "goal";    // 10% chance of scoring
-    // else if (chance < 0.3) return "save";    // 20% chance of a save
-    else if (chance < 0.6) return "miss";    // 30% chance of missing
-    else return "blocked";    // 40% chance of being blocked
+    const goalkeeper = teamsInMatch[player.teamIdx === 0 ? 1 : 0].players.find(p => p.position_in_match === "GK");
+    const defenders = teamsInMatch[player.teamIdx === 0 ? 1 : 0].players.filter(p => p.position_in_match === "CB");
+    // Select a random defender if any are present
+    let defensiveImpact = 0; // Default if no defenders
+    if (defenders.length > 0) {
+        const randomDefender = defenders[Math.floor(Math.random() * defenders.length)];
+        defensiveImpact = (randomDefender.attributes.mental.positioning + randomDefender.attributes.mental.anticipation + randomDefender.attributes.mental.bravery) / 300;
+    }
+
+    // Base probabilities for long shots
+    let baseGoalChance = 0.1;   // Base 10% chance of scoring
+    let baseMissChance = 0.3;   // Base 30% chance of missing
+    let baseBlockedChance = 0.4; // Base 40% chance of being blocked
+    let baseSaveChance = 0.2;   // Base 20% chance of a save
+
+    // Influence from player's attributes
+    const longShotsImpact = player.attributes.technical.long_shots / 100; // Skill in long shots
+    const shotPowerImpact = player.attributes.technical.shot_power / 100; // Harder shots reduce save/block chances
+    const composureImpact = player.attributes.mental.composure / 100; // Staying calm under pressure
+    const totalSkillImpact = (longShotsImpact + shotPowerImpact + composureImpact) / 3;
+
+    // Adjust for goalkeeping attributes
+    const goalkeeperSkill = (goalkeeper.attributes.goalkeeping.reflexes + goalkeeper.attributes.goalkeeping.shot_stopping + goalkeeper.attributes.goalkeeping.handling) / 300;
+
+    // Calculate adjusted probabilities
+    const goalChance = baseGoalChance + totalSkillImpact - goalkeeperSkill / 2; // Better players score more, good GKs reduce this
+    const saveChance = baseSaveChance + goalkeeperSkill - totalSkillImpact / 2; // Better GKs save more, good players reduce this
+    const missChance = baseMissChance - totalSkillImpact / 3; // Skilled players miss less
+    const blockedChance = baseBlockedChance + defensiveImpact - totalSkillImpact / 4; // Random defender increases block chance
+
+    // Ensure probabilities add up to 1
+    const total = goalChance + saveChance + missChance + blockedChance;
+    const adjustedGoalChance = goalChance / total;
+    const adjustedSaveChance = saveChance / total;
+    const adjustedMissChance = missChance / total;
+    const adjustedBlockedChance = blockedChance / total;
+
+    let outcome;
+    // Random outcome based on probabilities
+    const chance = Math.random();
+    if (chance < adjustedGoalChance) outcome = "goal";
+    else if (chance < adjustedGoalChance + adjustedSaveChance) outcome = "save";
+    else if (chance < adjustedGoalChance + adjustedSaveChance + adjustedMissChance) outcome = "miss";
+    else if (chance < adjustedGoalChance + adjustedSaveChance + adjustedMissChance + adjustedBlockedChance) outcome = "blocked";
+
+    return {
+        outcome,
+        opponentPlayer: goalkeeper
+    }
 }
 
 function getSaveOutcome(player) {
@@ -1448,6 +1493,7 @@ function simulatePlayerAction(action, player, currentTime, opponentPlayer) {
                 player,
                 `${player.name} took a long shot, but the goalkeeper made a remarkable save!`
             );
+            opponentPlayer.score = Math.min(opponentPlayer.score + lowPlayerScore, 10);
             break;
         case "long_shot_miss":
             logEvent(
