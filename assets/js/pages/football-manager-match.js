@@ -254,21 +254,21 @@ function simulateMatch(teamsInMatch) {
         if (matchTimeInSeconds % realTimeRate === 0) {
             if (totalMatchTime === recordTime) {
                 try {
-                    $.ajax({
-                        url: apiUrl + '/football-manager/match/record',
-                        method: 'POST',
-                        contentType: 'application/json',
-                        data: JSON.stringify({
-                            ...payload,
-                            players: teamsInMatch[teamsInMatch[0].is_my_team ? 0 : 1].players
-                        }),
-                        success: function (response) {
-                            console.log(response);
-                        },
-                        error: function (xhr, status, error) {
-                            console.error('Error:', error);
-                        },
-                    });
+                    // $.ajax({
+                    //     url: apiUrl + '/football-manager/match/record',
+                    //     method: 'POST',
+                    //     contentType: 'application/json',
+                    //     data: JSON.stringify({
+                    //         ...payload,
+                    //         players: teamsInMatch[teamsInMatch[0].is_my_team ? 0 : 1].players
+                    //     }),
+                    //     success: function (response) {
+                    //         console.log(response);
+                    //     },
+                    //     error: function (xhr, status, error) {
+                    //         console.error('Error:', error);
+                    //     },
+                    // });
                 } catch (error) {
                     console.error('Error fetching data:', error);
                 }
@@ -351,7 +351,6 @@ function simulateMatch(teamsInMatch) {
                     draft_away_score: result[1].score,
                     players: result[teamsInMatch[0].is_my_team ? 0 : 1].players
                 };
-                console.log(match_result)
                 $(document).on("click", "#btn-match-info", function () {
                     const matchAttributes = $("#matchInfoBackdrop #matchAttributes");
                     matchAttributes.html('<p class="mb-0">Data processing...</p>');
@@ -408,20 +407,20 @@ function simulateMatch(teamsInMatch) {
                 });
                 payload.result = JSON.stringify(match_result);
                 try {
-                    $.ajax({
-                        url: apiUrl + '/football-manager/match/result',
-                        method: 'POST',
-                        contentType: 'application/json',
-                        data: JSON.stringify(payload),
-                        success: function (response) {
-                            if (response.status === "success") {
-                                $('#match-form').removeClass('d-none');
-                            }
-                        },
-                        error: function (xhr, status, error) {
-                            console.error('Error:', error);
-                        },
-                    });
+                    // $.ajax({
+                    //     url: apiUrl + '/football-manager/match/result',
+                    //     method: 'POST',
+                    //     contentType: 'application/json',
+                    //     data: JSON.stringify(payload),
+                    //     success: function (response) {
+                    //         if (response.status === "success") {
+                    //             $('#match-form').removeClass('d-none');
+                    //         }
+                    //     },
+                    //     error: function (xhr, status, error) {
+                    //         console.error('Error:', error);
+                    //     },
+                    // });
                 } catch (error) {
                     console.error('Error fetching data:', error);
                 }
@@ -566,7 +565,9 @@ function performOutcomeAction(action, player) {
 
     switch (action) {
         case "shoot":
-            outcome = getShootOutcome(player);
+            const shootOutcome = getShootOutcome(player);
+            outcome = shootOutcome.outcome;
+            opponentPlayer = shootOutcome.opponentPlayer;
             break;
         case "long_shot":
             outcome = getLongShotOutcome(player);
@@ -644,12 +645,50 @@ function performOutcomeAction(action, player) {
 }
 
 function getShootOutcome(player) {
-    let chance = Math.random();  // Random chance for simplicity
-    if (chance < 0.2) return "goal";    // 20% chance of scoring
-    // else if (chance < 0.4) return "save";    // 20% chance of a save
-    else if (chance < 0.7) return "miss";    // 30% chance of missing
-    else return "blocked";    // 30% chance of being blocked
+    const goalkeeper = teamsInMatch[player.teamIdx === 0 ? 1 : 0].players.find(p => p.position_in_match === "GK");
+    // Base probabilities
+    let baseGoalChance = 0.2;
+    let baseMissChance = 0.2;
+    let baseBlockedChance = 0.3;
+    let baseSaveChance = 0.3;
+
+    // Influence from player's attributes
+    const finishingImpact = player.attributes.technical.finishing / 100; // Scales with finishing skill
+    const composureImpact = player.attributes.mental.composure / 100; // Adds calmness under pressure
+    const shotPowerImpact = player.attributes.technical.shot_power / 100; // Harder shots are less likely to be saved
+    const balanceImpact = player.attributes.physical.balance / 100; // Stability while shooting
+    const totalSkillImpact = (finishingImpact + composureImpact + shotPowerImpact + balanceImpact) / 4;
+
+    // Adjust for goalkeeping attributes
+    const goalkeeperSkill = (goalkeeper.attributes.goalkeeping.reflexes + goalkeeper.attributes.goalkeeping.shot_stopping + goalkeeper.attributes.goalkeeping.handling) / 300;
+
+    // Calculate adjusted probabilities
+    const goalChance = baseGoalChance + totalSkillImpact - goalkeeperSkill / 2; // Better goalkeepers reduce goal chance
+    const saveChance = baseSaveChance + goalkeeperSkill - totalSkillImpact / 2; // Better shooters reduce save chance
+    const missChance = baseMissChance - totalSkillImpact / 2; // Skilled players miss less
+    const blockedChance = baseBlockedChance - totalSkillImpact / 3; // Skilled players avoid blocks better
+
+    // Ensure probabilities add up to 1
+    const total = goalChance + saveChance + missChance + blockedChance;
+    const adjustedGoalChance = goalChance / total;
+    const adjustedSaveChance = saveChance / total;
+    const adjustedMissChance = missChance / total;
+    const adjustedBlockedChance = blockedChance / total;
+
+    let outcome;
+    // Random outcome based on probabilities
+    const chance = Math.random();
+    if (chance < adjustedGoalChance) outcome = "goal";
+    else if (chance < adjustedGoalChance + adjustedSaveChance) outcome = "save";
+    else if (chance < adjustedGoalChance + adjustedSaveChance + adjustedMissChance) outcome = "miss";
+    else outcome = "blocked";
+
+    return {
+        outcome,
+        opponentPlayer: goalkeeper
+    }
 }
+
 
 function getLongShotOutcome(player) {
     let chance = Math.random();  // Random chance for simplicity
@@ -1312,6 +1351,7 @@ function simulatePlayerAction(action, player, currentTime, opponentPlayer) {
             );
             player.score = Math.min(player.score + highPlayerScore, 10);
             player.goals_in_match++;
+            opponentPlayer.score = Math.max(opponentPlayer.score - mediumPlayerScore, 1);
             teamsInMatch[player.teamIdx].score++;
             break;
         case "shoot_save":
@@ -1319,8 +1359,9 @@ function simulatePlayerAction(action, player, currentTime, opponentPlayer) {
                 currentTime,
                 action,
                 player,
-                `${player.name} took a shot, but the goalkeeper made a brilliant save!`
+                `${player.name} took a shot, but ${opponentPlayer.name} made a brilliant save!`
             );
+            opponentPlayer.score = Math.min(opponentPlayer.score + lowPlayerScore, 10);
             break;
         case "shoot_miss":
             logEvent(

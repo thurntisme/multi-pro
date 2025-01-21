@@ -158,25 +158,6 @@ class FootballTeamController
                 exit;
             }
 
-            // Calculate termination cost (e.g., 25% of remaining wage)
-            $remainingWage = $playerData['contract_wage'] * 0.25;
-
-            if ($myTeam['budget'] < $remainingWage) {
-                $_SESSION['message_type'] = 'danger';
-                $_SESSION['message'] = "Not enough budget to terminate $playerName's contract.";
-                header("Location: " . $_SERVER['REQUEST_URI']);
-                exit;
-            }
-
-            // Deduct termination cost from the team budget
-            $teamBudget = $myTeam['budget'] - $remainingWage;
-            $updateTeamSql = "UPDATE football_team SET budget = :budget, updated_at = CURRENT_TIMESTAMP WHERE id = :team_id";
-            $updateTeamStmt = $this->pdo->prepare($updateTeamSql);
-            $updateTeamStmt->execute([
-                ':budget' => $teamBudget,
-                ':team_id' => $myTeam['id'],
-            ]);
-
             // Terminate the player's contract by setting `team_id` to NULL
             $terminateSql = "DELETE FROM football_player WHERE id = :player_id";
             $terminateStmt = $this->pdo->prepare($terminateSql);

@@ -780,9 +780,9 @@ function getBackgroundColor($ability): string
     // Assign colors based on ability ranges
     if ($ability <= 71) {
         return "rgba(245, 245, 245, 0.5)"; // Transparent
-    } elseif ($ability <= 96) {
+    } elseif ($ability <= 80) {
         return "rgba(255, 255, 150, 0.5)"; // Soft Yellow
-    } elseif ($ability <= 110) {
+    } elseif ($ability <= 90) {
         return "rgba(255, 100, 100, 0.5)"; // Soft Red
     } else {
         return "rgba(200, 100, 255, 0.5)"; // Soft Violet
