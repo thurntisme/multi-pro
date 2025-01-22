@@ -38,7 +38,7 @@ ob_start();
 <div class="row">
     <div class="col-xl-8 col-md-10 offset-xl-2 offset-md-1">
         <?php
-        includeFileWithVariables('components/single-button-group.php', array("slug" => "course", "post_id" => $postData['id'], 'modify_type' => $modify_type));
+        includeFileWithVariables('components/single-button-group.php', array("slug" => "course", "post_id" => $postData['id'] ?? '', 'modify_type' => $modify_type));
         ?>
         <form method="POST" action="<?= $_SERVER['REQUEST_URI'] ?>" id="course">
             <div class="card">

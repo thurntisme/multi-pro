@@ -154,6 +154,7 @@ $bookmarks = [
             ["url" => "https://free.ayaivn.me/", "name" => "Open WebUI", "logo" => "/assets/images/brands/splash.png", "tags" => ["AI", "chat"]],
             ["url" => "https://www.usnap.ai/", "name" => "USnap.ai", "logo" => "/assets/images/brands/usnap.png", "tags" => ["AI", "chat"]],
             ["url" => "https://iask.ai/?mode=question", "name" => "iAsk", "logo" => "/assets/images/brands/iask.png", "tags" => ["AI", "chat"]],
+            ["url" => "https://chat.deepseek.com/", "name" => "DeepSeek", "logo" => "/assets/images/brands/deepseek.png", "tags" => ["AI", "chat"]],
         ]
     ],
     [
