@@ -891,11 +891,49 @@ function getLongPassOutcome(player) {
 }
 
 function getDribbleOutcome(player) {
-    let chance = Math.random(); // Random chance for simplicity
-    if (chance < 0.5) return "successful"; // 50% chance of a successful dribble
-    else if (chance < 0.75) return "tackled"; // 25% chance of being tackled
-    else if (chance < 0.9) return "fouled"; // 15% chance of being fouled
-    else return "lose_control"; // 10% chance of losing control
+    // Base probabilities
+    let baseSuccessChance = 0.5;    // 50% base chance of a successful dribble
+    let baseTackledChance = 0.25;  // 25% base chance of being tackled
+    let baseFouledChance = 0.15;   // 15% base chance of being fouled
+    let baseLoseControlChance = 0.1; // 10% base chance of losing control
+
+    // Adjust probabilities based on player's dribbling skill
+    const dribblingImpact = player.attributes.technical.dribbling / 100;
+
+    // Adjust probabilities based on opponent defender's tackling ability
+    let tacklingImpact = 0;
+    const opponentDefenders = teamsInMatch[player.teamIdx === 0 ? 1 : 0].players.filter(p => !["GK", "CB"].includes( p.position_in_match));
+    if (opponentDefenders.length > 0) {
+        const randomDefender = opponentDefenders[Math.floor(Math.random() * opponentDefenders.length)];
+        tacklingImpact = randomDefender
+            ? randomDefender.attributes.technical.tackling / 100
+            : 0; // Use 0 if no defender is present
+    }
+
+    // Modify probabilities dynamically
+    let successChance = baseSuccessChance + dribblingImpact - tacklingImpact / 2;
+    let tackledChance = baseTackledChance + tacklingImpact / 2 - dribblingImpact / 4;
+    let fouledChance = baseFouledChance + tacklingImpact / 4 - dribblingImpact / 5;
+    let loseControlChance = baseLoseControlChance - dribblingImpact / 5;
+
+    // Normalize probabilities to ensure they sum to 1
+    const total = successChance + tackledChance + fouledChance + loseControlChance;
+    successChance /= total;
+    tackledChance /= total;
+    fouledChance /= total;
+    loseControlChance /= total;
+
+    // Determine the outcome
+    const chance = Math.random();
+    if (chance < successChance) {
+        return "successful"; // Dribble succeeds
+    } else if (chance < successChance + tackledChance) {
+        return "tackled"; // Opponent tackles the player
+    } else if (chance < successChance + tackledChance + fouledChance) {
+        return "fouled"; // Defender fouls the player
+    } else {
+        return "lose_control"; // Player loses control of the ball
+    }
 }
 
 function getInterceptOutcome(player) {
