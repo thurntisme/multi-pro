@@ -937,12 +937,56 @@ function getDribbleOutcome(player) {
 }
 
 function getInterceptOutcome(player) {
-    let chance = Math.random(); // Generate a random chance
-    if (chance < 0.45) return "successful"; // 45% chance of successful interception
-    else if (chance < 0.7) return "missed"; // 25% chance of missing the interception
-    else if (chance < 0.85) return "deflection"; // 15% chance of deflecting the ball
-    else if (chance < 0.95) return "foul"; // 10% chance of committing a foul
-    else return "own_goal"; // 5% chance of an own goal
+    // Base probabilities
+    let baseSuccessChance = 0.45;    // 45% base chance of successful interception
+    let baseMissedChance = 0.25;    // 25% base chance of missing
+    let baseDeflectionChance = 0.15; // 15% base chance of deflecting the ball
+    let baseFoulChance = 0.1;       // 10% base chance of committing a foul
+    let baseOwnGoalChance = 0.05;   // 5% base chance of an own goal
+
+    // Adjust probabilities based on player's defensive skills
+    const positioningImpact = player.attributes.mental.positioning / 100;
+    const anticipationImpact = player.attributes.mental.anticipation / 100;
+    const tacklingImpact = player.attributes.technical.tackling / 100;
+
+    // Adjust probabilities based on pass accuracy (higher pass accuracy reduces interception chances)
+    let passAccuracyImpact = 0;
+    const attackers = teamsInMatch[player.teamIdx === 0 ? 1 : 0].players.filter(p => !["GK", "CB"].includes( p.position_in_match));
+    if (attackers.length > 0) {
+        const randomAttacker = attackers[Math.floor(Math.random() * attackers.length)];
+        passAccuracyImpact = randomAttacker
+            ? randomAttacker.attributes.technical.short_passing / 100
+            : 0; // Use 0 if no defender is present
+    }
+
+    // Modify probabilities dynamically
+    let successChance = baseSuccessChance + positioningImpact + anticipationImpact - passAccuracyImpact / 2;
+    let missedChance = baseMissedChance - (positioningImpact + anticipationImpact) / 4 + passAccuracyImpact / 2;
+    let deflectionChance = baseDeflectionChance + tacklingImpact / 2 - anticipationImpact / 3;
+    let foulChance = baseFoulChance + tacklingImpact / 3 - positioningImpact / 4;
+    let ownGoalChance = baseOwnGoalChance - tacklingImpact / 5;
+
+    // Normalize probabilities to ensure they sum to 1
+    const total = successChance + missedChance + deflectionChance + foulChance + ownGoalChance;
+    successChance /= total;
+    missedChance /= total;
+    deflectionChance /= total;
+    foulChance /= total;
+    ownGoalChance /= total;
+
+    // Determine the outcome
+    const chance = Math.random();
+    if (chance < successChance) {
+        return "successful"; // Interception succeeds
+    } else if (chance < successChance + missedChance) {
+        return "missed"; // Interception attempt fails
+    } else if (chance < successChance + missedChance + deflectionChance) {
+        return "deflection"; // Ball is deflected
+    } else if (chance < successChance + missedChance + deflectionChance + foulChance) {
+        return "foul"; // Foul committed during the interception
+    } else {
+        return "own_goal"; // Unfortunate own goal
+    }
 }
 
 function getHeaderOutcome(player) {
