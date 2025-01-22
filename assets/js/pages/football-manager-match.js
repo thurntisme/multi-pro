@@ -219,6 +219,8 @@ const validActionsByPosition = {
     RW: ["rebound", "step_over", "cross", "dribble", "cut_inside", "pass", "shoot", "skill_move", "block_shot"],
 };
 
+const defaultActions = ["pass", "long_pass", "goal_kick", "throw_in"];
+
 function simulateMatch(teamsInMatch) {
     const team1 = teamsInMatch[0];
     const team2 = teamsInMatch[1];
@@ -437,31 +439,16 @@ function simulateMatch(teamsInMatch) {
                 if (!currentTimeInSeconds) {
                     logEvent(currentTimeInSeconds, "start", '', "Match start");
                 } else {
-                    if (!prevAction && !prevPlayer) {
-                        const team = Math.random() < 0.5 ? team1 : team2;
-                        prevAction = Math.random() < 0.5 ? "goal_kick" : "pass";
-                        if (prevAction === "goal_kick") {
-                            const goalkeeper = team.players.find(player => player.position_in_match === "GK");
-                            simulatePlayerAction(prevAction, goalkeeper, currentTimeInSeconds, '');
-                            const goalKickOutcome = getGoalKickOutcome(goalkeeper);
-                            prevAction = goalKickOutcome.nextAction;
-                            prevPlayer = goalKickOutcome.nextPlayer;
-                        } else {
-                            const randPlayers = team.players.filter(player => player.position_in_match !== "GK" && !player?.is_off);
-                            const randPlayer = randPlayers[Math.floor(Math.random() * randPlayers.length)];
-                            simulatePlayerAction(prevAction, randPlayer, currentTimeInSeconds, '');
-                            const passOutCome = getPassOutcome(randPlayer);
-                            prevAction = passOutCome.nextAction;
-                            prevPlayer = passOutCome.nextPlayer;
-                        }
+                    let defaultAction;
+                    if (!prevAction) {
+                        const randomActionIndex = Math.floor(Math.random() * defaultActions.length);
+                        const randomAction = defaultActions[randomActionIndex];
+                        defaultAction = performDefaultAction(randomAction, currentTimeInSeconds);
                     } else {
-                        const {outcomeAction, nextAction, nextPlayer} = performOutcomeAction(prevAction, prevPlayer);
-                        if (outcomeAction && prevPlayer){
-                            simulatePlayerAction(outcomeAction, prevPlayer, currentTimeInSeconds, nextPlayer);
-                        }
-                        prevAction = nextAction;
-                        prevPlayer = nextPlayer;
+                        defaultAction = performDefaultAction(prevAction, currentTimeInSeconds);
                     }
+                    prevAction = defaultAction.action;
+                    prevPlayer = guestNextPlayer(prevAction, defaultAction.actionType, defaultAction.player);
                     console.log({prevAction, prevPlayer})
                 }
             }
@@ -472,6 +459,96 @@ function simulateMatch(teamsInMatch) {
         // Increment the total time
         matchTimeInSeconds++;
     }, 10); // Delay of 1 second per iteration
+}
+
+function performDefaultAction(action, currentTime) {
+    const team = teamsInMatch[Math.floor(Math.random() * teamsInMatch.length)];
+
+    // Helper function to get a random player from a filtered list
+    function getRandomPlayer(filterCondition) {
+        const players = team.players.filter(filterCondition);
+        return players[Math.floor(Math.random() * players.length)];
+    }
+
+    // Helper function to get a random next action from a list
+    function getRandomNextAction(possibleActions) {
+        return possibleActions[Math.floor(Math.random() * possibleActions.length)];
+    }
+
+    // Helper function to get a random opponent action
+    function getRandomOpponentAction(possibleActions) {
+        return possibleActions[Math.floor(Math.random() * possibleActions.length)];
+    }
+
+    // Helper function to randomly determine if action is teammate or opponent
+    function getRandomActionType() {
+        return Math.random() < 0.5 ? "teammate" : "opponent";
+    }
+
+    let player = null;
+    let description;
+    let nextAction = '';
+    let opponentAction = '';
+    let actionType = getRandomActionType();
+
+    switch (action) {
+        case "goal_kick":
+            player = team.players.find(p => p.position_in_match === "GK");
+            if (player) {
+                description = `${player.name} executed a precise goal kick, launching the ball forward to maintain possession.`;
+                nextAction = getRandomNextAction(["challenge_header", "distribute_ball", "pass"]);
+                opponentAction = getRandomOpponentAction(["intercept", "press", "regain_possession"]);
+            }
+            break;
+
+        case "pass":
+            player = getRandomPlayer(p => !p?.is_off);
+            if (player) {
+                description = `${player.name} delivered an accurate pass, keeping the attack alive.`;
+                nextAction = getRandomNextAction(["long_pass", "dribble", "shot"]);
+                opponentAction = getRandomOpponentAction(["block", "tackle", "intercept"]);
+            }
+            break;
+
+        case "long_pass":
+            player = getRandomPlayer(p => !p?.is_off);
+            if (player) {
+                description = `${player.name} launched a long pass, attempting to bypass the opposition's midfield.`;
+                nextAction = getRandomNextAction(["throw_in", "challenge_header", "control_ball"]);
+                opponentAction = getRandomOpponentAction(["intercept", "header_duel", "mark"]);
+            }
+            break;
+
+        case "throw_in":
+            player = getRandomPlayer(p => ["LB", "RB", "LM", "RM"].includes(p.position_in_match));
+            if (player) {
+                description = `${player.name} performed a quick throw-in, aiming to restart play efficiently.`;
+                nextAction = getRandomNextAction(["pass", "cross", "dribble"]);
+                opponentAction = getRandomOpponentAction(["press", "intercept", "challenge"]);
+            }
+            break;
+
+        case "dribble":
+            player = getRandomPlayer(p => !["GK"].includes(p.position_in_match));
+            if (player) {
+                const dribbleOutcome = getDribbleOutcome(player);
+                description = dribbleOutcome.description;
+                actionType = dribbleOutcome.actionType;
+                nextAction = getRandomNextAction(["pass", "shot", "cross"]);
+                opponentAction = getRandomOpponentAction(["tackle", "press", "block"]);
+            }
+            break;
+
+        default:
+            console.error("Unknown action type", action);
+            return {action, player}; // Exit early for unknown actions
+    }
+
+    if (player && description) {
+        logEvent(currentTime, action, player, description);
+    }
+
+    return {actionType, action: actionType === "teammate" ? nextAction : opponentAction, player};
 }
 
 function getActionFromPlayer(player, currentTimeInSeconds) {
@@ -498,7 +575,7 @@ function getActionFromPlayer(player, currentTimeInSeconds) {
     //         action = "foul";
     //     }
     // }
-    if (randAction < 0.2 && isPossibleSub) { 
+    if (randAction < 0.2 && isPossibleSub) {
         action = "substitute";
     }
 
@@ -510,31 +587,20 @@ function getActionFromPlayer(player, currentTimeInSeconds) {
 }
 
 // Function to perform an action and simulate opponent reaction
-function performNextAction(currentAction, prevPlayer) {
-    // Check if opponent can react to this action
-    const possibleReactions = opponentReactions[currentAction];
-    const possibleFollowUps = playerActions[currentAction];
+function performNextAction(currentAction, prevPlayer, currentTimeInSeconds) {
+    console.log("performNextAction: ", currentAction, prevPlayer);
 
-    if (possibleReactions) {
-        // Simulate a random chance for opponent reaction
-        const opponentChance = Math.random(); // 0 to 1
-
-        if (opponentChance < 0.5) {
-            // Opponent reacts
-            const reactionIndex = Math.floor(Math.random() * possibleReactions.length);
-            const opponentAction = possibleReactions[reactionIndex];
-            const positionsWithAction = Object.keys(validActionsByPosition).filter(position =>
-                validActionsByPosition[position].includes(opponentAction)
-            );
-            const randomPosition = positionsWithAction[Math.floor(Math.random() * positionsWithAction.length)];
-            const opponentPlayers = teamsInMatch[prevPlayer.teamIdx === 0 ? 1 : 0].players.filter(p => p.position_in_match === randomPosition && !p?.is_off);
-            const opponentPlayer = opponentPlayers[Math.floor(Math.random() * opponentPlayers.length)];
-
-            return {player: opponentPlayer, action: opponentAction};
-        }
+    if (currentAction === "intercept") {
+        return guestNextPlayer(currentAction, getInterceptOutcome(prevPlayer, currentTimeInSeconds), prevPlayer);
     }
 
-    // If no opponent reaction, continue with the player's follow-up action
+
+    return null;
+}
+
+function guestFollowReaction(currentAction, prevPlayer) {
+    const possibleFollowUps = playerActions[currentAction];
+
     if (possibleFollowUps) {
         const followUpIndex = Math.floor(Math.random() * possibleFollowUps.length);
         const nextAction = possibleFollowUps[followUpIndex];
@@ -550,22 +616,17 @@ function performNextAction(currentAction, prevPlayer) {
     }
 }
 
-function guestFollowReaction(currentAction, prevPlayer) {
-    const possibleFollowUps = playerActions[currentAction];
-
-    if (possibleFollowUps) {
-        const followUpIndex = Math.floor(Math.random() * possibleFollowUps.length);
-        const nextAction = possibleFollowUps[followUpIndex];
-        const positionsWithAction = Object.keys(validActionsByPosition).filter(position =>
-            validActionsByPosition[position].includes(nextAction)
-        );
-        const randomPosition = positionsWithAction[Math.floor(Math.random() * positionsWithAction.length)];
-        const teamPlayers = teamsInMatch[prevPlayer.teamIdx].players.filter(p => p.position_in_match === randomPosition && !p?.is_off);
-        const teamPlayer = teamPlayers[Math.floor(Math.random() * teamPlayers.length)];
-        return { player: teamPlayer, action: nextAction };
+function guestNextPlayer(action, actionType, player) {
+    const positionsWithAction = Object.keys(validActionsByPosition).filter(position =>
+        validActionsByPosition[position].includes(action)
+    );
+    let players;
+    if (actionType === "teammate") {
+        players = teamsInMatch[player.teamIdx].players.filter(p => positionsWithAction.includes(p.position_in_match));
     } else {
-        return { player: null, action: null };
+        players = teamsInMatch[player.teamIdx === 0 ? 1 : 0].players.filter(p => positionsWithAction.includes(p.position_in_match));
     }
+    return players[Math.floor(Math.random() * players.length)];
 }
 
 function guestOpponentAction(currentAction) {
@@ -575,9 +636,9 @@ function guestOpponentAction(currentAction) {
         const reactionIndex = Math.floor(Math.random() * possibleReactions.length);
         const opponentAction = possibleReactions[reactionIndex];
 
-        return { action: opponentAction };
+        return {action: opponentAction};
     } else {
-        return { action: null };
+        return {action: null};
     }
 }
 
@@ -615,60 +676,60 @@ function performOutcomeAction(action, player) {
         //   case "catch_cross":
         //     outcome = getCatchCrossOutcome(player);
         //     break;
-    //   case "long_pass":
-    //     outcome = getLongPassOutcome(player);
-    //     break;
-    //   case "dribble":
-    //     outcome = getDribbleOutcome(player);
-    //     break;
-    //   case "intercept":
-    //     outcome = getInterceptOutcome(player);
-    //     break;
-    //   case "attack_header":
-    //     outcome = getAttackHeaderOutcome(player);
-    //     break;
-    //   case "tackle":
-    //     outcome = getTackleOutcome(player);
-    //     break;
-    //   case "cut_inside":
-    //     outcome = getCutInsideOutcome(player);
-    //     break;
-    //   case "volley":
-    //     outcome = getVolleyOutcome(player);
-    //     break;
-    //   case "tap_in":
-    //     outcome = getTapInOutcome(player);
-    //     break;
-    //   case "foul":
-    //     const foulOutcome = getFoulOutcome(player);
-    //     outcome = foulOutcome.outcome;
-    //     outcomePlayer = foulOutcome.opponentPlayer;
-    //     break;
-    //   case "recover_ball":
-    //     outcome = getRecoverBallOutcome(player);
-    //     break;
-    //   case "block_cross":
-    //     outcome = getBlockCrossOutcome(player);
-    //     break;
-    //   case "intercept_cross":
-    //     outcome = getInterceptCrossOutcome(player);
-    //     break;
-    //   case "injury":
-    //     const injuryOutcome = getInjuryOutcome(player);
-    //     outcome = injuryOutcome.outcome;
-    //     outcomePlayer = injuryOutcome.opponentPlayer;
-    //     break;
-    //   case "substitute":
-    //     const substituteOutcome = getSubstituteOutcome(player);
-    //     outcome = substituteOutcome.outcome;
-    //     outcomePlayer = substituteOutcome.opponentPlayer;
-    //     break;
-    //   case "tap_in":
-    //     outcome = getAttackHeaderOutcome(player);
-    //     break;
-      default:
-        // console.log(action)
-        break;
+        //   case "long_pass":
+        //     outcome = getLongPassOutcome(player);
+        //     break;
+        //   case "dribble":
+        //     outcome = getDribbleOutcome(player);
+        //     break;
+        //   case "intercept":
+        //     outcome = getInterceptOutcome(player);
+        //     break;
+        //   case "attack_header":
+        //     outcome = getAttackHeaderOutcome(player);
+        //     break;
+        //   case "tackle":
+        //     outcome = getTackleOutcome(player);
+        //     break;
+        //   case "cut_inside":
+        //     outcome = getCutInsideOutcome(player);
+        //     break;
+        //   case "volley":
+        //     outcome = getVolleyOutcome(player);
+        //     break;
+        //   case "tap_in":
+        //     outcome = getTapInOutcome(player);
+        //     break;
+        //   case "foul":
+        //     const foulOutcome = getFoulOutcome(player);
+        //     outcome = foulOutcome.outcome;
+        //     outcomePlayer = foulOutcome.opponentPlayer;
+        //     break;
+        //   case "recover_ball":
+        //     outcome = getRecoverBallOutcome(player);
+        //     break;
+        //   case "block_cross":
+        //     outcome = getBlockCrossOutcome(player);
+        //     break;
+        //   case "intercept_cross":
+        //     outcome = getInterceptCrossOutcome(player);
+        //     break;
+        //   case "injury":
+        //     const injuryOutcome = getInjuryOutcome(player);
+        //     outcome = injuryOutcome.outcome;
+        //     outcomePlayer = injuryOutcome.opponentPlayer;
+        //     break;
+        //   case "substitute":
+        //     const substituteOutcome = getSubstituteOutcome(player);
+        //     outcome = substituteOutcome.outcome;
+        //     outcomePlayer = substituteOutcome.opponentPlayer;
+        //     break;
+        //   case "tap_in":
+        //     outcome = getAttackHeaderOutcome(player);
+        //     break;
+        default:
+            // console.log(action)
+            break;
     }
 
     const {outcome, nextPlayer, nextAction} = outcomeData;
@@ -734,7 +795,7 @@ function getLongShotOutcome(player) {
 
 function getCatchCrossOutcome(player) {
     let opponentPlayer;
-    const attackers = teamsInMatch[player.teamIdx === 0 ? 1 : 0].players.filter(p => ["LB", "RB", "LM", "RM", "LW", "RW"].includes( p.position_in_match));
+    const attackers = teamsInMatch[player.teamIdx === 0 ? 1 : 0].players.filter(p => ["LB", "RB", "LM", "RM", "LW", "RW"].includes(p.position_in_match));
     if (attackers.length > 0) {
         opponentPlayer = attackers[Math.floor(Math.random() * attackers.length)];
     } else {
@@ -827,16 +888,16 @@ function getPassOutcome(player) {
     let nextAction = '';
     const chance = Math.random();
     if (chance < successChance) {
-        outcome = "successful"; 
+        outcome = "successful";
         const followAction = guestFollowReaction('pass', player);
         nextPlayer = followAction.player;
         nextAction = followAction.action;
     } else if (chance < successChance + interceptedChance) {
-        outcome = "intercepted"; 
+        outcome = "intercepted";
         const opponentAction = guestOpponentAction('intercept');
         nextAction = opponentAction.action;
     } else if (chance < successChance + interceptedChance + blockedChance) {
-        outcome = "blocked"; 
+        outcome = "blocked";
         const opponentAction = guestOpponentAction('block');
         nextAction = opponentAction.action;
     } else {
@@ -876,12 +937,12 @@ function getChallengeHeaderOutcome(player) {
     baseClearedChance += opponentHeaderImpact * 0.05; // Opponent skill affects clearance chance
 
     // Ensure probabilities sum to 1
-    const total = 
-        baseSuccessChance + 
-        baseFailedChance + 
-        baseFoulChance + 
-        baseDeflectedChance + 
-        baseClearedChance + 
+    const total =
+        baseSuccessChance +
+        baseFailedChance +
+        baseFoulChance +
+        baseDeflectedChance +
+        baseClearedChance +
         baseOffsideChance;
 
     baseSuccessChance /= total;
@@ -896,17 +957,17 @@ function getChallengeHeaderOutcome(player) {
     let nextPlayer = opponent;
     let nextAction = guestOpponentAction('challenge_header')['action'];
     if (chance < baseSuccessChance) {
-        outcome = "success"; 
+        outcome = "success";
     } else if (chance < baseSuccessChance + baseFailedChance) {
-        outcome = "failed"; 
+        outcome = "failed";
     } else if (chance < baseSuccessChance + baseFailedChance + baseFoulChance) {
-        outcome = "foul"; 
+        outcome = "foul";
     } else if (chance < baseSuccessChance + baseFailedChance + baseFoulChance + baseDeflectedChance) {
-        outcome = "deflected"; 
+        outcome = "deflected";
     } else if (chance < baseSuccessChance + baseFailedChance + baseFoulChance + baseDeflectedChance + baseClearedChance) {
         outcome = "cleared";
     } else {
-        outcome = "offside"; 
+        outcome = "offside";
     }
 
     if (["success", "cleared"].includes(outcome)) {
@@ -957,7 +1018,7 @@ function getShootOutcome(player) {
     else outcome = "blocked";
 
     let nextPlayer = null;
-    if (["save", "goal"].includes(outcome)){
+    if (["save", "goal"].includes(outcome)) {
         nextPlayer = goalkeeper;
     }
     return {outcome, nextPlayer, nextAction: ""}
@@ -975,7 +1036,7 @@ function getGoalKickOutcome(player) {
     console.log({nextAction, positionsWithAction})
 
     let players = [];
-    if (rand > 0.5){
+    if (rand > 0.5) {
         players = teamsInMatch[player.teamIdx].players.filter(p => positionsWithAction.includes(p.position_in_match));
     } else {
         players = teamsInMatch[player.teamIdx === 0 ? 1 : 0].players.filter(p => positionsWithAction.includes(p.position_in_match));
@@ -998,7 +1059,7 @@ function getLongPassOutcome(player) {
 
     // Adjust interception and block chances based on opponent defenders
     let defensiveImpact = 0;
-    const opponentDefenders = teamsInMatch[player.teamIdx === 0 ? 1 : 0].players.filter(p => !["GK", "CB"].includes( p.position_in_match));
+    const opponentDefenders = teamsInMatch[player.teamIdx === 0 ? 1 : 0].players.filter(p => !["GK", "CB"].includes(p.position_in_match));
     if (opponentDefenders.length > 0) {
         const randomDefender = opponentDefenders[Math.floor(Math.random() * opponentDefenders.length)];
         defensiveImpact = (randomDefender.attributes.mental.anticipation + randomDefender.attributes.mental.positioning) / 200;
@@ -1046,7 +1107,7 @@ function getDribbleOutcome(player) {
 
     // Adjust probabilities based on opponent defender's tackling ability
     let tacklingImpact = 0;
-    const opponentDefenders = teamsInMatch[player.teamIdx === 0 ? 1 : 0].players.filter(p => !["GK", "CB"].includes( p.position_in_match));
+    const opponentDefenders = teamsInMatch[player.teamIdx === 0 ? 1 : 0].players.filter(p => !["GK", "CB"].includes(p.position_in_match));
     if (opponentDefenders.length > 0) {
         const randomDefender = opponentDefenders[Math.floor(Math.random() * opponentDefenders.length)];
         tacklingImpact = randomDefender
@@ -1069,18 +1130,23 @@ function getDribbleOutcome(player) {
 
     // Determine the outcome
     const chance = Math.random();
+    let description = '';
+    let actionType = 'opponent';
     if (chance < successChance) {
-        return "successful"; // Dribble succeeds
+        description = `${player.name} dribbled past the defender successfully.`;
+        actionType = 'teammate';
     } else if (chance < successChance + tackledChance) {
-        return "tackled"; // Opponent tackles the player
+        description = `${player.name} was tackled and lost the ball.`
     } else if (chance < successChance + tackledChance + fouledChance) {
-        return "fouled"; // Defender fouls the player
+        description = `${player.name} was fouled while attempting a dribble.`;
     } else {
-        return "lose_control"; // Player loses control of the ball
+        description = `${player.name} lost control of the ball during the dribble.`;
     }
+
+    return {description, actionType}
 }
 
-function getInterceptOutcome(player) {
+function getInterceptOutcome(player, currentTime) {
     // Base probabilities
     let baseSuccessChance = 0.45;    // 45% base chance of successful interception
     let baseMissedChance = 0.25;    // 25% base chance of missing
@@ -1095,7 +1161,7 @@ function getInterceptOutcome(player) {
 
     // Adjust probabilities based on pass accuracy (higher pass accuracy reduces interception chances)
     let passAccuracyImpact = 0;
-    const attackers = teamsInMatch[player.teamIdx === 0 ? 1 : 0].players.filter(p => !["GK", "CB"].includes( p.position_in_match));
+    const attackers = teamsInMatch[player.teamIdx === 0 ? 1 : 0].players.filter(p => !["GK", "CB"].includes(p.position_in_match));
     if (attackers.length > 0) {
         const randomAttacker = attackers[Math.floor(Math.random() * attackers.length)];
         passAccuracyImpact = randomAttacker
@@ -1119,18 +1185,35 @@ function getInterceptOutcome(player) {
     ownGoalChance /= total;
 
     // Determine the outcome
+    let actionType = 'opponent';
     const chance = Math.random();
     if (chance < successChance) {
-        return "successful"; // Interception succeeds
+        logEvent(currentTime, "intercept", player, `${player.name} successfully intercepted the ball and regained possession.`);
+        player.score = Math.min(player.score + lowPlayerScore, 10);
+        actionType = 'teammate';
     } else if (chance < successChance + missedChance) {
-        return "missed"; // Interception attempt fails
+        logEvent(currentTime, "intercept", player, `${player.name} attempted to intercept but missed, allowing the ball to continue.`);
+        player.score = Math.max(player.score - lowPlayerScore, 1);
     } else if (chance < successChance + missedChance + deflectionChance) {
-        return "deflection"; // Ball is deflected
+        logEvent(currentTime, "intercept", player, `${player.name} got a touch on the ball, causing a deflection but no possession.`);
+        player.score = Math.max(player.score - lowPlayerScore, 1);
     } else if (chance < successChance + missedChance + deflectionChance + foulChance) {
-        return "foul"; // Foul committed during the interception
+        logEvent(currentTime, "intercept", player, `${player.name} fouled the opponent while trying to intercept.`);
+        player.score = Math.max(player.score - lowPlayerScore, 1);
+    } else if (chance < successChance + missedChance + deflectionChance + foulChance + ownGoalChance) {
+        logEvent(
+            currentTime,
+            "intercept",
+            player,
+            `${player.name} attempted an interception but accidentally deflected the ball into their own net!`
+        );
+        player.score = Math.max(player.score - mediumPlayerScore, 1);
+        teamsInMatch[player.teamIdx === 0 ? 1 : 0].score++;
+        player.own_goals_in_match++;
     } else {
-        return "own_goal"; // Unfortunate own goal
+        actionType = null;
     }
+    return actionType;
 }
 
 function getAttackHeaderOutcome(player) {
@@ -1544,22 +1627,6 @@ function simulatePlayerAction(action, player, currentTime, opponentPlayer) {
             );
             player.score = Math.min(player.score + lowPlayerScore, 10);
             break;
-        case "dribble_successful":
-            logEvent(currentTime, action, player, `${player.name} dribbled past the defender successfully.`);
-            player.score = Math.min(player.score + lowPlayerScore, 10);
-            break;
-        case "dribble_tackled":
-            logEvent(currentTime, action, player, `${player.name} was tackled and lost the ball.`);
-            player.score = Math.max(player.score - lowPlayerScore, 1);
-            break;
-        case "dribble_fouled":
-            logEvent(currentTime, action, player, `${player.name} was fouled while attempting a dribble.`);
-            player.score = Math.max(player.score - lowPlayerScore, 1);
-            break;
-        case "dribble_lose_control":
-            logEvent(currentTime, action, player, `${player.name} lost control of the ball during the dribble.`);
-            player.score = Math.max(player.score - lowPlayerScore, 1);
-            break;
         case "intercept":
             logEvent(
                 currentTime,
@@ -1568,33 +1635,6 @@ function simulatePlayerAction(action, player, currentTime, opponentPlayer) {
                 `${player.name} intercepted the pass, regaining possession for the team.`
             );
             player.score = Math.min(player.score + lowPlayerScore, 10);
-            break;
-        case "intercept_successful":
-            logEvent(currentTime, action, player, `${player.name} successfully intercepted the ball and regained possession.`);
-            player.score = Math.min(player.score + lowPlayerScore, 10);
-            break;
-        case "intercept_own_goal":
-            logEvent(
-                currentTime,
-                action,
-                player,
-                `${player.name} attempted an interception but accidentally deflected the ball into their own net!`
-            );
-            player.score = Math.max(player.score - mediumPlayerScore, 1);
-            teamsInMatch[player.teamIdx === 0 ? 1 : 0].score++;
-            player.own_goals_in_match++;
-            break;
-        case "intercept_missed":
-            logEvent(currentTime, action, player, `${player.name} attempted to intercept but missed, allowing the ball to continue.`);
-            player.score = Math.max(player.score - lowPlayerScore, 1);
-            break;
-        case "intercept_deflection":
-            logEvent(currentTime, action, player, `${player.name} got a touch on the ball, causing a deflection but no possession.`);
-            player.score = Math.max(player.score - lowPlayerScore, 1);
-            break;
-        case "intercept_foul":
-            logEvent(currentTime, action, player, `${player.name} fouled the opponent while trying to intercept.`);
-            player.score = Math.max(player.score - lowPlayerScore, 1);
             break;
         case "tackle":
             logEvent(
@@ -2160,7 +2200,7 @@ function simulatePlayerAction(action, player, currentTime, opponentPlayer) {
             );
             player.score = Math.min(player.score + lowPlayerScore, 10);
             break;
-        case "intercept_cross":
+        case "cross":
             logEvent(
                 currentTime,
                 action,
