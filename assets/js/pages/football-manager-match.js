@@ -798,11 +798,47 @@ function getCatchCrossOutcome(player) {
 }
 
 function getPassOutcome(player) {
-    let chance = Math.random();  // Random chance for simplicity
-    if (chance < 0.7) return "successful"; // 70% chance of a successful pass
-    else if (chance < 0.85) return "intercepted"; // 15% chance of interception
-    else if (chance < 0.95) return "blocked"; // 10% chance of being blocked
-    else return "missed"; // 5% chance of the pass going out of bounds or being off-target
+    // Base probabilities
+    let baseSuccessChance = 0.7;    // 70% base chance of a successful pass
+    let baseInterceptedChance = 0.15; // 15% base chance of interception
+    let baseBlockedChance = 0.1;    // 10% base chance of being blocked
+    let baseMissedChance = 0.05;    // 5% base chance of the pass being off-target
+
+    // Adjust probabilities based on player's short passing skill
+    const shortPassingImpact = player.attributes.technical.short_passing / 100;
+
+    // Adjust interception chance based on opponent defenders
+    let defensiveImpact = 0;
+    const opponentDefenders = teamsInMatch[player.teamIdx === 0 ? 1 : 0].players.filter(p => !["GK", "CB"].includes( p.position_in_match));
+    if (opponentDefenders.length > 0) {
+        const randomDefender = opponentDefenders[Math.floor(Math.random() * opponentDefenders.length)];
+        defensiveImpact = (randomDefender.attributes.mental.anticipation + randomDefender.attributes.mental.positioning) / 200;
+    }
+
+    // Modify probabilities dynamically
+    let successChance = baseSuccessChance + shortPassingImpact - defensiveImpact / 2;
+    let interceptedChance = baseInterceptedChance + defensiveImpact / 2 - shortPassingImpact / 4;
+    let blockedChance = baseBlockedChance + defensiveImpact / 4 - shortPassingImpact / 3;
+    let missedChance = baseMissedChance - shortPassingImpact / 5;
+
+    // Normalize probabilities to ensure they sum to 1
+    const total = successChance + interceptedChance + blockedChance + missedChance;
+    successChance /= total;
+    interceptedChance /= total;
+    blockedChance /= total;
+    missedChance /= total;
+
+    // Determine the outcome
+    const chance = Math.random();
+    if (chance < successChance) {
+        return "successful"; // Pass reaches the target
+    } else if (chance < successChance + interceptedChance) {
+        return "intercepted"; // Opponent intercepts the pass
+    } else if (chance < successChance + interceptedChance + blockedChance) {
+        return "blocked"; // Pass is blocked by an opponent
+    } else {
+        return "missed"; // Pass goes out of bounds or off-target
+    }
 }
 
 function getLongPassOutcome(player) {
