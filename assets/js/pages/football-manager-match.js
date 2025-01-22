@@ -450,9 +450,6 @@ function simulateMatch(teamsInMatch) {
                         prevPlayer = player;
                     } else {
                         const nextAction = performNextAction(prevAction, prevPlayer);
-                        if (!nextAction.action) {
-                            console.log(prevAction, nextAction)
-                        }
                         action = nextAction.action;
                         prevAction = action;
                         if (nextAction.player) {
@@ -489,14 +486,17 @@ function getActionFromPlayer(player, currentTimeInSeconds) {
     const isPossibleSub = currentTimeInSeconds > 45 * 60;
 
     // Check if the randomly chosen action should be a special event (injury, substitute, or foul)
-    if (randAction < 0.2) { // 20% chance for special actions
-        if (randAction < 0.01) {  // 1% chance for injury
-            action = "injury";
-        } else if (randAction < 0.1 && isPossibleSub) {  // 9% chance for substitute (only after 45 mins)
-            action = "substitute";
-        } else {  // 10% chance for foul
-            action = "foul";
-        }
+    // if (randAction < 0.2) { // 20% chance for special actions
+    //     if (randAction < 0.01) {  // 1% chance for injury
+    //         action = "injury";
+    //     } else if (randAction < 0.1 && isPossibleSub) {  // 9% chance for substitute (only after 45 mins)
+    //         action = "substitute";
+    //     } else {  // 10% chance for foul
+    //         action = "foul";
+    //     }
+    // }
+    if (randAction < 0.2 && isPossibleSub) { 
+        action = "substitute";
     }
 
     // Possible extensions based on additional factors:
@@ -741,12 +741,60 @@ function getLongShotOutcome(player) {
 }
 
 function getCatchCrossOutcome(player) {
-    let chance = Math.random(); // Random chance for simplicity
-    if (chance < 0.3) return "success"; // 30% chance of successful catch
-    else if (chance < 0.6) return "fail"; // 30% chance of failure to catch
-    else if (chance < 0.75) return "punch"; // 15% chance of punching the ball away
-    else if (chance < 0.85) return "own_goal"; // 10% chance of own goal
-    else return ""; // 15% chance of the cross being intercepted by a defender
+    let opponentPlayer;
+    const attackers = teamsInMatch[player.teamIdx === 0 ? 1 : 0].players.filter(p => ["LB", "RB", "LM", "RM", "LW", "RW"].includes( p.position_in_match));
+    if (attackers.length > 0) {
+        opponentPlayer = attackers[Math.floor(Math.random() * attackers.length)];
+    } else {
+        const allPlayers = teamsInMatch[player.teamIdx === 0 ? 1 : 0].players.filter(p => p.position_in_match !== "CB");
+        opponentPlayer = allPlayers[Math.floor(Math.random() * allPlayers.length)];
+    }
+    // Base probabilities for cross outcomes
+    let baseSuccessChance = 0.3; // 30% base chance of successful catch
+    let baseFailChance = 0.3;    // 30% base chance of failure to catch
+    let basePunchChance = 0.15;  // 15% base chance of punching the ball away
+    let baseOwnGoalChance = 0.1; // 10% base chance of own goal
+    let baseInterceptedChance = 0.15; // 15% base chance of the cross being intercepted
+
+    // Adjust probabilities based on the goalkeeper's attributes
+    const handlingImpact = player.attributes.goalkeeping.handling / 100;
+    const reflexesImpact = player.attributes.goalkeeping.reflexes / 100;
+    const commandOfAreaImpact = player.attributes.goalkeeping.command_of_area / 100;
+    const goalkeeperSkill = (handlingImpact + reflexesImpact + commandOfAreaImpact) / 3;
+
+    // Adjust probabilities based on opponent player's crossing skill
+    const crossingImpact = opponentPlayer.attributes.technical.crossing / 100;
+    const curveImpact = opponentPlayer.attributes.technical.curve / 100;
+    const opponentSkill = (crossingImpact + curveImpact) / 2;
+
+    // Modify chances dynamically
+    let successChance = baseSuccessChance + goalkeeperSkill - opponentSkill / 2;
+    let failChance = baseFailChance - goalkeeperSkill / 2 + opponentSkill / 3;
+    let punchChance = basePunchChance + goalkeeperSkill / 3 - opponentSkill / 3;
+    let ownGoalChance = baseOwnGoalChance;
+    let interceptedChance = baseInterceptedChance + (1 - opponentSkill) / 3;
+
+    // Normalize probabilities
+    const total = successChance + failChance + punchChance + ownGoalChance + interceptedChance;
+    successChance /= total;
+    failChance /= total;
+    punchChance /= total;
+    ownGoalChance /= total;
+    interceptedChance /= total;
+
+    // Determine outcome
+    const chance = Math.random();
+    if (chance < successChance) {
+        return "success"; // Goalkeeper successfully catches the ball
+    } else if (chance < successChance + failChance) {
+        return "fail"; // Goalkeeper fails to catch the ball
+    } else if (chance < successChance + failChance + punchChance) {
+        return "punch"; // Goalkeeper punches the ball away
+    } else if (chance < successChance + failChance + punchChance + ownGoalChance) {
+        return "own_goal"; // Goalkeeper accidentally scores an own goal
+    } else {
+        return ""; // Cross is intercepted by a defender
+    }
 }
 
 function getPassOutcome(player) {
