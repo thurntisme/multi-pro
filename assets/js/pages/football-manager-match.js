@@ -64,11 +64,11 @@ const playerActions = {
     // Overlapping players often aim to cross the ball or cut inside for an attack.
     overlap: ["cross", "cut_inside"], // Create attacking opportunities by crossing or moving inside.
     // Crossing aims to set up attacking chances like headers, volleys, or tap-ins.
-    cross: ["header", "volley", "tap_in"], // Deliver the ball into dangerous areas for finishes.
+    cross: ["attack_header", "volley", "tap_in"], // Deliver the ball into dangerous areas for finishes.
     // Cutting inside creates shooting or passing opportunities.
     cut_inside: ["shoot", "pass", "lay_off"], // Create chances through shots or combinations.
     // Long balls look for advanced teammates who can head or control the ball.
-    long_ball: ["header", "control", "pass"], // Target advanced players for progression.
+    long_ball: ["attack_header", "control", "pass"], // Target advanced players for progression.
     // Blocking a shot is defensive; clearing or sending a long pass follows logically.
     block_shot: ["clearance", "long_pass"], // Defuse danger by clearing or transitioning.
     // Heading the ball often leads to passing or attempting a shot, depending on position.
@@ -206,16 +206,16 @@ const opponentReactions = {
 const validActionsByPosition = {
     GK: ["goal_kick", "catch_cross", "punch", "clearance", "distribute_ball", "mark_players", "block_shot"],
     LB: ["intercept", "tackle", "overlap", "cross", "cut_inside", "long_ball", "block_cross", "track_runner", "intercept_cross", "contain", "block_shot", "press_receiver", "long_shot", "long_pass"],
-    CB: ["press", "mark_strikers", "clearance", "intercept", "tackle", "block_shot", "block_cross", "header", "mark", "challenge_header", "recover_ball", "contain", "press_receiver", "long_pass"],
+    CB: ["press", "mark_strikers", "clearance", "intercept", "tackle", "block_shot", "block_cross", "attack_header", "mark", "challenge_header", "recover_ball", "contain", "press_receiver", "long_pass"],
     RB: ["intercept", "tackle", "overlap", "cross", "cut_inside", "long_ball", "block_cross", "track_runner", "intercept_cross", "contain", "block_shot", "press_receiver", "long_shot", "long_pass"],
     LM: ["cross", "dribble", "cut_inside", "pass", "long_shot", "skill_move", "block_cross", "press_receiver"],
-    CDM: ["mark_strikers", "block_pass", "intercept", "tackle", "pass", "long_ball", "shield_ball", "switch_play", "shift_defensive_line", "contain", "block_shot", "press_receiver", "header", "challenge_header", "long_shot", "long_pass"],
-    CM: ["pass", "block_pass", "dribble", "long_shot", "through_ball", "tackle", "intercept", "counter_attack", "contain", "block_shot", "press_receiver", "header", "challenge_header", "long_pass"],
+    CDM: ["mark_strikers", "block_pass", "intercept", "tackle", "pass", "long_ball", "shield_ball", "switch_play", "shift_defensive_line", "contain", "block_shot", "press_receiver", "attack_header", "challenge_header", "long_shot", "long_pass"],
+    CM: ["pass", "block_pass", "dribble", "long_shot", "through_ball", "tackle", "intercept", "counter_attack", "contain", "block_shot", "press_receiver", "attack_header", "challenge_header", "long_pass"],
     CAM: ["rebound", "step_over", "block_pass", "dribble", "pass", "through_ball", "shoot", "cut_inside", "skill_move", "block_shot", "press_receiver", "long_shot"],
     RM: ["rebound", "cross", "dribble", "cut_inside", "pass", "long_shot", "skill_move", "block_cross", "press_receiver"],
     LW: ["rebound", "step_over", "cross", "dribble", "cut_inside", "pass", "shoot", "skill_move", "block_shot"],
-    CF: ["rebound", "step_over", "shoot", "lay_off", "pass", "press_defender", "header", "dribble", "hold_up_play"],
-    ST: ["rebound", "step_over", "shoot", "header", "hold_up_play", "press_defender", "run_in_behind", "tap_in", "block_shot", "press_receiver"],
+    CF: ["rebound", "step_over", "shoot", "lay_off", "pass", "press_defender", "attack_header", "dribble", "hold_up_play"],
+    ST: ["rebound", "step_over", "shoot", "attack_header", "hold_up_play", "press_defender", "run_in_behind", "tap_in", "block_shot", "press_receiver"],
     RW: ["rebound", "step_over", "cross", "dribble", "cut_inside", "pass", "shoot", "skill_move", "block_shot"],
 };
 
@@ -565,77 +565,80 @@ function performOutcomeAction(action, player) {
     let opponentPlayer = '';
 
     switch (action) {
-        case "shoot":
-            const shootOutcome = getShootOutcome(player);
-            outcome = shootOutcome.outcome;
-            opponentPlayer = shootOutcome.opponentPlayer;
-            break;
-        case "long_shot":
-            const longShotOutcome = getShootOutcome(player);
-            outcome = longShotOutcome.outcome;
-            opponentPlayer = longShotOutcome.opponentPlayer;
-            break;
-        case "catch_cross":
-            outcome = getCatchCrossOutcome(player);
-            break;
-        case "pass":
-            outcome = getPassOutcome(player);
-            break;
-        case "long_pass":
-            outcome = getLongPassOutcome(player);
-            break;
-        case "dribble":
-            outcome = getDribbleOutcome(player);
-            break;
-        case "intercept":
-            outcome = getInterceptOutcome(player);
-            break;
-        case "tackle":
-            outcome = getTackleOutcome(player);
-            break;
-        case "cut_inside":
-            outcome = getCutInsideOutcome(player);
-            break;
-        case "volley":
-            outcome = getVolleyOutcome(player);
-            break;
-        case "tap_in":
-            outcome = getTapInOutcome(player);
-            break;
-        case "foul":
-            const foulOutcome = getFoulOutcome(player);
-            outcome = foulOutcome.outcome;
-            opponentPlayer = foulOutcome.opponentPlayer;
-            break;
-        case "recover_ball":
-            outcome = getRecoverBallOutcome(player);
-            break;
-        case "block_cross":
-            outcome = getBlockCrossOutcome(player);
-            break;
-        case "intercept_cross":
-            outcome = getInterceptCrossOutcome(player);
-            break;
-        case "challenge_header":
-            outcome = getChallengeHeaderOutcome(player);
-            break;
-        case "injury":
-            const injuryOutcome = getInjuryOutcome(player);
-            outcome = injuryOutcome.outcome;
-            opponentPlayer = injuryOutcome.opponentPlayer;
-            break;
-        case "substitute":
-            const substituteOutcome = getSubstituteOutcome(player);
-            outcome = substituteOutcome.outcome;
-            opponentPlayer = substituteOutcome.opponentPlayer;
-            break;
-        case "tap_in":
-            outcome = getHeaderOutcome(player);
-            break;
-        default:
-            outcome = '';
-            // console.log(action)
-            break;
+      case "shoot":
+        const shootOutcome = getShootOutcome(player);
+        outcome = shootOutcome.outcome;
+        opponentPlayer = shootOutcome.opponentPlayer;
+        break;
+      case "long_shot":
+        const longShotOutcome = getShootOutcome(player);
+        outcome = longShotOutcome.outcome;
+        opponentPlayer = longShotOutcome.opponentPlayer;
+        break;
+      case "catch_cross":
+        outcome = getCatchCrossOutcome(player);
+        break;
+      case "pass":
+        outcome = getPassOutcome(player);
+        break;
+      case "long_pass":
+        outcome = getLongPassOutcome(player);
+        break;
+      case "dribble":
+        outcome = getDribbleOutcome(player);
+        break;
+      case "intercept":
+        outcome = getInterceptOutcome(player);
+        break;
+      case "attack_header":
+        outcome = getAttackHeaderOutcome(player);
+        break;
+      case "tackle":
+        outcome = getTackleOutcome(player);
+        break;
+      case "cut_inside":
+        outcome = getCutInsideOutcome(player);
+        break;
+      case "volley":
+        outcome = getVolleyOutcome(player);
+        break;
+      case "tap_in":
+        outcome = getTapInOutcome(player);
+        break;
+      case "foul":
+        const foulOutcome = getFoulOutcome(player);
+        outcome = foulOutcome.outcome;
+        opponentPlayer = foulOutcome.opponentPlayer;
+        break;
+      case "recover_ball":
+        outcome = getRecoverBallOutcome(player);
+        break;
+      case "block_cross":
+        outcome = getBlockCrossOutcome(player);
+        break;
+      case "intercept_cross":
+        outcome = getInterceptCrossOutcome(player);
+        break;
+      case "challenge_header":
+        outcome = getChallengeHeaderOutcome(player);
+        break;
+      case "injury":
+        const injuryOutcome = getInjuryOutcome(player);
+        outcome = injuryOutcome.outcome;
+        opponentPlayer = injuryOutcome.opponentPlayer;
+        break;
+      case "substitute":
+        const substituteOutcome = getSubstituteOutcome(player);
+        outcome = substituteOutcome.outcome;
+        opponentPlayer = substituteOutcome.opponentPlayer;
+        break;
+      case "tap_in":
+        outcome = getAttackHeaderOutcome(player);
+        break;
+      default:
+        outcome = "";
+        // console.log(action)
+        break;
     }
 
     return {
@@ -989,12 +992,57 @@ function getInterceptOutcome(player) {
     }
 }
 
-function getHeaderOutcome(player) {
-    let chance = Math.random(); // Generate a random chance
-    if (chance < 0.35) return "goal"; // 35% chance of scoring a goal
-    else if (chance < 0.6) return "saved"; // 25% chance of the goalkeeper making a save
-    else if (chance < 0.8) return "miss"; // 20% chance of missing the target
-    else return "blocked"; // 20% chance of a defender blocking the header
+function getAttackHeaderOutcome(player) {
+    const goalkeeper = teamsInMatch[player.teamIdx === 0 ? 1 : 0].players.find(p => p.position_in_match === "GK");
+    // Base probabilities
+    let baseGoalChance = 0.35;       // 35% base chance of scoring
+    let baseSavedChance = 0.25;      // 25% base chance of a save
+    let baseMissChance = 0.2;        // 20% base chance of missing
+    let baseBlockedChance = 0.2;     // 20% base chance of being blocked
+
+    // Adjust probabilities based on the attacker's attributes
+    const headingAccuracyImpact = player.attributes.technical.heading_accuracy / 100;
+    const jumpingReachImpact = player.attributes.physical.jumping_reach / 100;
+
+    // Adjust probabilities based on the goalkeeper's attributes
+    const gkReflexesImpact = goalkeeper.attributes.goalkeeping.reflexes / 100;
+    const gkHandlingImpact = goalkeeper.attributes.goalkeeping.handling / 100;
+
+    // Adjust probabilities based on defending players (average blocking capability)
+    let opponentPlayer;
+    const defendingPlayers = teamsInMatch[player.teamIdx === 0 ? 1 : 0].players.filter(p => ["CB", "CDM"].includes(p.position_in_match));
+    if (defendingPlayers.length > 0) {
+        opponentPlayer = defendingPlayers[Math.floor(Math.random() * defendingPlayers.length)];
+    } else {
+        const allPlayers = teamsInMatch[player.teamIdx === 0 ? 1 : 0].players.filter(p => !["GK", "CB", "CDM"].includes(p.position_in_match));
+        opponentPlayer = allPlayers[Math.floor(Math.random() * allPlayers.length)];
+    }
+    const avgBlockingSkill = opponentPlayer.attributes.technical.tackling / 100;
+
+    // Modify probabilities dynamically
+    let goalChance = baseGoalChance + headingAccuracyImpact + jumpingReachImpact - gkReflexesImpact / 2;
+    let savedChance = baseSavedChance + gkReflexesImpact / 2 + gkHandlingImpact / 2;
+    let missChance = baseMissChance - headingAccuracyImpact / 2 - jumpingReachImpact / 4;
+    let blockedChance = baseBlockedChance + avgBlockingSkill;
+
+    // Normalize probabilities to ensure they sum to 1
+    const total = goalChance + savedChance + missChance + blockedChance;
+    goalChance /= total;
+    savedChance /= total;
+    missChance /= total;
+    blockedChance /= total;
+
+    // Determine the outcome
+    const chance = Math.random();
+    if (chance < goalChance) {
+        return "goal"; // Header results in a goal
+    } else if (chance < goalChance + savedChance) {
+        return "saved"; // Goalkeeper makes a save
+    } else if (chance < goalChance + savedChance + missChance) {
+        return "miss"; // Header misses the target
+    } else {
+        return "blocked"; // Defender blocks the header
+    }
 }
 
 function getTackleOutcome(player) {
@@ -1246,7 +1294,7 @@ function simulatePlayerAction(action, player, currentTime, opponentPlayer) {
             );
             player.score = Math.min(player.score + lowPlayerScore, 10);
             break;
-        case "header_goal":
+        case "attack_header_goal":
             logEvent(
                 currentTime,
                 action,
@@ -1257,7 +1305,7 @@ function simulatePlayerAction(action, player, currentTime, opponentPlayer) {
             player.goals_in_match++;
             teamsInMatch[player.teamIdx].score++;
             break;
-        case "header_saved":
+        case "attack_header_saved":
             logEvent(
                 currentTime,
                 action,
@@ -1266,7 +1314,7 @@ function simulatePlayerAction(action, player, currentTime, opponentPlayer) {
             );
             player.score = Math.min(player.score + lowPlayerScore, 10);
             break;
-        case "header_miss":
+        case "attack_header_miss":
             logEvent(
                 currentTime,
                 action,
@@ -1275,7 +1323,7 @@ function simulatePlayerAction(action, player, currentTime, opponentPlayer) {
             );
             player.score = Math.max(player.score - lowPlayerScore, 1);
             break;
-        case "header_blocked":
+        case "attack_header_blocked":
             logEvent(
                 currentTime,
                 action,
@@ -1507,10 +1555,10 @@ function simulatePlayerAction(action, player, currentTime, opponentPlayer) {
             logEvent(currentTime, action, player, `${player.name} lost possession while trying to cut inside.`);
             player.score = Math.max(player.score - lowPlayerScore, 1);
             break;
-        case "header":
+        case "attack_header":
             logEvent(
                 currentTime,
-                "header",
+                "attack_header",
                 player,
                 `${player.name} went for a header, challenging for the ball in the air.`
             );
