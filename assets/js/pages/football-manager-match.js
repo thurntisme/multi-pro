@@ -205,12 +205,12 @@ const opponentReactions = {
 // Define valid actions for each position
 const validActionsByPosition = {
     GK: ["goal_kick", "catch_cross", "punch", "clearance", "distribute_ball", "mark_players", "block_shot"],
-    LB: ["intercept", "tackle", "overlap", "cross", "cut_inside", "long_ball", "block_cross", "track_runner", "intercept_cross", "contain", "block_shot", "press_receiver", "long_shot"],
-    CB: ["press", "mark_strikers", "clearance", "intercept", "tackle", "block_shot", "block_cross", "header", "mark", "challenge_header", "recover_ball", "contain", "press_receiver"],
-    RB: ["intercept", "tackle", "overlap", "cross", "cut_inside", "long_ball", "block_cross", "track_runner", "intercept_cross", "contain", "block_shot", "press_receiver", "long_shot"],
+    LB: ["intercept", "tackle", "overlap", "cross", "cut_inside", "long_ball", "block_cross", "track_runner", "intercept_cross", "contain", "block_shot", "press_receiver", "long_shot", "long_pass"],
+    CB: ["press", "mark_strikers", "clearance", "intercept", "tackle", "block_shot", "block_cross", "header", "mark", "challenge_header", "recover_ball", "contain", "press_receiver", "long_pass"],
+    RB: ["intercept", "tackle", "overlap", "cross", "cut_inside", "long_ball", "block_cross", "track_runner", "intercept_cross", "contain", "block_shot", "press_receiver", "long_shot", "long_pass"],
     LM: ["cross", "dribble", "cut_inside", "pass", "long_shot", "skill_move", "block_cross", "press_receiver"],
-    CDM: ["mark_strikers", "block_pass", "intercept", "tackle", "pass", "long_ball", "shield_ball", "switch_play", "shift_defensive_line", "contain", "block_shot", "press_receiver", "header", "challenge_header", "long_shot"],
-    CM: ["pass", "block_pass", "dribble", "long_shot", "through_ball", "tackle", "intercept", "counter_attack", "contain", "block_shot", "press_receiver", "header", "challenge_header"],
+    CDM: ["mark_strikers", "block_pass", "intercept", "tackle", "pass", "long_ball", "shield_ball", "switch_play", "shift_defensive_line", "contain", "block_shot", "press_receiver", "header", "challenge_header", "long_shot", "long_pass"],
+    CM: ["pass", "block_pass", "dribble", "long_shot", "through_ball", "tackle", "intercept", "counter_attack", "contain", "block_shot", "press_receiver", "header", "challenge_header", "long_pass"],
     CAM: ["rebound", "step_over", "block_pass", "dribble", "pass", "through_ball", "shoot", "cut_inside", "skill_move", "block_shot", "press_receiver", "long_shot"],
     RM: ["rebound", "cross", "dribble", "cut_inside", "pass", "long_shot", "skill_move", "block_cross", "press_receiver"],
     LW: ["rebound", "step_over", "cross", "dribble", "cut_inside", "pass", "shoot", "skill_move", "block_shot"],
@@ -842,12 +842,52 @@ function getPassOutcome(player) {
 }
 
 function getLongPassOutcome(player) {
-    let chance = Math.random();  // Random chance for simplicity
-    if (chance < 0.6) return "successful"; // 60% chance of successful long pass
-    else if (chance < 0.8) return "intercepted"; // 20% chance of interception
-    else if (chance < 0.9) return "blocked"; // 10% chance of being blocked
-    else if (chance < 0.95) return "missed"; // 5% chance of going out of bounds
-    else return "chipped"; // 5% chance of a successful chip over the defender
+    // Base probabilities
+    let baseSuccessChance = 0.6;    // 60% base chance of a successful long pass
+    let baseInterceptedChance = 0.2; // 20% base chance of interception
+    let baseBlockedChance = 0.1;    // 10% base chance of being blocked
+    let baseMissedChance = 0.05;    // 5% base chance of going out of bounds
+    let baseChippedChance = 0.05;   // 5% base chance of a chipped pass
+
+    // Adjust probabilities based on player's long passing skill
+    const longPassingImpact = player.attributes.technical.long_passing / 100;
+
+    // Adjust interception and block chances based on opponent defenders
+    let defensiveImpact = 0;
+    const opponentDefenders = teamsInMatch[player.teamIdx === 0 ? 1 : 0].players.filter(p => !["GK", "CB"].includes( p.position_in_match));
+    if (opponentDefenders.length > 0) {
+        const randomDefender = opponentDefenders[Math.floor(Math.random() * opponentDefenders.length)];
+        defensiveImpact = (randomDefender.attributes.mental.anticipation + randomDefender.attributes.mental.positioning) / 200;
+    }
+
+    // Modify probabilities dynamically
+    let successChance = baseSuccessChance + longPassingImpact - defensiveImpact / 2;
+    let interceptedChance = baseInterceptedChance + defensiveImpact / 2 - longPassingImpact / 4;
+    let blockedChance = baseBlockedChance + defensiveImpact / 4 - longPassingImpact / 3;
+    let missedChance = baseMissedChance - longPassingImpact / 5;
+    let chippedChance = baseChippedChance + longPassingImpact / 5;
+
+    // Normalize probabilities to ensure they sum to 1
+    const total = successChance + interceptedChance + blockedChance + missedChance + chippedChance;
+    successChance /= total;
+    interceptedChance /= total;
+    blockedChance /= total;
+    missedChance /= total;
+    chippedChance /= total;
+
+    // Determine the outcome
+    const chance = Math.random();
+    if (chance < successChance) {
+        return "successful"; // Pass reaches the target
+    } else if (chance < successChance + interceptedChance) {
+        return "intercepted"; // Opponent intercepts the pass
+    } else if (chance < successChance + interceptedChance + blockedChance) {
+        return "blocked"; // Pass is blocked by an opponent
+    } else if (chance < successChance + interceptedChance + blockedChance + missedChance) {
+        return "missed"; // Pass goes out of bounds or off-target
+    } else {
+        return "chipped"; // Successful chip pass over the defender
+    }
 }
 
 function getDribbleOutcome(player) {
