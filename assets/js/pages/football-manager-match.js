@@ -160,7 +160,7 @@ const opponentReactions = {
     // Passing is met with interception attempts or pressure on the receiver.
     pass: ["intercept", "press_receiver"], // Anticipate the pass or press its recipient.
     // Long shots prompt opponents to block or prepare for saves.
-    long_shot: ["block_shot", "save"], // Prevent the shot from reaching goal or rely on the goalkeeper.
+    long_shot: ["block_shot"], // Prevent the shot from reaching goal or rely on the goalkeeper.
     // Skill moves are countered by tackles or containment strategies.
     skill_move: ["tackle", "contain"], // Challenge the player or deny space.
     // Shielding the ball is met with pressure or tackling to regain possession.
@@ -170,7 +170,7 @@ const opponentReactions = {
     // Through balls prompt interception attempts or blocking the resulting shot.
     through_ball: ["intercept", "block_shot"], // Stop the pass or defend against the attack.
     // Shooting is countered with blocks or goalkeeper saves.
-    shoot: ["block", "save"], // Defend the shot or rely on the goalkeeper.
+    shoot: ["block"], // Defend the shot or rely on the goalkeeper.
     // Lay-offs are met with interception attempts or immediate pressure.
     lay_off: ["intercept", "press"], // Cut off the pass or apply pressure.
     // Pressing defenders leads to dribbling away or a quick pass to avoid pressure.
@@ -180,7 +180,7 @@ const opponentReactions = {
     // Runs in behind trigger defensive tracking or attempts to block the pass.
     run_in_behind: ["track_run", "block_pass"], // Prevent the run or cut off the supply
     // Tap-ins are defended by blocking the shot or making a save.
-    tap_in: ["block_shot", "save"], // Stop the close-range attempt or rely on the goalkeeper.
+    tap_in: ["block_shot"], // Stop the close-range attempt or rely on the goalkeeper.
     recover_ball: ["press"],
     long_pass: ["intercept", "mark_receiver"],
     rebound: ["clearance", "block_shot"],
@@ -204,7 +204,7 @@ const opponentReactions = {
 
 // Define valid actions for each position
 const validActionsByPosition = {
-    GK: ["goal_kick", "save", "catch_cross", "punch", "clearance", "distribute_ball", "mark_players", "block_shot"],
+    GK: ["goal_kick", "catch_cross", "punch", "clearance", "distribute_ball", "mark_players", "block_shot"],
     LB: ["intercept", "tackle", "overlap", "cross", "cut_inside", "long_ball", "block_cross", "track_runner", "intercept_cross", "contain", "block_shot", "press_receiver", "long_shot"],
     CB: ["press", "mark_strikers", "clearance", "intercept", "tackle", "block_shot", "block_cross", "header", "mark", "challenge_header", "recover_ball", "contain", "press_receiver"],
     RB: ["intercept", "tackle", "overlap", "cross", "cut_inside", "long_ball", "block_cross", "track_runner", "intercept_cross", "contain", "block_shot", "press_receiver", "long_shot"],
@@ -575,9 +575,6 @@ function performOutcomeAction(action, player) {
             outcome = longShotOutcome.outcome;
             opponentPlayer = longShotOutcome.opponentPlayer;
             break;
-        case "save":
-            outcome = getSaveOutcome(player);
-            break;
         case "catch_cross":
             outcome = getCatchCrossOutcome(player);
             break;
@@ -741,12 +738,6 @@ function getLongShotOutcome(player) {
         outcome,
         opponentPlayer: goalkeeper
     }
-}
-
-function getSaveOutcome(player) {
-    let chance = Math.random();  // Random chance for simplicity
-    if (chance < 0.5) return "success";    // 50% chance of saving the shot
-    else return "";    // 50% chance of failing to save
 }
 
 function getCatchCrossOutcome(player) {
@@ -1702,24 +1693,6 @@ function simulatePlayerAction(action, player, currentTime, opponentPlayer) {
         case "recover_ball_pressured":
             logEvent(currentTime, action, player, `${player.name} was pressured by the opponent and lost possession.`);
             player.score = Math.max(player.score - lowPlayerScore, 1);
-            break;
-        case "save":
-            logEvent(
-                currentTime,
-                action,
-                player,
-                `${player.name} made a crucial save, denying the opposition from scoring.`
-            );
-            player.score = Math.min(player.score + mediumPlayerScore, 10);
-            break;
-        case "save_success":
-            logEvent(
-                currentTime,
-                action,
-                player,
-                `${player.name} made a great save, denying the striker a goal!`
-            );
-            player.score = Math.min(player.score + mediumPlayerScore, 10);
             break;
         case "contain":
             logEvent(
