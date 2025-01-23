@@ -639,8 +639,9 @@ function performFollowAction(prevAction, prevPlayer, currentTime) {
                 followAction = opponentAction;
                 followPlayer = choosePlayerWithAction(followAction, prevPlayer.teamIdx === 0 ? 1 : 0);
             }
-            description = getActionResult(followAction, followPlayer);
-            console.log("next", { followAction, followPlayer })
+            const outcomeResult = getOutcomeAction(followAction, followPlayer);
+            logEvent(currentTime, prevAction, prevPlayer, outcomeResult.description);
+            if (outcomeResult.outcome) { }
         }
     } else {
         const randomActionIndex = Math.floor(Math.random() * defaultActions.length);
@@ -677,19 +678,17 @@ function performFollowAction(prevAction, prevPlayer, currentTime) {
                 }
                 break;
         }
+        if (followAction && followPlayer && description) {
+            logEvent(currentTime, followAction, followPlayer, description);
+        }
         console.log("random", { followAction, followPlayer })
-    }
-    if (followAction && followPlayer && description) {
-        logEvent(currentTime, followAction, followPlayer, description);
     }
     return { followAction, followPlayer }
 }
 
-function getActionResult(followAction, followPlayer) {
-    // check outcome with action from player, then return description, update player/team score
-    // if outcome == true, end of action
-    // if outcome == false, continue
-    return '';
+function getOutcomeAction(followAction, followPlayer){
+    // check outcome and logEvent
+    return {outcome: true, description: `do action ${followAction}`};
 }
 
 function getActionFromPlayer(player, currentTimeInSeconds) {
