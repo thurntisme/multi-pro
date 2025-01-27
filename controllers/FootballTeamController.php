@@ -340,11 +340,11 @@ class FootballTeamController
 
     public function getTeamPlayersInMatch($teamId)
     {
-        $query = "";
         $params = [':team_id' => $teamId];
 
         $query = "AND joining_date < CURRENT_TIMESTAMP 
         AND (injury_end_date IS NULL OR injury_end_date < CURRENT_TIMESTAMP) 
+        AND contract_end_date <= CURRENT_TIMESTAMP 
         AND player_stamina >= 50 
         AND status = 'club'";
 

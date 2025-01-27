@@ -1,5 +1,5 @@
 const url = new URL(window.location.href);
-const payload = { match_uuid: url.searchParams.get('uuid') };
+const payload = {match_uuid: url.searchParams.get('uuid')};
 
 const teamsInMatch = groupTeams.map((team, teamIdx) => {
     const playerColor = teamIdx === 0 ? homeTeamColor : awayTeamColor;
@@ -29,7 +29,7 @@ const teamsInMatch = groupTeams.map((team, teamIdx) => {
             is_injury: false
         }
     });
-    return { ...team, players, bench };
+    return {...team, players, bench};
 });
 
 const redraw = () => {
@@ -314,255 +314,223 @@ function performFollowAction(prevAction, prevPlayer, currentTime) {
     let followPlayer = null;
     let followAction = null;
     let description = '';
-    if (prevAction && prevPlayer) {
-        let nextAction = '';
-        let opponentAction = '';
-        switch (prevAction) {
-            case "kick_off":
-                if (prevPlayer) {
-                    description = `${prevPlayer.name} steps up to restart the game with a kick-off after the goal. Their team looks to build an attack immediately.`;
-                    nextAction = getRandomNextAction(["pass", "long_pass", "dribble"]);
-                    opponentAction = getRandomNextAction(["press", "mark", "intercept"]);
-                }
-                break;
-
-            case "goal_kick":
-                if (prevPlayer) {
-                    description = `${prevPlayer.name} takes the goal kick, launching the ball high up the field to create an opportunity.`;
-                    nextAction = getRandomNextAction(["challenge_header", "distribute_ball"]);
-                    opponentAction = getRandomNextAction(["intercept", "press", "regain_possession"]);
-                }
-                break;
-            
-            case "pass":
-                if (prevPlayer) {
-                    description = `${prevPlayer.name} makes a pass, trying to connect with a teammate and advance the play.`;
-                    nextAction = getRandomNextAction(["long_pass", "dribble", "shoot", "long_shot"]);
-                    opponentAction = getRandomNextAction(["block", "tackle", "intercept"]);
-                }
-                break;
-            
-            case "long_pass":
-                if (prevPlayer) {
-                    description = `${prevPlayer.name} plays a long pass, sending the ball deep into the opponent's half to create an attacking opportunity.`;
-                    nextAction = getRandomNextAction(["throw_in", "challenge_header", "control_ball", "long_shot"]);
-                    opponentAction = getRandomNextAction(["intercept", "challenge_header", "mark"]);
-                }
-                break;
-
-            case "throw_in":
-                if (prevPlayer) {
-                    description = `${prevPlayer.name} takes the throw-in, looking to find a teammate and restart the play quickly.`;
-                    nextAction = getRandomNextAction(["pass", "long_pass", "dribble", "cross"]);
-                    opponentAction = getRandomNextAction(["press", "mark", "intercept"]);
-                }
-                break;
-
-            case "dribble":
-                description = "The player takes on defenders with a confident dribble, advancing the ball.";
-                nextAction = getRandomNextAction(["pass", "shoot", "cross"]);
-                opponentAction = getRandomNextAction(["tackle", "press", "block"]);
-                break;
-
-            case "distribute_ball":
-                description = "The goalkeeper calmly distributes the ball to a nearby teammate to maintain possession.";
-                nextAction = getRandomNextAction(["pass", "shoot", "cross"]);
-                opponentAction = getRandomNextAction(["tackle", "press", "block"]);
-                break;
-
-            case "intercept":
-                description = "The player steps in and intercepts the opponent's pass, regaining possession.";
-                nextAction = getRandomNextAction(["pass", "shoot", "cross", "throw_in"]);
-                opponentAction = getRandomNextAction(["tackle", "press", "block", "throw_in"]);
-                break;
-
-            case "press":
-                description = "The team applies pressure to force an error from the opponent.";
-                nextAction = getRandomNextAction(["tackle", "intercept", "regain_possession"]);
-                opponentAction = getRandomNextAction(["pass", "clearance", "dribble"]);
-                break;
-
-            case "block":
-                description = "The player makes a vital block, stopping the ball in its tracks.";
-                nextAction = getRandomNextAction(["regain_possession", "clearance", "counter_attack"]);
-                opponentAction = getRandomNextAction(["retry_pass", "recover", "switch_play"]);
-                break;
-
-            case "challenge_header":
-                description = "The player leaps high for an aerial duel, contesting the ball with determination.";
-                nextAction = getRandomNextAction(["pass", "flick_on", "control_ball", "throw_in"]);
-                opponentAction = getRandomNextAction(["press", "mark", "regain_possession", "throw_in"]);
-                break;
-
-            case "shoot":
-                description = "The player takes a shot at goal, aiming to beat the goalkeeper.";
-                nextAction = getRandomNextAction(["goal", "saved", "rebound", "miss"]);
-                opponentAction = getRandomNextAction(["block", "intercept", "save", "foul"]);
-                break;
-
-            case "long_shot":
-                description = `${prevPlayer.name} took a powerful long shot, testing the goalkeeper from a distance.`;
-                nextAction = getRandomNextAction(["rebound", "pass"]);
-                opponentAction = getRandomNextAction(["block_shot"]);
-                break;
-
-            case "volley":
-                description = "The player attempts a spectacular volley, striking the ball mid-air.";
-                nextAction = getRandomNextAction(["goal", "saved", "rebound", "miss"]);
-                opponentAction = getRandomNextAction(["block", "deflect", "intercept", "foul"]);
-                break;
-
-            case "tackle":
-                description = "The player goes in for a strong tackle to win the ball back.";
-                nextAction = getRandomNextAction(["pass", "shoot", "cross", "throw_in"]);
-                opponentAction = getRandomNextAction(["tackle", "press", "block", "throw_in"]);
-                break;
-
-            case "cross":
-                description = "The player whips in a cross, aiming to create a scoring opportunity.";
-                nextAction = getRandomNextAction(["attack_header", "volley", "shoot", "pass"]);
-                opponentAction = getRandomNextAction(["block_cross", "clearance", "intercept"]);
-                break;
-
-            case "control_ball":
-                description = "The player controls the ball skillfully, preparing for the next move.";
-                nextAction = getRandomNextAction(["dribble", "pass", "shoot", "clearance"]);
-                opponentAction = getRandomNextAction(["press", "tackle", "block", "mark", "intercept"]);
-                break;
-
-            case "mark":
-                description = "The player stays close to their opponent, cutting off passing options.";
-                nextAction = getRandomNextAction(["intercept", "block", "tackle"]);
-                opponentAction = getRandomNextAction(["dribble", "skill_move", "pass"]);
-                break;
-
-            case "attack_header":
-                description = "The player rises to meet the cross with a powerful attacking header.";
-                nextAction = getRandomNextAction(["goal", "assist", "clear", "pass"]);
-                opponentAction = getRandomNextAction(["defend", "block", "intercept", "foul"]);
-                break;
-
-            case "regain_possession":
-                description = "The team successfully regains possession and looks to build an attack.";
-                nextAction = getRandomNextAction(["dribble", "pass", "shoot", "clearance"]);
-                opponentAction = getRandomNextAction(["press", "tackle", "mark"]);
-                break;
-
-            case "block_cross":
-                description = "The defender steps in to block the cross, denying a scoring chance.";
-                nextAction = getRandomNextAction(["clearance", "pass", "long_ball", "intercept"]);
-                opponentAction = getRandomNextAction(["cross", "dribble", "cut_inside"]);
-                break;
-
-            case "long_ball":
-                description = "The player launches a long ball forward, looking to create an opportunity.";
-                nextAction = getRandomNextAction(["challenge_header", "control_ball", "shoot", "pass"]);
-                opponentAction = getRandomNextAction(["press", "intercept", "challenge_header", "throw_in"]);
-                break;
-
-            case "skill_move":
-                description = "The player executes a dazzling skill move to get past their marker.";
-                nextAction = getRandomNextAction(["dribble", "pass", "shoot", "cross"]);
-                opponentAction = getRandomNextAction(["tackle", "intercept"]);
-                break;
-
-            case "flick_on":
-                description = "The player flicks the ball on with a deft touch, redirecting it to a teammate.";
-                nextAction = getRandomNextAction(["control_ball", "pass", "shoot", "cross"]);
-                opponentAction = getRandomNextAction(["press", "intercept", "block"]);
-                break;
-
-            case "clearance":
-                description = "The defender clears the ball to relieve pressure on their team.";
-                nextAction = getRandomNextAction(["counter_attack", "intercept", "pass"]);
-                opponentAction = getRandomNextAction(["press", "block", "throw_in"]);
-                break;
-
-            case "counter_attack":
-                description = "The team launches a rapid counter-attack, exploiting the opponent's disorganization.";
-                nextAction = getRandomNextAction(["dribble", "pass", "shoot", "cross"]);
-                opponentAction = getRandomNextAction(["tackle", "press", "recover_ball"]);
-                break;
-
-            case "corner_kick":
-                if (prevPlayer) {
-                    description = `${prevPlayer.name} steps up to take the corner kick, delivering the ball into the box to create a scoring opportunity.`;
-                    nextAction = getRandomNextAction(["attack_header", "volley", "shoot", "clearance", "throw_in"]);
-                    opponentAction = getRandomNextAction(["block_cross", "clearance", "intercept", "throw_in"]);
-                }
-                break;
-
-            case "rebound":
-                if (prevPlayer) {
-                    description = `${prevPlayer.name} reacts quickly to the rebound, pouncing on the loose ball to create another opportunity.`;
-                    nextAction = getRandomNextAction(["shoot", "pass"]);
-                    opponentAction = getRandomNextAction(["block", "intercept", "press"]);
-                }
-                break;
-
-            default:
-                console.warn("Unknown action type", prevAction);
-        }
-
-        if (nextAction && opponentAction) {
-            const {outcomeDescription, outcomeAction, outcomePlayer} = getOutcomeAction(prevAction, prevPlayer);
-            if (outcomeAction && outcomePlayer) {
-                followAction = outcomeAction;
-                followPlayer = outcomePlayer;
-            } else {
-                let actionType = getRandomActionType();
-                if (actionType === "teammate") {
-                    followAction = nextAction;
-                    followPlayer = randomPlayerWithAction(followAction, prevPlayer.teamIdx);
-                } else {
-                    followAction = opponentAction;
-                    followPlayer = randomPlayerWithAction(followAction, prevPlayer.teamIdx === 0 ? 1 : 0);
-                }
-            }
-            if (prevAction && prevPlayer && (outcomeDescription || description)) { 
-                logEvent(currentTime, prevAction, prevPlayer, outcomeDescription || description);
-            }
-        }
-    } else {
-        const randomActionIndex = Math.floor(Math.random() * defaultActions.length);
-        const randomAction = defaultActions[randomActionIndex];
+    if (!prevAction && !prevPlayer) {
         const randomTeamIndex = Math.floor(Math.random() * teamsInMatch.length);
         const team = teamsInMatch[randomTeamIndex];
-        followAction = randomAction;
-        switch (followAction) {
-            case "goal_kick":
-                followPlayer = team.players.find(p => p.position_in_match === "GK");
-                if (followPlayer) {
-                    description = `${followPlayer.name} executed a precise goal kick, launching the ball forward to maintain possession.`;
-                }
-                break;
+        prevAction = "pass";
+        prevPlayer = getRandomPlayer(team, p => p.position_in_match !== "GK" && !p?.is_off);
+    }
+    let nextAction = '';
+    let opponentAction = '';
+    switch (prevAction) {
+        case "kick_off":
+            if (prevPlayer) {
+                description = `${prevPlayer.name} steps up to restart the game with a kick-off after the goal. Their team looks to build an attack immediately.`;
+                nextAction = getRandomNextAction(["pass", "long_pass", "dribble"]);
+                opponentAction = getRandomNextAction(["press", "mark", "intercept"]);
+            }
+            break;
 
-            case "pass":
-                followPlayer = getRandomPlayer(team, p => p.position_in_match !== "GK" && !p?.is_off);
-                if (followPlayer) {
-                    description = `${followPlayer.name} delivered an accurate pass, keeping the attack alive.`;
-                }
-                break;
+        case "goal_kick":
+            if (prevPlayer) {
+                description = `${prevPlayer.name} takes the goal kick, launching the ball high up the field to create an opportunity.`;
+                nextAction = getRandomNextAction(["challenge_header", "distribute_ball"]);
+                opponentAction = getRandomNextAction(["intercept", "press", "regain_possession"]);
+            }
+            break;
 
-            case "long_pass":
-                followPlayer = getRandomPlayer(team, p => p.position_in_match !== "GK" && !p?.is_off);
-                if (followPlayer) {
-                    description = `${followPlayer.name} launched a long pass, attempting to bypass the opposition's midfield.`;
-                }
-                break;
+        case "pass":
+            if (prevPlayer) {
+                description = `${prevPlayer.name} makes a pass, trying to connect with a teammate and advance the play.`;
+                nextAction = getRandomNextAction(["long_pass", "dribble", "shoot", "long_shot"]);
+                opponentAction = getRandomNextAction(["block", "tackle", "intercept"]);
+            }
+            break;
 
-            case "throw_in":
-                followPlayer = getRandomPlayer(team, p => ["LB", "RB", "LM", "RM"].includes(p.position_in_match) && !p?.is_off);
-                if (followPlayer) {
-                    description = `${followPlayer.name} performed a quick throw-in, aiming to restart play efficiently.`;
-                }
-                break;
+        case "long_pass":
+            if (prevPlayer) {
+                description = `${prevPlayer.name} plays a long pass, sending the ball deep into the opponent's half to create an attacking opportunity.`;
+                nextAction = getRandomNextAction(["throw_in", "challenge_header", "control_ball", "long_shot"]);
+                opponentAction = getRandomNextAction(["intercept", "challenge_header", "mark"]);
+            }
+            break;
+
+        case "throw_in":
+            if (prevPlayer) {
+                description = `${prevPlayer.name} takes the throw-in, looking to find a teammate and restart the play quickly.`;
+                nextAction = getRandomNextAction(["pass", "long_pass", "dribble", "cross"]);
+                opponentAction = getRandomNextAction(["press", "mark", "intercept"]);
+            }
+            break;
+
+        case "dribble":
+            description = "The player takes on defenders with a confident dribble, advancing the ball.";
+            nextAction = getRandomNextAction(["pass", "shoot", "cross"]);
+            opponentAction = getRandomNextAction(["tackle", "press", "block"]);
+            break;
+
+        case "distribute_ball":
+            description = "The goalkeeper calmly distributes the ball to a nearby teammate to maintain possession.";
+            nextAction = getRandomNextAction(["pass", "shoot", "cross"]);
+            opponentAction = getRandomNextAction(["tackle", "press", "block"]);
+            break;
+
+        case "intercept":
+            description = "The player steps in and intercepts the opponent's pass, regaining possession.";
+            nextAction = getRandomNextAction(["pass", "shoot", "cross", "throw_in"]);
+            opponentAction = getRandomNextAction(["tackle", "press", "block", "throw_in"]);
+            break;
+
+        case "press":
+            description = "The team applies pressure to force an error from the opponent.";
+            nextAction = getRandomNextAction(["tackle", "intercept", "regain_possession"]);
+            opponentAction = getRandomNextAction(["pass", "clearance", "dribble"]);
+            break;
+
+        case "block":
+            description = "The player makes a vital block, stopping the ball in its tracks.";
+            nextAction = getRandomNextAction(["regain_possession", "clearance", "counter_attack"]);
+            opponentAction = getRandomNextAction(["retry_pass", "recover", "switch_play"]);
+            break;
+
+        case "challenge_header":
+            description = "The player leaps high for an aerial duel, contesting the ball with determination.";
+            nextAction = getRandomNextAction(["pass", "flick_on", "control_ball", "throw_in"]);
+            opponentAction = getRandomNextAction(["press", "mark", "regain_possession", "throw_in"]);
+            break;
+
+        case "shoot":
+            description = "The player takes a shot at goal, aiming to beat the goalkeeper.";
+            nextAction = getRandomNextAction(["goal", "saved", "rebound", "miss"]);
+            opponentAction = getRandomNextAction(["block", "intercept", "save", "foul"]);
+            break;
+
+        case "long_shot":
+            description = `${prevPlayer.name} took a powerful long shot, testing the goalkeeper from a distance.`;
+            nextAction = getRandomNextAction(["rebound", "pass"]);
+            opponentAction = getRandomNextAction(["block_shot"]);
+            break;
+
+        case "volley":
+            description = "The player attempts a spectacular volley, striking the ball mid-air.";
+            nextAction = getRandomNextAction(["goal", "saved", "rebound", "miss"]);
+            opponentAction = getRandomNextAction(["block", "deflect", "intercept", "foul"]);
+            break;
+
+        case "tackle":
+            description = "The player goes in for a strong tackle to win the ball back.";
+            nextAction = getRandomNextAction(["pass", "shoot", "cross", "throw_in"]);
+            opponentAction = getRandomNextAction(["tackle", "press", "block", "throw_in"]);
+            break;
+
+        case "cross":
+            description = "The player whips in a cross, aiming to create a scoring opportunity.";
+            nextAction = getRandomNextAction(["attack_header", "volley", "shoot", "pass"]);
+            opponentAction = getRandomNextAction(["block_cross", "clearance", "intercept"]);
+            break;
+
+        case "control_ball":
+            description = "The player controls the ball skillfully, preparing for the next move.";
+            nextAction = getRandomNextAction(["dribble", "pass", "shoot", "clearance"]);
+            opponentAction = getRandomNextAction(["press", "tackle", "block", "mark", "intercept"]);
+            break;
+
+        case "mark":
+            description = "The player stays close to their opponent, cutting off passing options.";
+            nextAction = getRandomNextAction(["intercept", "block", "tackle"]);
+            opponentAction = getRandomNextAction(["dribble", "skill_move", "pass"]);
+            break;
+
+        case "attack_header":
+            description = "The player rises to meet the cross with a powerful attacking header.";
+            nextAction = getRandomNextAction(["goal", "assist", "clear", "pass"]);
+            opponentAction = getRandomNextAction(["defend", "block", "intercept", "foul"]);
+            break;
+
+        case "regain_possession":
+            description = "The team successfully regains possession and looks to build an attack.";
+            nextAction = getRandomNextAction(["dribble", "pass", "shoot", "clearance"]);
+            opponentAction = getRandomNextAction(["press", "tackle", "mark"]);
+            break;
+
+        case "block_cross":
+            description = "The defender steps in to block the cross, denying a scoring chance.";
+            nextAction = getRandomNextAction(["clearance", "pass", "long_ball", "intercept"]);
+            opponentAction = getRandomNextAction(["cross", "dribble", "cut_inside"]);
+            break;
+
+        case "long_ball":
+            description = "The player launches a long ball forward, looking to create an opportunity.";
+            nextAction = getRandomNextAction(["challenge_header", "control_ball", "shoot", "pass"]);
+            opponentAction = getRandomNextAction(["press", "intercept", "challenge_header", "throw_in"]);
+            break;
+
+        case "skill_move":
+            description = "The player executes a dazzling skill move to get past their marker.";
+            nextAction = getRandomNextAction(["dribble", "pass", "shoot", "cross"]);
+            opponentAction = getRandomNextAction(["tackle", "intercept"]);
+            break;
+
+        case "flick_on":
+            description = "The player flicks the ball on with a deft touch, redirecting it to a teammate.";
+            nextAction = getRandomNextAction(["control_ball", "pass", "shoot", "cross"]);
+            opponentAction = getRandomNextAction(["press", "intercept", "block"]);
+            break;
+
+        case "clearance":
+            description = "The defender clears the ball to relieve pressure on their team.";
+            nextAction = getRandomNextAction(["counter_attack", "intercept", "pass"]);
+            opponentAction = getRandomNextAction(["press", "block", "throw_in"]);
+            break;
+
+        case "counter_attack":
+            description = "The team launches a rapid counter-attack, exploiting the opponent's disorganization.";
+            nextAction = getRandomNextAction(["dribble", "pass", "shoot", "cross"]);
+            opponentAction = getRandomNextAction(["tackle", "press", "recover_ball"]);
+            break;
+
+        case "corner_kick":
+            if (prevPlayer) {
+                description = `${prevPlayer.name} steps up to take the corner kick, delivering the ball into the box to create a scoring opportunity.`;
+                nextAction = getRandomNextAction(["attack_header", "volley", "shoot", "clearance", "throw_in"]);
+                opponentAction = getRandomNextAction(["block_cross", "clearance", "intercept", "throw_in"]);
+            }
+            break;
+
+        case "rebound":
+            if (prevPlayer) {
+                description = `${prevPlayer.name} reacts quickly to the rebound, pouncing on the loose ball to create another opportunity.`;
+                nextAction = getRandomNextAction(["shoot", "pass"]);
+                opponentAction = getRandomNextAction(["block", "intercept", "press"]);
+            }
+            break;
+
+        default:
+            console.warn("Unknown action type", prevAction);
+    }
+    if (nextAction && opponentAction && prevAction && prevPlayer) {
+        const {outcomeDescription, outcomeAction, outcomePlayer} = getOutcomeAction(prevAction, prevPlayer);
+        if (outcomeAction && outcomePlayer) {
+            followAction = outcomeAction;
+            followPlayer = outcomePlayer;
+        } else {
+            let actionType = getRandomActionType();
+            if (actionType === "teammate") {
+                followAction = nextAction;
+                followPlayer = randomPlayerWithAction(followAction, prevPlayer.teamIdx);
+            } else {
+                followAction = opponentAction;
+                followPlayer = randomPlayerWithAction(followAction, prevPlayer.teamIdx === 0 ? 1 : 0);
+            }
         }
-        if (followAction && followPlayer && description) {
-            logEvent(currentTime, followAction, followPlayer, description);
+        if (outcomeDescription) {
+            description = outcomeDescription;
         }
     }
-    if(followPlayer){
+    if (followAction && followPlayer && description) {
+        logEvent(currentTime, prevAction, prevPlayer, description);
+    }
+    if (followPlayer) {
         teamsInMatch[0].playerSelected = null;
         teamsInMatch[1].playerSelected = null;
         teamsInMatch[followPlayer.teamIdx].playerSelected = followPlayer.uuid;
@@ -572,15 +540,14 @@ function performFollowAction(prevAction, prevPlayer, currentTime) {
     const team2score = document.getElementById("team-2-score");
     team1score.innerText = teamsInMatch[0].score;
     team2score.innerText = teamsInMatch[1].score;
-    console.log({ followAction, followPlayer })
-    return { followAction, followPlayer }
+    return {followAction, followPlayer}
 }
 
-function getOutcomeAction(followAction, followPlayer){
-    if (followAction === "long_shot"){
+function getOutcomeAction(followAction, followPlayer) {
+    if (followAction === "long_shot") {
         return getLongShotOutcome(followPlayer);
     }
-    if (followAction === "shoot"){
+    if (followAction === "shoot") {
         return getShootOutcome(followPlayer);
     }
 
@@ -591,10 +558,10 @@ function randomPlayerFromPositions(players, positions) {
     if (positions.length === 0) {
         return null; // No positions left to check, return null
     }
-    
+
     const randomPosition = positions[Math.floor(Math.random() * positions.length)];
     const randomPlayers = players.filter(p => p.position_in_match === randomPosition && !p?.is_off);
-    
+
     if (randomPlayers.length > 0) {
         return randomPlayers[Math.floor(Math.random() * randomPlayers.length)]; // Return a random player
     }
@@ -622,7 +589,7 @@ function randomPlayerCornerKick(players) {
     return randomPlayerFromPositions(players, ["LB", "RB", "LM", "RM", "CM", "CAM", "LW", "RW"])
 }
 
-function getLongShotOutcome(player){
+function getLongShotOutcome(player) {
     return getShotOutcome(player, "long_shot")
 }
 
@@ -634,7 +601,7 @@ function getShotOutcome(player, shoot_type) {
     const opponentPlayers = teamsInMatch[player.teamIdx === 0 ? 1 : 0].players;
     const goalkeeper = randomPlayerFromPositions(opponentPlayers, ['GK']);
     const defender = randomPlayerFromPositions(opponentPlayers, ["CB", "CDM"]);
-    
+
     const defensiveImpact = (defender.attributes.mental.positioning + defender.attributes.mental.anticipation + defender.attributes.mental.bravery) / 300;
 
     // Base probabilities for long shots
@@ -650,7 +617,7 @@ function getShotOutcome(player, shoot_type) {
     const composureImpact = player.attributes.mental.composure / 100; // Staying calm under pressure
 
     let totalSkillImpact = 0;
-    if (shoot_type === 'long_shot'){
+    if (shoot_type === 'long_shot') {
         totalSkillImpact = (longShotsImpact + shotPowerImpact + composureImpact) / 3;
     } else {
         totalSkillImpact = (finishingImpact + shotPowerImpact + composureImpact + balanceImpact) / 4;
@@ -683,9 +650,8 @@ function getShotOutcome(player, shoot_type) {
         player.goals_in_match++;
         teamsInMatch[player.teamIdx].score++;
         outcomeAction = "kick_off";
-        outcomePlayer = randomPlayerKickOff(teamsInMatch[player.teamIdx === 0 ? 1: 0].players)
-    }
-    else if (chance < adjustedGoalChance + adjustedSaveChance){
+        outcomePlayer = randomPlayerKickOff(teamsInMatch[player.teamIdx === 0 ? 1 : 0].players)
+    } else if (chance < adjustedGoalChance + adjustedSaveChance) {
         outcomeDescription = `${player.name} took a ${shoot_type.replace("_", " ")},`;
         goalkeeper.score = Math.min(goalkeeper.score + generatePlayerScore('low'), 10);
 
@@ -703,25 +669,23 @@ function getShotOutcome(player, shoot_type) {
                 outcomePlayer = randomPlayerCornerKick(teamsInMatch[player.teamIdx].players)
                 break;
             case "not_cleared":
-                outcomeDescription += 
-                " the goalkeeper couldn't fully clear the ball, and it deflected back into play, creating a dangerous rebound situation!";
+                outcomeDescription +=
+                    " the goalkeeper couldn't fully clear the ball, and it deflected back into play, creating a dangerous rebound situation!";
                 outcomeAction = "rebound";
                 outcomePlayer = randomPlayerWithAction(outcomeAction, player.teamIdx);
                 break;
             default:
                 outcomeDescription += " but the goalkeeper made a remarkable save!.";
         }
-    }
-    else if (chance < adjustedGoalChance + adjustedSaveChance + adjustedMissChance){
+    } else if (chance < adjustedGoalChance + adjustedSaveChance + adjustedMissChance) {
         outcomeDescription = `${player.name}'s ${shoot_type.replace("_", " ")} missed the target and went over the crossbar.`;
         player.score = Math.max(player.score - generatePlayerScore('low'), 1);
         outcomeAction = "corner_kick";
         outcomePlayer = goalkeeper;
-    }
-    else if (chance < adjustedGoalChance + adjustedSaveChance + adjustedMissChance + adjustedBlockedChance) {
+    } else if (chance < adjustedGoalChance + adjustedSaveChance + adjustedMissChance + adjustedBlockedChance) {
         outcomeDescription = `${player.name}'s ${shoot_type.replace("_", " ")} was blocked by a defender,`;
         defender.score = Math.min(defender.score + generatePlayerScore("low"), 10);
-    
+
         const nextActionType = getRandomNextAction(["saved", "corner", "own_goal", "not_cleared"]);
         switch (nextActionType) {
             case "saved":
@@ -729,7 +693,7 @@ function getShotOutcome(player, shoot_type) {
                 outcomeAction = getRandomNextAction(["long_ball", "pass"]);
                 outcomePlayer = randomPlayerWithAction(outcomeAction, defender.teamIdx);
                 break;
-    
+
             case "corner":
                 outcomeDescription += " the ball went out for a corner kick.";
                 outcomeAction = "corner_kick";
@@ -737,22 +701,22 @@ function getShotOutcome(player, shoot_type) {
                 break;
 
             case "not_cleared":
-                outcomeDescription += 
-                " but the ball deflected back into play, creating a dangerous rebound opportunity!";
+                outcomeDescription +=
+                    " but the ball deflected back into play, creating a dangerous rebound opportunity!";
                 outcomeAction = "rebound";
                 outcomePlayer = randomPlayerWithAction(outcomeAction, player.teamIdx);
                 break;
-    
+
             case "own_goal":
                 outcomeDescription += " resulting in an own goal!";
                 player.score = Math.min(player.score + generatePlayerScore("medium"), 10);
                 defender.score = Math.max(defender.score - generatePlayerScore("medium"), 1);
-                defender.own_goals_in_match = (defender.own_goals_in_match || 0) + 1; 
-                teamsInMatch[player.teamIdx === 0 ? 1 : 0].score++; 
+                defender.own_goals_in_match = (defender.own_goals_in_match || 0) + 1;
+                teamsInMatch[player.teamIdx === 0 ? 1 : 0].score++;
                 outcomeAction = "kick_off";
-                outcomePlayer = randomPlayerKickOff(teamsInMatch[player.teamIdx === 0 ? 1: 0].players)
+                outcomePlayer = randomPlayerKickOff(teamsInMatch[player.teamIdx === 0 ? 1 : 0].players)
                 break;
-    
+
             default:
                 outcomeDescription += " was blocked by a defender.";
         }
@@ -944,7 +908,7 @@ function getChallengeHeaderOutcome(player) {
         nextAction = followAction.action;
     }
 
-    return { outcome, nextPlayer, nextAction }
+    return {outcome, nextPlayer, nextAction}
 }
 
 function getGoalKickOutcome(player) {
@@ -965,7 +929,7 @@ function getGoalKickOutcome(player) {
     }
     const nextPlayer = players[Math.floor(Math.random() * players.length)];
 
-    return { nextPlayer, nextAction }
+    return {nextPlayer, nextAction}
 }
 
 function getLongPassOutcome(player) {
@@ -1065,7 +1029,7 @@ function getDribbleOutcome(player) {
         description = `${player.name} lost control of the ball during the dribble.`;
     }
 
-    return { description, actionType }
+    return {description, actionType}
 }
 
 function getInterceptOutcome(player) {
@@ -1133,7 +1097,7 @@ function getInterceptOutcome(player) {
         description = '';
     }
 
-    return { description, actionType }
+    return {description, actionType}
 }
 
 function getAttackHeaderOutcome(player) {
@@ -1201,7 +1165,7 @@ function getAttackHeaderOutcome(player) {
     } else {
         description = '';
     }
-    return { description, actionType, opponentAction }
+    return {description, actionType, opponentAction}
 }
 
 function getTackleOutcome(player) {
@@ -1233,24 +1197,20 @@ function getVolleyOutcome(player) {
         player.score = Math.min(player.score + highPlayerScore, 10);
         player.goals_in_match++;
         teamsInMatch[player.teamIdx].score++;
-    }
-    else if (chance < 0.5) {
+    } else if (chance < 0.5) {
         description = `${player.name} struck a volley on target, but the goalkeeper made an excellent save.`;
         goalkeeper.score = Math.min(goalkeeper.score + lowPlayerScore, 10);
         opponentAction = "long_ball";
-    }
-    else if (chance < 0.7) {
+    } else if (chance < 0.7) {
         description = `${player.name} attempted a volley but missed the target.`;
-    }
-    else if (chance < 0.85) {
+    } else if (chance < 0.85) {
         description = `${player.name}'s volley was blocked by a defender.`
-    }
-    else {
+    } else {
         description = `${player.name}'s volley was deflected, and the ball is now in play as a rebound.`;
         opponentAction = 'rebound';
     }
 
-    return { description, actionType: opponentAction ? 'opponent' : null, opponentAction }
+    return {description, actionType: opponentAction ? 'opponent' : null, opponentAction}
 }
 
 function getTapInOutcome(player) {
@@ -1326,7 +1286,7 @@ function getInjuryOutcome(player) {
     if (outcome === "serious" || outcome === "stoppage" || outcome === "substitution") {
         substitutePlayer = performActionSubstitute(player)
     }
-    return { outcome, opponentPlayer: substitutePlayer };
+    return {outcome, opponentPlayer: substitutePlayer};
 }
 
 function getSubstituteOutcome(player) {
@@ -1342,7 +1302,7 @@ function getSubstituteOutcome(player) {
         else if (chance < 0.95) outcome = "performance"; // 5% chance of performance-based substitution
         else outcome = ""; // 5% chance of part of multiple substitutions
     }
-    return { outcome, opponentPlayer: substitutePlayer };
+    return {outcome, opponentPlayer: substitutePlayer};
 }
 
 // Function to perform an action and simulate opponent reaction
@@ -1369,9 +1329,9 @@ function guestFollowReaction(currentAction, prevPlayer) {
         const randomPosition = positionsWithAction[Math.floor(Math.random() * positionsWithAction.length)];
         const teamPlayers = teamsInMatch[prevPlayer.teamIdx].players.filter(p => p.position_in_match === randomPosition && !p?.is_off);
         const teamPlayer = teamPlayers[Math.floor(Math.random() * teamPlayers.length)];
-        return { player: teamPlayer, action: nextAction };
+        return {player: teamPlayer, action: nextAction};
     } else {
-        return { player: null, action: null };
+        return {player: null, action: null};
     }
 }
 
@@ -1407,9 +1367,9 @@ function guestOpponentAction(currentAction) {
         const reactionIndex = Math.floor(Math.random() * possibleReactions.length);
         const opponentAction = possibleReactions[reactionIndex];
 
-        return { action: opponentAction };
+        return {action: opponentAction};
     } else {
-        return { action: null };
+        return {action: null};
     }
 }
 
@@ -2390,7 +2350,7 @@ function logEvent(time, action, player, message) {
     </div>
     <div class="flex-grow-1 ms-3 pt-1">
         <p class="text-muted mb-0 fs-12">${formatMatchTime(time)["minute"]}:${formatMatchTime(time)["second"]
-        }<span class="player-dot" style="background-color: ${player.playerColor}"></span></p>
+    }<span class="player-dot" style="background-color: ${player.playerColor}"></span></p>
         <h6 class="mb-1">${message}</h6>
     </div>`;
     const parentElement = document.getElementById("match-timeline");

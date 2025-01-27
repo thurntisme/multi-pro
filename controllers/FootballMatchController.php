@@ -580,7 +580,7 @@ class FootballMatchController
         return $players;
     }
 
-    public function getTeamInMatch($match_uuid)
+    public function getTeamInMatch($match_uuid): ?array
     {
         $match = $this->getLatestMatch($match_uuid);
 
