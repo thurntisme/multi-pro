@@ -565,9 +565,9 @@ class FootballTeamController
         if (isset($teamInClub['players']) && $total_players_in_club === 32) {
             $_SESSION['message_type'] = 'danger';
             $_SESSION['message'] = "Team data has reached the maximum number of club players ($total_players_in_club).";
+            header("Location: " . $_SERVER['REQUEST_URI']);
+            exit;
         }
-        header("Location: " . $_SERVER['REQUEST_URI']);
-        exit;
     }
 
     public function getMyTeamInClub(): array

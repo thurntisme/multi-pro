@@ -214,8 +214,12 @@ const calculatePlayerAbility = (formation, team) => {
 }
 
 // Function to filter players based on conditions
-function getFilteredPlayers(players, type = 'sub') {
+function getFilteredPlayers(formation, players, type = 'sub') {
     const now = new Date();
+
+    const formationData = generateFormation(formation);
+    const positions = formationData.map(formation => formation.posName);
+    console.log("team formation: ", positions)
 
     return players.filter(player => {
         const joiningDate = new Date(player.joining_date);
@@ -240,8 +244,8 @@ $(document).on("click", "#btn-best-players", (e) => {
     const formation = $("[name='team_formation']").val();
 
     // Use the filtering function
-    const filteredBadPlayers = getFilteredPlayers(myLineUp, 'lineup'); // Players in bad condition
-    let filteredGoodPlayers = getFilteredPlayers(bench, 'sub'); // Players in good condition
+    const filteredBadPlayers = getFilteredPlayers(formation, myLineUp, 'lineup'); // Players in bad condition
+    let filteredGoodPlayers = getFilteredPlayers(formation, bench, 'sub'); // Players in good condition
     const newMyLineUp = JSON.parse(JSON.stringify(myLineUp));
 
     // Sort filteredGoodPlayers by player_stamina and ability (both descending)
@@ -253,7 +257,7 @@ $(document).on("click", "#btn-best-players", (e) => {
             return b.player_form - a.player_form; // Compare form if stamina is equal
         }
         return b.player_stamina - a.player_stamina; // Compare stamina first
-    });    
+    });
 
     // Replace bad players with good players based on positions
     filteredBadPlayers.forEach(badPlayer => {
@@ -281,7 +285,7 @@ $(document).on("click", ".btn-player-action", (e) => {
     const item_uuid = $(e.currentTarget).attr("data-item-uuid");
     const player_uuid = $(playerSelected).attr("data-player-uuid");
     const payload = {item_uuid, player_uuid};
-    
+
     try {
         Swal.fire({
             title: 'Are you sure?',
@@ -309,13 +313,13 @@ $(document).on("click", ".btn-player-action", (e) => {
                                 const row = $(".my-club-player-row[data-player-uuid='" + player_uuid + "']");
                                 const action_player = groupTeams[0].players.find(p => p.uuid === player_uuid);
                                 $("#team-budget").text(budget);
-                                if (item_slug === 'stamina'){
+                                if (item_slug === 'stamina') {
                                     row.find(".progress-bar").attr("style", "width: 100%");
                                     row.find(".progress-bar").attr("aria-valuenow", 100);
                                     row.find(".progress-bar").attr("aria-valuemax", 100);
                                     action_player.player_stamina = 100;
                                 }
-                                if (item_slug === 'form'){
+                                if (item_slug === 'form') {
                                     row.find(".form").html('<i class="mdi mdi-arrow-up-bold-box text-success fs-22"></i>');
                                     action_player.form = 5;
                                 }

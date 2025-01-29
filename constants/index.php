@@ -32,7 +32,7 @@ define("MONTHS", $months);
 $timezones = [];
 foreach (DateTimeZone::listIdentifiers() as $zone) {
     $timezones[$zone] = $zone;
-};
+}
 $support_languages = ['en' => 'English', 'vi' => 'Vietnamese'];
 
 $support_fonts = [
@@ -718,8 +718,8 @@ $nations = [
     "Uganda",
     "Ukraine",
     "United Arab Emirates",
-    "United Kingdom",
-    "United States of America",
+    "England",
+    "USA",
     "Uruguay",
     "Uzbekistan",
     "Vanuatu",

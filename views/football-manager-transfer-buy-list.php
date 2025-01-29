@@ -64,7 +64,7 @@ ob_start();
                                         <th class="sort text-center" scope="col">Contract Wage</th>
                                         <th class="sort text-center" scope="col">Market Value</th>
                                         <th class="text-center" scope="col">
-                                            <?php if (count($buyList['successCount']) > 0) { ?>
+                                            <?php if ($buyList['successCount'] > 0) { ?>
                                                 <form method="POST" action="<?= $_SERVER['REQUEST_URI'] ?>">
                                                     <input type="hidden" name="action_name"
                                                            value="all_players_join_team">

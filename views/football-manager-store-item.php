@@ -8,8 +8,9 @@ $list = $commonController->convertResources(DEFAULT_STORE_ITEMS, 3);
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!empty($_POST['action_name'])) {
         if ($_POST['action_name'] === 'generate_player_on_demand') {
+            $player_name = $_POST['player_name'];
             $playerData = [
-                "name" => $_POST['player_name'],
+                "name" => $player_name,
                 "nationality" => $_POST['player_nationality'],
                 "weight" => (int)$_POST['player_weight'],
                 "height" => (int)$_POST['player_height'],
@@ -20,7 +21,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             try {
                 exportPlayersToJson($players);
                 $_SESSION['message_type'] = 'success';
-                $_SESSION['message'] = "Player submitted successfully.";
+                $_SESSION['message'] = "Player $player_name submitted successfully.";
             } catch (Exception $e) {
                 $_SESSION['message_type'] = 'danger';
                 $_SESSION['message'] = "Failed to submit a new player.";
