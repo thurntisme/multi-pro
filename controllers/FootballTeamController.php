@@ -364,108 +364,6 @@ class FootballTeamController
         return $players;
     }
 
-    public function getMyTeamInClub(): array
-    {
-        $team = $this->getMyTeam();
-        if (!empty($team)) {
-            $players = $this->getTeamPlayersInClub($team['id'], $team['formation']);
-
-            return [
-                'team_name' => $team['team_name'],
-                'team_id' => $team['id'],
-                'formation' => $team['formation'],
-                'players' => $players,
-            ];
-        }
-        return [];
-    }
-
-    public function getTeamPlayersInClub($teamId, $formation = ''): array
-    {
-        $sql = "SELECT * FROM football_player WHERE team_id = :team_id AND joining_date < CURRENT_TIMESTAMP 
-        AND status = 'club' ORDER BY starting_order ASC";
-        $stmt = $this->pdo->prepare($sql);
-        $stmt->execute([':team_id' => $teamId]);
-
-        $players = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-        $positionsArr = [];
-        if (!empty($formation)) {
-            $positionsArr = $this->getPlayerPositionsBySlug($formation);
-        }
-
-        if (count($players) > 0) {
-            $players = array_map(function ($player, $index) use ($positionsArr) {
-                $playerJsonData = getPlayerJsonByUuid($player['player_uuid']);
-                $playerJsonData['remaining_contract_date'] = $this->calRemainingContractDate($player['contract_end_date']);
-                $playerJsonData['market_value'] = formatCurrency($playerJsonData['market_value']);
-                $playerJsonData['contract_wage'] = formatCurrency($playerJsonData['contract_wage']);
-                $player['contract_end_date'] = $this->systemController->convertDate($player['contract_end_date']);
-                $playerJsonData['is_expired'] = $playerJsonData['remaining_contract_date'] < 0;
-                $player['level'] = $this->getLevelDetails($player['level']);
-                $player['is_injury'] = !empty($player['injury_end_date']) && !$this->systemController->isBeforeCurrentUTCDateTime($player['injury_end_date']);
-                $player['position_in_formation'] = $positionsArr[$index] ?? null; // Use index here
-                return array_merge($playerJsonData, $player);
-            }, $players, array_keys($players));
-        }
-
-        return $players;
-    }
-
-    function getPlayerPositionsBySlug($slug): ?array
-    {
-        global $formations;
-        $filtered = array_filter($formations, function ($formation) use ($slug) {
-            return $formation['slug'] === $slug;
-        });
-
-        if (!empty($filtered)) {
-            // Flatten the player_positions array
-            $formation = array_values($filtered)[0];
-            return array_merge(["GK"], ...array_values($formation['player_positions']));
-        }
-
-        return null;
-    }
-
-    public function calRemainingContractDate($date): int
-    {
-        // Convert both $now and $date to DateTime objects
-        try {
-            $nowDateTime = $this->systemController->getDateTime('now');
-            $convertedDate = $this->systemController->getDateTime($date);
-        } catch (Exception $e) {
-            throw new InvalidArgumentException("Invalid date format provided: " . $e->getMessage());
-        }
-
-        $nowDateTime->setTime(0, 0);
-        $convertedDate->setTime(0, 0);
-
-        // Calculate the difference
-        $diff = $nowDateTime->diff($convertedDate);
-
-        // Determine the sign of the difference using $diff->invert
-        $days = (int)$diff->format('%a');
-        if ($diff->invert === 1) {
-            $days = -$days; // Make the difference negative if the date is in the future
-        }
-
-        return $days;
-    }
-
-    function getLevelDetails($points): array
-    {
-        $pointsPerLevel = 100; // Points required for one level
-        $level = floor($points / $pointsPerLevel); // Current level
-        $progress = $points % $pointsPerLevel; // Points towards the next level
-        $percentageToNextLevel = ($progress / $pointsPerLevel) * 100; // Progress percentage
-
-        return [
-            'num' => $level,
-            'percentageToNextLevel' => number_format($percentageToNextLevel, 2)
-        ];
-    }
-
     public function getRandTeamInMatch(): array
     {
         $formation = $this->randFormation();
@@ -646,6 +544,7 @@ class FootballTeamController
 
     function assignPlayerToTeam($teamId, $playerId, $playerName)
     {
+        $this->checkTeamMaxPlayers();
         $rowsAffected = $this->footballTeamService->assignPlayerToTeam($teamId, $playerId);
         if ($rowsAffected) {
             $_SESSION['message_type'] = 'success';
@@ -659,8 +558,123 @@ class FootballTeamController
         exit;
     }
 
+    function checkTeamMaxPlayers()
+    {
+        $teamInClub = $this->getMyTeamInClub();
+        $total_players_in_club = count($teamInClub['players']);
+        if (isset($teamInClub['players']) && $total_players_in_club === 32) {
+            $_SESSION['message_type'] = 'danger';
+            $_SESSION['message'] = "Team data has reached the maximum number of club players ($total_players_in_club).";
+        }
+        header("Location: " . $_SERVER['REQUEST_URI']);
+        exit;
+    }
+
+    public function getMyTeamInClub(): array
+    {
+        $team = $this->getMyTeam();
+        if (!empty($team)) {
+            $players = $this->getTeamPlayersInClub($team['id'], $team['formation']);
+
+            return [
+                'team_name' => $team['team_name'],
+                'team_id' => $team['id'],
+                'formation' => $team['formation'],
+                'players' => $players,
+            ];
+        }
+        return [];
+    }
+
+    public function getTeamPlayersInClub($teamId, $formation = ''): array
+    {
+        $sql = "SELECT * FROM football_player WHERE team_id = :team_id AND joining_date < CURRENT_TIMESTAMP 
+        AND status = 'club' ORDER BY starting_order ASC";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute([':team_id' => $teamId]);
+
+        $players = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        $positionsArr = [];
+        if (!empty($formation)) {
+            $positionsArr = $this->getPlayerPositionsBySlug($formation);
+        }
+
+        if (count($players) > 0) {
+            $players = array_map(function ($player, $index) use ($positionsArr) {
+                $playerJsonData = getPlayerJsonByUuid($player['player_uuid']);
+                $playerJsonData['remaining_contract_date'] = $this->calRemainingContractDate($player['contract_end_date']);
+                $playerJsonData['market_value'] = formatCurrency($playerJsonData['market_value']);
+                $playerJsonData['contract_wage'] = formatCurrency($playerJsonData['contract_wage']);
+                $player['contract_end_date'] = $this->systemController->convertDate($player['contract_end_date']);
+                $playerJsonData['is_expired'] = $playerJsonData['remaining_contract_date'] < 0;
+                $player['level'] = $this->getLevelDetails($player['level']);
+                $player['is_injury'] = !empty($player['injury_end_date']) && !$this->systemController->isBeforeCurrentUTCDateTime($player['injury_end_date']);
+                $player['position_in_formation'] = $positionsArr[$index] ?? null; // Use index here
+                return array_merge($playerJsonData, $player);
+            }, $players, array_keys($players));
+        }
+
+        return $players;
+    }
+
+    function getPlayerPositionsBySlug($slug): ?array
+    {
+        global $formations;
+        $filtered = array_filter($formations, function ($formation) use ($slug) {
+            return $formation['slug'] === $slug;
+        });
+
+        if (!empty($filtered)) {
+            // Flatten the player_positions array
+            $formation = array_values($filtered)[0];
+            return array_merge(["GK"], ...array_values($formation['player_positions']));
+        }
+
+        return null;
+    }
+
+    public function calRemainingContractDate($date): int
+    {
+        // Convert both $now and $date to DateTime objects
+        try {
+            $nowDateTime = $this->systemController->getDateTime('now');
+            $convertedDate = $this->systemController->getDateTime($date);
+        } catch (Exception $e) {
+            throw new InvalidArgumentException("Invalid date format provided: " . $e->getMessage());
+        }
+
+        $nowDateTime->setTime(0, 0);
+        $convertedDate->setTime(0, 0);
+
+        // Calculate the difference
+        $diff = $nowDateTime->diff($convertedDate);
+
+        // Determine the sign of the difference using $diff->invert
+        $days = (int)$diff->format('%a');
+        if ($diff->invert === 1) {
+            $days = -$days; // Make the difference negative if the date is in the future
+        }
+
+        return $days;
+    }
+
+    function getLevelDetails($points): array
+    {
+        $pointsPerLevel = 100; // Points required for one level
+        $level = floor($points / $pointsPerLevel); // Current level
+        $progress = $points % $pointsPerLevel; // Points towards the next level
+        $percentageToNextLevel = ($progress / $pointsPerLevel) * 100; // Progress percentage
+
+        return [
+            'num' => $level,
+            'percentageToNextLevel' => number_format($percentageToNextLevel, 2)
+        ];
+    }
+
     function moveAllPlayersToTeam()
     {
+        $this->checkTeamMaxPlayers();
         $rowsAffected = $this->footballTeamService->moveAllPlayersToTeam();
         if ($rowsAffected) {
             $_SESSION['message_type'] = 'success';

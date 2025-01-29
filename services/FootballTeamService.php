@@ -192,105 +192,6 @@ class FootballTeamService
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    public function getTeamPlayersByUserId()
-    {
-        $team = $this->getMyTeamData();
-        if (!empty($team)) {
-            $players = array_map(function ($player) {
-                return $this->footballPlayerController->viewPlayer($player['id']);
-            }, $this->getTeamPlayers($team['id'], 'players'));
-            $team['players'] = $players;
-        }
-        return $team;
-    }
-
-    public function assignPlayerToTeam($teamId, $playerId)
-    {
-        try {
-            // Fetch player and team data
-            $playerData = $this->footballPlayerController->viewPlayer($playerId);
-            $teamData = $this->getTeamById($teamId);
-
-            // Validate data
-            if (empty($playerData)) {
-                throw new Exception("Player data not found for ID: $playerId");
-            }
-            if (empty($teamData)) {
-                throw new Exception("Team data not found for ID: $teamId");
-            }
-
-            // Calculate starting order, joining date, and contract end date
-            $startingOrder = $this->calculateStartingOrder($teamData['players']);
-            $joiningDate = date('Y-m-d H:i:s');
-            $contractEndDate = $this->calculateContractEndDate($playerData['contract_end'] ?? 7);
-
-            // Update player data in the database
-            $this->updatePlayerTeamData($teamId, $playerId, $joiningDate, $contractEndDate, $startingOrder);
-
-            return true;
-        } catch (Exception $e) {
-            throw new Exception("Failed to assign player $playerId to team $teamId: " . $e->getMessage());
-        }
-    }
-    
-    private function calculateStartingOrder($players)
-    {
-        return !empty($players) ? count($players) : 99;
-    }
-
-    private function calculateContractEndDate($contractDurationDays)
-    {
-        return date('Y-m-d H:i:s', strtotime("+$contractDurationDays days"));
-    }
-
-    private function updatePlayerTeamData($teamId, $playerId, $joiningDate, $contractEndDate, $startingOrder)
-    {
-        $sql = "UPDATE football_player 
-                SET joining_date = :joining_date, 
-                    contract_end_date = :contract_end_date, 
-                    status = :status, 
-                    starting_order = :starting_order, 
-                    updated_at = CURRENT_TIMESTAMP 
-                WHERE team_id = :team_id AND id = :player_id";
-
-        $stmt = $this->pdo->prepare($sql);
-
-        $stmt->execute([
-            ':joining_date' => $joiningDate,
-            ':contract_end_date' => $contractEndDate,
-            ':status' => 'club',
-            ':starting_order' => $startingOrder,
-            ':team_id' => $teamId,
-            ':player_id' => $playerId
-        ]);
-
-        if ($stmt->rowCount() === 0) {
-            throw new Exception("Failed to update player $playerId for team $teamId.");
-        }
-    }
-
-    public function getTeamById($teamId)
-    {
-        $team = $this->getTeamData($teamId);
-
-        if (!empty($team)) {
-            $players = array_map(function ($player) {
-                return $this->footballPlayerController->viewPlayer($player['id']);
-            }, $this->getTeamPlayers($teamId, 'club'));
-            $team['players'] = $players;
-        }
-        return $team;
-    }
-
-    public function getTeamData($teamId)
-    {
-        $sql = "SELECT * FROM football_team WHERE id = :team_id";
-        $stmt = $this->pdo->prepare($sql);
-        $stmt->execute([':team_id' => $teamId]);
-
-        return $stmt->fetch(PDO::FETCH_ASSOC);
-    }
-
     public function moveAllPlayersToTeam()
     {
         try {
@@ -308,40 +209,6 @@ class FootballTeamService
             return true;
         } catch (Exception $e) {
             throw new Exception("Failed to move all players to the team: " . $e->getMessage());
-        }
-    }
-
-    public function joinAllPlayersToTeam()
-    {
-        try {
-            // Get the current team data for the user
-            $team = $this->getTeamPlayersByUserId();
-
-            if (empty($team) || empty($team['players'])) {
-                throw new Exception("No team or players found to process.");
-            }
-
-            $totalPlayers = count($team['players']);
-            $processedPlayers = 0;
-
-            foreach ($team['players'] as $player) {
-                try {
-                    $this->assignPlayerToTeam($team['id'], $player['id']);
-                    $processedPlayers++;
-                } catch (Exception $e) {
-                    // Log the error for this player and continue with others
-                    error_log("Failed to assign player {$player['name']} to team: " . $e->getMessage());
-                }
-            }
-
-            // Check if all players were processed successfully
-            if ($processedPlayers === $totalPlayers) {
-                return true; // All players were successfully processed
-            } else {
-                throw new Exception("Only $processedPlayers out of $totalPlayers players were successfully processed.");
-            }
-        } catch (Exception $e) {
-            throw new Exception("Failed to join all players to the team: " . $e->getMessage());
         }
     }
 
@@ -392,6 +259,140 @@ class FootballTeamService
             // Rollback the transaction in case of an error
             $this->pdo->rollBack();
             throw new Exception("Failed to move player to team: " . $e->getMessage());
+        }
+    }
+
+    public function joinAllPlayersToTeam()
+    {
+        try {
+            // Get the current team data for the user
+            $team = $this->getTeamPlayersByUserId();
+
+            if (empty($team) || empty($team['players'])) {
+                throw new Exception("No team or players found to process.");
+            }
+
+            $totalPlayers = count($team['players']);
+            $processedPlayers = 0;
+
+            foreach ($team['players'] as $player) {
+                try {
+                    $this->assignPlayerToTeam($team['id'], $player['id']);
+                    $processedPlayers++;
+                } catch (Exception $e) {
+                    // Log the error for this player and continue with others
+                    error_log("Failed to assign player {$player['name']} to team: " . $e->getMessage());
+                }
+            }
+
+            // Check if all players were processed successfully
+            if ($processedPlayers === $totalPlayers) {
+                return true; // All players were successfully processed
+            } else {
+                throw new Exception("Only $processedPlayers out of $totalPlayers players were successfully processed.");
+            }
+        } catch (Exception $e) {
+            throw new Exception("Failed to join all players to the team: " . $e->getMessage());
+        }
+    }
+
+    public function getTeamPlayersByUserId()
+    {
+        $team = $this->getMyTeamData();
+        if (!empty($team)) {
+            $players = array_map(function ($player) {
+                return $this->footballPlayerController->viewPlayer($player['id']);
+            }, $this->getTeamPlayers($team['id'], 'players'));
+            $team['players'] = $players;
+        }
+        return $team;
+    }
+
+    public function assignPlayerToTeam($teamId, $playerId)
+    {
+        try {
+            // Fetch player and team data
+            $playerData = $this->footballPlayerController->viewPlayer($playerId);
+            $teamData = $this->getTeamById($teamId);
+
+            // Validate data
+            if (empty($playerData)) {
+                throw new Exception("Player data not found for ID: $playerId");
+            }
+            if (empty($teamData)) {
+                throw new Exception("Team data not found for ID: $teamId");
+            }
+
+            // Calculate starting order, joining date, and contract end date
+            $startingOrder = $this->calculateStartingOrder($teamData['players']);
+            $joiningDate = date('Y-m-d H:i:s');
+            $contractEndDate = $this->calculateContractEndDate($playerData['contract_end'] ?? 7);
+
+            // Update player data in the database
+            $this->updatePlayerTeamData($teamId, $playerId, $joiningDate, $contractEndDate, $startingOrder);
+
+            return true;
+        } catch (Exception $e) {
+            throw new Exception("Failed to assign player $playerId to team $teamId: " . $e->getMessage());
+        }
+    }
+
+    public function getTeamById($teamId)
+    {
+        $team = $this->getTeamData($teamId);
+
+        if (!empty($team)) {
+            $players = array_map(function ($player) {
+                return $this->footballPlayerController->viewPlayer($player['id']);
+            }, $this->getTeamPlayers($teamId, 'club'));
+            $team['players'] = $players;
+            $team['total_players_in_club'] = count($players);
+        }
+        return $team;
+    }
+
+    public function getTeamData($teamId)
+    {
+        $sql = "SELECT * FROM football_team WHERE id = :team_id";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute([':team_id' => $teamId]);
+
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+
+    private function calculateStartingOrder($players)
+    {
+        return !empty($players) ? count($players) : 99;
+    }
+
+    private function calculateContractEndDate($contractDurationDays)
+    {
+        return date('Y-m-d H:i:s', strtotime("+$contractDurationDays days"));
+    }
+
+    private function updatePlayerTeamData($teamId, $playerId, $joiningDate, $contractEndDate, $startingOrder)
+    {
+        $sql = "UPDATE football_player 
+                SET joining_date = :joining_date, 
+                    contract_end_date = :contract_end_date, 
+                    status = :status, 
+                    starting_order = :starting_order, 
+                    updated_at = CURRENT_TIMESTAMP 
+                WHERE team_id = :team_id AND id = :player_id";
+
+        $stmt = $this->pdo->prepare($sql);
+
+        $stmt->execute([
+            ':joining_date' => $joiningDate,
+            ':contract_end_date' => $contractEndDate,
+            ':status' => 'club',
+            ':starting_order' => $startingOrder,
+            ':team_id' => $teamId,
+            ':player_id' => $playerId
+        ]);
+
+        if ($stmt->rowCount() === 0) {
+            throw new Exception("Failed to update player $playerId for team $teamId.");
         }
     }
 
