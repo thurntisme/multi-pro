@@ -14,7 +14,7 @@ $myTeam = $footballTeamController->getMyTeamPlayers();
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_POST['action_name'])) {
         if ($_POST['action_name'] === 'all_players_join_team') {
-            $footballTeamController->moveAllPlayersToTeam();
+            $footballTeamController->moveAllPlayersToTeam('buy');
         }
         if ($_POST['action_name'] === 'player_join_team') {
             $footballTeamController->movePlayerToTeam($myTeam['id'], $_POST['player_id'], $_POST['player_name'], $_POST['transfer_id']);
@@ -64,7 +64,7 @@ ob_start();
                                         <th class="sort text-center" scope="col">Contract Wage</th>
                                         <th class="sort text-center" scope="col">Market Value</th>
                                         <th class="text-center" scope="col">
-                                            <?php if ($buyList['successCount'] > 0) { ?>
+                                            <?php if (count($buyList['successCount']) > 0) { ?>
                                                 <form method="POST" action="<?= $_SERVER['REQUEST_URI'] ?>">
                                                     <input type="hidden" name="action_name"
                                                            value="all_players_join_team">

@@ -672,10 +672,9 @@ class FootballTeamController
         ];
     }
 
-    function moveAllPlayersToTeam()
+    function moveAllPlayersToTeam($transferType)
     {
-        $this->checkTeamMaxPlayers();
-        $rowsAffected = $this->footballTeamService->moveAllPlayersToTeam();
+        $rowsAffected = $this->footballTeamService->moveAllPlayersToTeam($transferType);
         if ($rowsAffected) {
             $_SESSION['message_type'] = 'success';
             $_SESSION['message'] = "All players has been move successfully to your players.";
@@ -690,6 +689,7 @@ class FootballTeamController
 
     function joinAllPlayersToTeam()
     {
+        $this->checkTeamMaxPlayers();
         $rowsAffected = $this->footballTeamService->joinAllPlayersToTeam();
         if ($rowsAffected) {
             $_SESSION['message_type'] = 'success';

@@ -192,14 +192,14 @@ class FootballTeamService
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    public function moveAllPlayersToTeam()
+    public function moveAllPlayersToTeam($transferType)
     {
         try {
             // Get the current team data for the user
             $team = $this->getMyTeamData();
 
             if (!empty($team)) {
-                $transfers = $this->getAllSuccessTransfer();
+                $transfers = $this->getAllSuccessTransfer($transferType);
 
                 // Loop through each transfer and move the player to the team
                 foreach ($transfers as $transfer) {
@@ -212,17 +212,19 @@ class FootballTeamService
         }
     }
 
-    public function getAllSuccessTransfer()
+    public function getAllSuccessTransfer($transferType)
     {
         $fetchTransfersSql = "SELECT id, player_id 
                                   FROM football_transfer 
                                   WHERE manager_id = :manager_id 
                                   AND is_success = :is_success 
+                                  AND type = :type 
                                   AND response_at < CURRENT_TIMESTAMP";
         $fetchTransfersStmt = $this->pdo->prepare($fetchTransfersSql);
         $fetchTransfersStmt->execute([
             ':manager_id' => $this->user_id,
-            ':is_success' => 1,
+            ':is_success' => $transferType === 'buy' ? 1 : 0,
+            ':type' => $transferType,
         ]);
 
         return $fetchTransfersStmt->fetchAll(PDO::FETCH_ASSOC);
