@@ -578,7 +578,7 @@ $nations = [
     "Croatia",
     "Cuba",
     "Cyprus",
-    "Czechia (Czech Republic)",
+    "Czech",
     "Denmark",
     "Djibouti",
     "Dominica",
