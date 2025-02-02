@@ -3,7 +3,7 @@ const pitchColor = "#4CAF50";
 const lineColor = "#FFFFFF";
 const playerScore = 5;
 const homeTeamColor = "#337ca0";
-const awayTeamColor = "#ff1d15";
+const awayTeamColor = "#ff1d20";
 
 // Helper function to draw circles
 function drawCircle(x, y, color, radius = 10, isFilled = true) {
@@ -38,23 +38,81 @@ const drawFootballPitch = () => {
         ctx.strokeRect(x, y, w, h);
     }
 
+    function drawArc(centerX, centerY, radius, startAngle, endAngle) {
+        ctx.beginPath();
+        ctx.arc(centerX, centerY, radius, startAngle, endAngle);
+        ctx.strokeStyle = lineColor;
+        ctx.lineWidth = 2;
+        ctx.stroke();
+    }
+
     // Function to redraw the pitch and players
     function redraw() {
         // Redraw pitch
         ctx.fillStyle = pitchColor;
         ctx.fillRect(0, 0, width, height);
 
-        // Redraw lines
-        drawLine(10, 10, width - 10, 10);
-        drawLine(width - 10, 10, width - 10, height - 10);
-        drawLine(width - 10, height - 10, 10, height - 10);
-        drawLine(10, height - 10, 10, 10);
-        drawLine(width / 2, 10, width / 2, height - 10);
+        if (width === 320) {
+            // Redraw lines
+            drawLine(10, 10, width - 10, 10);
+            drawLine(width - 10, 10, width - 10, height - 10);
+            drawLine(width - 10, height - 10, 10, height - 10);
+            drawLine(10, height - 10, 10, 10);
+            drawLine(width / 2, 10, width / 2, height - 10);
 
-        // Redraw center circle and other elements
-        drawCircle(width / 2, height / 2, lineColor, height / 6, false);
-        drawRect(10, height / 2 - 40, 30, 80);
-        drawRect(width - 40, height / 2 - 40, 30, 80);
+            // Redraw center circle and other elements
+            drawCircle(width / 2, height / 2, lineColor, 15, false);
+
+            // Left goal box
+            drawRect(5, height / 2 - 7, 5, 14);
+            drawRect(10, height / 2 - 14, 14, 28);
+            drawRect(10, height / 2 - 32, 30, 64);
+            drawArc(30, height / 2, 15, 1.75 * Math.PI, 0.25 * Math.PI);
+
+            // Right goal box
+            drawRect(width - 10, height / 2 - 7, 5, 14);
+            drawRect(width - 24, height / 2 - 14, 14, 28);
+            drawRect(width - 40, height / 2 - 32, 30, 64);
+            drawArc(width - 30, height / 2, 15, 0.75 * Math.PI, 1.25 * Math.PI);
+
+            // Draw conner arc
+            drawArc(10, 10, 10, 2 * Math.PI, 0.5 * Math.PI);
+            drawArc(width - 10, 10, 10, 0.5 * Math.PI, Math.PI);
+            drawArc(width - 10, height - 10, 10, Math.PI, 1.5 * Math.PI);
+            drawArc(10, height - 10, 10, 1.5 * Math.PI, 2 * Math.PI);
+        } else {
+            // Redraw lines
+            drawLine(20, 20, width - 20, 20);
+            drawLine(width - 20, 20, width - 20, height - 20);
+            drawLine(width - 20, height - 20, 20, height - 20);
+            drawLine(20, height - 20, 20, 20);
+            drawLine(width / 2, 20, width / 2, height - 20);
+
+            // Redraw center circle and other elements
+            drawCircle(width / 2, height / 2, lineColor, 45, false);
+
+            // Left goal box
+            drawRect(10, height / 2 - 20, 10, 40);
+            drawRect(20, height / 2 - 40, 30, 80);
+            drawRect(20, 90, 90, 190);
+            drawArc(78, height / 2, 45, 1.75 * Math.PI, 0.25 * Math.PI);
+            drawCircle(74, height / 2, lineColor, 3, true);
+
+            // Right goal box
+            drawRect(width - 20, height / 2 - 20, 10, 40);
+            drawRect(width - 50, height / 2 - 40, 30, 80);
+            drawRect(width - 110, 90, 90, 190);
+            drawArc(width - 78, height / 2, 45, 0.75 * Math.PI, 1.25 * Math.PI);
+            drawCircle(width - 74, height / 2, lineColor, 3, true);
+
+            drawArc(78, height / 2, 45, 1.75 * Math.PI, 0.25 * Math.PI);
+
+            // Draw conner arc
+            drawArc(20, 20, 10, 2 * Math.PI, 0.5 * Math.PI);
+            drawArc(width - 20, 20, 10, 0.5 * Math.PI, Math.PI);
+            drawArc(width - 20, height - 20, 10, Math.PI, 1.5 * Math.PI);
+            drawArc(20, height - 20, 10, 1.5 * Math.PI, 2 * Math.PI);
+        }
     }
 
     // Initial draw
@@ -92,11 +150,14 @@ function drawBall() {
 
 // Function to draw player names
 function drawPlayerName(x, y, name) {
+    const playerName = getShortPlayerName(name);
+    drawRoundedRect(x - playerName.length * 2.5 - 5, y + 13, playerName.length * 5 + 10, 14, 5, '#fff');
+
     ctx.font = "10px Arial";
-    ctx.fillStyle = "#FFFFFF";
+    ctx.fillStyle = "#000";
     ctx.textAlign = "center";
     ctx.textBaseline = "middle";
-    ctx.fillText(getShortPlayerName(name), x, y + 20);
+    ctx.fillText(playerName, x, y + 20);
 }
 
 function getShortPlayerName(fullName) {
@@ -114,7 +175,7 @@ function getPositionColor(position) {
         Goalkeepers: "#ff8811",
         Defenders: "#3ec300",
         Midfielders: "#337ca0",
-        Attackers: "#ff1d15",
+        Attackers: "#ff1d20",
     };
 
     for (const [group, positions] of Object.entries(positionGroups)) {

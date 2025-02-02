@@ -828,8 +828,8 @@ function displayContractAlert($remainingContractDate): string
     if ($remainingContractDate > 5) return '';
 
     // Define the start and end colors in RGB
-    $startColor = [247, 184, 75];   // #f7b84b
-    $endColor = [255, 43, 43];    // #ff2b2b
+    $startColor = [255, 43, 43];    // #ff2b2b
+    $endColor = [247, 184, 75];   // #f7b84b
 
     // Normalize the value between 0 and 5
     $normalizedValue = max(0, min(5, $remainingContractDate)) / 5;

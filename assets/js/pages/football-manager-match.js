@@ -95,21 +95,21 @@ function simulateMatch(teamsInMatch) {
         if (matchTimeInSeconds % realTimeRate === 0) {
             if (totalMatchTime === recordTime) {
                 try {
-                    // $.ajax({
-                    //     url: apiUrl + '/football-manager/match/record',
-                    //     method: 'POST',
-                    //     contentType: 'application/json',
-                    //     data: JSON.stringify({
-                    //         ...payload,
-                    //         players: teamsInMatch[teamsInMatch[0].is_my_team ? 0 : 1].players
-                    //     }),
-                    //     success: function (response) {
-                    //         console.log(response);
-                    //     },
-                    //     error: function (xhr, status, error) {
-                    //         console.error('Error:', error);
-                    //     },
-                    // });
+                    $.ajax({
+                        url: apiUrl + '/football-manager/match/record',
+                        method: 'POST',
+                        contentType: 'application/json',
+                        data: JSON.stringify({
+                            ...payload,
+                            players: teamsInMatch[teamsInMatch[0].is_my_team ? 0 : 1].players
+                        }),
+                        success: function (response) {
+                            console.log(response);
+                        },
+                        error: function (xhr, status, error) {
+                            console.error('Error:', error);
+                        },
+                    });
                 } catch (error) {
                     console.error('Error fetching data:', error);
                 }
@@ -205,7 +205,7 @@ function simulateMatch(teamsInMatch) {
                                         <td class="text-muted"></td>
                                         <td class="text-muted"></td>
                                         <td class="text-muted"></td>
-                                        <th class="text-center px-1" style="width: 52px;">
+                                        <th class="text-center px-1" style="width: 60px;">
                                             <img src="${goalImagePath}" class="img-responsive avatar-xxs" alt="goals" />
                                         </th>
                                         <th class="text-center px-1" style="width: 52px;">
@@ -248,20 +248,20 @@ function simulateMatch(teamsInMatch) {
                 });
                 payload.result = JSON.stringify(match_result);
                 try {
-                    // $.ajax({
-                    //     url: apiUrl + '/football-manager/match/result',
-                    //     method: 'POST',
-                    //     contentType: 'application/json',
-                    //     data: JSON.stringify(payload),
-                    //     success: function (response) {
-                    //         if (response.status === "success") {
-                    //             $('#match-form').removeClass('d-none');
-                    //         }
-                    //     },
-                    //     error: function (xhr, status, error) {
-                    //         console.error('Error:', error);
-                    //     },
-                    // });
+                    $.ajax({
+                        url: apiUrl + '/football-manager/match/result',
+                        method: 'POST',
+                        contentType: 'application/json',
+                        data: JSON.stringify(payload),
+                        success: function (response) {
+                            if (response.status === "success") {
+                                $('#match-form').removeClass('d-none');
+                            }
+                        },
+                        error: function (xhr, status, error) {
+                            console.error('Error:', error);
+                        },
+                    });
                 } catch (error) {
                     console.error('Error fetching data:', error);
                 }
@@ -402,10 +402,10 @@ function performFollowAction(prevAction, prevPlayer, currentTime) {
             const distributeSuccess = Math.random() > 0.5; // Random chance for successful distribution
 
             if (distributeSuccess) {
-                description = "The goalkeeper calmly distributes the ball to a nearby teammate, making a precise pass to maintain possession and restart the play.";
+                description = `${prevPlayer.name} calmly distributes the ball to a nearby teammate, making a precise pass to maintain possession and restart the play.`;
                 prevPlayer.score = Math.min(prevPlayer.score + generatePlayerScore('low'), 10); // Increase score for success
             } else {
-                description = "The goalkeeper attempts to distribute the ball, but it's slightly off-target or intercepted, allowing the opponent to regain possession.";
+                description = `${prevPlayer.name} attempts to distribute the ball, but it's slightly off-target or intercepted, allowing the opponent to regain possession.`;
                 prevPlayer.score = Math.max(prevPlayer.score - generatePlayerScore('low'), 1); // Decrease score for failure
             }
 
@@ -577,10 +577,10 @@ function performFollowAction(prevAction, prevPlayer, currentTime) {
             const regainSuccess = Math.random() > 0.5; // Random chance for successful possession regain
 
             if (regainSuccess) {
-                description = "The team successfully regains possession and looks to build an attack, shifting momentum in their favor.";
+                description = `${prevPlayer.name} successfully regains possession and looks to build an attack, shifting momentum in their favor.`;
                 prevPlayer.score = Math.min(prevPlayer.score + generatePlayerScore('low'), 10); // Increase score for success
             } else {
-                description = "The team fails to regain possession, allowing the opposition to maintain control of the ball.";
+                description = `${prevPlayer.name} fails to regain possession, allowing the opposition to maintain control of the ball.`;
                 prevPlayer.score = Math.max(prevPlayer.score - generatePlayerScore('low'), 1); // Decrease score for failure
             }
 
@@ -592,10 +592,10 @@ function performFollowAction(prevAction, prevPlayer, currentTime) {
             const blockCrossSuccess = Math.random() > 0.5; // Random chance for successful cross block
 
             if (blockCrossSuccess) {
-                description = "The defender steps in to block the cross, denying a scoring chance and clearing the danger.";
+                description = `${prevPlayer.name} steps in to block the cross, denying a scoring chance and clearing the danger.`;
                 prevPlayer.score = Math.min(prevPlayer.score + generatePlayerScore('low'), 10); // Increase score for success
             } else {
-                description = "The defender tries to block the cross but is too late, allowing the ball to reach its target.";
+                description = `${prevPlayer.name} tries to block the cross but is too late, allowing the ball to reach its target.`;
                 prevPlayer.score = Math.max(prevPlayer.score - generatePlayerScore('low'), 1); // Decrease score for failure
             }
 
@@ -652,10 +652,10 @@ function performFollowAction(prevAction, prevPlayer, currentTime) {
             const clearanceSuccess = Math.random() > 0.5; // Random chance for successful clearance
 
             if (clearanceSuccess) {
-                description = "The defender clears the ball to relieve pressure on their team, maintaining defensive stability.";
+                description = `${prevPlayer.name} clears the ball to relieve pressure on their team, maintaining defensive stability.`;
                 prevPlayer.score = Math.min(prevPlayer.score + generatePlayerScore('low'), 10); // Increase score for success
             } else {
-                description = "The defender clears the ball poorly, giving possession back to the opponent.";
+                description = `${prevPlayer.name} clears the ball poorly, giving possession back to the opponent.`;
                 prevPlayer.score = Math.max(prevPlayer.score - generatePlayerScore('low'), 1); // Decrease score for failure
             }
 
@@ -667,10 +667,10 @@ function performFollowAction(prevAction, prevPlayer, currentTime) {
             const counterAttackSuccess = Math.random() > 0.5; // Random chance for successful counter-attack
 
             if (counterAttackSuccess) {
-                description = "The team launches a rapid counter-attack, exploiting the opponent's disorganization and quickly moving forward.";
+                description = `${prevPlayer.name} launches a rapid counter-attack, exploiting the opponent's disorganization and quickly moving forward.`;
                 prevPlayer.score = Math.min(prevPlayer.score + generatePlayerScore('low'), 10); // Increase score for success
             } else {
-                description = "The team tries to counter-attack but loses possession due to a poorly timed pass or an interception.";
+                description = `${prevPlayer.name} tries to counter-attack but loses possession due to a poorly timed pass or an interception.`;
                 prevPlayer.score = Math.max(prevPlayer.score - generatePlayerScore('low'), 1); // Decrease score for failure
             }
 
