@@ -58,15 +58,6 @@ class AuthenticationController
         exit;
     }
 
-    function createSystemNotification($title, $type, $message)
-    {
-        $sql = "INSERT INTO system_notifications (title, type, message) VALUES (:title, :type, :message)";
-        $stmt = $this->pdo->prepare($sql);
-        $stmt->execute([':title' => $title, ':type' => $type, ':message' => $message]);
-
-        return $this->pdo->lastInsertId();
-    }
-
     private function validateUserData($email, $password, $username = null, $confirmPassword = null, $isRegister = false)
     {
         $errors = [];
@@ -124,6 +115,15 @@ class AuthenticationController
         return $errors;
     }
 
+    function createSystemNotification($title, $type, $message)
+    {
+        $sql = "INSERT INTO system_notifications (title, type, message) VALUES (:title, :type, :message)";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute([':title' => $title, ':type' => $type, ':message' => $message]);
+
+        return $this->pdo->lastInsertId();
+    }
+
     public function login()
     {
         $email = $_POST['email'] ?? '';
@@ -177,7 +177,7 @@ class AuthenticationController
         $tokenData = $this->getTokenData($token);
         if (isset($tokenData['user_id'])) {
             $userData = $this->userController->getUserById($tokenData['user_id']);
-            $userData['full_name'] = $userData['first_name'] . ' ' . $userData['last_name'];;
+            $userData['full_name'] = $userData['first_name'] . ' ' . $userData['last_name'];
             return $userData;
         }
         return null;

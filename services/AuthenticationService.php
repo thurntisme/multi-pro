@@ -13,7 +13,7 @@ class AuthenticationService
     {
         // Validate input
         if (empty($firstName) || empty($lastName) || empty($username) || empty($email) || empty($password)) {
-            throw new InvalidArgumentException("All fields are required.");
+            return false; // Return false for missing required fields
         }
 
         try {
@@ -32,10 +32,11 @@ class AuthenticationService
                 ':password' => password_hash($password, PASSWORD_DEFAULT)
             ]);
 
-            // Get the newly inserted user ID
+            // Check if user creation succeeded
             $userId = $this->pdo->lastInsertId();
             if (!$userId) {
-                throw new Exception("Failed to create user.");
+                $this->pdo->rollBack();
+                return false;
             }
 
             // Create a notification for the administrator
@@ -52,13 +53,12 @@ class AuthenticationService
 
             // Commit transaction
             $this->pdo->commit();
+            return true; // Return true on success
 
-            // Return notification ID
-            return $this->pdo->lastInsertId();
         } catch (Exception $e) {
             // Rollback transaction on error
             $this->pdo->rollBack();
-            throw new Exception("Error creating user: " . $e->getMessage());
+            return false; // Return false on error
         }
     }
 
