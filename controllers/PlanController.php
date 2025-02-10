@@ -183,7 +183,7 @@ class PlanController
         if ($status !== '') {
             $stmt->bindParam(':status', $status, PDO::PARAM_STR);
         }
-        if ($startDate && $endDate) {
+        if (isset($startDate) && isset($endDate)) {
             $stmt->bindParam(':start_date', $startDate);
             $stmt->bindParam(':end_date', $endDate);
         }
