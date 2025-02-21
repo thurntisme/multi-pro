@@ -5,19 +5,27 @@ $modify_type = getLastSegmentFromUrl();
 require_once 'controllers/ProjectController.php';
 $projectController = new ProjectController();
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    if ($modify_type === "create") {
-        $projectController->createProject();
+if (!empty($modify_type)) {
+    $pageTitle .= " " . $modify_type;
+    if ($modify_type === 'edit') {
+        if (isset($_GET['id'])) {
+            $post_id = $_GET['id'];
+            $postData = $projectController->viewProject($post_id);
+        }
     }
-    if ($modify_type === "edit") {
-        $projectController->updateProject();
-    }
-};
-$projectData = '';
-if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-    if (isset($_GET['post_id'])) {
-        $post_id = $_GET['post_id'];
-        $projectData = $projectController->viewProject($post_id);
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        if (isset($_POST['action_name'])) {
+            if ($_POST['action_name'] === 'delete_record') {
+                $projectController->deleteProject();
+            }
+        } else {
+            if ($modify_type === "new") {
+                $projectController->createProject();
+            }
+            if ($modify_type === "edit") {
+                $projectController->updateProject();
+            }
+        }
     }
 }
 
@@ -28,25 +36,16 @@ $additionCss = ob_get_clean();
 
 ob_start();
 
-if (isset($_SESSION['message'])) {
-    $messageType = $_SESSION['message_type'] ?? 'info';
-    echo '<div class="alert alert-' . $_SESSION['message_type'] . ' alert-dismissible fade show" role="alert">
-                <i class="ri-' . ($_SESSION['message_type'] === "success" ? "check-double" : "error-warning") . '-line me-3 align-middle fs-16 text-' . $_SESSION['message_type'] . '"></i><strong>' . $_SESSION['message'] . '</strong>
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>';
 
-    unset($_SESSION['message']);
-    unset($_SESSION['message_type']);
-}
-$action = $modify_type === "create" ? $modify_type : ($modify_type . "?post_id=" . $_GET['post_id']);
-echo '<form method="post" action="' . home_url("projects/" . $action) . '">
+includeFileWithVariables('components/single-button-group.php', array("slug" => "project", "post_id" => $postData['id'] ?? '', 'modify_type' => $modify_type));
+echo '<form method="post" action="' . $_SERVER['REQUEST_URI'] . '">
         <div class="row">
             <div class="col-lg-8">
                 <div class="card">
                     <div class="card-body">
                         <div class="mb-3">
                             <label class="form-label" for="project-title-input">Project Title</label>
-                            <input type="text" class="form-control" name="title" id="project-title-input" placeholder="Enter project title" value="' . ($projectData['title'] ?? "") . '">
+                            <input type="text" class="form-control" name="title" id="project-title-input" placeholder="Enter project title" value="' . ($postData['title'] ?? "") . '">
                         </div>
 
                         <div class="mb-3">
@@ -57,7 +56,7 @@ echo '<form method="post" action="' . home_url("projects/" . $action) . '">
                         <div class="mb-3">
                             <label class="form-label">Project Description</label>
                             <div id="ckeditor-classic" name="description">
-                                ' . ($projectData['description'] ?? "") . '
+                                ' . ($postData['description'] ?? "") . '
                             </div>
                         </div>
 
@@ -66,8 +65,8 @@ echo '<form method="post" action="' . home_url("projects/" . $action) . '">
 $typeOptions = '';
 foreach (DEFAULT_PROJECT_TYPES as $type) {
     $selected = 'owner' === $type[0] ? 'selected' : '';
-    if (isset($projectData['type'])) {
-        $selected = $projectData['type'] === $type[0] ? 'selected' : '';
+    if (isset($postData['type'])) {
+        $selected = $postData['type'] === $type[0] ? 'selected' : '';
     }
     $typeOptions .= '<option value="' . htmlspecialchars($type[0]) . '" ' . $selected . '>' .
         htmlspecialchars($type[1]) .
@@ -82,13 +81,15 @@ echo '<div class="mb-3 mb-lg-0">
 echo '</div>';
 if ($modify_type == 'edit') {
     echo '<div class="col-lg-3">';
-    echo '<input type="hidden" name="project_id" value="' . $_GET['post_id'] . '" />';
+    if (!empty($post_id)) {
+        echo '<input type="hidden" name="project_id" value="' . $post_id . '">';
+    }
 
     $statusOptions = '';
     foreach (DEFAULT_PROJECT_STATUS as $status) {
         $selected = 'not_started' === $status[0] ? 'selected' : '';
-        if (isset($projectData['status'])) {
-            $selected = $projectData['status'] === $status[0] ? 'selected' : '';
+        if (isset($postData['status'])) {
+            $selected = $postData['status'] === $status[0] ? 'selected' : '';
         }
         $statusOptions .= '<option value="' . htmlspecialchars($status[0]) . '" ' . $selected . '>' .
             htmlspecialchars($status[1]) .
@@ -105,13 +106,13 @@ if ($modify_type == 'edit') {
 echo '<div class="col-lg-3">
                                 <div>
                                     <label for="datepicker-start-date-input" class="form-label">Start Date</label>
-                                    <input type="text" name="start_date" class="form-control" id="datepicker-start-date-input" placeholder="Enter Start Date" data-provider="flatpickr" value="' . ($projectData['start_date'] ?? "") . '">
+                                    <input type="text" name="start_date" class="form-control" id="datepicker-start-date-input" placeholder="Enter Start Date" data-provider="flatpickr" value="' . ($postData['start_date'] ?? "") . '">
                                 </div>
                             </div>
                             <div class="col-lg-3">
                                 <div>
                                     <label for="datepicker-end-date-input" class="form-label">End Date</label>
-                                    <input type="text" name="end_date" class="form-control" id="datepicker-end-date-input" placeholder="Enter End Date" data-provider="flatpickr" value="' . ($projectData['end_date'] ?? "") . '">
+                                    <input type="text" name="end_date" class="form-control" id="datepicker-end-date-input" placeholder="Enter End Date" data-provider="flatpickr" value="' . ($postData['end_date'] ?? "") . '">
                                 </div>
                             </div>
                         </div>
@@ -126,20 +127,20 @@ echo '<div class="col-lg-3">
                     <div class="card-body">
                         <div class="mb-3">
                             <label class="form-label" for="project-title-input">Dev Url</label>
-                            <input type="text" class="form-control" name="dev_url" placeholder="Enter development url" value="' . ($projectData['dev_url'] ?? "") . '">
+                            <input type="text" class="form-control" name="dev_url" placeholder="Enter development url" value="' . ($postData['dev_url'] ?? "") . '">
                         </div>
                         <div class="mb-3">
                             <label class="form-label" for="project-title-input">Staging Url</label>
-                            <input type="text" class="form-control" name="staging_url" placeholder="Enter staging url" value="' . ($projectData['staging_url'] ?? "") . '">
+                            <input type="text" class="form-control" name="staging_url" placeholder="Enter staging url" value="' . ($postData['staging_url'] ?? "") . '">
                         </div>
                         <div class="mb-3">
                             <label class="form-label" for="project-title-input">Production Url</label>
-                            <input type="text" class="form-control" name="production_url" placeholder="Enter production url" value="' . ($projectData['production_url'] ?? "") . '">
+                            <input type="text" class="form-control" name="production_url" placeholder="Enter production url" value="' . ($postData['production_url'] ?? "") . '">
                         </div>
                         <hr/>
                         <div class="mb-3">
                             <label class="form-label" for="project-title-input">Source Url</label>
-                            <input type="text" class="form-control" name="source_url" placeholder="Enter source url" value="' . ($projectData['source_url'] ?? "") . '">
+                            <input type="text" class="form-control" name="source_url" placeholder="Enter source url" value="' . ($postData['source_url'] ?? "") . '">
                         </div>
                     </div>
                 </div>
@@ -192,7 +193,7 @@ echo '<div class="col-lg-3">
                 </div>
                 <!-- end card -->
                 <div class="text-center mb-4">
-                    <a href="' . home_url("projects/list") . '" class="btn btn-light w-sm">Back</a>
+                    <a href="' . home_url("app/projects/list") . '" class="btn btn-light w-sm">Back</a>
                     <!--<button type="submit" class="btn btn-secondary w-sm">Draft</button>-->
                     <button type="submit" class="btn btn-success w-sm">' . ($modify_type === "create" ? "Create" : "Save") . '</button>
                 </div>
