@@ -1,132 +1,124 @@
 <?php
-$pageTitle = "Website";
+global $priorities, $status;
+require_once 'controllers/WebsiteController.php';
 
-$commonController = new CommonController();
+$pageTitle = "Websites";
 
-$list = $commonController->paginateResources(DEFAULT_NETWORK_WEBSITES);
+$websiteController = new WebsiteController();
+$list = $websiteController->listWebsites();
 
-$selectedTag = $_GET['tag'] ?? '';
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    if (isset($_POST['action_name'])) {
+        if ($_POST['action_name'] === 'delete_record' && isset($_POST['post_id'])) {
+            $websiteController->deleteWebsite();
+        }
+    }
+}
 
 ob_start();
 ?>
 
-<div class="row">
-    <div class="col-lg-12">
-        <div class="card">
-            <div class="card-header">
-                <div class="d-flex align-items-center flex-wrap gap-2">
-                    <div class="flex-grow-1">
-                        <button class="btn btn-info add-btn" data-bs-toggle="modal" data-bs-target="#showModal"><i
-                                class="ri-add-fill me-1 align-bottom"></i> Add Company
-                        </button>
-                    </div>
-                    <div class="flex-shrink-0">
-                        <div class="hstack text-nowrap gap-2">
-                            <button class="btn btn-soft-danger" id="remove-actions" onClick="deleteMultiple()"><i
-                                    class="ri-delete-bin-2-line"></i></button>
-                            <button class="btn btn-danger"><i class="ri-filter-2-line me-1 align-bottom"></i>
-                                Filters
-                            </button>
-                            <button type="button" id="dropdownMenuLink1" data-bs-toggle="dropdown"
-                                aria-expanded="false" class="btn btn-soft-info"><i class="ri-more-2-fill"></i>
-                            </button>
-                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink1">
-                                <li><a class="dropdown-item" href="#">All</a></li>
-                                <li><a class="dropdown-item" href="#">Last Week</a></li>
-                                <li><a class="dropdown-item" href="#">Last Month</a></li>
-                                <li><a class="dropdown-item" href="#">Last Year</a></li>
-                            </ul>
-                        </div>
-                    </div>
+<?php
+include_once DIR . '/components/alert.php';
+?>
+
+<div class="card" id="tasksList">
+    <div class="card-header border-0">
+        <div class="d-flex align-items-center">
+            <h5 class="card-title mb-0 flex-grow-1">All Websites</h5>
+            <div class="flex-shrink-0">
+                <div class="d-flex flex-wrap gap-2">
+                    <a class="btn btn-soft-success add-btn" href="<?= home_url('app/website/new') ?>"><i
+                            class="ri-add-line align-bottom me-1"></i> Create Website</a>
                 </div>
             </div>
         </div>
     </div>
-    <!--end col-->
-    <div class="col-lg-12">
-        <div class="card" id="companyList">
-            <div class="card-header">
-                <form method="get" action="<?= home_url('website') ?>">
-                    <div class="row g-2">
-                        <div class="col-md-3">
-                            <div class="search-box">
-                                <input type="text" class="form-control search" name="s"
-                                    placeholder="Search for webiste..." value="<?= $_GET['s'] ?? '' ?>" />
-                                <i class="ri-search-line search-icon"></i>
-                            </div>
-                        </div>
-                        <div class="col-md-3 ms-auto">
-                            <div class="d-flex align-items-center gap-2">
-                                <span class="text-muted">Sort by: </span>
-                                <div class="flex-grow-1">
-                                    <select class="form-control mb-0" data-choices data-choices-search-false
-                                        name="tag"
-                                        onchange="this.form.submit()">
-                                        <option value="">-- Select Tag --</option>
-                                        <?php foreach ($list['tags'] as $tag): ?>
-                                            <option value="<?= htmlspecialchars($tag) ?>" <?= $tag === $selectedTag ? 'selected' : '' ?>>
-                                                <?= htmlspecialchars($tag) ?>
-                                            </option>
-                                        <?php endforeach; ?>
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-                        <a class="btn btn-soft-success w-auto ms-2" href="<?= home_url("website") ?>"><i
-                                class="ri-refresh-line me-1 align-bottom"></i>Reset</a>
+    <div class="card-body border border-dashed border-end-0 border-start-0">
+        <form method="get" action="<?= home_url('app/website') ?>">
+            <div class="row g-3">
+                <div class="col-xxl-4 col-sm-12">
+                    <div class="search-box">
+                        <input type="text" name="s" class="form-control search bg-light border-light"
+                            placeholder="Search for websites or something..." value="<?= $_GET['s'] ?? '' ?>">
+                        <i class="ri-search-line search-icon"></i>
                     </div>
-                </form>
-            </div>
-            <div class="card-body">
-                <div>
-                    <div class="table-responsive table-card mb-3">
-                        <table class="table align-middle table-nowrap mb-0" id="customerTable">
-                            <thead class="table-light">
-                                <tr>
-                                    <th class="sort" scope="col">Title</th>
-                                    <th class="sort" scope="col">Description</th>
-                                    <th class="sort" scope="col">Tags</th>
-                                </tr>
-                            </thead>
-                            <tbody class="list form-check-all">
-                                <?php if (count($list['resources']) > 0) {
-                                    foreach ($list['resources'] as $item) { ?>
-                                        <tr>
-                                            <td>
-                                                <a target="_blank"
-                                                    rel="noopener noreferrer"
-                                                    href="<?= $item['link'] ?>"><?= $item['name'] ?></a>
-                                            </td>
-                                            <td><?= truncateString($item['description'], 50) ?></td>
-                                            <td><?= implode(", ", $item['tags']) ?></td>
-                                        </tr>
-                                <?php }
-                                } ?>
-
-                            </tbody>
-                        </table>
-                        <div class="noresult" style="display: none">
-                            <div class="text-center">
-                                <lord-icon src="https://cdn.lordicon.com/msoeawqm.json" trigger="loop"
-                                    colors="primary:#121331,secondary:#08a88a"
-                                    style="width:75px;height:75px"></lord-icon>
-                                <h5 class="mt-2">Sorry! No Result Found</h5>
-                                <p class="text-muted mb-0">We've searched more than 150+ companies We did not find
-                                    any companies for you search.</p>
-                            </div>
-                        </div>
-                    </div>
-                    <?php
-                    includeFileWithVariables('components/pagination.php', array("count" => $list['total_items']));
-                    ?>
                 </div>
-
+                <!--end col-->
+                <div class="col-xxl-2 col-sm-4 d-flex">
+                    <button type="submit" class="btn btn-primary"><i
+                            class="ri-equalizer-fill me-1 align-bottom"></i>
+                        Filters
+                    </button>
+                    <a href="<?= home_url("app/website") ?>" class="btn btn-danger ms-1"><i
+                            class="ri-delete-bin-2-fill me-1 align-bottom"></i>Reset</a>
+                </div>
+                <!--end col-->
             </div>
-        </div>
-        <!--end card-->
+            <!--end row-->
+        </form>
     </div>
-    <!--end col-->
+    <!--end card-body-->
+    <div class="card-body">
+        <div class="table-responsive table-card mb-4">
+            <table class="table align-middle table-nowrap mb-0" id="websitesTable">
+                <thead class="table-light text-muted">
+                    <tr>
+                        <th>Title</th>
+                        <th>Url</th>
+                        <th>Content</th>
+                        <th class="text-center">Tags</th>
+                    </tr>
+                </thead>
+                <tbody class="list form-check-all">
+                    <?php if (count($list['list']) > 0) {
+                        foreach ($list['list'] as $item) { ?>
+                            <tr>
+                                <td>
+                                    <div class="d-flex align-items-baseline">
+                                        <a class="text-black"
+                                            href="<?= home_url('app/website/detail?id=' . $item['id']) ?>"><?= $item['title'] ?></a>
+                                        <ul class="list-inline tasks-list-menu mb-0 ms-3">
+                                            <li class="list-inline-item m-0"><a
+                                                    class="edit-item-btn btn btn-link btn-sm"
+                                                    href="<?= home_url('app/website/detail?id=' . $item['id']) ?>"><i
+                                                        class="ri-eye-fill align-bottom text-muted"></i></a>
+                                            </li>
+                                            <li class="list-inline-item m-0"><a
+                                                    class="edit-item-btn btn btn-link btn-sm"
+                                                    href="<?= home_url('app/website/edit?id=' . $item['id']) ?>"><i
+                                                        class="ri-pencil-fill align-bottom text-muted"></i></a>
+                                            </li>
+                                            <li class="list-inline-item m-0">
+                                                <form method="POST" action="<?= $_SERVER['REQUEST_URI'] ?>">
+                                                    <input type="hidden" name="action_name" value="delete_record">
+                                                    <input type="hidden" name="post_id" value="<?= $item['id'] ?>">
+                                                    <button type="submit" class="btn btn-link btn-sm btn-delete-record">
+                                                        <i
+                                                            class="ri-delete-bin-5-line align-bottom text-muted"></i>
+                                                    </button>
+                                                </form>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </td>
+                                <td><a href="<?= $item['url'] ?>" target="_blank" rel="noopener noreferrer"><?= $item['url'] ?></a></td>
+                                <td><?= truncateString($item['content'], 50) ?></td>
+                                <td class="text-center"><?= $item['tags'] ?></td>
+                            </tr>
+                    <?php }
+                    } ?>
+                </tbody>
+            </table>
+            <!--end table-->
+        </div>
+        <?php
+        includeFileWithVariables('components/pagination.php', array("count" => $list['count']));
+        ?>
+    </div>
+    <!--end card-body-->
 </div>
+
 
 <?php
 $pageContent = ob_get_clean();
