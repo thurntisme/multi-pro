@@ -435,8 +435,8 @@ function generateRandomPlayers($type = '', $playerData = []): array
     }
 
     if ($type === 'on-demand') {
-        $minAttr = 60;
-        $maxAttr = 90;
+        $minAttr = 70;
+        $maxAttr = 110;
     }
 
     // Randomly select or generate player data

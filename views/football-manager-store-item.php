@@ -157,7 +157,7 @@ include_once DIR . '/components/alert.php';
                                         <label for="player_height" class="form-label">Height (cm)<span
                                                     class="text-danger">*</span></label>
                                         <input type="number" class="form-control" name="player_height"
-                                               id="player_height" min="165" max="195" placeholder="Height (cm)"
+                                               id="player_height" min="165" max="200" placeholder="Height (cm)"
                                                required/>
                                     </div>
                                 </div>
