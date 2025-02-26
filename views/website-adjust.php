@@ -53,7 +53,7 @@ ob_start();
 
                     <div class="mb-3">
                         <label class="form-label" for="content">Content</label>
-                        <textarea name="content" class="form-control"><?= $postData['content'] ?? '' ?></textarea>
+                        <textarea name="content" class="form-control" rows="6"><?= $postData['content'] ?? '' ?></textarea>
                     </div>
 
                     <div class="mb-3">

@@ -128,6 +128,7 @@ class WebsiteController
 
         // Search keyword
         $keyword = isset($_GET['s']) ? $_GET['s'] : '';
+        $tag = isset($_GET['tag']) ? $_GET['tag'] : '';
 
         $selectSql = $queryType === "result" ? "SELECT * FROM websites" : "SELECT COUNT(*) FROM websites";
         $sql = $selectSql . " WHERE user_id = $this->user_id ";
@@ -135,6 +136,11 @@ class WebsiteController
         if ($keyword !== '') {
             $keyword = '%' . $keyword . '%'; // Prepare for LIKE search
             $sql .= " AND (title LIKE :keyword OR tags LIKE :keyword OR content LIKE :keyword)";
+        }
+
+        if ($tag != '') {
+            $tag = '%' . $tag . '%';
+            $sql .= " AND (tags LIKE :tags)";
         }
 
         // Sorting parameters (optional)
@@ -153,6 +159,9 @@ class WebsiteController
         // Bind parameters
         if ($keyword != '') {
             $stmt->bindParam(':keyword', $keyword, PDO::PARAM_STR);
+        }
+        if ($tag != '') {
+            $stmt->bindParam(':tags', $tag, PDO::PARAM_STR);
         }
 
         // Execute the query

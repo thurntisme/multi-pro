@@ -53,6 +53,17 @@ include_once DIR . '/components/alert.php';
                     <a href="<?= home_url("app/website") ?>" class="btn btn-danger ms-1"><i
                             class="ri-delete-bin-2-fill me-1 align-bottom"></i>Reset</a>
                 </div>
+                <div class="col d-flex justify-content-center">
+                    <div class="button-group">
+                        <?php 
+                            $tags = ['search', 'ai chat', 'social'];
+                            foreach ($tags as $tag) {
+                                $active = isset($_GET['tag']) && $tag === $_GET['tag'] ? 'active' : '';
+                                echo '<a href="'.home_url('/app/website?tag=').$tag.'" class="btn btn-outline-info mx-1 '.$active.'">'.$tag.'</a>';
+                            }
+                        ?>
+                    </div>
+                </div>
                 <!--end col-->
             </div>
             <!--end row-->
@@ -103,7 +114,7 @@ include_once DIR . '/components/alert.php';
                                     </div>
                                 </td>
                                 <td><a href="<?= $item['url'] ?>" target="_blank" rel="noopener noreferrer"><?= $item['url'] ?></a></td>
-                                <td><?= truncateString($item['content'], 50) ?></td>
+                                <td><?= truncateString($item['content'], 100) ?></td>
                                 <td class="text-center"><?= $item['tags'] ?></td>
                             </tr>
                     <?php }
