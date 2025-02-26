@@ -5,8 +5,9 @@ return function (PDO $pdo) {
     $table_name = 'daily_checklist';
     $attributes = [
         'id INTEGER PRIMARY KEY AUTOINCREMENT',
-        'task_id INTEGER NOT NULL',
-        "status TEXT DEFAULT 'completed'",
+        'title TEXT NOT NULL',
+        'content TEXT',
+        "status TEXT DEFAULT 'todo'",
         'user_id INTEGER NOT NULL',
         'created_at DATETIME DEFAULT CURRENT_TIMESTAMP',
         'updated_at DATETIME DEFAULT CURRENT_TIMESTAMP',
