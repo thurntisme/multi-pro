@@ -35,52 +35,52 @@ if (!empty($modify_type)) {
 
 ob_start();
 ?>
-<div class="row">
-    <div class="col-xl-8 col-md-10 offset-xl-2 offset-md-1">
-        <?php
-        includeFileWithVariables('components/single-button-group.php', array("slug" => "note", "post_id" => $postData['id'], 'modify_type' => $modify_type));
-        ?>
-        <form method="POST" action="<?= $_SERVER['REQUEST_URI'] ?>" id="note">
-            <div class="card">
-                <div class="card-body">
-                    <div class="mb-3">
-                        <label class="form-label" for="note-title-input">Title</label>
-                        <input type="text" class="form-control" id="note-title-input" name="title"
-                            placeholder="Enter title" value="<?= $postData['title'] ?? '' ?>">
-                        <?php if (!empty($post_id)) { ?>
-                            <input type="hidden" name="note_id" value="<?= $post_id ?>">
-                        <?php } ?>
-                    </div>
+    <div class="row">
+        <div class="col-xl-8 col-md-10 offset-xl-2 offset-md-1">
+            <?php
+            includeFileWithVariables('components/single-button-group.php', array("slug" => "note", "post_id" => $postData['id'] ?? '', 'modify_type' => $modify_type));
+            ?>
+            <form method="POST" action="<?= $_SERVER['REQUEST_URI'] ?>" id="note">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <label class="form-label" for="note-title-input">Title</label>
+                            <input type="text" class="form-control" id="note-title-input" name="title"
+                                   placeholder="Enter title" value="<?= $postData['title'] ?? '' ?>">
+                            <?php if (!empty($post_id)) { ?>
+                                <input type="hidden" name="note_id" value="<?= $post_id ?>">
+                            <?php } ?>
+                        </div>
 
-                    <div class="mb-3">
-                        <label class="form-label">Content</label>
-                        <textarea name="content" class="ckeditor-classic">
+                        <div class="mb-3">
+                            <label class="form-label">Content</label>
+                            <textarea name="content" class="ckeditor-classic">
                             <?= $postData['content'] ?? '' ?>
                         </textarea>
-                    </div>
+                        </div>
 
-                    <div class="mb-3">
-                        <label for="choices-text-input" class="form-label">Tags</label>
-                        <input class="form-control" id="choices-text-input" data-choices data-choices-removeItem
-                            data-choices-limit="Required Limit" placeholder="Enter Tags" type="text"
-                            name="tags"
-                            value="<?= $postData['tags'] ?? '' ?>" />
+                        <div class="mb-3">
+                            <label for="choices-text-input" class="form-label">Tags</label>
+                            <input class="form-control" id="choices-text-input" data-choices data-choices-removeItem
+                                   data-choices-limit="Required Limit" placeholder="Enter Tags" type="text"
+                                   name="tags"
+                                   value="<?= $postData['tags'] ?? '' ?>"/>
+                        </div>
                     </div>
+                    <!-- end card body -->
                 </div>
-                <!-- end card body -->
-            </div>
-            <!-- end card -->
+                <!-- end card -->
 
-            <!-- end card -->
-            <div class="text-center mb-4">
-                <a href="<?= home_url('note') ?>" class="btn btn-light w-sm">Back</a>
-                <button type="submit"
-                    class="btn btn-success w-sm"><?= $modify_type === "new" ? "Create" : "Save" ?></button>
-            </div>
-        </form>
+                <!-- end card -->
+                <div class="text-center mb-4">
+                    <a href="<?= home_url('note') ?>" class="btn btn-light w-sm">Back</a>
+                    <button type="submit"
+                            class="btn btn-success w-sm"><?= $modify_type === "new" ? "Create" : "Save" ?></button>
+                </div>
+            </form>
+        </div>
+        <!-- end col -->
     </div>
-    <!-- end col -->
-</div>
 
 <?php
 include_once DIR . '/components/modal-delete.php';

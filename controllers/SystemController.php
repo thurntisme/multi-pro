@@ -41,6 +41,11 @@ class SystemController
         return $timezone['option_value'] ?? 'UTC';
     }
 
+    public function checkPreviousDateTime($dateTime)
+    {
+        return $this->getDateTime($dateTime)->format('Y-m-d H:i:s') < $this->getCurrentDateTimeStr();
+    }
+
     public function getCurrentDateTimeStr($format = 'Y-m-d H:i:s')
     {
         $timezone = $this->getTimezone();
@@ -48,15 +53,25 @@ class SystemController
         return $dateTime->format($format);
     }
 
-    public function checkPreviousDateTime($dateTime)
+    public function checkDateRelation($dateTime)
     {
-        return $this->getDateTime($dateTime) < $this->getCurrentDateTimeStr();
+        $date = $this->getDateTime($dateTime)->format('Y-m-d');
+        $today = $this->getCurrentDateTimeStr();
+        $tomorrow = date('Y-m-d', strtotime('+1 day', strtotime($today)));
+
+        if ($date === $today) {
+            return 'today';
+        } elseif ($date === $tomorrow) {
+            return 'tomorrow';
+        } else {
+            return $dateTime;
+        }
     }
 
     public function isBeforeCurrentUTCDateTime($dateTime)
     {
-        $providedDateTime = new \DateTime($dateTime, new \DateTimeZone('UTC'));
-        $currentDateTime = new \DateTime('now', new \DateTimeZone('UTC'));
+        $providedDateTime = new DateTime($dateTime, new DateTimeZone('UTC'));
+        $currentDateTime = new DateTime('now', new DateTimeZone('UTC'));
         return $providedDateTime < $currentDateTime;
     }
 
