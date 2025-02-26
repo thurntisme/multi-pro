@@ -22,7 +22,6 @@ function getPageData($slug, $role): array
         'finance/expenses' => ['url' => DIR . '/views/expenses.php', 'title' => 'Expenses', 'role' => 0],
         'version' => ['url' => DIR . '/views/version.php', 'title' => 'Version', 'role' => 0],
         'daily-checklist' => ['url' => DIR . '/views/daily-checklist.php', 'title' => 'Daily Checklist', 'role' => 0],
-        'bookmark' => ['url' => DIR . '/views/bookmark.php', 'title' => 'Bookmark', 'role' => 0],
         'subscription' => ['url' => DIR . '/views/subscription.php', 'title' => 'Subscription', 'role' => 0],
         'subscription/new' => ['url' => DIR . '/views/subscription-adjust.php', 'title' => 'New Subscription', 'role' => 0],
         'subscription/edit' => ['url' => DIR . '/views/subscription-adjust.php', 'title' => 'Edit Subscription', 'role' => 0],

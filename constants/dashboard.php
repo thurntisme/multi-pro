@@ -102,8 +102,8 @@ $quickApps = array(
         'slug' => 'calendar',
     ),
     array(
-        'title' => 'Bookmark',
-        'slug' => 'bookmark',
+        'title' => 'Website',
+        'slug' => 'website',
     ),
     array(
         'title' => 'Book',

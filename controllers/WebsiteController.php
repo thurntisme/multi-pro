@@ -140,6 +140,7 @@ class WebsiteController
         // Sorting parameters (optional)
         $sortColumn = $_GET['sort'] ?? 'updated_at';
         $sortOrder = isset($_GET['order']) && in_array(strtoupper($_GET['order']), ['ASC', 'DESC']) ? strtoupper($_GET['order']) : 'DESC'; // Default to DESC
+        $sql .= " ORDER BY $sortColumn $sortOrder";
 
         if ($queryType === "result") {
             // Add pagination (LIMIT and OFFSET)
