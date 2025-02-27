@@ -232,6 +232,11 @@ $menu_items = [
                 'name' => 'Lottery Simulator',
                 'icon' => 'ri-numbers-line',
                 'slug' => 'lottery-simulator'
+            ],
+            [
+                'name' => 'Monopoly',
+                'icon' => 'ri-numbers-line',
+                'slug' => 'monopoly'
             ]
         ]
     ],

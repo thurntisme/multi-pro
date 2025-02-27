@@ -117,6 +117,7 @@ function getPageData($slug, $role): array
         'slot-machine' => ['url' => DIR . '/views/slot-machine.php', 'title' => 'Slot Machine', 'role' => 3],
         'flip-memory' => ['url' => DIR . '/views/flip-memory.php', 'title' => 'Flip Memory', 'role' => 3],
         'lottery-simulator' => ['url' => DIR . '/views/lottery-simulator.php', 'title' => 'Lottery Simulator', 'role' => 3],
+        'monopoly' => ['url' => DIR . '/views/monopoly.php', 'title' => 'Monopoly', 'role' => 3],
         // redirectUser
         'dashboard' => ['url' => DIR . '/functions/redirectUser.php', 'title' => 'Redirect', 'role' => 3],
         'login' => ['url' => DIR . '/functions/redirectUser.php', 'title' => 'Redirect', 'role' => 3],
