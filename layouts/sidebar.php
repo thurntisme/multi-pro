@@ -212,6 +212,11 @@ $menu_items = [
                 'name' => 'Football Manager',
                 'icon' => 'ri-football-line',
                 'slug' => 'football-manager'
+            ],
+            [
+                'name' => 'Number Guessing',
+                'icon' => 'ri-numbers-line',
+                'slug' => 'number-guessing'
             ]
         ]
     ],
