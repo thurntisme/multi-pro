@@ -159,7 +159,7 @@ include_once DIR . "/components/alert.php";
                                     if ($row['status'] == 'done') {
                                         $complete_count += 1;
                                     }
-                                    $is_previous_date = $systemController->checkPreviousDateTime($row['due_date']);
+                                    $is_previous_date = $systemController->checkPreviousDateTime($row['due_date'] . ' 23:59:59');
                                     ?>
                                     <tr>
                                         <td><?= $index < 10 ? '0' . $index + 1 : $index ?></td>
