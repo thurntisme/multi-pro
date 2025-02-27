@@ -217,6 +217,11 @@ $menu_items = [
                 'name' => 'Number Guessing',
                 'icon' => 'ri-numbers-line',
                 'slug' => 'number-guessing'
+            ],
+            [
+                'name' => 'Slot Machine',
+                'icon' => 'ri-numbers-line',
+                'slug' => 'slot-machine'
             ]
         ]
     ],

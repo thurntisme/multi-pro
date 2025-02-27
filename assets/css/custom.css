@@ -39,7 +39,7 @@ tr.my-club-player-row.selected :is(.btn-search, .btn-change) {
     border-radius: 50%;
 }
 
-.ckeditor-advanced + .ck-editor .ck-toolbar {
+.ckeditor-advanced+.ck-editor .ck-toolbar {
     border-left: none !important;
     border-top: none !important;
     border-right: none !important;
@@ -73,23 +73,26 @@ tr.my-club-player-row.selected :is(.btn-search, .btn-change) {
     padding-bottom: 60px;
     text-align: center;
 }
+
 #wheel-wrapper #cursor {
     position: absolute;
-    top: 0; 
+    top: 0;
     left: 50%;
     width: 0;
     height: 0;
     border-left: 20px solid transparent;
     border-right: 20px solid transparent;
-    border-top: 40px solid red; 
+    border-top: 40px solid red;
     transform: translateX(-50%);
 }
+
 #wheel-wrapper #wheelContainer {
     position: relative;
     width: 400px;
     height: 400px;
     margin: auto;
 }
+
 #wheel-wrapper #wheelCanvas {
     display: block;
     margin: auto;
@@ -97,10 +100,33 @@ tr.my-club-player-row.selected :is(.btn-search, .btn-change) {
     height: 400px;
     transform: rotate(-90deg);
 }
+
 #wheel-wrapper #spinBtn {
     display: block;
     margin: 20px auto;
     padding: 10px 20px;
     font-size: 16px;
     cursor: pointer;
+}
+
+#slot-machine .slot-machine {
+    display: flex;
+    justify-content: center;
+    margin: 20px;
+}
+
+#slot-machine .reel {
+    width: 80px;
+    height: 80px;
+    border: 2px solid #000;
+    font-size: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f8f8f8;
+    transition: transform 0.5s;
+}
+
+#slot-machine .spin-btn {
+    width: 90px;
 }
