@@ -227,6 +227,11 @@ $menu_items = [
                 'name' => 'Flip Memory',
                 'icon' => 'ri-numbers-line',
                 'slug' => 'flip-memory'
+            ],
+            [
+                'name' => 'Lottery Simulator',
+                'icon' => 'ri-numbers-line',
+                'slug' => 'lottery-simulator'
             ]
         ]
     ],
@@ -312,7 +317,7 @@ $menu_items = [
             </span>
         </a>
         <button type="button" class="btn btn-sm p-0 fs-20 header-item float-end btn-vertical-sm-hover"
-            id="vertical-hover">
+                id="vertical-hover">
             <i class="ri-record-circle-line"></i>
         </button>
     </div>

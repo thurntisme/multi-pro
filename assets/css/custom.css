@@ -39,7 +39,7 @@ tr.my-club-player-row.selected :is(.btn-search, .btn-change) {
     border-radius: 50%;
 }
 
-.ckeditor-advanced+.ck-editor .ck-toolbar {
+.ckeditor-advanced + .ck-editor .ck-toolbar {
     border-left: none !important;
     border-top: none !important;
     border-right: none !important;
@@ -153,4 +153,30 @@ tr.my-club-player-row.selected :is(.btn-search, .btn-change) {
 
 #card-flip-memory .flipped {
     background: white;
+}
+
+#lottery-simulator .lottery-box .lottery-result {
+    width: 80px;
+    height: 80px;
+    border: 2px solid var(--vz-border-color);
+    font-size: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f8f8f8;
+    transition: transform 0.5s;
+    border-radius: 8px;
+}
+
+#lottery-simulator .lottery-box .lottery-result.loaded {
+    background: var(--vz-border-color);
+}
+
+#lottery-simulator .lottery-box .lottery-result + input {
+    border: solid 1px var(--vz-border-color);
+    text-align: center;
+}
+
+#lottery-simulator input[name="your_number"] {
+    width: 200px;
 }
