@@ -112,6 +112,7 @@ function getPageData($slug, $role): array
         'calendar/edit' => ['url' => DIR . '/views/calendar-adjust.php', 'title' => 'Calendar', 'role' => 3],
         'system-error' => ['url' => DIR . '/views/system-error.php', 'title' => 'System Error', 'role' => 0],
         'system-notification' => ['url' => DIR . '/views/system-notification.php', 'title' => 'System Notification', 'role' => 0],
+        'lucky-wheel' => ['url' => DIR . '/views/lucky-wheel.php', 'title' => 'Lucky Wheel', 'role' => 3],
         // redirectUser
         'dashboard' => ['url' => DIR . '/functions/redirectUser.php', 'title' => 'Redirect', 'role' => 3],
         'login' => ['url' => DIR . '/functions/redirectUser.php', 'title' => 'Redirect', 'role' => 3],

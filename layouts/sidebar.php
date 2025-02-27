@@ -196,6 +196,16 @@ $menu_items = [
         ]
     ],
     [
+        'title' => 'Tools',
+        'sub_items' => [
+            [
+                'name' => 'Lucky Wheel',
+                'icon' => 'ri-search-eye-line',
+                'slug' => 'lucky-wheel'
+            ]
+        ]
+    ],
+    [
         'title' => 'Game',
         'sub_items' => [
             [
