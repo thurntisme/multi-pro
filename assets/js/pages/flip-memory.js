@@ -12,14 +12,34 @@ $(document).ready(function () {
     }
 
     function startGame() {
+        $('#btn-start').prop('disabled', true);
+
+        // Reset variables
+        flippedCards = [];
+        matchedPairs = 0;
+        timeLeft = 30;
+        score = 0;
+
+        // Reset UI
         $('#game-board').empty();
         $('#score').text(score);
+        $('#timer').text(timeLeft);
+
+        drawCards();
+
+        // Reattach event listeners
+        $('.card').on('click', flipCard);
+
+        // Restart the timer
+        startTimer();
+    }
+
+    function drawCards() {
+        // Shuffle and render cards
         cards = shuffle(cards);
         cards.forEach((icon, index) => {
             $('#game-board').append(`<div class='card m-0' data-icon='${icon}' data-index='${index}'></div>`);
         });
-        $('.card').on('click', flipCard);
-        startTimer();
     }
 
     function flipCard() {
@@ -45,7 +65,8 @@ $(document).ready(function () {
                     title: 'You Win! Your score: ' + score,
                     icon: 'success',
                     confirmButtonText: 'OK'
-                })
+                });
+                $('#btn-start').prop('disabled', false);
             }
         } else {
             setTimeout(() => {
@@ -66,11 +87,17 @@ $(document).ready(function () {
                     title: 'Time is up! You Lose. Your score: ' + score,
                     icon: 'error',
                     confirmButtonText: 'OK'
-                })
+                });
                 $('.card').off('click');
+                $('#btn-start').prop('disabled', false);
             }
         }, 1000);
     }
 
-    startGame();
+    drawCards();
+
+    $(document).on('click', '#btn-start', function () {
+        startGame();
+    })
+
 });
