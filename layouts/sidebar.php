@@ -222,6 +222,11 @@ $menu_items = [
                 'name' => 'Slot Machine',
                 'icon' => 'ri-numbers-line',
                 'slug' => 'slot-machine'
+            ],
+            [
+                'name' => 'Flip Memory',
+                'icon' => 'ri-numbers-line',
+                'slug' => 'flip-memory'
             ]
         ]
     ],

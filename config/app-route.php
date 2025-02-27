@@ -115,6 +115,7 @@ function getPageData($slug, $role): array
         'lucky-wheel' => ['url' => DIR . '/views/lucky-wheel.php', 'title' => 'Lucky Wheel', 'role' => 3],
         'number-guessing' => ['url' => DIR . '/views/number-guessing.php', 'title' => 'Number Guessing', 'role' => 3],
         'slot-machine' => ['url' => DIR . '/views/slot-machine.php', 'title' => 'Slot Machine', 'role' => 3],
+        'flip-memory' => ['url' => DIR . '/views/flip-memory.php', 'title' => 'Flip Memory', 'role' => 3],
         // redirectUser
         'dashboard' => ['url' => DIR . '/functions/redirectUser.php', 'title' => 'Redirect', 'role' => 3],
         'login' => ['url' => DIR . '/functions/redirectUser.php', 'title' => 'Redirect', 'role' => 3],
