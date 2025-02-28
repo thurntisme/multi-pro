@@ -39,7 +39,7 @@ tr.my-club-player-row.selected :is(.btn-search, .btn-change) {
     border-radius: 50%;
 }
 
-.ckeditor-advanced + .ck-editor .ck-toolbar {
+.ckeditor-advanced+.ck-editor .ck-toolbar {
     border-left: none !important;
     border-top: none !important;
     border-right: none !important;
@@ -172,7 +172,7 @@ tr.my-club-player-row.selected :is(.btn-search, .btn-change) {
     background: var(--vz-border-color);
 }
 
-#lottery-simulator .lottery-box .lottery-result + input {
+#lottery-simulator .lottery-box .lottery-result+input {
     border: solid 1px var(--vz-border-color);
     text-align: center;
 }
@@ -183,236 +183,97 @@ tr.my-club-player-row.selected :is(.btn-search, .btn-change) {
 
 #monopoly #board {
     display: grid;
-    grid-template-columns: repeat(10, 120px);
-    grid-template-rows: repeat(8, 120px);
-    gap: 5px;
+    grid-template-columns: repeat(8, 120px);
+    grid-template-rows: repeat(6, 120px);
     position: relative;
+    gap: 5px;
 }
 
 #monopoly #board .tile {
     display: flex;
-    justify-content: center;
     align-items: center;
+    justify-content: center;
+    font-size: 14px;
     font-weight: bold;
+    padding: 8px;
+    flex-direction: column-reverse;
+    border-width: 1px;
+    border-style: solid;
 }
 
 #monopoly #board .property {
     background-color: lightblue;
+    border-color: lightblue;
 }
 
 #monopoly #board .special {
     background-color: lightgray;
+    border-color: lightgray;
 }
 
 #monopoly #board .chance {
     background-color: yellow;
+    border-color: yellow;
 }
 
 #monopoly #board .tax {
     background-color: red;
+    border-color: red;
     color: white;
 }
 
 #monopoly #board .corner {
     background-color: white;
+    border-color: white;
+}
+#monopoly #board .tile.active {
+    border-color: #000;
 }
 
 #monopoly #info {
-    grid-column: 4 / span 4;
-    grid-row: 3 / span 4;
+    grid-column: 2 / 8;
+    grid-row: 2 / 6;
     background-color: white;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    border: 2px solid black;
     padding: 10px;
 }
 
 #monopoly #diceResult {
     height: 24px;
 }
-
-.container {
+#monopoly .container .top {
+    grid-column: 1/9;
+    grid-row: 1/2;
     display: grid;
-    grid-template-columns: repeat(10, 1fr);
-    grid-template-rows: repeat(8, 1fr);
-    gap: 10px;
-    width: 100%;
-    height: 100vh;
-    background-color: #f4f4f4;
-    padding: 20px;
+    grid-template-columns: repeat(8, 120px);
+    gap: 5px;
 }
-
-.item {
-    background: lightblue;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 14px;
-    font-weight: bold;
+#monopoly .container .right {
+    grid-column: 8/9;
+    grid-row: 2/6;
+    display: grid;
+    grid-template-rows: repeat(4, 120px);
+    gap: 5px;
 }
-
-/* Top Items (1-8) */
-.tile:nth-child(1) {
-    grid-column: 1 / span 1;
-    grid-row: 2 / span 1;
+#monopoly .container .bottom {
+    grid-column: 1/9;
+    grid-row: 6/7;
+    display: grid;
+    grid-template-columns: repeat(8, 120px);
+    gap: 5px;
+    direction: rtl;
 }
-
-.tile:nth-child(2) {
-    grid-column: 2 / span 1;
-    grid-row: 2 / span 1;
+#monopoly .container .left {
+    grid-column: 1/2;
+    grid-row: 2/6;
+    display: grid;
+    grid-template-rows: repeat(4, 120px);
+    gap: 5px;
 }
-
-.tile:nth-child(3) {
-    grid-column: 3 / span 1;
-    grid-row: 2 / span 1;
-}
-
-.tile:nth-child(4) {
-    grid-column: 4 / span 1;
-    grid-row: 2 / span 1;
-}
-
-.tile:nth-child(5) {
-    grid-column: 5 / span 1;
-    grid-row: 2 / span 1;
-}
-
-.tile:nth-child(6) {
-    grid-column: 6 / span 1;
-    grid-row: 2 / span 1;
-}
-
-.tile:nth-child(7) {
-    grid-column: 7 / span 1;
-    grid-row: 2 / span 1;
-}
-
-.tile:nth-child(8) {
-    grid-column: 8 / span 1;
-    grid-row: 2 / span 1;
-}
-
-/* Bottom Items (9-16) */
-.tile:nth-child(9) {
-    grid-column: 1 / span 1;
-    grid-row: 7 / span 1;
-}
-
-.tile:nth-child(10) {
-    grid-column: 2 / span 1;
-    grid-row: 7 / span 1;
-}
-
-.tile:nth-child(11) {
-    grid-column: 3 / span 1;
-    grid-row: 7 / span 1;
-}
-
-.tile:nth-child(12) {
-    grid-column: 4 / span 1;
-    grid-row: 7 / span 1;
-}
-
-.tile:nth-child(13) {
-    grid-column: 5 / span 1;
-    grid-row: 7 / span 1;
-}
-
-.tile:nth-child(14) {
-    grid-column: 6 / span 1;
-    grid-row: 7 / span 1;
-}
-
-.tile:nth-child(15) {
-    grid-column: 7 / span 1;
-    grid-row: 7 / span 1;
-}
-
-.tile:nth-child(16) {
-    grid-column: 8 / span 1;
-    grid-row: 7 / span 1;
-}
-
-/* Left Items (18-25) */
-.tile:nth-child(18) {
-    grid-column: 3 / span 1;
-    grid-row: 1 / span 1;
-}
-
-.tile:nth-child(19) {
-    grid-column: 3 / span 1;
-    grid-row: 2 / span 1;
-}
-
-.tile:nth-child(20) {
-    grid-column: 3 / span 1;
-    grid-row: 3 / span 1;
-}
-
-.tile:nth-child(21) {
-    grid-column: 3 / span 1;
-    grid-row: 4 / span 1;
-}
-
-.tile:nth-child(22) {
-    grid-column: 3 / span 1;
-    grid-row: 5 / span 1;
-}
-
-.tile:nth-child(23) {
-    grid-column: 3 / span 1;
-    grid-row: 6 / span 1;
-}
-
-.tile:nth-child(24) {
-    grid-column: 3 / span 1;
-    grid-row: 7 / span 1;
-}
-
-.tile:nth-child(25) {
-    grid-column: 3 / span 1;
-    grid-row: 8 / span 1;
-}
-
-/* Right Items (26-33) */
-.tile:nth-child(26) {
-    grid-column: 8 / span 1;
-    grid-row: 1 / span 1;
-}
-
-.tile:nth-child(27) {
-    grid-column: 8 / span 1;
-    grid-row: 2 / span 1;
-}
-
-.tile:nth-child(28) {
-    grid-column: 8 / span 1;
-    grid-row: 3 / span 1;
-}
-
-.tile:nth-child(29) {
-    grid-column: 8 / span 1;
-    grid-row: 4 / span 1;
-}
-
-.tile:nth-child(30) {
-    grid-column: 8 / span 1;
-    grid-row: 5 / span 1;
-}
-
-.tile:nth-child(31) {
-    grid-column: 8 / span 1;
-    grid-row: 6 / span 1;
-}
-
-.tile:nth-child(32) {
-    grid-column: 8 / span 1;
-    grid-row: 7 / span 1;
-}
-
-.tile:nth-child(33) {
-    grid-column: 8 / span 1;
-    grid-row: 8 / span 1;
-}
+#monopoly .container .left .tile:nth-child(1) { order: 4; }
+#monopoly .container .left .tile:nth-child(2) { order: 3; }
+#monopoly .container .left .tile:nth-child(3) { order: 2; }
+#monopoly .container .left .tile:nth-child(4) { order: 1; }
