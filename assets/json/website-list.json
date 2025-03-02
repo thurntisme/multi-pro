@@ -1,0 +1,170 @@
+{
+  "categories": [
+    {
+      "name": "General Knowledge & Conversations",
+      "ai_tools": [
+        {
+          "name": "Meta AI",
+          "url": "https://about.fb.com/news/tag/meta-ai/"
+        },
+        {
+          "name": "Poe",
+          "url": "https://poe.com/"
+        },
+        {
+          "name": "ChatGPT",
+          "url": "https://chat.openai.com/"
+        },
+        {
+          "name": "Gemini",
+          "url": "https://gemini.google.com/"
+        },
+        {
+          "name": "Microsoft Copilot",
+          "url": "https://copilot.microsoft.com/"
+        },
+        {
+          "name": "Perplexity",
+          "url": "https://www.perplexity.ai/"
+        },
+        {
+          "name": "YouChat",
+          "url": "https://you.com/"
+        },
+        {
+          "name": "HuggingChat",
+          "url": "https://huggingface.co/chat/"
+        },
+        {
+          "name": "PI",
+          "url": "https://pi.ai/"
+        }
+      ]
+    },
+    {
+      "name": "Coding & Programming",
+      "ai_tools": [
+        {
+          "name": "Phind",
+          "url": "https://www.phind.com/"
+        },
+        {
+          "name": "Blackbox AI",
+          "url": "https://www.useblackbox.io/"
+        },
+        {
+          "name": "ChatGPT (Free)",
+          "url": "https://chat.openai.com/"
+        },
+        {
+          "name": "HuggingChat",
+          "url": "https://huggingface.co/chat/"
+        },
+        {
+          "name": "Poe",
+          "url": "https://poe.com/"
+        },
+        {
+          "name": "DeepSeek",
+          "url": "https://www.deepseek.com/"
+        },
+        {
+          "name": "Microsoft Copilot",
+          "url": "https://copilot.microsoft.com/"
+        }
+      ]
+    },
+    {
+      "name": "Writing & Content Creation",
+      "ai_tools": [
+        {
+          "name": "Rytr",
+          "url": "https://rytr.me/"
+        },
+        {
+          "name": "ChatGPT",
+          "url": "https://chat.openai.com/"
+        },
+        {
+          "name": "Poe",
+          "url": "https://poe.com/"
+        },
+        {
+          "name": "Microsoft Copilot",
+          "url": "https://copilot.microsoft.com/"
+        },
+        {
+          "name": "Merlin AI",
+          "url": "https://merlin.foyer.work/"
+        }
+      ]
+    },
+    {
+      "name": "Search & Research",
+      "ai_tools": [
+        {
+          "name": "Perplexity",
+          "url": "https://www.perplexity.ai/"
+        },
+        {
+          "name": "Phind",
+          "url": "https://www.phind.com/"
+        },
+        {
+          "name": "YouChat",
+          "url": "https://you.com/"
+        },
+        {
+          "name": "DeepSeek",
+          "url": "https://www.deepseek.com/"
+        },
+        {
+          "name": "iAsk",
+          "url": "https://www.iask.ai/"
+        }
+      ]
+    },
+    {
+      "name": "Business & Productivity",
+      "ai_tools": [
+        {
+          "name": "Microsoft Copilot",
+          "url": "https://copilot.microsoft.com/"
+        },
+        {
+          "name": "ChatGPT",
+          "url": "https://chat.openai.com/"
+        },
+        {
+          "name": "Gemini",
+          "url": "https://gemini.google.com/"
+        },
+        {
+          "name": "Poe",
+          "url": "https://poe.com/"
+        }
+      ]
+    },
+    {
+      "name": "AI Image, Video & Audio Generation",
+      "ai_tools": [
+        {
+          "name": "Runway",
+          "url": "https://runwayml.com/"
+        },
+        {
+          "name": "Pika",
+          "url": "https://www.pika.art/"
+        },
+        {
+          "name": "Eleven Labs",
+          "url": "https://elevenlabs.io/"
+        },
+        {
+          "name": "Ideogram",
+          "url": "https://ideogram.ai/"
+        }
+      ]
+    }
+  ]
+}

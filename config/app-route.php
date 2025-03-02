@@ -70,6 +70,7 @@ function getPageData($slug, $role): array
         'website/new' => ['url' => DIR . '/views/website-adjust.php', 'title' => 'New Website', 'role' => 3],
         'website/edit' => ['url' => DIR . '/views/website-adjust.php', 'title' => 'Edit Website', 'role' => 3],
         'website/detail' => ['url' => DIR . '/views/website-detail.php', 'title' => 'Website Detail', 'role' => 3],
+        'website/quick' => ['url' => DIR . '/views/website-quick.php', 'title' => 'Website Quick Links', 'role' => 3],
         'football-manager' => ['url' => DIR . '/views/football-manager.php', 'title' => 'Football Manager', 'role' => 0],
         'football-manager/my-club' => ['url' => DIR . '/views/football-manager-club.php', 'title' => 'Football Manager - My Club', 'role' => 0],
         'football-manager/transfer' => ['url' => DIR . '/views/football-manager-transfer.php', 'title' => 'Football Manager - Transfer', 'role' => 0],

@@ -80,7 +80,6 @@ $links = array(
 $dashboard = array(
     'checklist' => $checklist,
     'event' => $event,
-    'links' => DEFAULT_BOOKMARKS[0]['links'],
 );
 define('DEFAULT_DASHBOARD_OPTIONS', $dashboard);
 

@@ -2,176 +2,294 @@
 
 $bookmarks = [
     [
-        "title" => "Featured",
-        "slug" => "featured",
-        "links" => [
-            ["url" => "https://www.google.com/", "name" => "Google", "logo" => "/assets/images/brands/google.png", "tags" => ["popular", "global", "AI-powered"]],
-            ["url" => "https://www.facebook.com/", "name" => "Facebook", "logo" => "/assets/images/brands/facebook.png", "tags" => ["social-networking", "global"]],
-            ["url" => "https://www.youtube.com/", "name" => "YouTube", "logo" => "/assets/images/brands/youtube.png", "tags" => ["videos", "global", "content"]],
-            ["url" => "https://chat.zalo.me/", "name" => "Zalo", "logo" => "/assets/images/brands/zalo.png", "tags" => ["messaging", "social"]],
-            ["url" => "https://chat.openai.com/", "name" => "ChatGPT", "logo" => "/assets/images/brands/chatgpt.png", "tags" => ["AI", "chat"]],
-        ],
-    ],
-    [
-        "title" => "Search Engines",
+        "name" => "Search Engines",
         "slug" => "search-engines",
         "links" => [
-            ["url" => "https://www.google.com/", "name" => "Google", "logo" => "https://www.google.com/images/branding/googlelogo/2x/googlelogo_color_92x30dp.png", "tags" => ["popular", "global", "AI-powered"]],
-            ["url" => "https://www.bing.com/", "name" => "Bing", "logo" => "https://www.bing.com/sa/simg/hpc27.png", "tags" => ["Microsoft", "global"]],
-            ["url" => "https://www.yahoo.com/", "name" => "Yahoo", "logo" => "https://s.yimg.com/rz/p/yahoo_homepage_en-US_s_f_p_bestfit_homepage.png", "tags" => ["email", "news", "legacy"]],
-            ["url" => "https://duckduckgo.com/", "name" => "DuckDuckGo", "logo" => "https://duckduckgo.com/assets/logo_homepage.alt.v108.svg", "tags" => ["privacy", "no-tracking"]],
-            ["url" => "https://www.baidu.com/", "name" => "Baidu", "logo" => "https://www.baidu.com/img/bd_logo1.png", "tags" => ["China", "local"]],
-            ["url" => "https://yandex.com/", "name" => "Yandex", "logo" => "https://yastatic.net/s3/home-static/_/AIXfoJ0uN5OxkgAOa9ZbZEv4QXY.svg", "tags" => ["Russia", "local"]],
-            ["url" => "https://www.ask.com/", "name" => "Ask", "logo" => "https://ask.com/favicon.ico", "tags" => ["question-answer", "legacy"]],
-            ["url" => "https://www.startpage.com/", "name" => "Startpage", "logo" => "https://www.startpage.com/graphics/meta/icon/startpage/apple-touch-icon.png", "tags" => ["privacy", "Google-results"]],
-            ["url" => "https://www.qwant.com/", "name" => "Qwant", "logo" => "https://www.qwant.com/static/img/logos/qwant-primary-lg.png", "tags" => ["privacy", "France"]],
-            ["url" => "https://www.ecosia.org/", "name" => "Ecosia", "logo" => "https://www.ecosia.org/assets/images/ecosia-logo.png", "tags" => ["eco-friendly", "tree-planting"]],
-            ["url" => "https://www.mojeek.com/", "name" => "Mojeek", "logo" => "https://www.mojeek.com/static/img/mojeek-logo.svg", "tags" => ["privacy", "independent"]],
-            ["url" => "https://www.gibiru.com/", "name" => "Gibiru", "logo" => "https://www.gibiru.com/images/logos/gibiru.png", "tags" => ["privacy", "uncensored"]],
-            ["url" => "https://www.searchencrypt.com/", "name" => "Search Encrypt", "logo" => "https://www.searchencrypt.com/wp-content/uploads/2018/06/search-encrypt-400x400.jpg", "tags" => ["privacy", "encrypted"]],
-            ["url" => "https://www.dogpile.com/", "name" => "Dogpile", "logo" => "https://www.dogpile.com/images/hp/logo.png", "tags" => ["meta-search", "multiple-engines"]],
-            ["url" => "https://www.boardreader.com/", "name" => "Boardreader", "logo" => "https://www.boardreader.com/images/logo_main.png", "tags" => ["forums", "message-boards"]],
-            ["url" => "https://www.yippy.com/", "name" => "Yippy", "logo" => "https://www.yippy.com/images/yippy_logo.png", "tags" => ["meta-search", "categorized-results"]],
-            ["url" => "https://swisscows.com/", "name" => "Swisscows", "logo" => "https://upload.wikimedia.org/wikipedia/commons/9/91/Swisscows_logo.svg", "tags" => ["family-friendly", "privacy"]],
-            ["url" => "https://searx.me/", "name" => "Searx", "logo" => "https://searx.github.io/searx/images/searx_logo.svg", "tags" => ["open-source", "meta-search"]],
-            ["url" => "https://www.givero.com/", "name" => "Givero", "logo" => "https://www.givero.com/media/logo.png", "tags" => ["charity", "ethical"]],
-        ],
-    ],
-    [
-        "title" => "Social Media",
-        "slug" => "social-media",
-        "links" => [
-            ["url" => "https://www.facebook.com/", "name" => "Facebook", "logo" => "https://upload.wikimedia.org/wikipedia/commons/5/51/Facebook_f_logo_%282019%29.svg", "tags" => ["social-networking", "global"]],
-            ["url" => "https://www.twitter.com/", "name" => "Twitter (X)", "logo" => "https://upload.wikimedia.org/wikipedia/commons/6/6f/Logo_of_X_%28formerly_Twitter%29.svg", "tags" => ["microblogging", "trending"]],
-            ["url" => "https://www.instagram.com/", "name" => "Instagram", "logo" => "https://upload.wikimedia.org/wikipedia/commons/a/a5/Instagram_icon.png", "tags" => ["photo-sharing", "visual-content"]],
-            ["url" => "https://www.linkedin.com/", "name" => "LinkedIn", "logo" => "https://upload.wikimedia.org/wikipedia/commons/0/01/LinkedIn_Logo.svg", "tags" => ["professional-network", "jobs"]],
-            ["url" => "https://www.snapchat.com/", "name" => "Snapchat", "logo" => "https://upload.wikimedia.org/wikipedia/en/a/ad/Snapchat_logo.svg", "tags" => ["temporary-messages", "AR"]],
-            ["url" => "https://www.pinterest.com/", "name" => "Pinterest", "logo" => "https://upload.wikimedia.org/wikipedia/commons/0/08/Pinterest-logo.png", "tags" => ["visual-discovery", "ideas"]],
-            ["url" => "https://www.tiktok.com/", "name" => "TikTok", "logo" => "https://upload.wikimedia.org/wikipedia/en/6/69/TikTok_logo.svg", "tags" => ["short-video", "viral-content"]],
-            ["url" => "https://www.reddit.com/", "name" => "Reddit", "logo" => "https://upload.wikimedia.org/wikipedia/en/5/58/Reddit_logo_new.svg", "tags" => ["forums", "communities"]],
-            ["url" => "https://www.tumblr.com/", "name" => "Tumblr", "logo" => "https://upload.wikimedia.org/wikipedia/commons/1/1e/Tumblr_logo.svg", "tags" => ["blogging", "creative"]],
-            ["url" => "https://www.discord.com/", "name" => "Discord", "logo" => "https://upload.wikimedia.org/wikipedia/commons/9/98/Discord_logo.svg", "tags" => ["chat", "gaming", "communities"]],
-            ["url" => "https://www.whatsapp.com/", "name" => "WhatsApp", "logo" => "https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg", "tags" => ["messaging", "end-to-end-encryption"]],
-            ["url" => "https://www.telegram.org/", "name" => "Telegram", "logo" => "https://upload.wikimedia.org/wikipedia/commons/8/82/Telegram_logo.svg", "tags" => ["messaging", "encrypted"]],
-            ["url" => "https://www.wechat.com/", "name" => "WeChat", "logo" => "https://upload.wikimedia.org/wikipedia/en/8/87/WeChat_Logo.png", "tags" => ["messaging", "China"]],
-            ["url" => "https://www.vk.com/", "name" => "VK", "logo" => "https://upload.wikimedia.org/wikipedia/commons/2/21/VK.com-logo.svg", "tags" => ["social-networking", "Russia"]],
-            ["url" => "https://www.mastodon.social/", "name" => "Mastodon", "logo" => "https://upload.wikimedia.org/wikipedia/commons/4/48/Mastodon_Logotype_%28Simple%29.svg", "tags" => ["open-source", "decentralized"]],
-            ["url" => "https://www.clubhouse.com/", "name" => "Clubhouse", "logo" => "https://upload.wikimedia.org/wikipedia/commons/a/a3/Clubhouse_App_Logo.png", "tags" => ["audio-chat", "voice-conversations"]],
-        ],
-    ],
-    [
-        "title" => "Video Platforms",
-        "slug" => "video-platforms",
-        "links" =>
-        [
-            ["url" => "https://www.youtube.com/", "name" => "YouTube", "logo" => "https://upload.wikimedia.org/wikipedia/commons/b/b8/YouTube_Logo_2017.svg", "tags" => ["videos", "global", "content"]],
-            ["url" => "https://www.vimeo.com/", "name" => "Vimeo", "logo" => "https://upload.wikimedia.org/wikipedia/commons/3/32/Vimeo_Logo.svg", "tags" => ["professional", "creative"]],
-            ["url" => "https://www.dailymotion.com/", "name" => "Dailymotion", "logo" => "https://upload.wikimedia.org/wikipedia/commons/4/41/Dailymotion_logo.svg", "tags" => ["global", "entertainment"]],
-            ["url" => "https://www.twitch.tv/", "name" => "Twitch", "logo" => "https://upload.wikimedia.org/wikipedia/commons/5/5a/Twitch_Logo_2019.svg", "tags" => ["live-streaming", "gaming"]],
-            ["url" => "https://www.bitchute.com/", "name" => "BitChute", "logo" => "https://upload.wikimedia.org/wikipedia/commons/7/77/BitChute_logo.svg", "tags" => ["free-speech", "independent"]],
-            ["url" => "https://www.peertube.org/", "name" => "PeerTube", "logo" => "https://upload.wikimedia.org/wikipedia/commons/4/47/PeerTube_Logo_2020.svg", "tags" => ["decentralized", "open-source"]],
-            ["url" => "https://odysee.com/", "name" => "Odysee", "logo" => "https://upload.wikimedia.org/wikipedia/commons/1/1c/Odysee_logo.svg", "tags" => ["blockchain", "content-sharing"]],
-            ["url" => "https://www.dtube.video/", "name" => "DTube", "logo" => "https://upload.wikimedia.org/wikipedia/commons/a/ac/DTube_Logo.png", "tags" => ["decentralized", "blockchain"]],
-            ["url" => "https://rumble.com/", "name" => "Rumble", "logo" => "https://upload.wikimedia.org/wikipedia/commons/3/3f/Rumble_Logo.svg", "tags" => ["alternative", "freedom-of-speech"]],
-            ["url" => "https://www.facebook.com/watch/", "name" => "Facebook Watch", "logo" => "https://upload.wikimedia.org/wikipedia/commons/f/f0/Facebook_Watch_logo_2018.svg", "tags" => ["social-media", "video"]],
-            ["url" => "https://www.douyin.com/", "name" => "Douyin", "logo" => "https://upload.wikimedia.org/wikipedia/commons/d/d5/Douyin_logo.svg", "tags" => ["China", "short-videos"]],
-            ["url" => "https://www.tiktok.com/", "name" => "TikTok", "logo" => "https://upload.wikimedia.org/wikipedia/en/6/69/TikTok_logo.svg", "tags" => ["short-video", "viral-content"]],
-            ["url" => "https://www.9gag.com/tv", "name" => "9GAG TV", "logo" => "https://upload.wikimedia.org/wikipedia/commons/6/69/9gag_logo.svg", "tags" => ["funny-videos", "memes"]],
+            [
+                "name" => "Google",
+                "url" => "https://www.google.com/",
+                "logo" => "/assets/images/bookmarks/google.png"
+            ],
+            [
+                "name" => "Bing",
+                "url" => "https://www.bing.com/",
+                "logo" => "/assets/images/bookmarks/bing.png"
+            ],
+            [
+                "name" => "Yahoo",
+                "url" => "https://www.yahoo.com/",
+                "logo" => "/assets/images/bookmarks/yahoo.png"
+            ],
+            [
+                "name" => "DuckDuckGo",
+                "url" => "https://www.duckduckgo.com/",
+                "logo" => "/assets/images/bookmarks/duckduckgo.png"
+            ],
+            [
+                "name" => "Ecosia",
+                "url" => "https://www.ecosia.org/",
+                "logo" => "/assets/images/bookmarks/ecosia.png"
+            ],
+            [
+                "name" => "Mojeek",
+                "url" => "https://www.mojeek.com/",
+                "logo" => "/assets/images/bookmarks/mojeek.png"
+            ],
+            [
+                "name" => "Gibiru",
+                "url" => "https://www.gibiru.com/",
+                "logo" => "/assets/images/bookmarks/gibiru.png"
+            ],
+            [
+                "name" => "Swisscows",
+                "url" => "https://www.swisscows.com/",
+                "logo" => "/assets/images/bookmarks/swisscows.png"
+            ],
+            [
+                "name" => "Givero",
+                "url" => "https://www.givero.com/",
+                "logo" => "/assets/images/bookmarks/givero.png"
+            ]
         ]
     ],
     [
-        "title" => "Social Media Platforms",
-        "slug" => "social-media-platforms",
+        "name" => "Metasearch Engines",
+        "slug" => "metasearch-engines",
         "links" => [
-            ["url" => "https://www.whatsapp.com/", "name" => "WhatsApp", "logo" => "https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg", "tags" => ["mobile", "encrypted"]],
-            ["url" => "https://telegram.org/", "name" => "Telegram", "logo" => "https://upload.wikimedia.org/wikipedia/commons/8/82/Telegram_logo.svg", "tags" => ["mobile", "privacy"]],
-            ["url" => "https://www.messenger.com/", "name" => "Facebook Messenger", "logo" => "https://upload.wikimedia.org/wikipedia/commons/0/08/Facebook_Messenger_logo_2020.svg", "tags" => ["social-media", "chat"]],
-            ["url" => "https://signal.org/", "name" => "Signal", "logo" => "https://upload.wikimedia.org/wikipedia/commons/8/8d/Signal-Logo.svg", "tags" => ["encrypted", "secure"]],
-            ["url" => "https://www.wechat.com/", "name" => "WeChat", "logo" => "https://upload.wikimedia.org/wikipedia/commons/8/89/WeChat_logo.svg", "tags" => ["China", "social"]],
-            ["url" => "https://www.line.me/", "name" => "LINE", "logo" => "https://upload.wikimedia.org/wikipedia/commons/4/41/LINE_logo.svg", "tags" => ["Asia", "stickers"]],
-            ["url" => "https://www.viber.com/", "name" => "Viber", "logo" => "https://upload.wikimedia.org/wikipedia/commons/7/70/Viber_logo.svg", "tags" => ["global", "calls"]],
-            ["url" => "https://slack.com/", "name" => "Slack", "logo" => "https://upload.wikimedia.org/wikipedia/commons/d/d5/Slack_icon_2019.svg", "tags" => ["workplace", "collaboration"]],
-            ["url" => "https://discord.com/", "name" => "Discord", "logo" => "https://upload.wikimedia.org/wikipedia/commons/8/80/Discord_logo.svg", "tags" => ["gaming", "community"]],
-            ["url" => "https://www.skype.com/", "name" => "Skype", "logo" => "https://upload.wikimedia.org/wikipedia/commons/5/5c/Skype_logo.svg", "tags" => ["calls", "video"]],
-            ["url" => "https://www.kakaocorp.com/service/KakaoTalk", "name" => "KakaoTalk", "logo" => "https://upload.wikimedia.org/wikipedia/en/0/09/KakaoTalk_logo.svg", "tags" => ["Korea", "stickers"]],
-            ["url" => "https://www.threema.ch/en", "name" => "Threema", "logo" => "https://upload.wikimedia.org/wikipedia/commons/4/42/Threema_logo.svg", "tags" => ["privacy", "encrypted"]],
-            ["url" => "https://www.icq.com/", "name" => "ICQ", "logo" => "https://upload.wikimedia.org/wikipedia/commons/6/61/ICQ_new_logo.svg", "tags" => ["classic", "messaging"]],
-            ["url" => "https://www.google.com/intl/en_ALL/hangouts/", "name" => "Google Hangouts", "logo" => "https://upload.wikimedia.org/wikipedia/commons/5/58/Google_Hangouts_icon.svg", "tags" => ["Google", "chat"]],
-            ["url" => "https://teams.microsoft.com/", "name" => "Microsoft Teams", "logo" => "https://upload.wikimedia.org/wikipedia/commons/4/4e/Microsoft_Office_Teams_%282020%29.svg", "tags" => ["team collaboration", "messaging"]],
-            ["url" => "https://chat.zalo.me/", "name" => "Zalo", "logo" => "https://upload.wikimedia.org/wikipedia/commons/c/c2/Zalo_App_Logo.png", "tags" => ["messaging", "social"]],
+            [
+                "name" => "Dogpile",
+                "url" => "https://www.dogpile.com/",
+                "logo" => "/assets/images/bookmarks/dogpile.png"
+            ],
+            [
+                "name" => "Startpage",
+                "url" => "https://www.startpage.com/",
+                "logo" => "/assets/images/bookmarks/startpage.png"
+            ]
         ]
     ],
     [
-        "title" => "Social Networking",
-        "slug" => "social-networking",
+        "name" => "Academic & Research Tools",
+        "slug" => "academic-research-tools",
         "links" => [
-            ["url" => "https://www.linkedin.com/", "name" => "LinkedIn", "logo" => "https://upload.wikimedia.org/wikipedia/commons/c/ca/LinkedIn_logo_initials.png", "tags" => ["professional", "jobs"]],
-            ["url" => "https://angel.co/", "name" => "AngelList", "logo" => "https://upload.wikimedia.org/wikipedia/commons/e/ec/AngelList_logo.svg", "tags" => ["startups", "investors"]],
-            ["url" => "https://www.xing.com/", "name" => "Xing", "logo" => "https://upload.wikimedia.org/wikipedia/commons/6/6d/Xing_logo.svg", "tags" => ["professional", "Germany"]],
-            ["url" => "https://about.me/", "name" => "About.me", "logo" => "https://upload.wikimedia.org/wikipedia/commons/7/79/About.me_logo.svg", "tags" => ["personal", "portfolio"]],
-            ["url" => "https://www.meetup.com/", "name" => "Meetup", "logo" => "https://upload.wikimedia.org/wikipedia/commons/2/2c/Meetup_Logo_2015.png", "tags" => ["networking", "events"]],
-            ["url" => "https://www.behance.net/", "name" => "Behance", "logo" => "https://upload.wikimedia.org/wikipedia/commons/8/89/Behance_logo.svg", "tags" => ["creative", "portfolio"]],
-            ["url" => "https://dribbble.com/", "name" => "Dribbble", "logo" => "https://upload.wikimedia.org/wikipedia/commons/8/85/Dribbble_logo.svg", "tags" => ["designers", "creativity"]],
-            ["url" => "https://www.opportunity.com/", "name" => "Opportunity", "logo" => "https://opportunity.com/images/OpportunityLogo-New2.png", "tags" => ["jobs", "networking"]],
-            ["url" => "https://www.shapr.co/", "name" => "Shapr", "logo" => "https://upload.wikimedia.org/wikipedia/commons/8/83/Shapr-logo.png", "tags" => ["networking", "matches"]],
-            ["url" => "https://www.biznik.com/", "name" => "Biznik", "logo" => "https://upload.wikimedia.org/wikipedia/en/6/6f/Biznik_logo.png", "tags" => ["entrepreneurs", "networking"]],
-            ["url" => "https://the-dots.com/", "name" => "The Dots", "logo" => "https://upload.wikimedia.org/wikipedia/commons/9/94/The_Dots_Logo.png", "tags" => ["creative", "jobs"]],
+            [
+                "name" => "Refseek",
+                "url" => "https://www.refseek.com/",
+                "logo" => "/assets/images/bookmarks/refseek.png"
+            ],
+            [
+                "name" => "WorldCat",
+                "url" => "https://www.worldcat.org/",
+                "logo" => "/assets/images/bookmarks/worldcat.png"
+            ]
         ]
     ],
     [
-        "title" => "News",
-        "slug" => "news",
+        "name" => "General Knowledge & Conversations",
+        "slug" => "general-knowledge-conversations",
         "links" => [
-            ["url" => "https://techcrunch.com/", "name" => "TechCrunch", "logo" => "https://upload.wikimedia.org/wikipedia/commons/a/ae/TechCrunch_logo.svg", "tags" => ["startup", "tech"]],
-            ["url" => "https://thenextweb.com/", "name" => "The Next Web", "logo" => "https://upload.wikimedia.org/wikipedia/commons/0/0b/The_Next_Web_Logo.svg", "tags" => ["technology", "innovation"]],
-            ["url" => "https://www.wired.com/", "name" => "Wired", "logo" => "https://upload.wikimedia.org/wikipedia/commons/4/40/Wired_logo.svg", "tags" => ["technology", "gadgets"]],
-            ["url" => "https://www.smashingmagazine.com/", "name" => "Smashing Magazine", "logo" => "https://upload.wikimedia.org/wikipedia/commons/e/e4/Smashing_Magazine_Logo.svg", "tags" => ["web development", "design"]],
-            ["url" => "https://www.sitepoint.com/", "name" => "SitePoint", "logo" => "https://upload.wikimedia.org/wikipedia/commons/5/56/SitePoint_Logo_2017.svg", "tags" => ["coding", "web development"]],
-            ["url" => "https://dzone.com/", "name" => "DZone", "logo" => "https://d2c2m6zxkh5o7u.cloudfront.net/appmedia/logo-dzone.png", "tags" => ["development", "programming"]],
-            ["url" => "https://www.infoq.com/", "name" => "InfoQ", "logo" => "https://upload.wikimedia.org/wikipedia/commons/a/a0/InfoQ_logo.svg", "tags" => ["software development", "enterprise"]],
-            ["url" => "https://dev.to/", "name" => "Dev.to", "logo" => "https://upload.wikimedia.org/wikipedia/commons/c/c6/Devto_logo.svg", "tags" => ["developer", "community"]],
-            ["url" => "https://www.hackernoon.com/", "name" => "Hacker Noon", "logo" => "https://upload.wikimedia.org/wikipedia/commons/e/e9/Hacker_Noon_logo.svg", "tags" => ["technology", "programming"]],
-            ["url" => "https://css-tricks.com/", "name" => "CSS-Tricks", "logo" => "https://upload.wikimedia.org/wikipedia/commons/3/3e/CSS-Tricks_logo.svg", "tags" => ["web design", "CSS"]],
-            ["url" => "https://medium.com/tag/programming", "name" => "Medium (Programming)", "logo" => "https://upload.wikimedia.org/wikipedia/commons/3/33/Medium_logo_Monogram.svg", "tags" => ["blog", "programming"]],
-            ["url" => "https://www.reddit.com/r/programming/", "name" => "Reddit (Programming)", "logo" => "https://upload.wikimedia.org/wikipedia/commons/5/58/Reddit_logo_new.svg", "tags" => ["community", "programming"]],
-            ["url" => "https://www.toptal.com/developers/blog", "name" => "Toptal Engineering Blog", "logo" => "https://upload.wikimedia.org/wikipedia/commons/f/fd/Toptal-logo.png", "tags" => ["engineering", "development"]],
+            [
+                "name" => "Meta AI",
+                "url" => "https://about.fb.com/news/tag/meta-ai/",
+                "logo" => "/assets/images/bookmarks/meta-ai.png"
+            ],
+            [
+                "name" => "Poe",
+                "url" => "https://poe.com/",
+                "logo" => "/assets/images/bookmarks/poe.png"
+            ],
+            [
+                "name" => "ChatGPT",
+                "url" => "https://chat.openai.com/",
+                "logo" => "/assets/images/bookmarks/chatgpt.png"
+            ],
+            [
+                "name" => "Gemini",
+                "url" => "https://gemini.google.com/",
+                "logo" => "/assets/images/bookmarks/gemini.png"
+            ],
+            [
+                "name" => "Microsoft Copilot",
+                "url" => "https://copilot.microsoft.com/",
+                "logo" => "/assets/images/bookmarks/copilot.png"
+            ],
+            [
+                "name" => "Perplexity",
+                "url" => "https://www.perplexity.ai/",
+                "logo" => "/assets/images/bookmarks/perplexity.png"
+            ],
+            [
+                "name" => "YouChat",
+                "url" => "https://you.com/",
+                "logo" => "/assets/images/bookmarks/you.png"
+            ],
+            [
+                "name" => "HuggingChat",
+                "url" => "https://huggingface.co/chat/",
+                "logo" => "/assets/images/bookmarks/huggingchat.png"
+            ],
+            [
+                "name" => "PI",
+                "url" => "https://pi.ai/",
+                "logo" => "/assets/images/bookmarks/pi.png"
+            ]
         ]
     ],
     [
-        "title" => "AI Chat Platforms",
-        "slug" => "ai-chat-platforms",
+        "name" => "Coding & Programming",
+        "slug" => "coding-programming",
         "links" => [
-            ["url" => "https://chat.openai.com/", "name" => "ChatGPT", "logo" => "/assets/images/brands/chatgpt.png", "tags" => ["AI", "chat"]],
-            ["url" => "https://www.getmerlin.in/chat", "name" => "Merlin AI", "logo" => "/assets/images/brands/phind.png", "tags" => []],
-            ["url" => "https://www.blackbox.ai/", "name" => "Blackbox AI", "logo" => "/assets/images/brands/blackbox.png", "tags" => ["AI", "chat"]],
-            ["url" => "https://www.perplexity.ai/", "name" => "Perplexity", "logo" => "/assets/images/brands/perplexity.png", "tags" => []],
-            ["url" => "https://www.phind.com/", "name" => "Phind", "logo" => "/assets/images/brands/phind.png", "tags" => []],
-            ["url" => "https://gemini.google.com/app", "name" => "Gemini", "logo" => "/assets/images/brands/gemini.png", "tags" => ["AI", "chat"]],
-            ["url" => "https://bing.com/chat", "name" => "Bing Chat", "logo" => "/assets/images/brands/bing.png", "tags" => ["AI", "chat"]],
-            ["url" => "https://app.rytr.me/create/chat", "name" => "Rytr", "logo" => "/assets/images/brands/rytr.png", "tags" => ["AI", "writing"]],
-            ["url" => "https://www.you.com/", "name" => "YouChat", "logo" => "/assets/images/brands/you.png", "tags" => ["AI", "chat"]],
-            ["url" => "https://www.poe.com/", "name" => "Poe by Quora", "logo" => "/assets/images/brands/poe.png", "tags" => ["AI", "chat"]],
-            ["url" => "https://free.ayaivn.me/", "name" => "Open WebUI", "logo" => "/assets/images/brands/splash.png", "tags" => ["AI", "chat"]],
-            ["url" => "https://www.usnap.ai/", "name" => "USnap.ai", "logo" => "/assets/images/brands/usnap.png", "tags" => ["AI", "chat"]],
-            ["url" => "https://iask.ai/?mode=question", "name" => "iAsk", "logo" => "/assets/images/brands/iask.png", "tags" => ["AI", "chat"]],
-            ["url" => "https://chat.deepseek.com/", "name" => "DeepSeek", "logo" => "/assets/images/brands/deepseek.png", "tags" => ["AI", "chat"]],
+            [
+                "name" => "Phind",
+                "url" => "https://www.phind.com/",
+                "logo" => "/assets/images/bookmarks/phind.png"
+            ],
+            [
+                "name" => "Blackbox AI",
+                "url" => "https://www.useblackbox.io/",
+                "logo" => "/assets/images/bookmarks/blackbox.png"
+            ],
+            [
+                "name" => "DeepSeek",
+                "url" => "https://www.deepseek.com/",
+                "logo" => "/assets/images/bookmarks/deepseek.png"
+            ]
         ]
     ],
     [
-        "title" => "Miscellaneous",
-        "slug" => "miscellaneous",
+        "name" => "Writing & Content Creation",
+        "slug" => "writing-content-creation",
         "links" => [
-            ["url" => "https://www.wikipedia.org/", "name" => "Wikipedia", "logo" => "https://upload.wikimedia.org/wikipedia/commons/thumb/6/63/Wikipedia-logo.png/480px-Wikipedia-logo.png", "tags" => ["encyclopedia", "knowledge"]],
-            ["url" => "https://www.reddit.com/", "name" => "Reddit", "logo" => "https://upload.wikimedia.org/wikipedia/commons/5/58/Reddit_logo_new.svg", "tags" => ["forums", "community"]],
-            ["url" => "https://www.archive.org/", "name" => "Internet Archive", "logo" => "https://upload.wikimedia.org/wikipedia/commons/6/6a/Internet_Archive_logo.png", "tags" => ["archives", "history"]],
-            ["url" => "https://www.gumroad.com/", "name" => "Gumroad", "logo" => "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f3/Gumroad_logo_2022.svg/800px-Gumroad_logo_2022.svg.png", "tags" => ["e-commerce", "digital products"]],
-            ["url" => "https://www.patreon.com/", "name" => "Patreon", "logo" => "https://upload.wikimedia.org/wikipedia/commons/8/89/Patreon_logo.svg", "tags" => ["membership", "creators"]],
-            ["url" => "https://www.kickstarter.com/", "name" => "Kickstarter", "logo" => "https://upload.wikimedia.org/wikipedia/commons/thumb/6/66/Kickstarter_logo.svg/1024px-Kickstarter_logo.svg.png", "tags" => ["crowdfunding", "projects"]],
-            ["url" => "https://www.trello.com/", "name" => "Trello", "logo" => "https://upload.wikimedia.org/wikipedia/en/3/32/Trello_logo.svg", "tags" => ["task management", "productivity"]],
-            ["url" => "https://www.medium.com/", "name" => "Medium", "logo" => "https://upload.wikimedia.org/wikipedia/commons/thumb/2/24/Medium_logo_Monogram.svg/1024px-Medium_logo_Monogram.svg.png", "tags" => ["blogs", "articles"]],
-            ["url" => "https://www.producthunt.com/", "name" => "Product Hunt", "logo" => "https://upload.wikimedia.org/wikipedia/commons/6/61/Product_Hunt_logo.png", "tags" => ["tech", "products"]],
-            ["url" => "https://www.ifttt.com/", "name" => "IFTTT", "logo" => "https://upload.wikimedia.org/wikipedia/commons/9/9e/IFTTT_Logo_2021.svg", "tags" => ["automation", "connectivity"]],
+            [
+                "name" => "Rytr",
+                "url" => "https://rytr.me/",
+                "logo" => "/assets/images/bookmarks/rytr.png"
+            ],
+            [
+                "name" => "Merlin AI",
+                "url" => "https://merlin.foyer.work/",
+                "logo" => "/assets/images/bookmarks/merlin.png"
+            ]
         ]
     ],
+    [
+        "name" => "Search & Research",
+        "slug" => "search-research",
+        "links" => [
+            [
+                "name" => "Perplexity",
+                "url" => "https://www.perplexity.ai/",
+                "logo" => "/assets/images/bookmarks/perplexity.png"
+            ],
+            [
+                "name" => "Phind",
+                "url" => "https://www.phind.com/",
+                "logo" => "/assets/images/bookmarks/phind.png"
+            ],
+            [
+                "name" => "DeepSeek",
+                "url" => "https://www.deepseek.com/",
+                "logo" => "/assets/images/bookmarks/deepseek.png"
+            ],
+            [
+                "name" => "iAsk",
+                "url" => "https://www.iask.ai/",
+                "logo" => "/assets/images/bookmarks/iask.png"
+            ]
+        ]
+    ],
+    [
+        "name" => "Business & Productivity",
+        "slug" => "business-productivity",
+        "links" => [
+            [
+                "name" => "Microsoft Copilot",
+                "url" => "https://copilot.microsoft.com/",
+                "logo" => "/assets/images/bookmarks/copilot.png"
+            ],
+            [
+                "name" => "ChatGPT",
+                "url" => "https://chat.openai.com/",
+                "logo" => "/assets/images/bookmarks/chatgpt.png"
+            ],
+            [
+                "name" => "Gemini",
+                "url" => "https://gemini.google.com/",
+                "logo" => "/assets/images/bookmarks/gemini.png"
+            ]
+        ]
+    ],
+    [
+        "name" => "AI Image, Video & Audio Generation",
+        "slug" => "ai-image-video-audio-generation",
+        "links" => [
+            [
+                "name" => "Runway",
+                "url" => "https://runwayml.com/",
+                "logo" => "/assets/images/bookmarks/runway.png"
+            ],
+            [
+                "name" => "Pika",
+                "url" => "https://www.pika.art/",
+                "logo" => "/assets/images/bookmarks/pika.png"
+            ],
+            [
+                "name" => "Ideogram",
+                "url" => "https://ideogram.ai/",
+                "logo" => "/assets/images/bookmarks/ideogram.png"
+            ]
+        ]
+    ], [
+        "name" => "Social Media & Content Platforms",
+        "slug" => "social-media-content-platforms",
+        "links" => [
+            [
+                "name" => "Reddit",
+                "url" => "https://www.reddit.com/",
+                "logo" => "/assets/images/bookmarks/reddit.png"
+            ],
+            [
+                "name" => "9GAG TV",
+                "url" => "https://9gag.com/tv",
+                "logo" => "/assets/images/bookmarks/9gag.png"
+            ],
+            [
+                "name" => "YouTube",
+                "url" => "https://www.youtube.com/",
+                "logo" => "/assets/images/bookmarks/youtube.png"
+            ],
+            [
+                "name" => "Tumblr",
+                "url" => "https://www.tumblr.com/",
+                "logo" => "/assets/images/bookmarks/tumblr.png"
+            ],
+            [
+                "name" => "Pinterest",
+                "url" => "https://www.pinterest.com/",
+                "logo" => "/assets/images/bookmarks/pinterest.png"
+            ],
+            [
+                "name" => "LinkedIn",
+                "url" => "https://www.linkedin.com/",
+                "logo" => "/assets/images/bookmarks/linkedin.png"
+            ],
+            [
+                "name" => "Instagram",
+                "url" => "https://www.instagram.com/",
+                "logo" => "/assets/images/bookmarks/instagram.png"
+            ],
+            [
+                "name" => "Twitter (X)",
+                "url" => "https://twitter.com/",
+                "logo" => "/assets/images/bookmarks/twitter.png"
+            ],
+            [
+                "name" => "Facebook",
+                "url" => "https://www.facebook.com/",
+                "logo" => "/assets/images/bookmarks/facebook.png"
+            ]
+        ]
+    ]
 ];
-define("DEFAULT_BOOKMARKS", $bookmarks);
+
+define('DEFAULT_BOOKMARKS', $bookmarks);
