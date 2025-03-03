@@ -132,6 +132,11 @@ $bookmarks = [
                 "name" => "PI",
                 "url" => "https://pi.ai/",
                 "logo" => "/assets/images/bookmarks/pi.png"
+            ],
+            [
+                "name" => "Grok",
+                "url" => "https://grok.com/?referrer=website",
+                "logo" => "/assets/images/bookmarks/grok.png"
             ]
         ]
     ],
@@ -287,6 +292,11 @@ $bookmarks = [
                 "name" => "Facebook",
                 "url" => "https://www.facebook.com/",
                 "logo" => "/assets/images/bookmarks/facebook.png"
+            ],
+            [
+                "name" => "Threads",
+                "url" => "https://www.threads.net/",
+                "logo" => "/assets/images/bookmarks/threads.png"
             ]
         ]
     ]
