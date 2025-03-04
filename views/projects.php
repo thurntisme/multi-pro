@@ -87,7 +87,6 @@ include_once DIR . '/components/alert.php';
                         <th>Title</th>
                         <th class="text-center">Start Date</th>
                         <th class="text-center">End Date</th>
-                        <th class="text-center">Status</th>
                         <th class="text-center">Type</th>
                         <th class="text-end">Last Updated</th>
                     </tr>
@@ -126,7 +125,6 @@ include_once DIR . '/components/alert.php';
                                 </td>
                                 <td class="text-center"><?= $systemController->convertDate($item['start_date']) ?></td>
                                 <td class="text-center"><?= $systemController->convertDate($item['end_date']) ?></td>
-                                <td class="text-center"><?= renderStatusBadge($item['status']) ?></td>
                                 <td class="text-center fw-bold text-capitalize"><?= $item['type'] ?></td>
                                 <td class="text-end"><?= $systemController->convertDateTime($item['updated_at']) ?></td>
                             </tr>

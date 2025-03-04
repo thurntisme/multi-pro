@@ -85,8 +85,16 @@ define('DEFAULT_DASHBOARD_OPTIONS', $dashboard);
 
 $quickApps = array(
     array(
+        'title' => 'Daily Checklist',
+        'slug' => 'daily-checklist',
+    ),
+    array(
         'title' => 'To Do',
         'slug' => 'todo',
+    ),
+    array(
+        'title' => 'Project',
+        'slug' => 'project',
     ),
     array(
         'title' => 'Note',
@@ -112,12 +120,4 @@ $quickApps = array(
         'title' => 'Course',
         'slug' => 'course',
     ),
-    array(
-        'title' => 'Blog',
-        'slug' => 'blog',
-    ),
-    array(
-        'title' => 'Game',
-        'slug' => 'football-manager',
-    )
 );

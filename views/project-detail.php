@@ -30,7 +30,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 ob_start();
 ?>
 <div class="row">
-    <div class="col-xl-8 col-md-10 offset-xl-2 offset-md-1">
+    <div class="col-12">
         <?php
         includeFileWithVariables('components/single-button-group.php', array("slug" => "project", "post_id" => $postData['id'], 'modify_type' => $modify_type));
         ?>
@@ -127,27 +127,9 @@ ob_start();
             <div class="card-header border-0">
                 <div class="d-flex align-items-center">
                     <h5 class="card-title mb-0 flex-grow-1">All Tasks</h5>
+                    <button data-bs-toggle="modal" data-bs-target="#createTaskModal" class="btn btn-soft-success add-btn"><i
+                            class="ri-add-line align-bottom me-1"></i> Create Task</button>
                 </div>
-            </div>
-            <div class="card-body border border-dashed border-end-0 border-start-0">
-                <form method="post" action="<?= $_SERVER['REQUEST_URI'] ?>">
-                    <?php if (!empty($post_id)) { ?>
-                        <input type="hidden" name="project_id" value="<?= $post_id ?>">
-                        <input type="hidden" name="action_name" value="new_task">
-                    <?php } ?>
-                    <div class="row">
-                        <div class="col-4">
-                            <input type="text" name="task_title" class="form-control search bg-light border-light"
-                                placeholder="Input task title">
-                        </div>
-                        <div class="col-4">
-                            <input type="text" class="form-control" id="datepicker-deadline-input"
-                                placeholder="Enter due date" data-provider="flatpickr" name="task_due_date" data-date-format="Y-m-d">
-                        </div>
-                        <button type="submit" class="btn btn-soft-success add-btn w-25"><i
-                                class="ri-add-line align-bottom me-1"></i> Create Task</button>
-                    </div>
-                </form>
             </div>
             <div class="card-body border border-dashed border-end-0 border-start-0">
                 <form method="get" action="<?= home_url("app/project/detail?id=" . $post_id) ?>">
@@ -186,9 +168,8 @@ ob_start();
                         <thead class="table-light text-muted">
                             <tr>
                                 <th>Title</th>
-                                <th>Description</th>
-                                <th class="text-center">Due Date</th>
                                 <th class="text-center">Status</th>
+                                <th class="text-center">Due Date</th>
                                 <th class="text-end">Last Updated</th>
                             </tr>
                         </thead>
@@ -199,7 +180,7 @@ ob_start();
                                         <td>
                                             <div class="d-flex align-items-baseline">
                                                 <a class="text-black"
-                                                    href="<?= home_url('app/project/detail?id=' . $item['id']) ?>"><?= $item['title'] ?></a>
+                                                    href="<?= home_url('app/task/detail?id=' . $item['id']) ?>"><?= $item['title'] ?></a>
                                                 <ul class="list-inline tasks-list-menu mb-0 ms-3">
                                                     <li class="list-inline-item m-0">
                                                         <form method="POST" action="<?= $_SERVER['REQUEST_URI'] ?>">
@@ -214,9 +195,8 @@ ob_start();
                                                 </ul>
                                             </div>
                                         </td>
-                                        <td><?= truncateString($item['desciption'], 50) ?></td>
-                                        <td class="text-center"><?= $systemController->convertDate($item['due_date']) ?></td>
                                         <td class="text-center"><?= renderStatusBadge($item['status']) ?></td>
+                                        <td class="text-center"><?= $systemController->convertDate($item['due_date']) ?></td>
                                         <td class="text-end"><?= $systemController->convertDateTime($item['updated_at']) ?></td>
                                     </tr>
                             <?php }
@@ -231,5 +211,50 @@ ob_start();
     </div>
 </div>
 
+<div class="modal fade" id="createTaskModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0">
+            <div class="modal-header p-3 bg-info-subtle">
+                <h5 class="modal-title" id="modal-title">New Task</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
+            </div>
+            <div class="modal-body p-4">
+                <form method="POST" action="<?= $_SERVER['REQUEST_URI'] ?>">
+                    <?php if (!empty($post_id)) { ?>
+                        <input type="hidden" name="project_id" value="<?= $post_id ?>">
+                        <input type="hidden" name="action_name" value="new_task">
+                    <?php } ?>
+                    <div class="mb-3">
+                        <label class="form-label" for="task-title-input">Title</label>
+                        <input type="text" class="form-control" id="task-title-input" name="task_title"
+                            placeholder="Enter title">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label" for="task_description">Content</label>
+                        <textarea name="task_description" class="ckeditor-classic">
+                                </textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label for="datepicker-task-due-date-input" class="form-label">Deadline</label>
+                        <input type="text" class="form-control" id="datepicker-task-due-date-input"
+                            placeholder="Enter due date" data-provider="flatpickr" name="task_due_date" data-date-format="Y-m-d">
+                    </div>
+                    <div class="mt-4 hstack gap-2 justify-content-center">
+                        <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
+                        <button type="submit"
+                            class="btn btn-success w-sm">Create</button>
+                    </div>
+                </form>
+            </div>
+        </div> <!-- end modal-content-->
+    </div> <!-- end modal dialog-->
+</div>
+
 <?php
 $pageContent = ob_get_clean();
+
+ob_start();
+echo "
+<script src='" . home_url("/assets/libs/@ckeditor/ckeditor5-build-classic/build/ckeditor.js") . "'></script>
+";
+$additionJs = ob_get_clean();

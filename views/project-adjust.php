@@ -63,14 +63,14 @@ ob_start();
                     </div>
 
                     <div class="row">
-                        <div class="col-lg-3">
+                        <div class="col-lg-4">
                             <div class="mb-3 mb-lg-0">
                                 <label for="choices-type-input" class="form-label">Type</label>
                                 <select class="form-select" data-choices data-choices-search-false
                                     data-choices-sorting-false
                                     id="choices-type-input" name="type">
                                     <?php
-                                    $types = ['owner' => 'Owner', 'freelancer' => 'Freelancer'];
+                                    $types = ['freelancer' => 'Freelancer', 'owner' => 'Owner'];
                                     foreach ($types as $value => $label) {
                                         $selected = (!empty($postData['type']) ? $value === $postData['type'] : $value === 'owner') ? 'selected' : '';
                                         echo "<option value=\"$value\" $selected>$label</option>";
@@ -79,29 +79,29 @@ ob_start();
                                 </select>
                             </div>
                         </div>
-                        <div class="col-lg-3">
+                        <!-- <div class="col-lg-3">
                             <div class="mb-3 mb-lg-0">
                                 <label for="choices-status-input" class="form-label">Status</label>
                                 <select class="form-select" data-choices data-choices-search-false
                                     data-choices-sorting-false
                                     id="choices-status-input" name="status">
                                     <?php
-                                    foreach ($status as $value => $label) {
-                                        $selected = (!empty($postData['status']) ? $value === $postData['status'] : $value === 'not_started') ? 'selected' : '';
-                                        echo "<option value=\"$value\" $selected>$label</option>";
-                                    }
+                                    // foreach ($status as $value => $label) {
+                                    //     $selected = (!empty($postData['status']) ? $value === $postData['status'] : $value === 'not_started') ? 'selected' : '';
+                                    //     echo "<option value=\"$value\" $selected>$label</option>";
+                                    // }
                                     ?>
                                 </select>
                             </div>
-                        </div>
-                        <div class="col-lg-3">
+                        </div> -->
+                        <div class="col-lg-4">
                             <div>
                                 <label for="datepicker-start-date-input" class="form-label">Start Date</label>
                                 <input type="text" name="start_date" class="form-control" id="datepicker-start-date-input"
                                     placeholder="Enter Start Date" data-provider="flatpickr" value="<?= !empty($postData['start_date']) && ($postData['start_date'] !== '0000-00-00') ? $postData['start_date'] : "" ?>">
                             </div>
                         </div>
-                        <div class="col-lg-3">
+                        <div class="col-lg-4">
                             <div>
                                 <label for="datepicker-end-date-input" class="form-label">End Date</label>
                                 <input type="text" name="end_date" class="form-control" id="datepicker-end-date-input"

@@ -16,6 +16,7 @@ function getPageData($slug, $role): array
         'project/edit' => ['url' => DIR . '/views/project-adjust.php', 'title' => 'Edit Project', 'role' => 0],
         'project/detail' => ['url' => DIR . '/views/project-detail.php', 'title' => 'Project Detail', 'role' => 0],
         'project/report' => ['url' => DIR . '/views/report-working.php', 'title' => 'Project Report', 'role' => 0],
+        'task/detail' => ['url' => DIR . '/views/task-detail.php', 'title' => 'Task Detail', 'role' => 0],
         'finance' => ['url' => DIR . '/views/finance.php', 'title' => 'Finance', 'role' => 3],
         'finance/budget' => ['url' => DIR . '/views/budget.php', 'title' => 'Budget', 'role' => 0],
         'finance/income' => ['url' => DIR . '/views/income.php', 'title' => 'Income', 'role' => 0],

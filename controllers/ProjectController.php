@@ -184,7 +184,7 @@ class ProjectController
       $stmt = $this->pdo->prepare($sql);
       $stmt->execute([':id' => $post_id]);
 
-      $taskSql = "SELECT * FROM tasks WHERE project_id = :project_id";
+      $taskSql = "SELECT * FROM tasks WHERE project_id = :project_id ORDER BY updated_at DESC";
       $taskStmt = $this->pdo->prepare($taskSql);
       $taskStmt->execute([':project_id' => $post_id]);
 
@@ -204,12 +204,13 @@ class ProjectController
   {
     $project_id = $_POST['project_id'] ?? '';
     $task_title = $_POST['task_title'] ?? '';
+    $task_description = $_POST['task_description'] ?? '';
     $task_due_date = $_POST['task_due_date'] ?? '';
 
     if ($project_id) {
-      $sql = "INSERT INTO tasks (project_id, title, due_date) VALUES (:project_id, :title, :due_date)";
+      $sql = "INSERT INTO tasks (project_id, title, description, due_date) VALUES (:project_id, :title, :description, :due_date)";
       $stmt = $this->pdo->prepare($sql);
-      $stmt->execute([':project_id' => $project_id, ':title' => $task_title, ':due_date' => $task_due_date]);
+      $stmt->execute([':project_id' => $project_id, ':title' => $task_title, ':description' => $task_description, ':due_date' => $task_due_date]);
 
       $result = $this->pdo->lastInsertId();
 
@@ -232,6 +233,7 @@ class ProjectController
   public function deleteTask()
   {
     $id = $_POST['task_id'] ?? null;
+    $project_id = $_POST['project_id'] ?? '';
     if ($id) {
       $sql = "DELETE FROM tasks WHERE id = :id";
       $stmt = $this->pdo->prepare($sql);
@@ -241,6 +243,10 @@ class ProjectController
       if ($rowsAffected) {
         $_SESSION['message_type'] = 'success';
         $_SESSION['message'] = "Task deleted successfully.";
+        if (!empty($project_id)){
+          header("Location: " . home_url('app/project/detail?id=' . $project_id));
+          exit;
+        }
       } else {
         $_SESSION['message_type'] = 'danger';
         $_SESSION['message'] = "Failed to delete task.";
@@ -252,5 +258,57 @@ class ProjectController
 
     header("Location: " . $_SERVER['REQUEST_URI']);
     exit;
+  }
+
+  public function viewTask($post_id)
+  {
+    if ($post_id) {
+      $sql = "SELECT * FROM tasks WHERE id = :id";
+      $stmt = $this->pdo->prepare($sql);
+      $stmt->execute([':id' => $post_id]);
+
+      return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+
+    $_SESSION['message_type'] = 'danger';
+    $_SESSION['message'] = "Task ID is required.";
+    header("Location: " . $_SERVER['REQUEST_URI']);
+    exit;
+  }
+
+  public function changeStatusTask()
+  {
+      $id = $_POST['task_id'] ?? null;
+      if ($id) {
+          $rowsAffected = $this->changeStatusTaskCallback($id);
+          if ($rowsAffected) {
+              $_SESSION['message_type'] = 'success';
+              $_SESSION['message'] = "Task's status has been successfully updated.";
+          } else {
+              $_SESSION['message_type'] = 'danger';
+              $_SESSION['message'] = "Failed to update task's status.";
+          }
+      } else {
+          $_SESSION['message_type'] = 'danger';
+          $_SESSION['message'] = "Failed to update task's status.";
+      }
+
+      header("Location: " . $_SERVER['REQUEST_URI']);
+      exit;
+  }
+
+  function changeStatusTaskCallback($id)
+  {
+      $sql = "SELECT status FROM tasks WHERE id = :id";
+      $stmt = $this->pdo->prepare($sql);
+      $stmt->execute([':id' => $id]);
+      $task = $stmt->fetch(PDO::FETCH_ASSOC);
+      $newStatus = $task['status'] === 'pending' ? 'complete' : 'pending';
+
+      $sql = "UPDATE tasks SET status = :status WHERE id = :id";
+      $stmt = $this->pdo->prepare($sql);
+      $stmt->execute([':status' => $newStatus, ':id' => $id]);
+
+      return $stmt->rowCount();
   }
 }
