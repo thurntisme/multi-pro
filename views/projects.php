@@ -2,7 +2,7 @@
 global $priorities, $status;
 require_once 'controllers/ProjectController.php';
 
-$pageTitle = "Projects";
+$pageTitle = "Project";
 
 $projectController = new ProjectController();
 $list = $projectController->listProjects();

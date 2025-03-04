@@ -84,11 +84,6 @@ $menu_items = [
         'title' => 'App',
         'sub_items' => [
             [
-                'name' => 'Bookmark',
-                'icon' => 'ri-bookmark-line',
-                'slug' => 'bookmark'
-            ],
-            [
                 'name' => 'Short Link',
                 'icon' => 'ri-link-m',
                 'slug' => 'short-link'
@@ -114,9 +109,9 @@ $menu_items = [
         'title' => 'Work',
         'sub_items' => [
             [
-                'name' => 'Projects',
+                'name' => 'Project',
                 'icon' => 'ri-folder-5-line',
-                'slug' => 'projects'
+                'slug' => 'project'
             ],
             [
                 'name' => 'Report Working',

@@ -184,11 +184,72 @@ class ProjectController
       $stmt = $this->pdo->prepare($sql);
       $stmt->execute([':id' => $post_id]);
 
-      return $stmt->fetch(PDO::FETCH_ASSOC);
+      $taskSql = "SELECT * FROM tasks WHERE project_id = :project_id";
+      $taskStmt = $this->pdo->prepare($taskSql);
+      $taskStmt->execute([':project_id' => $post_id]);
+
+      $result = $stmt->fetch(PDO::FETCH_ASSOC);
+      $result['tasks'] = $taskStmt->fetchAll(PDO::FETCH_ASSOC);
+
+      return $result;
     }
 
     $_SESSION['message_type'] = 'danger';
     $_SESSION['message'] = "Project ID is required.";
+    header("Location: " . $_SERVER['REQUEST_URI']);
+    exit;
+  }
+
+  public function createTask()
+  {
+    $project_id = $_POST['project_id'] ?? '';
+    $task_title = $_POST['task_title'] ?? '';
+    $task_due_date = $_POST['task_due_date'] ?? '';
+
+    if ($project_id) {
+      $sql = "INSERT INTO tasks (project_id, title, due_date) VALUES (:project_id, :title, :due_date)";
+      $stmt = $this->pdo->prepare($sql);
+      $stmt->execute([':project_id' => $project_id, ':title' => $task_title, ':due_date' => $task_due_date]);
+
+      $result = $this->pdo->lastInsertId();
+
+      if ($result) {
+        $_SESSION['message_type'] = 'success';
+        $_SESSION['message'] = "Task created successfully";
+      } else {
+        $_SESSION['message_type'] = 'danger';
+        $_SESSION['message'] = "Project ID is required.";
+      }
+
+      header("Location: " . $_SERVER['REQUEST_URI']);
+      exit;
+    } else {
+      $_SESSION['message_type'] = 'danger';
+      $_SESSION['message'] = "Task title is required.";
+    }
+  }
+
+  public function deleteTask()
+  {
+    $id = $_POST['task_id'] ?? null;
+    if ($id) {
+      $sql = "DELETE FROM tasks WHERE id = :id";
+      $stmt = $this->pdo->prepare($sql);
+      $stmt->execute([':id' => $id]);
+  
+      $rowsAffected = $stmt->rowCount();
+      if ($rowsAffected) {
+        $_SESSION['message_type'] = 'success';
+        $_SESSION['message'] = "Task deleted successfully.";
+      } else {
+        $_SESSION['message_type'] = 'danger';
+        $_SESSION['message'] = "Failed to delete task.";
+      }
+    } else {
+      $_SESSION['message_type'] = 'danger';
+      $_SESSION['message'] = "Task ID is required.";
+    }
+
     header("Location: " . $_SERVER['REQUEST_URI']);
     exit;
   }
