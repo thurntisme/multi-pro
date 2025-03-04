@@ -68,6 +68,12 @@ class UserController
         return $currentUser['first_name'] . ' ' . $currentUser['last_name'];
     }
 
+    public function getUserPoint($id)
+    {
+        $currentUser = $this->userService->getUser('id', $id);
+        return $currentUser['point'];
+    }
+
     public function getSystemUser()
     {
         return $this->userService->getUser('username', 'system');

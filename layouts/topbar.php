@@ -4,6 +4,7 @@ require_once 'controllers/SystemNotificationController.php';
 
 $user = new UserController();
 $user_fullName = $user->getUserFullName($user_id);
+$user_point = $user->getUserPoint($user_id);
 $fullName = !empty(trim($user_fullName)) ? $user_fullName : 'User';
 
 $file = 'error.log';
@@ -687,7 +688,7 @@ $systemNotiCount = $systemNotificationController->getSystemNotificationsUnreadCo
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item" href="<?= home_url('app/wallet') ?>"><i
                                 class="mdi mdi-wallet text-muted fs-16 align-middle me-1"></i> <span
-                                class="align-middle">Balance : <b>$5971.67</b></span></a>
+                                class="align-middle"><b><?= $commonController->formatNumberWithCommas($user_point) ?></b></span></a>
                         <a class="dropdown-item" href="<?= home_url('app/my-settings') ?>"><i
                                 class="mdi mdi-cog-outline text-muted fs-16 align-middle me-1"></i> <span
                                 class="align-middle">My Settings</span></a>

@@ -152,4 +152,12 @@ class CommonController
             'resources' => $pagedResources,
         ];
     }
+
+    function formatNumberWithCommas($number) {
+        if (empty($number) || !is_numeric($number)) {
+            return $number;
+        }
+    
+        return number_format($number);
+    }
 }

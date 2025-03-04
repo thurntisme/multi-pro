@@ -14,6 +14,7 @@ return function (PDO $pdo) {
         'isEmailVerify TINYINT(1) DEFAULT 0', //-- 0 for unverified, 1 for verified
         'isActive TINYINT(1) DEFAULT 1',      //-- 0 for deactivated, 1 for active
         'last_login DATETIME',
+        'point INTEGER DEFAULT 20250304',
         'created_at DATETIME DEFAULT CURRENT_TIMESTAMP',
         'updated_at DATETIME DEFAULT CURRENT_TIMESTAMP',
     ];
