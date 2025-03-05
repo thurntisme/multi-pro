@@ -424,6 +424,7 @@ $priorities = [
     'high' => 'High',
     'critical' => 'Critical',
 ];
+
 $status = [
     'not_started' => 'Not Started',
     'todo' => 'Todo',
@@ -431,7 +432,7 @@ $status = [
     'in_progress' => 'Inprogress',
     'completed' => 'Completed',
     'on_hold' => 'On Hold',
-    'cancelled' => 'Cancelled',
+    'cancelled' => 'Cancelled', 
 ];
 
 $projectTypes = array(

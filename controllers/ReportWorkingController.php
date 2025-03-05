@@ -104,12 +104,12 @@ class ReportWorkingController
     $keyword = '%' . $keyword . '%'; // Prepare for LIKE search
 
     // Filter last updated
-    $lastUpdated = isset($_GET['last_updated']) ? $_GET['last_updated'] : '';
+    $workingDate = isset($_GET['working_date']) ? $_GET['working_date'] : '';
 
     // Filter by role (optional)
     $type = isset($_GET['type']) ? $_GET['type'] : '';
 
-    $selectSql = $queryType === "result" ? "SELECT * FROM report_working" : "SELECT COUNT(*) FROM todos";
+    $selectSql = $queryType === "result" ? "SELECT * FROM report_working" : "SELECT COUNT(*) FROM report_working";
     $sql = $selectSql . " WHERE user_id = $this->user_id ";
 
     if ($keyword !== '') {
@@ -120,9 +120,14 @@ class ReportWorkingController
       $sql .= " AND type = :type";
     }
 
-    list($startDate, $endDate) = getDateRange($lastUpdated);
-    if ($lastUpdated !== '') {
-      $sql .= " AND datetime(updated_at, '" . getTimezoneOffset() . "') BETWEEN :start_date AND :end_date";
+    $startDate = '';
+    $endDate = '';
+    if ($workingDate !== '') {
+      $date_array = explode('to', $workingDate);
+      $date_array = array_map('trim', $date_array);
+      list($startDate, $endDate) = $date_array;
+      $endDate = $endDate ?? $startDate;
+      $sql .= " AND working_date BETWEEN :start_date AND :end_date";
     }
 
     // Sorting parameters (optional)

@@ -6,6 +6,14 @@ $pageTitle = "Report Working";
 $reportWorkingController = new ReportWorkingController();
 $list = $reportWorkingController->listReportWorkings();
 
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    if (isset($_POST['action_name'])) {
+        if ($_POST['action_name'] === 'delete_record' && isset($_POST['post_id'])) {
+            $reportWorkingController->deleteReport();
+        }
+    }
+}
+
 ob_start();
 ?>
 
@@ -19,19 +27,19 @@ include_once DIR . '/components/alert.php';
             <h5 class="card-title mb-0 flex-grow-1">All Reports</h5>
             <div class="flex-shrink-0">
                 <div class="d-flex flex-wrap gap-2">
-                    <a class="btn btn-danger add-btn" href="<?= home_url('report-working/new') ?>"><i
+                    <a class="btn btn-soft-success add-btn" href="<?= home_url('app/report-working/new') ?>"><i
                             class="ri-add-line align-bottom me-1"></i> Create Report</a>
                 </div>
             </div>
         </div>
     </div>
     <div class="card-body border border-dashed border-end-0 border-start-0">
-        <form method="get" action="<?= home_url('report-working') ?>">
+        <form method="get" action="<?= home_url('app/report-working') ?>">
             <div class="row g-3">
                 <div class="col-xxl-5 col-sm-12">
                     <div class="search-box">
                         <input type="text" name="s" class="form-control search bg-light border-light"
-                            placeholder="Search for report or something...">
+                            placeholder="Search for report or something..." value="<?= $_GET['s'] ?? '' ?>">
                         <i class="ri-search-line search-icon"></i>
                     </div>
                 </div>
@@ -39,27 +47,19 @@ include_once DIR . '/components/alert.php';
 
                 <div class="col-xxl-3 col-sm-4">
                     <input type="text" class="form-control bg-light border-light" id="demo-datepicker"
-                        data-provider="flatpickr" data-date-format="d M, Y" data-range-date="true"
-                        placeholder="Select date range">
+                        data-provider="flatpickr" data-date-format="Y-m-d" data-range-date="true" name="working_date"
+                        placeholder="Select date range" value="<?= $_GET['working_date'] ?? '' ?>">
                 </div>
                 <!--end col-->
 
-                <div class="col-xxl-3 col-sm-4">
-                    <div class="input-light">
-                        <select class="form-control" data-choices data-choices-search-false
-                            name="choices-single-default" id="idStatus">
-                            <option value="" selected>All</option>
-                            <option value="monthly">Monthly</option>
-                            <option value="yearly">Yearly</option>
-                        </select>
-                    </div>
-                </div>
                 <!--end col-->
-                <div class="col-xxl-1 col-sm-4">
+                <div class="col-xxl-2 col-sm-4 d-flex">
                     <button type="submit" class="btn btn-primary w-100"> <i
                             class="ri-equalizer-fill me-1 align-bottom"></i>
                         Filters
                     </button>
+                    <a href="<?= home_url("app/report-working") ?>" class="btn btn-danger ms-1"><i
+                            class="ri-delete-bin-2-fill me-1 align-bottom"></i>Reset</a>
                 </div>
                 <!--end col-->
             </div>
@@ -85,15 +85,29 @@ include_once DIR . '/components/alert.php';
                             <tr>
                                 <td>
                                     <div class="d-flex">
-                                        <div class="flex-grow-1"><?= truncateString($item['title'], 50) ?></div>
+                                        <?= $item['title'] ?>
                                         <div class="flex-shrink-0 ms-4">
                                             <ul class="list-inline tasks-list-menu mb-0">
-                                                <li class="list-inline-item"><a
-                                                        href="<?= home_url('report-working/detail?id=' . $item['id']) ?>"><i
-                                                            class="ri-eye-fill align-bottom me-2 text-muted"></i></a></li>
-                                                <li class="list-inline-item"><a class="edit-item-btn"
-                                                        href="<?= home_url('report-working/edit?id=' . $item['id']) ?>"><i
-                                                            class="ri-pencil-fill align-bottom me-2 text-muted"></i></a></li>
+                                                <li class="list-inline-item m-0"><a
+                                                        class="edit-item-btn btn btn-link btn-sm"
+                                                        href="<?= home_url('app/report-working/detail?id=' . $item['id']) ?>"><i
+                                                            class="ri-eye-fill align-bottom text-muted"></i></a>
+                                                </li>
+                                                <li class="list-inline-item m-0"><a
+                                                        class="edit-item-btn btn btn-link btn-sm"
+                                                        href="<?= home_url('app/report-working/edit?id=' . $item['id']) ?>"><i
+                                                            class="ri-pencil-fill align-bottom text-muted"></i></a>
+                                                </li>
+                                                <li class="list-inline-item m-0">
+                                                    <form method="POST" action="<?= $_SERVER['REQUEST_URI'] ?>">
+                                                        <input type="hidden" name="action_name" value="delete_record">
+                                                        <input type="hidden" name="post_id" value="<?= $item['id'] ?>">
+                                                        <button type="submit" class="btn btn-link btn-sm btn-delete-record">
+                                                            <i
+                                                                class="ri-delete-bin-5-line align-bottom text-muted"></i>
+                                                        </button>
+                                                    </form>
+                                                </li>
                                             </ul>
                                         </div>
                                     </div>
@@ -107,16 +121,6 @@ include_once DIR . '/components/alert.php';
                     } ?>
                 </tbody>
             </table>
-            <!--end table-->
-            <div class="noresult" style="display: none">
-                <div class="text-center">
-                    <lord-icon src="https://cdn.lordicon.com/msoeawqm.json" trigger="loop"
-                        colors="primary:#121331,secondary:#08a88a" style="width:75px;height:75px"></lord-icon>
-                    <h5 class="mt-2">Sorry! No Result Found</h5>
-                    <p class="text-muted mb-0">Weve searched more than 200k+ todos We did not find any
-                        todos for you search.</p>
-                </div>
-            </div>
         </div>
         <?php
         includeFileWithVariables('components/pagination.php', array("count" => $list['count']));

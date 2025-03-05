@@ -33,13 +33,13 @@ if (!empty($modify_type)) {
 
 ob_start();
 ?>
-<form method="POST" action="<?= $_SERVER['REQUEST_URI'] ?>" id="report-working">
-    <div class="row">
-        <div class="col-lg-8">
-
-            <?php
-            include_once DIR . '/components/alert.php';
-            ?>
+<div class="row">
+    <div class="col-xl-8 col-md-10 offset-xl-2 offset-md-1">
+        <?php
+        includeFileWithVariables('components/single-button-group.php', array("slug" => "report-working", "post_id" => $postData['id'] ?? '', 'modify_type' => $modify_type));
+        ?>
+        <form method="POST" action="<?= $_SERVER['REQUEST_URI'] ?>" id="report-working">
+            <?php csrfInput() ?>
 
             <div class="card">
                 <div class="card-body">
@@ -109,11 +109,15 @@ ob_start();
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <select class="form-select" data-choices data-choices-search-false
-                                                        name="task_status">
-                                                        <option value="todo" <?php echo ($task['task_status'] == 'todo') ? 'selected' : ''; ?>>Todo</option>
-                                                        <option value="processing" <?php echo ($task['task_status'] == 'processing') ? 'selected' : ''; ?>>Processing</option>
-                                                        <option value="done" <?php echo ($task['task_status'] == 'done') ? 'selected' : ''; ?>>Done</option>
+                                                    <select class="form-select mb-0" data-choices data-choices-search-false
+                                                        data-choices-sorting-false
+                                                        id="choices-status-input" name="task_status">
+                                                        <?php
+                                                        foreach ($status as $value => $label) {
+                                                            $selected = (!empty($task['task_status']) ? $value === $task['task_status'] : $value === 'not_started') ? 'selected' : '';
+                                                            echo "<option value=\"$value\" $selected>$label</option>";
+                                                        }
+                                                        ?>
                                                     </select>
                                                 </td>
                                                 <td>
@@ -195,129 +199,9 @@ ob_start();
                 <button type="submit"
                     class="btn btn-success w-sm"><?= $modify_type === "new" ? "Create" : "Save" ?></button>
             </div>
-        </div>
-        <!-- end col -->
-        <div class="col-lg-4">
-            <div class="card">
-                <div class="card-header">
-                    <h5 class="card-title mb-0">Action</h5>
-                </div>
-                <div class="card-body">
-                    <a href="<?= home_url('report-working') ?>" class="btn btn-light w-sm">Back</a>
-                    <a href="<?= home_url('report-working/detail?id=' . $postData['id']) ?>"
-                        class="btn btn-info w-sm mx-2">View</a>
-                    <?php if (!empty($post_id)) { ?>
-                        <button type="button" class="btn btn-danger w-sm" data-bs-toggle="modal"
-                            data-bs-target="#deleteRecordModal">Delete</button>
-                    <?php } ?>
-                </div>
-                <!-- end card body -->
-            </div>
-            <!-- end card -->
-
-            <div class="card">
-                <div class="card-header">
-                    <h5 class="card-title mb-0">Privacy</h5>
-                </div>
-                <div class="card-body">
-                    <div>
-                        <label for="choices-privacy-status-input" class="form-label">Status</label>
-                        <select class="form-select" data-choices data-choices-search-false
-                            id="choices-privacy-status-input">
-                            <option value="Private" selected>Private</option>
-                            <option value="Team">Team</option>
-                            <option value="Public">Public</option>
-                        </select>
-                    </div>
-                </div>
-                <!-- end card body -->
-            </div>
-            <!-- end card -->
-
-            <div class="card">
-                <div class="card-header">
-                    <h5 class="card-title mb-0">Tags</h5>
-                </div>
-                <div class="card-body">
-                    <div class="mb-3">
-                        <label for="choices-categories-input" class="form-label">Categories</label>
-                        <select class="form-select" data-choices data-choices-search-false
-                            id="choices-categories-input">
-                            <option value="Designing" selected>Designing</option>
-                            <option value="Development">Development</option>
-                        </select>
-                    </div>
-
-                    <div>
-                        <label for="choices-text-input" class="form-label">Tags</label>
-                        <input class="form-control" id="choices-text-input" data-choices
-                            data-choices-limit="Required Limit" placeholder="Enter Skills" type="text" name="tags"
-                            value="<?= $postData['tags'] ?? '' ?>" />
-                    </div>
-                </div>
-                <!-- end card body -->
-            </div>
-            <!-- end card -->
-
-            <div class="card">
-                <div class="card-header">
-                    <h5 class="card-title mb-0">Members</h5>
-                </div>
-                <div class="card-body">
-                    <div class="mb-3">
-                        <label for="choices-lead-input" class="form-label">Team Lead</label>
-                        <select class="form-select" data-choices data-choices-search-false id="choices-lead-input">
-                            <option value="Brent Gonzalez" selected>Brent Gonzalez</option>
-                            <option value="Darline Williams">Darline Williams</option>
-                            <option value="Sylvia Wright">Sylvia Wright</option>
-                            <option value="Ellen Smith">Ellen Smith</option>
-                            <option value="Jeffrey Salazar">Jeffrey Salazar</option>
-                            <option value="Mark Williams">Mark Williams</option>
-                        </select>
-                    </div>
-
-                    <div>
-                        <label class="form-label">Team Members</label>
-                        <div class="avatar-group">
-                            <a href="javascript: void(0);" class="avatar-group-item" data-bs-toggle="tooltip"
-                                data-bs-trigger="hover" data-bs-placement="top" title="Brent Gonzalez">
-                                <div class="avatar-xs">
-                                    <img src="assets/images/users/avatar-3.jpg" alt="" class="rounded-circle img-fluid">
-                                </div>
-                            </a>
-                            <a href="javascript: void(0);" class="avatar-group-item" data-bs-toggle="tooltip"
-                                data-bs-trigger="hover" data-bs-placement="top" title="Sylvia Wright">
-                                <div class="avatar-xs">
-                                    <div class="avatar-title rounded-circle bg-secondary">
-                                        S
-                                    </div>
-                                </div>
-                            </a>
-                            <a href="javascript: void(0);" class="avatar-group-item" data-bs-toggle="tooltip"
-                                data-bs-trigger="hover" data-bs-placement="top" title="Ellen Smith">
-                                <div class="avatar-xs">
-                                    <img src="assets/images/users/avatar-4.jpg" alt="" class="rounded-circle img-fluid">
-                                </div>
-                            </a>
-                            <a href="javascript: void(0);" class="avatar-group-item" data-bs-toggle="tooltip"
-                                data-bs-trigger="hover" data-bs-placement="top" title="Add Members">
-                                <div class="avatar-xs" data-bs-toggle="modal" data-bs-target="#inviteMembersModal">
-                                    <div
-                                        class="avatar-title fs-16 rounded-circle bg-light border-dashed border text-primary">
-                                        +
-                                    </div>
-                                </div>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-                <!-- end card body -->
-            </div>
-            <!-- end card -->
-        </div>
-        <!-- end col -->
+        </form>
     </div>
-</form>
+</div>
 
 <?php
 include_once DIR . '/components/modal-delete.php';

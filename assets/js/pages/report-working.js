@@ -1,11 +1,3 @@
-/*
-Template Name: Velzon - Admin & Dashboard Template
-Author: Themesbrand
-Website: https://Themesbrand.com/
-Contact: Themesbrand@gmail.com
-File: Invoice create init Js File
-*/
-
 function new_link() {
   var count = $("tr.product").length;
   count++;
