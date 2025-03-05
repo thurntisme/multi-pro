@@ -158,6 +158,11 @@ $bookmarks = [
                 "name" => "DeepSeek",
                 "url" => "https://www.deepseek.com/",
                 "logo" => "/assets/images/bookmarks/deepseek.png"
+            ],
+            [
+                "name" => "v0",
+                "url" => "https://www.v0.dev/",
+                "logo" => "/assets/images/bookmarks/v0.png"
             ]
         ]
     ],
