@@ -279,8 +279,9 @@ class ProjectController
   public function changeStatusTask()
   {
       $id = $_POST['task_id'] ?? null;
+      $status = $_POST['status'] ?? 'not_started';
       if ($id) {
-          $rowsAffected = $this->changeStatusTaskCallback($id);
+          $rowsAffected = $this->changeStatusTaskCallback($id, $status);
           if ($rowsAffected) {
               $_SESSION['message_type'] = 'success';
               $_SESSION['message'] = "Task's status has been successfully updated.";
@@ -297,17 +298,11 @@ class ProjectController
       exit;
   }
 
-  function changeStatusTaskCallback($id)
+  function changeStatusTaskCallback($id, $status)
   {
-      $sql = "SELECT status FROM tasks WHERE id = :id";
-      $stmt = $this->pdo->prepare($sql);
-      $stmt->execute([':id' => $id]);
-      $task = $stmt->fetch(PDO::FETCH_ASSOC);
-      $newStatus = $task['status'] === 'pending' ? 'complete' : 'pending';
-
       $sql = "UPDATE tasks SET status = :status WHERE id = :id";
       $stmt = $this->pdo->prepare($sql);
-      $stmt->execute([':status' => $newStatus, ':id' => $id]);
+      $stmt->execute([':status' => $status, ':id' => $id]);
 
       return $stmt->rowCount();
   }

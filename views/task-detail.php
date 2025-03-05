@@ -36,17 +36,16 @@ ob_start();
             <form method="POST" action="<?= $_SERVER['REQUEST_URI'] ?>">
                 <input type="hidden" name="task_id" value="<?= $postData['id'] ?>">
                 <input type="hidden" name="action_name" value="change_status_record">
-                <?php if ($postData['status'] === 'pending') { ?>
-                    <button type="submit" class="btn btn-success">
-                        <i
-                            class="ri-check-line align-bottom"></i> Mark Complete
-                    </button>
-                <?php } else { ?>
-                    <button type="submit" class="btn btn-warning">
-                        <i
-                            class="ri-close-line align-bottom"></i> Remove Complete
-                    </button>
-                <?php } ?>
+                <select class="form-select mb-0" data-choices data-choices-search-false
+                    data-choices-sorting-false
+                    id="choices-status-input" name="status">
+                    <?php
+                    foreach ($status as $value => $label) {
+                        $selected = (!empty($postData['status']) ? $value === $postData['status'] : $value === 'not_started') ? 'selected' : '';
+                        echo "<option value=\"$value\" $selected>$label</option>";
+                    }
+                    ?>
+                </select>
             </form>
             <form method="POST" action="<?= $_SERVER['REQUEST_URI'] ?>">
                 <input type="hidden" name="task_id" value="<?= $postData['id'] ?>">
@@ -101,7 +100,34 @@ ob_start();
 $pageContent = ob_get_clean();
 
 ob_start();
-echo "
-<script src='" . home_url("/assets/libs/@ckeditor/ckeditor5-build-classic/build/ckeditor.js") . "'></script>
-";
+?>
+
+<script src='<?= home_url("/assets/libs/@ckeditor/ckeditor5-build-classic/build/ckeditor.js") ?>'></script>
+<script>
+    $("#choices-status-input").on("change", function(e) {
+        const value = $(this).val();
+        const form = $(this).closest('form');
+        const newStatus = value.replace(/_/g, " ").replace(/\b\w/g, c => c.toUpperCase());
+        if (form) {
+            Swal.fire({
+                    title: 'Are you sure?',
+                    text: `Status will be changed to: ${newStatus}`,
+                    icon: 'warning',
+                    showCancelButton: !0,
+                    customClass: {
+                        confirmButton: 'btn btn-primary w-xs me-2 mt-2',
+                        cancelButton: 'btn btn-danger w-xs mt-2',
+                    },
+                    confirmButtonText: 'Yes, change it!',
+                    buttonsStyling: !1,
+                    showCloseButton: !0
+                })
+                .then(function(t) {
+                    t.value && form.submit();
+                })
+        }
+    })
+</script>
+
+<?php
 $additionJs = ob_get_clean();

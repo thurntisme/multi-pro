@@ -8,7 +8,7 @@ return function (PDO $pdo) {
         'project_id INTEGER',
         'title TEXT NOT NULL',
         'description TEXT',
-        'status TEXT DEFAULT "pending"',
+        'status TEXT DEFAULT "not_started"',
         'due_date DATE',
         'created_at DATETIME DEFAULT CURRENT_TIMESTAMP',
         'updated_at DATETIME DEFAULT CURRENT_TIMESTAMP',
