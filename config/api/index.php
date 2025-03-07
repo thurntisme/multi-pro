@@ -42,60 +42,68 @@ function sendResponse($status, $code, $message, $data = null)
 }
 
 try {
+    $contentType = $_SERVER['CONTENT_TYPE'] ?? '';
+    $payload = [];
 
-    // Decode payload based on the request method and content type
     if (in_array($method, ['GET', 'POST', 'PUT', 'DELETE'])) {
-        $contentType = $_SERVER['CONTENT_TYPE'] ?? '';
-        $payload = array();
-
+        // Handle JSON payload
         if (stripos($contentType, 'application/json') !== false) {
-            // Handle JSON payload
             $rawPayload = file_get_contents('php://input');
-            $payload = json_decode($rawPayload, true);
-
-            // Check if JSON decoding failed
+            $payload = json_decode($rawPayload, true) ?? [];
             if (json_last_error() !== JSON_ERROR_NONE) {
                 sendResponse("error", 400, "Invalid JSON payload");
             }
-        } elseif (stripos($contentType, 'multipart/form-data') !== false) {
-            // Handle form-data payload
-            $payload = $_POST; // Normal form fields
-            $payload['file'] = $_FILES['file'] ?? null; // Uploaded file(s), if any
-
-            // Check if file data exists
+        } // Handle multipart/form-data payload
+        elseif (stripos($contentType, 'multipart/form-data') !== false) {
+            $payload = $_POST;
+            $payload['file'] = $_FILES['file'] ?? null;
             if ($_FILES && !isset($_FILES['file'])) {
                 sendResponse("error", 400, "No file provided in form data");
             }
-        } else {
-            sendResponse('error', 500, 'Internal Server Error');
         }
+
+        // Define public API routes
+        $publicApiRoutes = [
+            'resources' => 'resources.php',
+        ];
+
+        // Define private API routes
+        $privateApiRoutes = [
+            'football-manager' => 'football-manager.php',
+            'file-manager' => 'file-manager.php',
+        ];
+
+        // Check if the request matches a public API route
+        foreach ($publicApiRoutes as $route => $file) {
+            if (str_starts_with($api_url, $route)) {
+                include_once $file;
+                exit;
+            }
+        }
+
+        // Handle private API access
         if (isset($_SESSION['token'])) {
             $token = $_SESSION['token'];
-            $userData = $authenticationController->checkUserDataByToken($token); 
+            $userData = $authenticationController->checkUserDataByToken($token);
             $user_id = $userData['id'];
             $systemController = new SystemController($user_id);
 
             if (!empty($userData['role'])) {
-                // Define mapping of API URLs to permissions and include files
-                $apiRoutes = [
-                    'football-manager' => 'football-manager.php',
-                    'file-manager' => 'file-manager.php',
-                ];
-                // Loop through each route and check permissions
-                foreach ($apiRoutes as $route => $file) {
+                // Check private API routes
+                foreach ($privateApiRoutes as $route => $file) {
                     if (str_starts_with($api_url, $route) && checkUserPermission($route, $userData['role'])) {
                         include_once $file;
-                        break;
+                        exit;
                     }
                 }
             }
         }
         sendResponse("error", 403, "Permission denied");
     } else {
-        sendResponse('error', 405, 'Method Not Allowed');
+        sendResponse("error", 405, "Method Not Allowed");
     }
-} catch (\Exception $e) {
-    sendResponse('error', 500, 'Internal Server Error');
+} catch (Exception $e) {
+    sendResponse("error", 500, "Internal Server Error");
 }
 
 sendResponse("success", 200, "Welcome to the mercufee API.");
@@ -103,8 +111,8 @@ sendResponse("success", 200, "Welcome to the mercufee API.");
 /**
  * Function to check if a user has permission to access a specific route based on their role.
  *
- * @param string $route      The route the user is trying to access.
- * @param string $userRole  The role of the user (e.g., 'super_admin', 'premium_user', etc.).
+ * @param string $route The route the user is trying to access.
+ * @param string $userRole The role of the user (e.g., 'super_admin', 'premium_user', etc.).
  * @return bool  True if the user has permission to access the route, false otherwise.
  */
 function checkUserPermission($route, $userRole)

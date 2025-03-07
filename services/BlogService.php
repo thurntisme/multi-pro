@@ -13,21 +13,21 @@ class BlogService
     }
 
     // Create a new blog
-    public function createBlog($title, $content, $tags, $category, $ref_url)
+    public function createBlog($title, $slug, $content, $tags, $category, $ref_url, $excerpt)
     {
-        $sql = "INSERT INTO blogs (title, content, tags, category, ref_url, user_id) VALUES (:title, :content, :tags, :category, :ref_url, :user_id)";
+        $sql = "INSERT INTO blogs (title, slug, content, tags, category, ref_url, user_id) VALUES (:title, :slug, :content, :tags, :category, :ref_url, :excerpt, :user_id)";
         $stmt = $this->pdo->prepare($sql);
-        $stmt->execute([':title' => $title, ':content' => $content, ':tags' => $tags, ':category' => $category, ':ref_url' => $ref_url, ':user_id' => $this->user_id]);
+        $stmt->execute([':title' => $title, ':slug' => $slug, ':content' => $content, ':tags' => $tags, ':category' => $category, ':ref_url' => $ref_url, ':excerpt' => $excerpt, ':user_id' => $this->user_id]);
 
         return $this->pdo->lastInsertId();
     }
 
     // Update a blog
-    public function updateBlog($id, $title, $content, $tags, $category, $ref_url)
+    public function updateBlog($id, $title, $slug, $content, $tags, $category, $ref_url, $excerpt)
     {
-        $sql = "UPDATE blogs SET title = :title, content = :content, tags = :tags, category = :category, ref_url = :ref_url, updated_at = CURRENT_TIMESTAMP WHERE user_id = :user_id AND id = :id";
+        $sql = "UPDATE blogs SET title = :title, slug = :slug, content = :content, tags = :tags, category = :category, ref_url = :ref_url, excerpt = :excerpt, updated_at = CURRENT_TIMESTAMP WHERE user_id = :user_id AND id = :id";
         $stmt = $this->pdo->prepare($sql);
-        $stmt->execute([':title' => $title, ':content' => $content, ':tags' => $tags, ':category' => $category, ':ref_url' => $ref_url, ':id' => $id, ':user_id' => $this->user_id]);
+        $stmt->execute([':title' => $title, ':slug' => $slug, ':content' => $content, ':tags' => $tags, ':category' => $category, ':ref_url' => $ref_url, ':excerpt' => $excerpt, ':id' => $id, ':user_id' => $this->user_id]);
 
         return $stmt->rowCount();
     }

@@ -10,6 +10,8 @@ return function (PDO $pdo) {
         'tags TEXT',
         'category TEXT',
         'ref_url TEXT',
+        'slug TEXT NOT NULL',
+        'excerpt TEXT',
         'created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP',
         'updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP',
         'user_id INTEGER NOT NULL',

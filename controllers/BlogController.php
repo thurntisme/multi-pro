@@ -17,7 +17,6 @@ class BlogController
         $this->blogService = new BlogService($pdo);
     }
 
-    // Handle creating a new blog
     public function createBlog($firstSlug)
     {
         $title = $_POST['title'] ?? '';
@@ -25,9 +24,11 @@ class BlogController
         $tags = $_POST['tags'] ?? '';
         $category = $_POST['category'] ?? '';
         $ref_url = $_POST['ref_url'] ?? '';
+        $excerpt = $_POST['excerpt'] ?? '';
+        $slug = $this->generate_slug($title);
 
         if ($title) {
-            $this->blogService->createBlog($title, $content, $tags, $category, $ref_url);
+            $this->blogService->createBlog($title, $slug, $content, $tags, $category, $ref_url, $excerpt);
             $_SESSION['message_type'] = 'success';
             $_SESSION['message'] = "Blog created successfully";
         } else {
@@ -35,11 +36,19 @@ class BlogController
             $_SESSION['message'] = "Failed to create blog";
         }
 
-        header("Location: " . home_url($firstSlug));
+        header("Location: " . home_url('app/blog'));
         exit;
     }
 
+    // Handle creating a new blog
+
+    private function generate_slug($title)
+    {
+        return strtolower(trim(preg_replace('/[^a-zA-Z0-9]+/', '-', $title), '-'));
+    }
+
     // Handle updating a blog
+
     public function updateBlog($firstSlug)
     {
         $id = $_POST['blog_id'] ?? '';
@@ -48,9 +57,11 @@ class BlogController
         $tags = $_POST['tags'] ?? '';
         $category = $_POST['category'] ?? '';
         $ref_url = $_POST['ref_url'] ?? '';
+        $excerpt = $_POST['excerpt'] ?? '';
+        $slug = $this->generate_slug($title);
 
         if ($id && $title) {
-            $rowsAffected = $this->blogService->updateBlog($id, $title, $content, $tags, $category, $ref_url);
+            $rowsAffected = $this->blogService->updateBlog($id, $title, $slug, $content, $tags, $category, $ref_url, $excerpt);
             if ($rowsAffected) {
                 $_SESSION['message_type'] = 'success';
                 $_SESSION['message'] = "Blog updated successfully.";
@@ -68,6 +79,7 @@ class BlogController
     }
 
     // Handle deleting a blog
+
     public function deleteBlog()
     {
         $id = $_POST['post_id'] ?? null;
@@ -99,12 +111,10 @@ class BlogController
         ];
     }
 
-    // Handle listing all blogs
-
-    public function getBlogsSQL($queryType = "result", $category = '')
+    public function getBlogsSQL($queryType = "result", $category = '', $is_public = false)
     {
         // Pagination parameters
-        $itemsPerPage = 12; // Number of results per page
+        $itemsPerPage = 10; // Number of results per page
         $page = isset($_GET['page']) ? (int)$_GET['page'] : 1; // Current page number
         $offset = ($page - 1) * $itemsPerPage; // Offset for LIMIT clause
 
@@ -118,8 +128,9 @@ class BlogController
         // Filter by role (optional)
         $type = isset($_GET['type']) ? $_GET['type'] : '';
 
-        $selectSql = $queryType === "result" ? "SELECT * FROM blogs" : "SELECT COUNT(*) FROM blogs";
-        $sql = $selectSql . " WHERE user_id = $this->user_id ";
+        $select_all = !$is_public ? "SELECT * FROM blogs" : "SELECT title, slug, excerpt, category, tags, created_at FROM blogs";
+        $selectSql = $queryType === "result" ? $select_all : "SELECT COUNT(*) FROM blogs";
+        $sql = $selectSql . (!$is_public ? " WHERE user_id = $this->user_id " : " WHERE created_at IS NOT NULL");
         if (!empty($category)) {
             $sql .= " AND category = '$category' ";
         }
@@ -174,6 +185,17 @@ class BlogController
 
     // Handle listing all blogs
 
+    public function apiListBlogs()
+    {
+        $category = $_GET['cat'] ?? '';
+        return [
+            'list' => $this->getBlogsSQL("result", $category, true),
+            'count' => $this->getBlogsSQL("count", $category, true),
+        ];
+    }
+
+    // Handle listing all blogs
+
     public function listBlogsByCategory($category)
     {
         return [
@@ -183,6 +205,7 @@ class BlogController
     }
 
     // Handle viewing a single blog
+
     public function viewBlog($id)
     {
         if ($id) {

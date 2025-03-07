@@ -9,6 +9,12 @@ include_once DIR . '/functions/system.php';
 $url = extractPathFromCurrentUrl();
 if ($url === '') {
     include_once DIR . '/views/landing.php';
+    include DIR . '/landing-layout.php';
+    exit;
+}
+if ($url === 'resources') {
+    include_once DIR . '/views/resources.php';
+    include DIR . '/landing-layout.php';
     exit;
 }
 
@@ -30,11 +36,11 @@ if (!empty($token)) {
                 include_once DIR . "/assets/lang-php/" . $cur_lang . ".php";
                 $user_role = $curr_data['role'];
                 $app_url = str_replace('app/', '', $url);
-                include_once  getPageData($app_url, $user_role)['url'];
+                include_once getPageData($app_url, $user_role)['url'];
                 include DIR . '/app-layout.php';
             } else {
                 include_once DIR . '/views/user-block.php';
-                include  DIR . '/auth-layout.php';
+                include DIR . '/auth-layout.php';
             }
         } else {
             $commonController->removeToken();
@@ -43,7 +49,7 @@ if (!empty($token)) {
     } catch (Throwable $th) {
         $error_msg = $th->getMessage();
         include_once DIR . '/views/500.php';
-        include  DIR . '/auth-layout.php';
+        include DIR . '/auth-layout.php';
     }
 } else {
     switch ($url) {
@@ -64,5 +70,5 @@ if (!empty($token)) {
             break;
     }
     include_once $pageUrl;
-    include  DIR . '/auth-layout.php';
+    include DIR . '/auth-layout.php';
 }
