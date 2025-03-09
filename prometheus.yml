@@ -1,0 +1,7 @@
+global:
+  scrape_interval: 5s  # How often to scrape metrics
+
+scrape_configs:
+  - job_name: 'php-fpm'
+    static_configs:
+      - targets: [ 'php-exporter:9253' ]
