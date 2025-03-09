@@ -50,8 +50,19 @@ services:
     depends_on:
       - mysql
 
+  redis:
+    image: redis:latest
+    container_name: redis_cache
+    restart: always
+    ports:
+      - "6379:6379"
+    command: redis-server --appendonly yes
+    volumes:
+      - redis_data:/data
+
 volumes:
   mysql_data:
+  redis_data:
 
 networks:
   default:

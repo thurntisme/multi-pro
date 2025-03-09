@@ -32,7 +32,7 @@ class DailyChecklistController
         $due_date = $_POST['due_date'] ?? '';
         $content = $_POST['content'] ?? '';
 
-        if (empty($title) || empty($due_date) || empty($content)) {
+        if (empty($title) || empty($due_date)) {
             $_SESSION['message_type'] = 'danger';
             $_SESSION['message'] = "All fields are required";
             header("Location: " . $_SERVER['REQUEST_URI']);
