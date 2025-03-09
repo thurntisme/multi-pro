@@ -192,6 +192,34 @@ services:
       timeout: 10s
       retries: 3
 
+  npm:
+    image: 'jc21/nginx-proxy-manager:latest'
+    container_name: nginx-proxy-manager
+    restart: unless-stopped
+    ports:
+      - "80:80"     # HTTP
+      - "81:81"     # Admin Web UI
+      - "443:443"   # HTTPS
+    volumes:
+      - ./data:/data
+      - ./letsencrypt:/etc/letsencrypt
+    environment:
+      DB_SQLITE_FILE: "/data/database.sqlite"
+
+  duplicacy:
+    image: saspus/duplicacy-web:latest
+    container_name: duplicacy
+    restart: unless-stopped
+    ports:
+      - "3875:3875"  # Web UI
+    volumes:
+      - ./config:/config  # Duplicacy configuration
+      - ./logs:/logs  # Logs storage
+      - ./backup:/backup  # Backup storage
+      - .:/data  # Data to be backed up (Modify as needed)
+    environment:
+      - TZ=UTC  # Change this to your timezone
+
 volumes:
   mysql_data:
   redis_data:
@@ -202,6 +230,9 @@ volumes:
   netdata-config:
   netdata-lib:
   netdata-cache:
+  countly_data:
+  countly_logs:
+  mongo_data:
 
 networks:
   default:
