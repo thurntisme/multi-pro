@@ -152,12 +152,56 @@ services:
     environment:
       ZOOKEEPER_CLIENT_PORT: 2181
 
+  portainer:
+    image: portainer/portainer-ce:latest
+    restart: always
+    ports:
+      - "8082:9000"
+      - "9001:9001"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - portainer_data:/data
+
+  netdata:
+    image: netdata/netdata:latest
+    container_name: netdata
+    restart: unless-stopped
+    cap_add:
+      - SYS_PTRACE
+      - NET_ADMIN
+    security_opt:
+      - apparmor:unconfined
+    ports:
+      - "19999:19999"
+    volumes:
+      - netdata-config:/etc/netdata
+      - netdata-lib:/var/lib/netdata
+      - netdata-cache:/var/cache/netdata
+      - /etc/passwd:/host/etc/passwd:ro
+      - /etc/group:/host/etc/group:ro
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /etc/os-release:/host/etc/os-release:ro
+    environment:
+      - NETDATA_CLAIM_TOKEN=<your-claim-token>  # Optional, if using Netdata Cloud
+      - NETDATA_CLAIM_URL=https://app.netdata.cloud  # Optional
+      - NETDATA_CLAIM_ROOMS=<your-claim-room>  # Optional
+    healthcheck:
+      test: [ "CMD", "netdata", "-W", "health" ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
 volumes:
   mysql_data:
   redis_data:
   meili_data:
   grafana_data:
   minio_data:
+  portainer_data:
+  netdata-config:
+  netdata-lib:
+  netdata-cache:
 
 networks:
   default:
