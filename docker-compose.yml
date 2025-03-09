@@ -60,6 +60,14 @@ services:
     volumes:
       - redis_data:/data
 
+  mailhog:
+    image: mailhog/mailhog
+    container_name: mailhog
+    restart: unless-stopped
+    ports:
+      - "1025:1025" # SMTP server
+      - "8025:8025" # Web UI
+
 volumes:
   mysql_data:
   redis_data:
