@@ -223,7 +223,197 @@ services:
       - duplicacy_cache:/cache  # Cache storage
       - duplicacy_storage:/storage  # Backup storage
 
+  # 🚀 API Gateway (Traefik)
+  traefik:
+    image: traefik:v2.9
+    restart: always
+    command:
+      - "--api.insecure=true"
+      - "--providers.docker=true"
+      - "--entrypoints.web.address=:80"
+    ports:
+      - "80:80"
+      - "8080:8080"
+    networks:
+      - backend
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
 
+  # 🖥️ Authentication & Identity (Keycloak)
+  keycloak:
+    image: quay.io/keycloak/keycloak:latest
+    command: ["start-dev"]
+    environment:
+      KC_DB: postgres
+      KC_DB_URL_HOST: postgres
+      KC_DB_USERNAME: keycloak
+      KC_DB_PASSWORD: keycloakpassword
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: adminpassword
+    depends_on:
+      - postgres
+    ports:
+      - "8081:8080"
+    networks:
+      - backend
+
+  # 💾 PostgreSQL Database
+  postgres:
+    image: postgres:15
+    restart: always
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: rootpassword
+      POSTGRES_DB: app_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - backend
+
+  # 🔧 Core Backend (Rails)
+  rails:
+    build: ./rails-backend
+    depends_on:
+      - postgres
+      - redis
+    environment:
+      DATABASE_URL: postgres://root:rootpassword@postgres:5432/app_db
+      REDIS_URL: redis://redis:6379/1
+    networks:
+      - backend
+    volumes:
+      - ./rails-backend:/app
+    ports:
+      - "3000:3000"
+
+  # 📡 Real-Time Communication (Node.js + WebSockets)
+  websocket:
+    build: ./node-realtime
+    depends_on:
+      - redis
+    networks:
+      - backend
+    ports:
+      - "3001:3001"
+    volumes:
+      - ./node-realtime:/app
+
+  # 🔥 AI & ML Processing (Python + FastAPI)
+  ai_service:
+    build: ./python-ai
+    depends_on:
+      - clickhouse
+    networks:
+      - backend
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./python-ai:/app
+
+  # 📊 Analytics Database (ClickHouse)
+  clickhouse:
+    image: clickhouse/clickhouse-server
+    restart: always
+    ports:
+      - "8123:8123"
+      - "9000:9000"
+    volumes:
+      - clickhouse_data:/var/lib/clickhouse
+    networks:
+      - backend
+
+  # 🚀 Payment Processing (Go + gRPC)
+  payments:
+    build: ./go-payments
+    networks:
+      - backend
+    ports:
+      - "6000:6000"
+    volumes:
+      - ./go-payments:/app
+
+  # Ethereum Full Node (Geth)
+  ethereum-node:
+    image: ethereum/client-go  # Uses Geth (Go Ethereum) client
+    container_name: geth
+    ports:
+      - "8545:8545"   # JSON-RPC API port (used for Web3 interactions)
+      - "30303:30303" # P2P network communication port
+    volumes:
+      - ./geth_data:/root/.ethereum  # Persistent blockchain data
+    restart: always
+    entrypoint: ["geth", "--http", "--http.api", "eth,net,web3"] # Enables RPC API for transactions
+
+  # IPFS (InterPlanetary File System) for decentralized storage
+  ipfs:
+    image: ipfs/kubo  # Kubo (previously go-ipfs) is the latest IPFS implementation
+    container_name: ipfs
+    ports:
+      - "4001:4001"  # P2P communication
+      - "5001:5001"  # API access (used to interact with IPFS)
+      - "8080:8080"  # Gateway for accessing stored files
+    volumes:
+      - ./ipfs_data:/data/ipfs  # Stores files and metadata
+    restart: always
+
+  # Bitcoin Lightning Node for fast & low-cost BTC transactions
+  lightning:
+    image: lightninglabs/lnd  # LND (Lightning Network Daemon) implementation
+    container_name: lnd
+    ports:
+      - "9735:9735"  # P2P Lightning network port
+      - "10009:10009" # gRPC API port (used to send transactions)
+    volumes:
+      - ./lnd_data:/root/.lnd  # Stores wallet and transaction data
+    restart: always
+
+  # Hyperledger Fabric Peer Node for private blockchain operations
+  hyperledger-peer:
+    image: hyperledger/fabric-peer  # Hyperledger Fabric peer node
+    container_name: fabric-peer
+    ports:
+      - "7051:7051"  # Peer communication port
+    volumes:
+      - ./fabric_peer_data:/var/hyperledger/production  # Stores ledger data
+    environment:
+      - CORE_PEER_ID=fabric-peer
+      - CORE_PEER_ADDRESS=0.0.0.0:7051
+    restart: always
+
+  # Chainlink Node for retrieving off-chain data (oracles)
+  chainlink:
+    image: smartcontract/chainlink
+    container_name: chainlink
+    ports:
+      - "6688:6688"  # API server
+    volumes:
+      - ./chainlink_data:/chainlink  # Stores blockchain job data
+    restart: always
+    environment:
+      - ETH_CHAIN_ID=1  # Mainnet
+      - LINK_CONTRACT_ADDRESS=0x514910771AF9Ca656af840dff83E8264EcF986CA  # Chainlink token contract
+
+  # Web3 Gateway - API Proxy to interact with blockchain services
+  web3-gateway:
+    image: traefik:v2.5  # Reverse proxy for API calls
+    container_name: traefik
+    ports:
+      - "80:80"      # Standard HTTP port
+      - "443:443"    # HTTPS port (if TLS is configured)
+    volumes:
+      - ./traefik_data:/etc/traefik  # Configuration for routing
+    restart: always
+
+networks:
+  backend:
+    driver: bridge
+  frontend:
+    driver: bridge
+  databases:
+    driver: bridge
+    
 volumes:
   mysql_data:  # Stores MySQL database data to ensure persistence
   redis_data:  # Stores Redis cache data (if used for caching)
