@@ -131,53 +131,55 @@ services:
       - ./storage_data/minio_data:/data  # Persist stored objects
     command: server --console-address ":9090" /data
     restart: always
-#
-#  # RabbitMQ - Message broker for async tasks
-#  rabbitmq:
-#    image: rabbitmq:3-management
-#    container_name: rabbitmq
-#    ports:
-#      - "${RABBITMQ_PORT}:5672"  # Message queue
-#      - "${RABBITMQ_MANAGEMENT_PORT}:15672"  # Management UI
-#    healthcheck:
-#      test: [ "CMD", "rabbitmqctl", "status" ]
-#      interval: 30s
-#      timeout: 10s
-#      retries: 3
-#
-#  # Apache Kafka - Event streaming platform
-#  kafka:
-#    image: confluentinc/cp-kafka
-#    environment:
-#      KAFKA_BROKER_ID: ${KAFKA_BROKER_ID}
-#      KAFKA_ZOOKEEPER_CONNECT: "zookeeper:${ZOOKEEPER_PORT}"
-#      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:${KAFKA_PORT}
-#    ports:
-#      - "${KAFKA_PORT}:9092"  # Expose Kafka
-#    depends_on:
-#      - zookeeper  # Ensure Zookeeper is running first
-#    healthcheck:
-#      test: [ "CMD", "kafka-topics.sh", "--list", "--bootstrap-server", "kafka:${KAFKA_PORT}" ]
-#      interval: 30s
-#      timeout: 10s
-#      retries: 3
-#
-#  # Zookeeper - Required for Kafka
-#  zookeeper:
-#    image: confluentinc/cp-zookeeper
-#    environment:
-#      ZOOKEEPER_CLIENT_PORT: ${ZOOKEEPER_PORT}
-#
-#  # Portainer - Docker management UI
-#  portainer:
-#    image: portainer/portainer-ce:latest
-#    container_name: portainer
-#    ports:
-#      - "9999:9999"  # Access Portainer at http://localhost:9999
-#    restart: always
-#    volumes:
-#      - /var/run/docker.sock:/var/run/docker.sock  # Grant access to Docker
-#      - portainer_data:/data  # Persist Portainer data
+  #
+  #  # RabbitMQ - Message broker for async tasks
+  #  rabbitmq:
+  #    image: rabbitmq:3-management
+  #    container_name: rabbitmq
+  #    ports:
+  #      - "${RABBITMQ_PORT}:5672"  # Message queue
+  #      - "${RABBITMQ_MANAGEMENT_PORT}:15672"  # Management UI
+  #    healthcheck:
+  #      test: [ "CMD", "rabbitmqctl", "status" ]
+  #      interval: 30s
+  #      timeout: 10s
+  #      retries: 3
+  #
+  #  # Apache Kafka - Event streaming platform
+  #  kafka:
+  #    image: confluentinc/cp-kafka
+  #    environment:
+  #      KAFKA_BROKER_ID: ${KAFKA_BROKER_ID}
+  #      KAFKA_ZOOKEEPER_CONNECT: "zookeeper:${ZOOKEEPER_PORT}"
+  #      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:${KAFKA_PORT}
+  #    ports:
+  #      - "${KAFKA_PORT}:9092"  # Expose Kafka
+  #    depends_on:
+  #      - zookeeper  # Ensure Zookeeper is running first
+  #    healthcheck:
+  #      test: [ "CMD", "kafka-topics.sh", "--list", "--bootstrap-server", "kafka:${KAFKA_PORT}" ]
+  #      interval: 30s
+  #      timeout: 10s
+  #      retries: 3
+  #
+  #  # Zookeeper - Required for Kafka
+  #  zookeeper:
+  #    image: confluentinc/cp-zookeeper
+  #    environment:
+  #      ZOOKEEPER_CLIENT_PORT: ${ZOOKEEPER_PORT}
+  #
+  # Portainer - Docker management UI
+  portainer:
+    image: portainer/portainer-ce:latest
+    container_name: portainer
+    ports:
+      - "8000:8000"  # Edge agent port
+      - "9001:9000"  # Web UI
+      - "9443:9443"  # Secure UI (HTTPS)
+    restart: always
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock  # Grant access to Docker
+      - ./storage_data/portainer_data:/data  # Persist Portainer data
 #
 #  # Netdata - System monitoring tool
 #  netdata:
