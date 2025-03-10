@@ -101,21 +101,21 @@ services:
     ports:
       - "${PROMETHEUS_PORT}:9090"  # Expose Prometheus
     restart: unless-stopped
-#
-#  # Grafana - Data visualization for metrics
-#  grafana:
-#    image: grafana/grafana:latest
-#    container_name: grafana
-#    ports:
-#      - "3000:3000"  # Access Grafana at http://localhost:3000
-#    environment:
-#      GF_SECURITY_ADMIN_USER: ${GRAFANA_ADMIN_USER}
-#      GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_ADMIN_PASSWORD}  # Secure access
-#    volumes:
-#      - grafana_data:/var/lib/grafana  # Persist dashboards and settings
-#    restart: unless-stopped
-#    depends_on:
-#      - prometheus  # Ensure Prometheus is running before Grafana starts
+
+  # Grafana - Data visualization for metrics
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    ports:
+      - "3000:3000"  # Access Grafana at http://localhost:3000
+    environment:
+      GF_SECURITY_ADMIN_USER: ${GRAFANA_ADMIN_USER}
+      GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_ADMIN_PASSWORD}  # Secure access
+    volumes:
+      - ./grafana_data:/var/lib/grafana  # Persist dashboards and settings
+    restart: unless-stopped
+    depends_on:
+      - prometheus  # Ensure Prometheus is running before Grafana starts
 #
 #  # MinIO - Object storage service (like AWS S3)
 #  minio:
