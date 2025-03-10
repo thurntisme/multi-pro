@@ -44,7 +44,7 @@ services:
     ports:
       - "3306:3306"  # Expose MySQL default port
     volumes:
-      - ./db_data/mysql_data:/var/lib/mysql  # Persist database data
+      - ./storage_data/mysql_data:/var/lib/mysql  # Persist database data
     healthcheck:
       test: [ "CMD", "mysqladmin", "ping", "-h", "localhost" ]
       interval: 30s
@@ -73,7 +73,7 @@ services:
       - "${REDIS_PORT}:6379"  # Expose Redis
     command: redis-server --appendonly yes  # Enable persistence
     volumes:
-      - ./db_data/redis_data:/data  # Persist Redis data
+      - ./storage_data/redis_data:/data  # Persist Redis data
     healthcheck:
       test: [ "CMD", "redis-cli", "ping" ]
       interval: 30s
@@ -112,25 +112,25 @@ services:
       GF_SECURITY_ADMIN_USER: ${GRAFANA_ADMIN_USER}
       GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_ADMIN_PASSWORD}  # Secure access
     volumes:
-      - ./grafana_data:/var/lib/grafana  # Persist dashboards and settings
+      - ./storage_data/grafana_data:/var/lib/grafana  # Persist dashboards and settings
     restart: unless-stopped
     depends_on:
       - prometheus  # Ensure Prometheus is running before Grafana starts
-#
-#  # MinIO - Object storage service (like AWS S3)
-#  minio:
-#    image: minio/minio:latest
-#    container_name: minio
-#    ports:
-#      - "9000:9000"  # MinIO API
-#      - "9091:9090"  # MinIO console UI
-#    environment:
-#      MINIO_ROOT_USER: ${MINIO_ROOT_USER}
-#      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD}  # Secure access
-#    volumes:
-#      - minio_data:/data  # Persist stored objects
-#    command: server --console-address ":9090" /data
-#    restart: always
+
+  # MinIO - Object storage service (like AWS S3)
+  minio:
+    image: minio/minio:latest
+    container_name: minio
+    ports:
+      - "9000:9000"  # MinIO API
+      - "9091:9090"  # MinIO console UI
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD}  # Secure access
+    volumes:
+      - ./storage_data/minio_data:/data  # Persist stored objects
+    command: server --console-address ":9090" /data
+    restart: always
 #
 #  # RabbitMQ - Message broker for async tasks
 #  rabbitmq:
