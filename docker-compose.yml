@@ -13,6 +13,18 @@ services:
       - PORT=4000
     command: [ "npm", "run", "dev" ]
 
+  landing-be:
+    build: ./landing-be
+    ports:
+      - "5050:5050"
+    volumes:
+      - ./landing-be:/app
+      - /app/node_modules
+    environment:
+      - NODE_ENV=development
+      - PORT=5050
+    command: [ "npm", "run", "start:dev" ]
+  
   # PHP service
   php:
     build:
