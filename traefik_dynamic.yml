@@ -1,0 +1,14 @@
+http:
+  routers:
+    dashboard:
+      rule: "Host(`localhost`)"
+      entrypoints:
+        - websecure
+      service: api@internal
+      tls: {}  # Enable HTTPS
+
+  services:
+    myservice:
+      loadBalancer:
+        servers:
+          - url: "http://localhost:8080"

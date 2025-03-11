@@ -218,33 +218,28 @@ services:
     volumes:
       - ./storage_data/nginx_proxy_manager_data:/data
       - ./storage_data/nginx_proxy_manager_letsencrypt:/etc/letsencrypt
-#
-#  # Duplicacy - Backup tool for cloud/local storage
-#  duplicacy:
-#    image: saspus/duplicacy-web
-#    container_name: duplicacy
-#    restart: always
-#    ports:
-#      - "3875:3875"  # Web UI (http://localhost:3875)
-#    volumes:
-#      - duplicacy_config:/config  # Configuration files
-#      - duplicacy_cache:/cache  # Cache storage
-#      - duplicacy_storage:/storage  # Backup storage
-#
-#  # 🚀 API Gateway (Traefik)
-#  traefik:
-#    image: traefik:v2.9
-#    restart: always
-#    command:
-#      - "--api.insecure=true"
-#      - "--providers.docker=true"
-#      - "--entrypoints.web.address=:80"
-#    ports:
-#      - "8443:8443"
-#    networks:
-#      - backend
-#    volumes:
-#      - /var/run/docker.sock:/var/run/docker.sock
+
+  # 🚀 API Gateway (Traefik)
+  traefik:
+    image: traefik:v2.9
+    container_name: traefik
+    restart: always
+    command:
+      - "--api.dashboard=true"
+      - "--providers.docker=true"
+      - "--providers.file.filename=/etc/traefik/traefik_dynamic.yml"
+      - "--entrypoints.web.address=:8080"
+      - "--entrypoints.websecure.address=:8443"
+      - "--log.level=DEBUG"  # Enable detailed logs for debugging
+    ports:
+      - "8080:8080"
+      - "8443:8443"
+    networks:
+      - backend
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./traefik_dynamic.yml:/etc/traefik/traefik_dynamic.yml
+      - ./letsencrypt:/letsencrypt
 #
 #  # 🖥️ Authentication & Identity (Keycloak)
 #  keycloak:
@@ -362,8 +357,8 @@ services:
 #      - DATABASE_URL=mysql://user:password@tcp(mysql:3306)/payments_db
 #
 networks:
-#  backend:
-#    driver: bridge
+  backend:
+    driver: bridge
 #  frontend:
 #    driver: bridge
 #  databases:
@@ -383,6 +378,3 @@ networks:
 #  netdata_data:  # Stores Netdata system monitoring logs and metrics
 #  nginx_proxy_manager_data:  # Stores Nginx Proxy Manager settings and configurations
 #  nginx_proxy_manager_letsencrypt:  # Stores SSL certificates managed by Nginx Proxy Manager
-#  duplicacy_config:  # Stores configuration files for Duplicacy backup tool
-#  duplicacy_cache:  # Stores temporary cache data for Duplicacy (deduplication, chunking, etc.)
-#  duplicacy_storage:  # Stores actual backup files from Duplicacy (local or cloud backups)
