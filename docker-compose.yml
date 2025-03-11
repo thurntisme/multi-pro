@@ -1,6 +1,18 @@
 version: "3.8"
 
 services:
+  landing:
+    build: ./landing
+    ports:
+      - "4000:4000"
+    volumes:
+      - ./landing:/app
+      - /app/node_modules
+    environment:
+      - NODE_ENV=development
+      - PORT=4000
+    command: [ "npm", "run", "dev" ]
+
   # PHP service
   php:
     build:
@@ -245,7 +257,7 @@ services:
   keycloak:
     image: quay.io/keycloak/keycloak:latest
     container_name: keycloak
-    command: ["start-dev"]
+    command: [ "start-dev" ]
     environment:
       KC_DB: postgres
       KC_DB_URL: jdbc:postgresql://postgres/keycloak
@@ -272,7 +284,7 @@ services:
     volumes:
       - ./storage_data/postgres_data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD", "pg_isready", "-U", "keycloak"]
+      test: [ "CMD", "pg_isready", "-U", "keycloak" ]
       interval: 10s
       retries: 5
     networks:
@@ -363,10 +375,10 @@ services:
 networks:
   backend:
     driver: bridge
-#  frontend:
-#    driver: bridge
-#  databases:
-#    driver: bridge
+  #  frontend:
+  #    driver: bridge
+  #  databases:
+  #    driver: bridge
   netdata_network:
     driver: bridge
   proxy_network:
