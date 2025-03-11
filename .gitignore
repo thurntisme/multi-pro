@@ -9,3 +9,4 @@ sessions/
 assets/json/system_log.json
 assets/uploads/
 assets/logs/api_log.json
+storage_data

@@ -180,25 +180,30 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock  # Grant access to Docker
       - ./storage_data/portainer_data:/data  # Persist Portainer data
-#
-#  # Netdata - System monitoring tool
-#  netdata:
-#    image: netdata/netdata:latest
-#    container_name: netdata
-#    pid: host
-#    network_mode: host  # Use host networking for real-time stats
-#    cap_add:
-#      - SYS_PTRACE  # Allow system monitoring
-#    security_opt:
-#      - apparmor=unconfined
-#    restart: always
-#    volumes:
-#      - netdata_data:/var/lib/netdata
-#      - /etc/passwd:/host/etc/passwd:ro
-#      - /etc/group:/host/etc/group:ro
-#      - /proc:/host/proc:ro
-#      - /sys:/host/sys:ro
-#      - /etc/os-release:/host/etc/os-release:ro
+
+  netdata:
+    image: netdata/netdata:latest
+    container_name: netdata
+    pid: host
+    cap_add:
+      - SYS_PTRACE  # Allow system monitoring
+    security_opt:
+      - apparmor=unconfined
+    restart: always
+    ports:
+      - "19999:19999"  # Expose Netdata on port 19999
+    networks:
+      - netdata_network
+    volumes:
+      - ./storage_data/netdata_data:/var/lib/netdata
+      - ./storage_data/netdata_config:/etc/netdata
+      - ./storage_data/netdata_cloud:/var/lib/netdata/cloud.d
+      - /etc/passwd:/host/etc/passwd:ro
+      - /etc/group:/host/etc/group:ro
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /etc/os-release:/host/etc/os-release:ro
+
 #
 #  # Nginx Proxy Manager - Reverse proxy with SSL support
 #  nginx_proxy_manager:
@@ -355,13 +360,15 @@ services:
 #    environment:
 #      - DATABASE_URL=mysql://user:password@tcp(mysql:3306)/payments_db
 #
-#networks:
+networks:
 #  backend:
 #    driver: bridge
 #  frontend:
 #    driver: bridge
 #  databases:
 #    driver: bridge
+  netdata_network:
+    driver: bridge
 #
 #volumes:
 #  mysql_data:  # Stores MySQL database data to ensure persistence
