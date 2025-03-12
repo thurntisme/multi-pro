@@ -1,0 +1,10 @@
+fastapi
+uvicorn
+pydantic
+clickhouse-connect
+transformers
+fastapi[all]
+python-keycloak
+torch
+torchvision
+torchaudio

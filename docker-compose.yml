@@ -163,7 +163,7 @@ services:
     ports:
       - "1025:1025" # SMTP server
       - "8025:8025" # Web UI
-      
+
   #
   #  # RabbitMQ - Message broker for async tasks
   #  rabbitmq:
@@ -310,61 +310,63 @@ services:
       retries: 5
     networks:
       - backend
-#
-#    # 🔧 Core Backend (Rails)
-#  rails:
-#    image: ruby:3.2-alpine  # Lightweight official Ruby image
-#    container_name: rails_backend
-#    depends_on:
-#      - postgres
-#      - redis
-#    environment:
-#      DATABASE_URL: postgres://root:rootpassword@postgres:5432/app_db
-#      REDIS_URL: redis://redis:6379/1
-#    networks:
-#      - backend
-#    volumes:
-#      - ./rails-backend:/app
-#    working_dir: /app  # Set working directory
-#    command: [ "sh", "-c", "bundle install && rails server -b 0.0.0.0 -p 3030" ]
-#    ports:
-#      - "3030:3030"
-#
-#  # 📡 Real-Time Communication (Node.js + WebSockets)
-#  websocket:
-#    image: node:18-alpine  # Lightweight official Node.js image
-#    container_name: websocket_service
-#    command: [ "node", "server.js" ]  # Start the WebSocket server
-#    depends_on:
-#      - redis
-#    networks:
-#      - backend
-#    ports:
-#      - "3001:3001"
-#    volumes:
-#      - ./node-realtime:/app
-#    working_dir: /app  # Set working directory
-#    environment:
-#      - REDIS_HOST=redis
-#      - REDIS_PORT=6379
-#
+  #
+  #    # 🔧 Core Backend (Rails)
+  #  rails:
+  #    image: ruby:3.2-alpine  # Lightweight official Ruby image
+  #    container_name: rails_backend
+  #    depends_on:
+  #      - postgres
+  #      - redis
+  #    environment:
+  #      DATABASE_URL: postgres://root:rootpassword@postgres:5432/app_db
+  #      REDIS_URL: redis://redis:6379/1
+  #    networks:
+  #      - backend
+  #    volumes:
+  #      - ./rails-backend:/app
+  #    working_dir: /app  # Set working directory
+  #    command: [ "sh", "-c", "bundle install && rails server -b 0.0.0.0 -p 3030" ]
+  #    ports:
+  #      - "3030:3030"
+  #
+  #  # 📡 Real-Time Communication (Node.js + WebSockets)
+  #  websocket:
+  #    image: node:18-alpine  # Lightweight official Node.js image
+  #    container_name: websocket_service
+  #    command: [ "node", "server.js" ]  # Start the WebSocket server
+  #    depends_on:
+  #      - redis
+  #    networks:
+  #      - backend
+  #    ports:
+  #      - "3001:3001"
+  #    volumes:
+  #      - ./node-realtime:/app
+  #    working_dir: /app  # Set working directory
+  #    environment:
+  #      - REDIS_HOST=redis
+  #      - REDIS_PORT=6379
+  #
   # 🔥 AI & ML Processing (Python + FastAPI)
   ai_service:
     build:
       context: ./python-ai
     container_name: ai_service_container
-    command: uvicorn main:app --host 0.0.0.0 --port 5001
-    depends_on:
-      - clickhouse
+    #    depends_on:
+    #      - clickhouse
+    #      - keycloak
+    #    environment:
+    #      - KEYCLOAK_URL=http://keycloak:8080
+    #      - KEYCLOAK_REALM=fastapi-realm
+    #      - KEYCLOAK_CLIENT_ID=fastapi-client
+    #      - KEYCLOAK_CLIENT_SECRET=your-client-secret
+    ports:
+      - "5001:5001"
     networks:
       - backend
-    ports:
-      - "5001:5000"
     volumes:
       - ./python-ai:/app
-    working_dir: /app
-    depends_on:
-      - clickhouse
 
   # 📊 Analytics Database (ClickHouse)
   clickhouse:
