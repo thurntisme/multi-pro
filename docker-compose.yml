@@ -348,25 +348,24 @@ services:
 #      - REDIS_HOST=redis
 #      - REDIS_PORT=6379
 #
-#  # 🔥 AI & ML Processing (Python + FastAPI)
-#  ai_service:
-#    build:
-#      context: ./python-ai
-#    container_name: ai_service_container
-#    command: uvicorn main:app --host 0.0.0.0 --port 5001
-#    depends_on:
-#      - clickhouse
-#    networks:
-#      - backend
-#    ports:
-#      - "5001:5000"
-#    volumes:
-#      - ./python-ai:/app
-#    working_dir: /app
-#    environment:
-#      - CLICKHOUSE_HOST=clickhouse
-#      - CLICKHOUSE_PORT=9999
-#
+  # 🔥 AI & ML Processing (Python + FastAPI)
+  ai_service:
+    build:
+      context: ./python-ai
+    container_name: ai_service_container
+    command: uvicorn main:app --host 0.0.0.0 --port 5001
+    depends_on:
+      - clickhouse
+    networks:
+      - backend
+    ports:
+      - "5001:5000"
+    volumes:
+      - ./python-ai:/app
+    working_dir: /app
+    depends_on:
+      - clickhouse
+
   # 📊 Analytics Database (ClickHouse)
   clickhouse:
     image: clickhouse/clickhouse-server
