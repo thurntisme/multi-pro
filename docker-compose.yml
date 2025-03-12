@@ -155,6 +155,15 @@ services:
       - ./storage_data/minio_data:/data  # Persist stored objects
     command: server --console-address ":9090" /data
     restart: always
+
+  mailhog:
+    image: mailhog/mailhog
+    container_name: mailhog
+    restart: unless-stopped
+    ports:
+      - "1025:1025" # SMTP server
+      - "8025:8025" # Web UI
+      
   #
   #  # RabbitMQ - Message broker for async tasks
   #  rabbitmq:
