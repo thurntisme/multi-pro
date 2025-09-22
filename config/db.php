@@ -24,7 +24,17 @@ try {
         $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     }
 
-    // echo "Connected to the SQLite database successfully!";
+    if ($_ENV['DB_DRIVER'] === 'mysql') {
+        $pdo->query("SELECT 1");
+        return true;
+    } elseif ($_ENV['DB_DRIVER'] === 'sqlite') {
+        $pdo->query("SELECT sqlite_version()");
+        return true;
+    } else {
+        error_log("Unknown database driver: " . $_ENV['DB_DRIVER']);
+        return false;
+    }
 } catch (PDOException $e) {
-    echo "Connection failed: " . $e->getMessage();
+    error_log("Connection failed: " . $e->getMessage());
+    return false;
 }
