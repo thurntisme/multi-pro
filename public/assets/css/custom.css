@@ -1,0 +1,279 @@
+/*
+Template Name: Velzon - Admin & Dashboard Template
+Author: Themesbrand
+Website: https://themesbrand.com/
+Contact: support@themesbrand.com
+File: Custom Css File
+*/
+
+tr.my-club-player-row {
+    opacity: 0.75;
+    cursor: pointer;
+    transition: all 0.5s ease;
+}
+
+tr.my-club-player-row:hover,
+tr.my-club-player-row.selected {
+    opacity: 1;
+}
+
+tr.my-club-player-row :is(.btn-search, .btn-change) {
+    visibility: hidden;
+}
+
+tr.my-club-player-row:hover :is(.btn-search, .btn-change),
+tr.my-club-player-row.selected :is(.btn-search, .btn-change) {
+    visibility: visible;
+}
+
+#inventoryItemModal #player-info .progress-bar {
+    /*transition-duration: 2s;*/
+    transition-timing-function: linear;
+}
+
+.player-dot {
+    width: 6px;
+    height: 6px;
+    display: inline-block;
+    margin-left: 4px;
+    border-radius: 50%;
+}
+
+.ckeditor-advanced+.ck-editor .ck-toolbar {
+    border-left: none !important;
+    border-top: none !important;
+    border-right: none !important;
+    border-radius: 0 !important;
+}
+
+.dropdown-icon-item:hover {
+    background-color: #eff2f7;
+}
+
+.user-online {
+    background-color: #0ab39c;
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    display: inline-block;
+}
+
+.player-alert {
+    width: 28px;
+    height: 28px;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#wheel-wrapper {
+    position: relative;
+    padding-top: 60px;
+    padding-bottom: 60px;
+    text-align: center;
+}
+
+#wheel-wrapper #cursor {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-left: 20px solid transparent;
+    border-right: 20px solid transparent;
+    border-top: 40px solid red;
+    transform: translateX(-50%);
+}
+
+#wheel-wrapper #wheelContainer {
+    position: relative;
+    width: 400px;
+    height: 400px;
+    margin: auto;
+}
+
+#wheel-wrapper #wheelCanvas {
+    display: block;
+    margin: auto;
+    width: 400px;
+    height: 400px;
+    transform: rotate(-90deg);
+}
+
+#wheel-wrapper #spinBtn {
+    display: block;
+    margin: 20px auto;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+#slot-machine .slot-machine {
+    display: flex;
+    justify-content: center;
+    margin: 20px;
+}
+
+#slot-machine .reel {
+    width: 80px;
+    height: 80px;
+    border: 2px solid #000;
+    font-size: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f8f8f8;
+    transition: transform 0.5s;
+}
+
+#slot-machine .spin-btn {
+    width: 90px;
+}
+
+#card-flip-memory #game-board {
+    display: grid;
+    grid-template-columns: repeat(4, 100px);
+    gap: 10px;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+#card-flip-memory .card {
+    width: 100px;
+    height: 100px;
+    background: #ddd;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    cursor: pointer;
+    border: 1px solid #333;
+}
+
+#card-flip-memory .flipped {
+    background: white;
+}
+
+#lottery-simulator .lottery-box .lottery-result {
+    width: 80px;
+    height: 80px;
+    border: 2px solid var(--vz-border-color);
+    font-size: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f8f8f8;
+    transition: transform 0.5s;
+    border-radius: 8px;
+}
+
+#lottery-simulator .lottery-box .lottery-result.loaded {
+    background: var(--vz-border-color);
+}
+
+#lottery-simulator .lottery-box .lottery-result+input {
+    border: solid 1px var(--vz-border-color);
+    text-align: center;
+}
+
+#lottery-simulator input[name="your_number"] {
+    width: 200px;
+}
+
+#monopoly #board {
+    display: grid;
+    grid-template-columns: repeat(8, 120px);
+    grid-template-rows: repeat(6, 120px);
+    position: relative;
+    gap: 5px;
+}
+
+#monopoly #board .tile {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    font-weight: bold;
+    padding: 8px;
+    flex-direction: column-reverse;
+    border-width: 1px;
+    border-style: solid;
+}
+
+#monopoly #board .property {
+    background-color: lightblue;
+    border-color: lightblue;
+}
+
+#monopoly #board .special {
+    background-color: lightgray;
+    border-color: lightgray;
+}
+
+#monopoly #board .chance {
+    background-color: yellow;
+    border-color: yellow;
+}
+
+#monopoly #board .tax {
+    background-color: red;
+    border-color: red;
+    color: white;
+}
+
+#monopoly #board .corner {
+    background-color: white;
+    border-color: white;
+}
+#monopoly #board .tile.active {
+    border-color: #000;
+}
+
+#monopoly #info {
+    grid-column: 2 / 8;
+    grid-row: 2 / 6;
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+}
+
+#monopoly #diceResult {
+    height: 24px;
+}
+#monopoly .container .top {
+    grid-column: 1/9;
+    grid-row: 1/2;
+    display: grid;
+    grid-template-columns: repeat(8, 120px);
+    gap: 5px;
+}
+#monopoly .container .right {
+    grid-column: 8/9;
+    grid-row: 2/6;
+    display: grid;
+    grid-template-rows: repeat(4, 120px);
+    gap: 5px;
+}
+#monopoly .container .bottom {
+    grid-column: 1/9;
+    grid-row: 6/7;
+    display: grid;
+    grid-template-columns: repeat(8, 120px);
+    gap: 5px;
+    direction: rtl;
+}
+#monopoly .container .left {
+    grid-column: 1/2;
+    grid-row: 2/6;
+    display: grid;
+    grid-template-rows: repeat(4, 120px);
+    gap: 5px;
+}
+#monopoly .container .left .tile:nth-child(1) { order: 4; }
+#monopoly .container .left .tile:nth-child(2) { order: 3; }
+#monopoly .container .left .tile:nth-child(3) { order: 2; }
+#monopoly .container .left .tile:nth-child(4) { order: 1; }
