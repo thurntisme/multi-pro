@@ -1,20 +1,29 @@
 <?php
-require_once 'controllers/NotificationController.php';
-require_once 'controllers/SystemNotificationController.php';
+// require_once 'controllers/NotificationController.php';
+// require_once 'controllers/SystemNotificationController.php';
 
-$user = new UserController();
-$user_fullName = $user->getUserFullName($user_id);
-$user_point = $user->getUserPoint($user_id);
-$fullName = !empty(trim($user_fullName)) ? $user_fullName : 'User';
+// $user = new UserController();
+// $user_fullName = $user->getUserFullName($user_id);
+// $user_point = $user->getUserPoint($user_id);
+// $fullName = !empty(trim($user_fullName)) ? $user_fullName : 'User';
 
-$file = 'error.log';
-$content = file_get_contents($file);
-$error_count = substr_count($content, 'PHP Warning');
+// $file = 'error.log';
+// $content = file_get_contents($file);
+// $error_count = substr_count($content, 'PHP Warning');
 
-$notificationController = new NotificationController();
-$systemNotificationController = new SystemNotificationController();
-$notifications = $notificationController->newestNotifications($user_id);
-$systemNotiCount = $systemNotificationController->getSystemNotificationsUnreadCount();
+// $notificationController = new NotificationController();
+// $systemNotificationController = new SystemNotificationController();
+// $notifications = $notificationController->newestNotifications($user_id);
+// $systemNotiCount = $systemNotificationController->getSystemNotificationsUnreadCount();
+
+$fullName = 'Admin';
+$error_count = 0;
+$notifications = [
+    'newest' => [],
+    'count' => 0
+];
+$user_point = 0;
+$systemNotiCount = 0;
 
 ?>
 
@@ -183,7 +192,7 @@ $systemNotiCount = $systemNotificationController->getSystemNotificationsUnreadCo
                             alt="Header Language" height="20" class="rounded">
                     </button>
                     <div class="dropdown-menu dropdown-menu-end">
-                        <?php foreach ($support_languages as $key => $value) { ?>
+                        <?php foreach (SUPPORT_LANGUAGES as $key => $value) { ?>
                             <a href="javascript:void(0);" class="dropdown-item notify-item language py-2"
                                 data-lang="<?= $key ?>" title="<?= $value ?>">
                                 <img src="<?= App\Helpers\NetworkHelper::home_url("assets/images/flags/" . $key . ".svg") ?>"
@@ -210,7 +219,7 @@ $systemNotiCount = $systemNotificationController->getSystemNotificationsUnreadCo
 
                         <div class="p-2">
                             <div class="row g-0 flex-wrap">
-                                <?php foreach ($quickApps as $app): ?>
+                                <?php foreach (DEFAULT_QUICK_APPS as $app): ?>
                                     <div class="col-4">
                                         <a class="dropdown-icon-item"
                                             href="<?= App\Helpers\NetworkHelper::home_url('app/' . $app['slug']) ?>">
@@ -701,7 +710,7 @@ $systemNotiCount = $systemNotificationController->getSystemNotificationsUnreadCo
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item" href="<?= App\Helpers\NetworkHelper::home_url('app/wallet') ?>"><i
                                 class="mdi mdi-wallet text-muted fs-16 align-middle me-1"></i> <span
-                                class="align-middle"><b><?= $commonController->formatNumberWithCommas($user_point) ?></b></span></a>
+                                class="align-middle"><b><?= $user_point ?></b></span></a>
                         <a class="dropdown-item" href="<?= App\Helpers\NetworkHelper::home_url('app/my-settings') ?>"><i
                                 class="mdi mdi-cog-outline text-muted fs-16 align-middle me-1"></i> <span
                                 class="align-middle">My Settings</span></a>

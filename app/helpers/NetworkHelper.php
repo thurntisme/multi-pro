@@ -40,4 +40,42 @@ class NetworkHelper
     {
         return $_SERVER['REQUEST_METHOD'];
     }
+
+    private static function getFirstParamInUrl()
+    {
+        // Get the full request URI
+        $uri = $_SERVER['REQUEST_URI'];
+
+        // Remove any query parameters if present
+        $cleanUri = strtok($uri, '?');
+
+        // Split the URI by "/"
+        $uriParts = explode('/', trim($cleanUri, '/'));
+
+        // Get specific parts of the URI
+        $firstPart = $uriParts[1] ?? null;
+        return $firstPart;
+    }
+
+    public static function activeClassName($url, $className = 'active', $isParent = false)
+    {
+        $currentUrl = self::getFirstParamInUrl();
+        return $currentUrl === $url ? $className : '';
+    }
+
+    public static function getCurrentUrl()
+    {
+        // Determine the protocol (http or https)
+        $protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' || $_SERVER['SERVER_PORT'] == 443) ? "https://" : "http://";
+
+        // Get the host
+        $host = $_SERVER['HTTP_HOST'];
+
+        // Get the URI path without query parameters
+        $uri = $_SERVER['REQUEST_URI'];
+        $uriWithoutParams = parse_url($uri, PHP_URL_PATH);
+
+        // Return the full URL without query parameters
+        return $protocol . $host . $uriWithoutParams;
+    }
 }

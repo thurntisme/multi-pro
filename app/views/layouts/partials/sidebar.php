@@ -336,17 +336,18 @@ $menu_items = [
                     echo '<li class="menu-title"><span>' . $category['title'] . '</span></li>';
 
                     foreach ($category['sub_items'] as $item) {
-                        $pageData = getPageData($item['slug'], $user_role);
+                        // $pageData = getPageData($item['slug'], $user_role);
+                        $isLock = false;
                         // Generate active class based on the slug
-                        $active_class = activeClassName($item['slug']);
+                        $active_class = App\Helpers\NetworkHelper::activeClassName($item['slug']);
 
                         // Generate the URL dynamically based on the slug
-                        $url = home_url("app/{$item['slug']}");
+                        $url = App\Helpers\NetworkHelper::home_url("app/{$item['slug']}");
 
                         echo '<li class="nav-item">
                                     <a class="nav-link menu-link ' . $active_class . '" href="' . $url . '">
                                         <i class="' . $item['icon'] . '"></i> <span>' . $item['name'] . '</span>
-                                        ' . (empty($pageData['isAccessible']) ? '<i class="mdi mdi-lock ms-auto"></i>' : '') . '
+                                        ' . ($isLock ? '<i class="mdi mdi-lock ms-auto"></i>' : '') . '
                                     </a>
                                   </li>';
                     }

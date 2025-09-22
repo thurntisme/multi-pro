@@ -6,6 +6,21 @@ define('DEFAULT_DATE_FORMAT', 'Y-m-d');
 define('DEFAULT_TIME_FORMAT', 'H:i:s');
 define('DEFAULT_DATETIME_FORMAT', 'Y-m-d H:i:s');
 
+// Paths
+define('BASE_PATH', 'http://localhost:8000');
+define('APP_ROOT', dirname(__DIR__, 2));
+define('PUBLIC_PATH', APP_ROOT . '/public/');
+define('UPLOAD_PATH', APP_ROOT . '/public/uploads/');
+define('VIEWS_PATH', APP_ROOT . '/app/views/');
+define('LAYOUTS_PATH', APP_ROOT . '/app/views/layouts/');
+define('ASSETS_PATH', BASE_PATH . '/public/assets/');
+define('STORAGE_PATH', APP_ROOT . '/storage/');
+define('LOGS_PATH', APP_ROOT . '/storage/logs/');
+define('DIR_UPLOADS_PATH', APP_ROOT . '/storage/app/uploads/');
+define('APP_UPLOADS_PATH', BASE_PATH . '/storage/app/uploads/');
+define("VIEW_EXTENSION", ".php");
+define("APP_VERSION", "1.0.0");
+
 include "version.php";
 include "bookmarks.php";
 include "network.php";
@@ -33,7 +48,6 @@ $timezones = [];
 foreach (DateTimeZone::listIdentifiers() as $zone) {
     $timezones[$zone] = $zone;
 }
-$support_languages = ['en' => 'English', 'vi' => 'Vietnamese'];
 
 $support_fonts = [
     "Tahoma" => "Tahoma",
@@ -432,7 +446,7 @@ $status = [
     'in_progress' => 'Inprogress',
     'completed' => 'Completed',
     'on_hold' => 'On Hold',
-    'cancelled' => 'Cancelled', 
+    'cancelled' => 'Cancelled',
 ];
 
 $projectTypes = array(

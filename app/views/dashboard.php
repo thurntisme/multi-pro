@@ -1,46 +1,5 @@
 <?php
-$pageTitle = "Dashboard";
-
-$checklist = DEFAULT_DASHBOARD_OPTIONS['checklist'];
-$event = DEFAULT_DASHBOARD_OPTIONS['event'];
-$today = strtolower(date('D'));
-$current_time = time();
-$today_events = [];
-foreach ($event as $e) {
-    if (in_array($today, $e['date'])) {
-        $event_start = strtotime($e['start_time']); // Convert start time to timestamp
-        $event_end = strtotime($e['end_time']); // Convert end time to timestamp
-
-        // Check status: Passed, Upcoming, or Processing
-        if ($current_time < $event_start) {
-            $status = 'Upcoming';
-        } elseif ($current_time <= $event_end) {
-            $status = 'Processing';
-        } else {
-            $status = 'Passed';
-        }
-
-        $today_events[] = array_merge($e, ['status' => $status]);
-    }
-}
-
-$user = new UserController();
-$user_fullName = $user->getUserFullName($user_id);
-
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    if (!empty($_POST['action_name'])) {
-        if ($_POST['action_name'] === 'check_in_out') {
-            if (isUserCheckIn()) {
-                checkOut();
-            } else {
-                checkIn();
-            }
-        }
-    }
-}
-
-$user_logs = get_log_message();
-
+$user_fullName = 'admin';
 ob_start();
 ?>
 <div class="row">
@@ -132,7 +91,7 @@ ob_start();
             </div><!-- end card header -->
             <div class="card-body p-1 d-flex justify-content-center align-items-center">
                 <div class="row g-0 flex-wrap">
-                    <?php foreach ($quickApps as $app): ?>
+                    <?php foreach (DEFAULT_QUICK_APPS as $app): ?>
                         <div class="col-4">
                             <a class="dropdown-icon-item"
                                 href="<?= App\Helpers\NetworkHelper::home_url('app/' . $app['slug']) ?>">
@@ -155,7 +114,7 @@ ob_start();
             </div><!-- end card header -->
             <div class="card-body pt-0">
                 <ul class="list-group list-group-flush border-dashed">
-                    <?php foreach ($today_events as $item): ?>
+                    <?php foreach ($events as $item): ?>
                         <li class="list-group-item ps-0">
                             <div class="row align-items-center g-3">
                                 <div class="col-auto">
@@ -168,7 +127,8 @@ ob_start();
                                 </div>
                                 <div class="col">
                                     <h5 class="text-muted mt-0 mb-1 fs-13">
-                                        <?= $item['start_time'] . ' - ' . $item['end_time'] ?></h5>
+                                        <?= $item['start_time'] . ' - ' . $item['end_time'] ?>
+                                    </h5>
                                     <p class="text-reset fs-14 mb-0"><?= $item['content'] ?></p>
                                 </div>
                                 <div class="col-sm-auto">
@@ -202,7 +162,7 @@ ob_start();
                 <h4 class="card-title mb-0 flex-grow-1">My Activities</h4>
             </div><!-- end card header -->
             <div class="card-body p-0">
-                <?php if (!isUserCheckIn()) { ?>
+                <?php if ($isUserCheckIn) { ?>
                     <div class="p-3">
                         <p class="fs-16 lh-base">🎉 Check in now to earn points and unlock rewards! 🏆</p>
                         <form action="<?= $_SERVER['REQUEST_URI'] ?>" method="POST">
@@ -224,7 +184,8 @@ ob_start();
                                         </div>
                                         <div class="flex-shrink-0 ms-2">
                                             <p class="text-muted fs-12 mb-0">
-                                                <?= $commonController->convertTime($item['timestamp']); ?></p>
+                                                <?= $commonController->convertTime($item['timestamp']); ?>
+                                            </p>
                                         </div>
                                     </div>
                                 </li>
@@ -322,3 +283,5 @@ ob_start();
 
 <?php
 $pageContent = ob_get_clean();
+
+require LAYOUTS_PATH . 'dashboard.php';

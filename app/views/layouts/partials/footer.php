@@ -1,8 +1,3 @@
-<?php
-$lastVersion = end($projectVersions);
-$lastVersionKey = key($projectVersions);
-?>
-
 <footer class="footer">
     <div class="container-fluid">
         <div class="row">
@@ -13,7 +8,7 @@ $lastVersionKey = key($projectVersions);
             </div>
             <div class="col-sm-6">
                 <a href="<?= App\Helpers\NetworkHelper::home_url("version") ?>" class="text-sm-end d-none d-sm-block">
-                    Version <?= $lastVersionKey ?>
+                    Version <?= APP_VERSION ?>
                 </a>
             </div>
         </div>

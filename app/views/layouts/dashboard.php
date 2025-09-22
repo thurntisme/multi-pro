@@ -1,9 +1,9 @@
-<?php include 'layouts/main.php'; ?>
+<?php include_once LAYOUTS_PATH . 'partials/main.php'; ?>
 
 <head>
 
     <?php include_once LAYOUTS_PATH . 'partials/title-meta.php' ?>
-    <?php include 'layouts/head-css.php'; ?>
+    <?php include_once LAYOUTS_PATH . 'partials/head-css.php'; ?>
 
 </head>
 
@@ -12,7 +12,8 @@
     <!-- Begin page -->
     <div id="layout-wrapper">
 
-        <?php include 'layouts/menu.php'; ?>
+        <?php include_once LAYOUTS_PATH . 'partials/topbar.php'; ?>
+        <?php include_once LAYOUTS_PATH . 'partials/sidebar.php'; ?>
 
         <!-- ============================================================== -->
         <!-- Start right Content here -->
@@ -22,25 +23,25 @@
             <div class="page-content">
                 <div class="container-fluid">
 
-                    <?php includeFileWithVariables('layouts/page-title.php', array('title' => $pageTitle ?? "")); ?>
-                    <?php echo $pageContent ?? '<p>Welcome to the main content area.</p>'; ?>
+                    <?php include_once LAYOUTS_PATH . 'partials/breadcrumb.php'; ?>
+                    <?php echo $pageContent ?? ''; ?>
 
                 </div>
                 <!-- container-fluid -->
             </div>
             <!-- End Page-content -->
 
-            <?php include 'layouts/footer.php'; ?>
+            <?php include_once LAYOUTS_PATH . 'partials/footer.php'; ?>
         </div>
         <!-- end main content-->
 
     </div>
     <!-- END layout-wrapper -->
 
-    <?php //include 'layouts/customizer.php';
+    <?php //include_once LAYOUTS_PATH . 'partials/customizer.php';
     ?>
 
-    <?php include 'layouts/vendor-scripts.php'; ?>
+    <?php include_once LAYOUTS_PATH . 'partials/vendor-scripts.php'; ?>
 
     <!-- App js -->
     <script src="<?= App\Helpers\NetworkHelper::home_url("assets/js/app.js") ?>"></script>

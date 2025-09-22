@@ -9,6 +9,6 @@ class LandingController extends Controller
     public function index()
     {
         // Render the landing page
-        $this->view('landing');
+        return $this->view('landing', ['title' => 'Welcome to My Website']);
     }
 }
