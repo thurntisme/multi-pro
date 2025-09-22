@@ -1,0 +1,334 @@
+<?php
+
+namespace App\Constants;
+
+class Sidebar
+{
+    public const SIDEBAR_MENU = [
+        [
+            'title' => 'Personal',
+            'sub_items' => [
+                [
+                    'name' => 'Dashboard',
+                    'icon' => 'ri-dashboard-2-line',
+                    'slug' => ''
+                ],
+                [
+                    'name' => 'To Do',
+                    'icon' => 'ri-task-line',
+                    'slug' => 'todo'
+                ],
+                [
+                    'name' => 'Note',
+                    'icon' => 'ri-sticky-note-line',
+                    'slug' => 'note'
+                ],
+                [
+                    'name' => 'Habit',
+                    'icon' => 'ri-sticky-note-line',
+                    'slug' => 'habit'
+                ],
+                [
+                    'name' => 'Daily Checklist',
+                    'icon' => 'ri-calendar-check-line',
+                    'slug' => 'daily-checklist'
+                ],
+                [
+                    'name' => 'Income',
+                    'icon' => 'ri-wallet-3-line',
+                    'slug' => 'income'
+                ],
+                [
+                    'name' => 'Expense',
+                    'icon' => 'ri-wallet-3-line',
+                    'slug' => 'expense'
+                ],
+                [
+                    'name' => 'Journal',
+                    'icon' => 'ri-wallet-3-line',
+                    'slug' => 'journal'
+                ],
+                [
+                    'name' => 'Subscription',
+                    'icon' => 'ri-calendar-check-line',
+                    'slug' => 'subscription'
+                ],
+                [
+                    'name' => 'Plan',
+                    'icon' => 'ri-file-text-line',
+                    'slug' => 'plan'
+                ],
+                [
+                    'name' => 'Calendar',
+                    'icon' => 'ri-calendar-event-fill',
+                    'slug' => 'calendar'
+                ],
+                [
+                    'name' => 'Workout',
+                    'icon' => 'ri-calendar-event-fill',
+                    'slug' => 'workout'
+                ],
+            ]
+        ],
+        [
+            'title' => 'Tech Stack',
+            'sub_items' => [
+                [
+                    'name' => 'Wordpress',
+                    'icon' => 'mdi mdi-wordpress',
+                    'slug' => 'wordpress'
+                ],
+                [
+                    'name' => 'ReactJS',
+                    'icon' => 'mdi mdi-react',
+                    'slug' => 'reactjs'
+                ],
+                [
+                    'name' => 'PHP',
+                    'icon' => 'mdi mdi-language-php',
+                    'slug' => 'php'
+                ],
+                [
+                    'name' => 'MySql',
+                    'icon' => 'mdi mdi-database-outline',
+                    'slug' => 'mysql'
+                ],
+                [
+                    'name' => 'English',
+                    'icon' => 'mdi mdi-google-translate',
+                    'slug' => 'english'
+                ],
+            ]
+        ],
+        [
+            'title' => 'App',
+            'sub_items' => [
+                [
+                    'name' => 'Short Link',
+                    'icon' => 'ri-link-m',
+                    'slug' => 'short-link'
+                ],
+                [
+                    'name' => 'Generate QR',
+                    'icon' => 'ri-qr-code-line',
+                    'slug' => 'generate-qr'
+                ],
+                [
+                    'name' => 'AI Chat',
+                    'icon' => 'ri-chat-3-line',
+                    'slug' => 'ai-chat'
+                ],
+                [
+                    'name' => 'File Manager',
+                    'icon' => 'ri-folder-5-line',
+                    'slug' => 'file-manager'
+                ]
+            ]
+        ],
+        [
+            'title' => 'Work',
+            'sub_items' => [
+                [
+                    'name' => 'Project',
+                    'icon' => 'ri-folder-5-line',
+                    'slug' => 'project'
+                ],
+                [
+                    'name' => 'Task',
+                    'icon' => 'ri-folder-5-line',
+                    'slug' => 'task'
+                ],
+                [
+                    'name' => 'Client',
+                    'icon' => 'ri-folder-5-line',
+                    'slug' => 'client'
+                ],
+                [
+                    'name' => 'Estimation',
+                    'icon' => 'ri-folder-5-line',
+                    'slug' => 'estimation'
+                ],
+                [
+                    'name' => 'Resume',
+                    'icon' => 'ri-folder-5-line',
+                    'slug' => 'resume'
+                ],
+                [
+                    'name' => 'Report Working',
+                    'icon' => 'ri-clipboard-line',
+                    'slug' => 'report-working'
+                ],
+                [
+                    'name' => 'Maintain Web',
+                    'icon' => 'ri-global-line',
+                    'slug' => 'maintain-web'
+                ],
+                [
+                    'name' => 'SEO Checklist',
+                    'icon' => 'ri-search-line',
+                    'slug' => 'seo-checklist'
+                ],
+                [
+                    'name' => 'Web Dev Checklist',
+                    'icon' => 'ri-tools-line',
+                    'slug' => 'web-dev-checklist'
+                ],
+                [
+                    'name' => 'Web Secure Checklist',
+                    'icon' => 'ri-shield-line',
+                    'slug' => 'web-secure-checklist'
+                ]
+            ]
+        ],
+        [
+            'title' => 'Development',
+            'sub_items' => [
+                [
+                    'name' => 'Code',
+                    'icon' => 'ri-code-line',
+                    'slug' => 'code'
+                ],
+                [
+                    'name' => 'Tip',
+                    'icon' => 'ri-lightbulb-line',
+                    'slug' => 'tip'
+                ],
+                [
+                    'name' => 'Book',
+                    'icon' => 'ri-book-open-line',
+                    'slug' => 'book'
+                ],
+                [
+                    'name' => 'Git',
+                    'icon' => 'ri-git-merge-line',
+                    'slug' => 'git'
+                ],
+                [
+                    'name' => 'Course',
+                    'icon' => 'ri-graduation-cap-line',
+                    'slug' => 'course'
+                ],
+                [
+                    'name' => 'Blog',
+                    'icon' => 'ri-article-line',
+                    'slug' => 'blog'
+                ]
+            ]
+        ],
+        [
+            'title' => 'Network',
+            'sub_items' => [
+                [
+                    'name' => 'Lead',
+                    'icon' => 'ri-file-user-line',
+                    'slug' => 'lead'
+                ],
+                [
+                    'name' => 'Website',
+                    'icon' => 'ri-links-line',
+                    'slug' => 'website'
+                ]
+            ]
+        ],
+        [
+            'title' => 'Tools',
+            'sub_items' => [
+                [
+                    'name' => 'Lucky Wheel',
+                    'icon' => 'ri-search-eye-line',
+                    'slug' => 'lucky-wheel'
+                ]
+            ]
+        ],
+        [
+            'title' => 'Game',
+            'sub_items' => [
+                [
+                    'name' => 'Football Manager',
+                    'icon' => 'ri-football-line',
+                    'slug' => 'football-manager'
+                ],
+                [
+                    'name' => 'Number Guessing',
+                    'icon' => 'ri-numbers-line',
+                    'slug' => 'number-guessing'
+                ],
+                [
+                    'name' => 'Slot Machine',
+                    'icon' => 'ri-numbers-line',
+                    'slug' => 'slot-machine'
+                ],
+                [
+                    'name' => 'Flip Memory',
+                    'icon' => 'ri-numbers-line',
+                    'slug' => 'flip-memory'
+                ],
+                [
+                    'name' => 'Lottery Simulator',
+                    'icon' => 'ri-numbers-line',
+                    'slug' => 'lottery-simulator'
+                ],
+                [
+                    'name' => 'Monopoly',
+                    'icon' => 'ri-numbers-line',
+                    'slug' => 'monopoly'
+                ]
+            ]
+        ],
+        [
+            'title' => 'My Account',
+            'sub_items' => [
+                [
+                    'name' => 'Settings',
+                    'icon' => 'ri-settings-3-line',
+                    'slug' => 'my-settings',
+                ],
+                [
+                    'name' => 'Notifications',
+                    'icon' => 'ri-notification-2-line',
+                    'slug' => 'my-notification',
+                ],
+                [
+                    'name' => 'Package',
+                    'icon' => 'ri-star-s-line',
+                    'slug' => 'my-package',
+                ],
+                [
+                    'name' => 'Profile',
+                    'icon' => 'ri-user-settings-line',
+                    'slug' => 'my-profile',
+                ],
+            ]
+        ],
+        [
+            'title' => 'System',
+            'sub_items' => [
+                [
+                    'name' => 'API Log',
+                    'icon' => 'ri-file-list-2-line',
+                    'slug' => 'api-log'
+                ],
+                [
+                    'name' => 'User Management',
+                    'icon' => 'ri-user-line',
+                    'slug' => 'user-management'
+                ],
+                [
+                    'name' => 'Settings',
+                    'icon' => 'ri-settings-2-line',
+                    'slug' => 'settings'
+                ],
+                [
+                    'name' => 'Mail Log',
+                    'icon' => 'ri-mail-line',
+                    'slug' => 'mail'
+                ],
+                [
+                    'name' => 'Database',
+                    'icon' => 'ri-database-2-line',
+                    'slug' => 'database'
+                ]
+            ]
+        ]
+    ];
+}

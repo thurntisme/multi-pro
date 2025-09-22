@@ -23,7 +23,7 @@
             </div>
             <ul class="navbar-nav" id="navbar-nav">
                 <?php
-                foreach (SIDEBAR_MENU_ITEMS as $category) {
+                foreach (App\Constants\Sidebar::SIDEBAR_MENU as $category) {
                     echo '<li class="menu-title"><span>' . $category['title'] . '</span></li>';
 
                     foreach ($category['sub_items'] as $item) {
