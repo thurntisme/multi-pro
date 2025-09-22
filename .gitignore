@@ -11,3 +11,4 @@ assets/uploads/
 assets/logs/api_log.json
 storage_data
 letsencrypt/acme.json
+storage/logs/

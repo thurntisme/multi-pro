@@ -2,7 +2,7 @@
     "name": "thurntisme/multi-pro",
     "autoload": {
         "psr-4": {
-            "Thurntisme\\MultiPro\\": "app/"
+            "App\\": "app/"
         }
     },
     "authors": [

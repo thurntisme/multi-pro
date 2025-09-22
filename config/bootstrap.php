@@ -5,9 +5,6 @@ require_once __DIR__ . '/../vendor/autoload.php';
 $dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/..');
 $dotenv->load();
 
-// Include the routing file to handle routing logic
-// require_once __DIR__ . '/../config/route.php';
-
 // Include constants
 require_once __DIR__ . '/constants.php';
 
@@ -26,6 +23,9 @@ $isDbOk = require __DIR__ . '/db.php';
 if (!$isDbOk) {
     die('Database connection failed');
 }
+
+// Include the routing file to handle routing logic
+(new App\Core\Route())->register();
 
 // // Include functions
 // require_once __DIR__ . '/utils.php';
