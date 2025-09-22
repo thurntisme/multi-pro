@@ -35,4 +35,9 @@ class NetworkHelper
 
         return $base_url;
     }
+
+    public static function getRequestMethod(): string
+    {
+        return $_SERVER['REQUEST_METHOD'];
+    }
 }

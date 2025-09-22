@@ -2,8 +2,7 @@
 
 <head>
 
-    <?php includeFileWithVariables('layouts/title-meta.php', array('title' => $pageTitle ?? "")); ?>
-
+    <?php include_once LAYOUTS_PATH . 'partials/title-meta.php' ?>
     <?php include 'layouts/head-css.php'; ?>
 
 </head>

@@ -18,3 +18,4 @@ define('STORAGE_PATH', APP_ROOT . '/storage/');
 define('LOGS_PATH', APP_ROOT . '/storage/logs/');
 define('DIR_UPLOADS_PATH', APP_ROOT . '/storage/app/uploads/');
 define('APP_UPLOADS_PATH', BASE_PATH . '/storage/app/uploads/');
+define("VIEW_EXTENSION", ".php");

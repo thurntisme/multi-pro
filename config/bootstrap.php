@@ -24,8 +24,20 @@ if (!$isDbOk) {
     die('Database connection failed');
 }
 
+$router = require __DIR__ . '/router.php';
+$container = require __DIR__ . '/container.php';
+$middleware = require __DIR__ . '/middleware.php';
+$request = App\Core\Request::createFromGlobals();
+
+$dispatcher = new App\Core\Dispatcher($router, $container, $middleware);
+
+$response = $dispatcher->handle($request);
+
+$response->send();
+
+
 // Include the routing file to handle routing logic
-(new App\Core\Route())->register();
+// (new App\Core\Route())->register();
 
 // // Include functions
 // require_once __DIR__ . '/utils.php';

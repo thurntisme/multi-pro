@@ -4,9 +4,8 @@
 
 <head>
 
-    <?php includeFileWithVariables('layouts/title-meta.php', array('title' => $pageTitle ?? "")); ?>
-
-    <?php include 'layouts/head-css.php'; ?>
+    <?php include_once LAYOUTS_PATH . 'partials/title-meta.php' ?>
+    <?php include_once LAYOUTS_PATH . 'partials/head-css.php'; ?>
 
 </head>
 
@@ -71,7 +70,7 @@
     </div>
     <!-- end auth-page-wrapper -->
 
-    <?php include 'layouts/vendor-scripts.php'; ?>
+    <?php include_once LAYOUTS_PATH . 'partials/vendor-scripts.php'; ?>
 
     <!-- particles js -->
     <script src="<?= App\Helpers\NetworkHelper::home_url("assets/libs/particles.js/particles.js") ?>"></script>
