@@ -22,19 +22,19 @@ $shopping_links = [
 <div class="d-flex align-items-center flex-wrap gap-2">
     <div class="flex-grow-1">
         <a class="btn btn-<?= $slug !== 'football-manager' ? 'soft-' : '' ?>info add-btn"
-            href="<?= home_url("app/football-manager") ?>"><i
+            href="<?= App\Helpers\NetworkHelper::home_url("app/football-manager") ?>"><i
                 class=" bx bx-home-circle me-1 align-baseline"></i> Home
         </a>
         <a class="btn btn-<?= $slug !== 'my-club' ? 'soft-' : '' ?>info add-btn"
-            href="<?= home_url("app/football-manager/my-club") ?>"><i
+            href="<?= App\Helpers\NetworkHelper::home_url("app/football-manager/my-club") ?>"><i
                 class="bx bx-clipboard me-1 align-baseline"></i> My Club
         </a>
         <a class="btn btn-<?= $slug !== 'locker-room' ? 'soft-' : '' ?>info add-btn"
-            href="<?= home_url("app/football-manager/locker-room") ?>"><i
+            href="<?= App\Helpers\NetworkHelper::home_url("app/football-manager/locker-room") ?>"><i
                 class=" bx bx-closet me-1 align-baseline"></i> Locker Room
         </a>
         <a class="btn btn-<?= $slug !== 'my-players' ? 'soft-' : '' ?>info add-btn"
-            href="<?= home_url("app/football-manager/my-players") ?>"><i
+            href="<?= App\Helpers\NetworkHelper::home_url("app/football-manager/my-players") ?>"><i
                 class="bx bx-run me-1 align-baseline"></i> My Players
         </a>
     </div>
@@ -42,33 +42,32 @@ $shopping_links = [
         <div class="hstack text-nowrap gap-2">
             <div class="dropdown">
                 <button class="btn btn-<?= $slug !== 'transfer' ? 'soft-' : '' ?>info dropdown-toggle" type="button"
-                    id="dropdownMenuButton"
-                    data-bs-toggle="dropdown" aria-expanded="false">
+                    id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
                     <i class="bx bx-transfer-alt me-1 align-baseline"></i> Transfer
                 </button>
                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                    <?php foreach ($market_links as $link => $label) : ?>
+                    <?php foreach ($market_links as $link => $label): ?>
                         <a class="dropdown-item"
-                            href="<?= home_url("app/football-manager/transfer" . (!$link ? $link : '/' . $link)) ?>"><?= $label ?></a>
+                            href="<?= App\Helpers\NetworkHelper::home_url("app/football-manager/transfer" . (!$link ? $link : '/' . $link)) ?>"><?= $label ?></a>
                     <?php endforeach; ?>
                 </div>
             </div>
             <div class="dropdown">
                 <button class="btn btn-<?= $slug !== 'store' ? 'soft-' : '' ?>info dropdown-toggle" type="button"
-                    id="dropdownMenuButton"
-                    data-bs-toggle="dropdown" aria-expanded="false">
+                    id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
                     <i class=" bx bx-store-alt me-1 align-baseline"></i> Shopping
                 </button>
                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                    <?php foreach ($shopping_links as $link => $label) : ?>
+                    <?php foreach ($shopping_links as $link => $label): ?>
                         <a class="dropdown-item"
-                            href="<?= home_url("app/football-manager/store" . (!$link ? $link : '/' . $link)) ?>"><?= $label ?></a>
+                            href="<?= App\Helpers\NetworkHelper::home_url("app/football-manager/store" . (!$link ? $link : '/' . $link)) ?>"><?= $label ?></a>
                     <?php endforeach; ?>
                 </div>
             </div>
             <?php if (!empty($myTeam['budget'])) { ?>
                 <div class="ms-2 d-flex align-items-center">
-                    <span class="badge bg-warning-subtle text-warning badge-border fs-20 ms-1" id="team-budget"><?= formatCurrency($myTeam['budget'] ?? 0) ?></span>
+                    <span class="badge bg-warning-subtle text-warning badge-border fs-20 ms-1"
+                        id="team-budget"><?= formatCurrency($myTeam['budget'] ?? 0) ?></span>
                 </div>
             <?php } ?>
         </div>

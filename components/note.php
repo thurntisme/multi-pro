@@ -13,7 +13,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       $noteController->createNote();
     }
   }
-};
+}
+;
 
 ?>
 
@@ -40,7 +41,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       <?php
       if (count($noteList) > 0) {
         foreach ($noteList as $note) {
-      ?>
+          ?>
           <div class="list-group-item list-group-item-action">
             <div class="d-flex">
               <div class="flex-grow-1">
@@ -50,7 +51,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
               </div>
               <div>
                 <button type="button" class="btn btn-sm"><i class="fas fa-pen"></i></button>
-                <form method="POST" action="<?= home_url("/") ?>">
+                <form method="POST" action="<?= App\Helpers\NetworkHelper::home_url("/") ?>">
                   <input type="hidden" name="note_id" value="<?= $note['id'] ?>">
                   <input type="hidden" name="action_name" value="delete_note">
                   <button type="submit" class="btn btn-sm"><i class="fas fa-trash text-danger"></i></button>
@@ -76,7 +77,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </button>
       </div>
       <div class="modal-body">
-        <form method="POST" action="<?= home_url("/") ?>">
+        <form method="POST" action="<?= App\Helpers\NetworkHelper::home_url("/") ?>">
           <input type="hidden" name="action_name" value="add_new_note">
           <div class="form-group">
             <label for="title">Title:</label>

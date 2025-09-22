@@ -14,7 +14,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       $taskController->createTask();
     }
   }
-};
+}
+;
 
 $commonController = new CommonController();
 
@@ -43,21 +44,23 @@ $commonController = new CommonController();
       <?php
       if (count($taskList) > 0) {
         foreach ($taskList as $task) {
-      ?>
+          ?>
           <div class="list-group-item list-group-item-action pt-3">
             <div class="d-flex">
               <div class="flex-grow-1">
                 <h5 class="mb-1 text-gray-900"><?= $task['title'] ?? '' ?></h5>
                 <p class="mb-1"><?= $task['description'] ?? '' ?></p>
                 <div class="row">
-                  <small class="col-6"><i class="fas fa-pen text-gray-500 mr-1"></i> <?= isset($task['updated_at']) ? timeAgo($systemController->convertDateTime($task['updated_at'])) : '' ?></small>
+                  <small class="col-6"><i class="fas fa-pen text-gray-500 mr-1"></i>
+                    <?= isset($task['updated_at']) ? timeAgo($systemController->convertDateTime($task['updated_at'])) : '' ?></small>
                   <?php if (!empty($task['due_date'])) { ?>
-                    <small class="ml-4"><i class="fas fa-calendar text-gray-500 mr-1"></i> <?= date("d-m-Y", strtotime($task['due_date'])) ?></small>
+                    <small class="ml-4"><i class="fas fa-calendar text-gray-500 mr-1"></i>
+                      <?= date("d-m-Y", strtotime($task['due_date'])) ?></small>
                   <?php } ?>
                 </div>
               </div>
               <div class="p-0 pr-1">
-                <form method="POST" action="<?= home_url("/") ?>">
+                <form method="POST" action="<?= App\Helpers\NetworkHelper::home_url("/") ?>">
                   <input type="hidden" name="task_id" value="<?= $task['id'] ?>">
                   <input type="hidden" name="action_name" value="complete_task">
                   <button type="submit" class="btn btn-sm btn-outline-success"><i class="fas fa-check"></i></button>
@@ -83,7 +86,7 @@ $commonController = new CommonController();
         </button>
       </div>
       <div class="modal-body">
-        <form method="POST" action="<?= home_url("/") ?>">
+        <form method="POST" action="<?= App\Helpers\NetworkHelper::home_url("/") ?>">
           <input type="hidden" name="action_name" value="add_new_task">
           <div class="form-group">
             <label for="title">Title:</label>
