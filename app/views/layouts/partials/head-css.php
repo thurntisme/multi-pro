@@ -32,14 +32,14 @@ $googleFontsUrl = "https://fonts.googleapis.com/css2?family=" . urlencode($font)
   }
 </style>
 
-<?php
-if (!empty($additionCss)) {
-  echo $additionCss;
-}
-?>
-
 <!-- App Css-->
 <link href="<?= App\Helpers\NetworkHelper::home_url("assets/css/app.min.css") ?>" rel="stylesheet" type="text/css" />
 
 <!-- custom Css-->
 <link href="<?= App\Helpers\NetworkHelper::home_url("assets/css/custom.css") ?>" rel="stylesheet" type="text/css" />
+
+<?php
+if (!empty($additionCss)) {
+  echo $additionCss;
+}
+?>

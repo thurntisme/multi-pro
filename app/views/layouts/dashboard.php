@@ -12,7 +12,7 @@
     <!-- Begin page -->
     <div id="layout-wrapper">
 
-        <?php include_once LAYOUTS_PATH . 'partials/topbar.php'; ?>
+        <?php include_once LAYOUTS_PATH . 'partials/top-bar.php'; ?>
         <?php include_once LAYOUTS_PATH . 'partials/sidebar.php'; ?>
 
         <!-- ============================================================== -->
@@ -46,6 +46,11 @@
     <!-- App js -->
     <script src="<?= App\Helpers\NetworkHelper::home_url("assets/js/app.js") ?>"></script>
     <script src="<?= App\Helpers\NetworkHelper::home_url("assets/js/custom.js") ?>"></script>
+    <?php
+    if (!empty($additionCss)) {
+        echo $additionCss;
+    }
+    ?>
 </body>
 
 </html>

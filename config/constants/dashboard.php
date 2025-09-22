@@ -122,6 +122,3 @@ $quickApps = array(
     ),
 );
 define('DEFAULT_QUICK_APPS', $quickApps);
-
-$support_languages = ['en' => 'English', 'vi' => 'Vietnamese'];
-define('SUPPORT_LANGUAGES', $support_languages);
