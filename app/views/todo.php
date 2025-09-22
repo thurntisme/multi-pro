@@ -1,25 +1,12 @@
 <?php
-global $priorities, $status;
-require_once 'controllers/TodoController.php';
-
-$pageTitle = "Todos";
-
-$todoController = new TodoController();
-$list = $todoController->listTodos();
-
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    if (isset($_POST['action_name'])) {
-        if ($_POST['action_name'] === 'delete_record' && isset($_POST['post_id'])) {
-            $todoController->deleteTodo();
-        }
-    }
-}
+$priorities = App\Constants\Common::PRIORITIES;
+$status = App\Constants\Common::STATUS;
+$list = [
+    'list' => [],
+    'count' => 0
+];
 
 ob_start();
-?>
-
-<?php
-include_once DIR . '/components/alert.php';
 ?>
 
 <div class="card" id="tasksList">
@@ -146,12 +133,13 @@ include_once DIR . '/components/alert.php';
             <!--end table-->
         </div>
         <?php
-        includeFileWithVariables('components/pagination.php', array("count" => $list['count']));
+        include_once VIEWS_PATH . 'components/pagination.php';
         ?>
     </div>
     <!--end card-body-->
 </div>
 
-
 <?php
 $pageContent = ob_get_clean();
+
+include_once LAYOUTS_PATH . 'dashboard.php';

@@ -78,4 +78,32 @@ class NetworkHelper
         // Return the full URL without query parameters
         return $protocol . $host . $uriWithoutParams;
     }
+
+    public static function generatePageUrl($params = [])
+    {
+        // Get the current URL
+        $currentUrl = self::getCurrentUrl();
+
+        // Parse the URL to get its components
+        $urlParts = parse_url($currentUrl);
+        $queryParams = $_GET;
+
+        // Parse the query string into an associative array
+        if (isset($urlParts['query'])) {
+            parse_str($urlParts['query'], $queryParams);
+        }
+
+        // Replace or add the new parameters
+        foreach ($params as $key => $value) {
+            $queryParams[$key] = $value;
+        }
+
+        // Build the new query string
+        $newQuery = http_build_query($queryParams);
+
+        // Build the new URL with the updated query string
+        $newUrl = self::home_url($urlParts['path'] . (($newQuery != "") ? ('?' . $newQuery) : ''));
+
+        return $newUrl;
+    }
 }
