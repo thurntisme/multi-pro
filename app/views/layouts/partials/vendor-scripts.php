@@ -11,6 +11,10 @@
 <script src="<?= App\Helpers\NetworkHelper::home_url("/assets/libs/sweetalert2/sweetalert2.min.js") ?>"></script>
 <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 
+<!-- App js -->
+<script src="<?= App\Helpers\NetworkHelper::home_url("assets/js/app.js") ?>"></script>
+<script src="<?= App\Helpers\NetworkHelper::home_url("assets/js/custom.js") ?>"></script>
+
 <?php
 if (!empty($additionJs)) {
   echo $additionJs;

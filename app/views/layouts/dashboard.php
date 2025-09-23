@@ -42,15 +42,6 @@
     ?>
 
     <?php include_once LAYOUTS_PATH . 'partials/vendor-scripts.php'; ?>
-
-    <!-- App js -->
-    <script src="<?= App\Helpers\NetworkHelper::home_url("assets/js/app.js") ?>"></script>
-    <script src="<?= App\Helpers\NetworkHelper::home_url("assets/js/custom.js") ?>"></script>
-    <?php
-    if (!empty($additionCss)) {
-        echo $additionCss;
-    }
-    ?>
 </body>
 
 </html>

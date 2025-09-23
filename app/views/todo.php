@@ -1,145 +1,288 @@
 <?php
-$priorities = App\Constants\Common::PRIORITIES;
-$status = App\Constants\Common::STATUS;
-$list = [
-    'list' => [],
-    'count' => 0
-];
-
 ob_start();
 ?>
-
-<div class="card" id="tasksList">
-    <div class="card-header border-0">
-        <div class="d-flex align-items-center">
-            <h5 class="card-title mb-0 flex-grow-1">All Todos</h5>
-            <div class="flex-shrink-0">
-                <div class="d-flex flex-wrap gap-2">
-                    <a class="btn btn-soft-success add-btn"
-                        href="<?= App\Helpers\NetworkHelper::home_url('app/todo/new') ?>"><i
-                            class="ri-add-line align-bottom me-1"></i> Create Todo</a>
+<!-- Dragula css -->
+<link rel="stylesheet" href="<?= App\Helpers\NetworkHelper::home_url("assets/libs/dragula/dragula.min.css") ?>" />
+<?php
+$additionCss = ob_get_clean();
+ob_start();
+?>
+<div class="chat-wrapper d-lg-flex gap-1 mx-n4 mt-n4 p-1">
+    <div class="bg-white w-100 p-4 pb-0">
+        <div class="p-3 bg-light rounded mb-4">
+            <div class="row g-2">
+                <div class="col-lg-auto">
+                    <select class="form-control" data-choices data-choices-search-false name="choices-select-sortlist"
+                        id="choices-select-sortlist">
+                        <option value="">Sort</option>
+                        <option value="By ID">By ID</option>
+                        <option value="By Name">By Name</option>
+                    </select>
                 </div>
-            </div>
-        </div>
-    </div>
-    <div class="card-body border border-dashed border-end-0 border-start-0">
-        <form method="get" action="<?= App\Helpers\NetworkHelper::home_url('app/todo') ?>">
-            <div class="row g-3">
-                <div class="col-xxl-4 col-sm-12">
+                <div class="col-lg-auto">
+                    <select class="form-control" data-choices data-choices-search-false name="choices-select-status"
+                        id="choices-select-status">
+                        <option value="">All Tasks</option>
+                        <option value="Completed">Completed</option>
+                        <option value="Inprogress">Inprogress</option>
+                        <option value="Pending">Pending</option>
+                        <option value="New">New</option>
+                    </select>
+                </div>
+                <div class="col-lg">
                     <div class="search-box">
-                        <input type="text" name="s" class="form-control search bg-light border-light"
-                            placeholder="Search for todos or something..." value="<?= $_GET['s'] ?? '' ?>">
+                        <input type="text" id="searchTaskList" class="form-control search"
+                            placeholder="Search task name">
                         <i class="ri-search-line search-icon"></i>
                     </div>
                 </div>
-                <!--end col-->
-                <div class="col-xxl-2 col-sm-4">
-                    <input type="text" class="form-control bg-light border-light" name="due_date"
-                        data-provider="flatpickr" data-date-format="Y-m-d" data-range-date="true"
-                        placeholder="Select date range" value="<?= $_GET['due_date'] ?? '' ?>">
-                </div>
-                <div class="col-xxl-2 col-sm-4">
-                    <div class="input-light">
-                        <select class="form-control" data-choices data-choices-search-false name="priority">
-                            <?php
-                            echo '<option value="" ' . (!empty($_GET['priority']) ? 'selected' : "") . '>Select Priority</option>';
-                            foreach ($priorities as $value => $label) {
-                                $selected = (!empty($_GET['priority']) && $value === $_GET['priority']) ? 'selected' : '';
-                                echo "<option value=\"$value\" $selected>$label</option>";
-                            }
-                            ?>
-                        </select>
-                    </div>
-                </div>
-                <div class="col-xxl-2 col-sm-4">
-                    <div class="input-light">
-                        <select class="form-control" data-choices data-choices-search-false name="status">
-                            <?php
-                            echo '<option value="" ' . (!empty($_GET['status']) ? 'selected' : "") . '>Select Status</option>';
-                            foreach ($status as $value => $label) {
-                                $selected = (!empty($_GET['status']) && $value === $_GET['status']) ? 'selected' : '';
-                                echo "<option value=\"$value\" $selected>$label</option>";
-                            }
-                            ?>
-                        </select>
-                    </div>
-                </div>
-                <!--end col-->
-                <div class="col-xxl-2 col-sm-4 d-flex">
-                    <button type="submit" class="btn btn-primary"><i class="ri-equalizer-fill me-1 align-bottom"></i>
-                        Filters
+                <div class="col-lg-auto">
+                    <button class="btn btn-primary createTask" type="button" data-bs-toggle="modal"
+                        data-bs-target="#createTask">
+                        <i class="ri-add-fill align-bottom"></i> Add Tasks
                     </button>
-                    <a href="<?= App\Helpers\NetworkHelper::home_url("app/todo") ?>" class="btn btn-danger ms-1"><i
-                            class="ri-delete-bin-2-fill me-1 align-bottom"></i>Reset</a>
                 </div>
-                <!--end col-->
             </div>
-            <!--end row-->
-        </form>
-    </div>
-    <!--end card-body-->
-    <div class="card-body">
-        <div class="table-responsive table-card mb-4">
-            <table class="table align-middle table-nowrap mb-0" id="todosTable">
-                <thead class="table-light text-muted">
-                    <tr>
-                        <th>Title</th>
-                        <th class="text-center">Due Date</th>
-                        <th class="text-center">Tags</th>
-                        <th class="text-center">Priority</th>
-                        <th class="text-center">Status</th>
-                        <th class="text-end">Last Updated</th>
-                    </tr>
-                </thead>
-                <tbody class="list form-check-all">
-                    <?php if (count($list['list']) > 0) {
-                        foreach ($list['list'] as $item) { ?>
-                            <tr>
-                                <td>
-                                    <div class="d-flex align-items-baseline">
-                                        <a class="text-black"
-                                            href="<?= App\Helpers\NetworkHelper::home_url('app/todo/detail?id=' . $item['id']) ?>"><?= truncateString($item['title'], 50) ?></a>
-                                        <ul class="list-inline tasks-list-menu mb-0 ms-3">
-                                            <li class="list-inline-item m-0"><a class="edit-item-btn btn btn-link btn-sm"
-                                                    href="<?= App\Helpers\NetworkHelper::home_url('app/todo/detail?id=' . $item['id']) ?>"><i
-                                                        class="ri-eye-fill align-bottom text-muted"></i></a>
-                                            </li>
-                                            <li class="list-inline-item m-0"><a class="edit-item-btn btn btn-link btn-sm"
-                                                    href="<?= App\Helpers\NetworkHelper::home_url('app/todo/edit?id=' . $item['id']) ?>"><i
-                                                        class="ri-pencil-fill align-bottom text-muted"></i></a>
-                                            </li>
-                                            <li class="list-inline-item m-0">
-                                                <form method="POST" action="<?= $_SERVER['REQUEST_URI'] ?>">
-                                                    <input type="hidden" name="action_name" value="delete_record">
-                                                    <input type="hidden" name="post_id" value="<?= $item['id'] ?>">
-                                                    <button type="submit" class="btn btn-link btn-sm btn-delete-record">
-                                                        <i class="ri-delete-bin-5-line align-bottom text-muted"></i>
-                                                    </button>
-                                                </form>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </td>
-                                <td class="text-center"><?= $systemController->convertDate($item['due_date']) ?></td>
-                                <td class="text-center"><?= $item['tags'] ?></td>
-                                <td class="text-center"><?= renderPriorityBadge($item['priority']) ?></td>
-                                <td class="text-center"><?= renderStatusBadge($item['status']) ?></td>
-                                <td class="text-end"><?= $systemController->convertDateTime($item['updated_at']) ?></td>
-                            </tr>
-                        <?php }
-                    } ?>
-                </tbody>
-            </table>
-            <!--end table-->
         </div>
-        <?php
-        include_once VIEWS_PATH . 'components/pagination.php';
-        ?>
+
+        <div class="todo-content position-relative px-4 mx-n4" id="todo-content">
+            <div id="elmLoader">
+                <div class="spinner-border text-primary avatar-sm" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+            </div>
+            <div class="todo-task" id="todo-task">
+                <div class="table-responsive">
+                    <table class="table align-middle position-relative table-nowrap">
+                        <thead class="table-active">
+                            <tr>
+                                <th scope="col">Task Name</th>
+                                <th scope="col">Assigned</th>
+                                <th scope="col">Due Date</th>
+                                <th scope="col">Status</th>
+                                <th scope="col">Priority</th>
+                                <th scope="col">Action</th>
+                            </tr>
+                        </thead>
+
+                        <tbody id="task-list"></tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="py-4 mt-4 text-center" id="noresult" style="display: none;">
+                <lord-icon src="https://cdn.lordicon.com/msoeawqm.json" trigger="loop"
+                    colors="primary:#405189,secondary:#0ab39c" style="width:72px;height:72px"></lord-icon>
+                <h5 class="mt-4">Sorry! No Result Found</h5>
+            </div>
+        </div>
+
     </div>
-    <!--end card-body-->
 </div>
+
+<!-- Modal -->
+<div class="modal fade" id="createTask" tabindex="-1" aria-labelledby="createTaskLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0">
+            <div class="modal-header p-3 bg-success-subtle">
+                <h5 class="modal-title" id="createTaskLabel">Create Task</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" id="createTaskBtn-close"
+                    aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div id="task-error-msg" class="alert alert-danger py-2"></div>
+                <form autocomplete="off" action="" id="creattask-form">
+                    <input type="hidden" id="taskid-input" class="form-control">
+                    <div class="mb-3">
+                        <label for="task-title-input" class="form-label">Task Title</label>
+                        <input type="text" id="task-title-input" class="form-control" placeholder="Enter task title">
+                    </div>
+                    <div class="mb-3 position-relative">
+                        <label for="task-assign-input" class="form-label">Assigned To</label>
+
+                        <div class="avatar-group justify-content-center" id="assignee-member"></div>
+                        <div class="select-element">
+                            <button class="btn btn-light w-100 d-flex justify-content-between" type="button"
+                                data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
+                                <span>Assigned To<b id="total-assignee" class="mx-1">0</b>Members</span> <i
+                                    class="mdi mdi-chevron-down"></i>
+                            </button>
+                            <div class="dropdown-menu w-100">
+                                <div data-simplebar style="max-height: 141px">
+                                    <ul class="list-unstyled mb-0">
+                                        <li>
+                                            <a class="dropdown-item d-flex align-items-center" href="#">
+                                                <div class="avatar-xxs flex-shrink-0 me-2">
+                                                    <img src="assets/images/users/avatar-2.jpg" alt=""
+                                                        class="img-fluid rounded-circle" />
+                                                </div>
+                                                <div class="flex-grow-1">James Forbes</div>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item d-flex align-items-center" href="#">
+                                                <div class="avatar-xxs flex-shrink-0 me-2">
+                                                    <img src="assets/images/users/avatar-3.jpg" alt=""
+                                                        class="img-fluid rounded-circle" />
+                                                </div>
+                                                <div class="flex-grow-1">John Robles</div>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item d-flex align-items-center" href="#">
+                                                <div class="avatar-xxs flex-shrink-0 me-2">
+                                                    <img src="assets/images/users/avatar-4.jpg" alt=""
+                                                        class="img-fluid rounded-circle" />
+                                                </div>
+                                                <div class="flex-grow-1">Mary Gant</div>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item d-flex align-items-center" href="#">
+                                                <div class="avatar-xxs flex-shrink-0 me-2">
+                                                    <img src="assets/images/users/avatar-1.jpg" alt=""
+                                                        class="img-fluid rounded-circle" />
+                                                </div>
+                                                <div class="flex-grow-1">Curtis Saenz</div>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item d-flex align-items-center" href="#">
+                                                <div class="avatar-xxs flex-shrink-0 me-2">
+                                                    <img src="assets/images/users/avatar-5.jpg" alt=""
+                                                        class="img-fluid rounded-circle" />
+                                                </div>
+                                                <div class="flex-grow-1">Virgie Price</div>
+                                            </a>
+                                        </li>
+
+                                        <li>
+                                            <a class="dropdown-item d-flex align-items-center" href="#">
+                                                <div class="avatar-xxs flex-shrink-0 me-2">
+                                                    <img src="assets/images/users/avatar-10.jpg" alt=""
+                                                        class="img-fluid rounded-circle" />
+                                                </div>
+                                                <div class="flex-grow-1">Anthony Mills</div>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item d-flex align-items-center" href="#">
+                                                <div class="avatar-xxs flex-shrink-0 me-2">
+                                                    <img src="assets/images/users/avatar-6.jpg" alt=""
+                                                        class="img-fluid rounded-circle" />
+                                                </div>
+                                                <div class="flex-grow-1">Marian Angel</div>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item d-flex align-items-center" href="#">
+                                                <div class="avatar-xxs flex-shrink-0 me-2">
+                                                    <img src="assets/images/users/avatar-7.jpg" alt=""
+                                                        class="img-fluid rounded-circle" />
+                                                </div>
+                                                <div class="flex-grow-1">Johnnie Walton</div>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item d-flex align-items-center" href="#">
+                                                <div class="avatar-xxs flex-shrink-0 me-2">
+                                                    <img src="assets/images/users/avatar-8.jpg" alt=""
+                                                        class="img-fluid rounded-circle" />
+                                                </div>
+                                                <div class="flex-grow-1">Donna Weston</div>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item d-flex align-items-center" href="#">
+                                                <div class="avatar-xxs flex-shrink-0 me-2">
+                                                    <img src="assets/images/users/avatar-9.jpg" alt=""
+                                                        class="img-fluid rounded-circle" />
+                                                </div>
+                                                <div class="flex-grow-1">Diego Norris</div>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row g-4 mb-3">
+                        <div class="col-lg-6">
+                            <label for="task-status" class="form-label">Status</label>
+                            <select class="form-control" data-choices data-choices-search-false id="task-status-input">
+                                <option value="">Status</option>
+                                <option value="New" selected>New</option>
+                                <option value="Inprogress">Inprogress</option>
+                                <option value="Pending">Pending</option>
+                                <option value="Completed">Completed</option>
+                            </select>
+                        </div>
+                        <!--end col-->
+                        <div class="col-lg-6">
+                            <label for="priority-field" class="form-label">Priority</label>
+                            <select class="form-control" data-choices data-choices-search-false id="priority-field">
+                                <option value="">Priority</option>
+                                <option value="High">High</option>
+                                <option value="Medium">Medium</option>
+                                <option value="Low">Low</option>
+                            </select>
+                        </div>
+                        <!--end col-->
+                    </div>
+                    <div class="mb-4">
+                        <label for="task-duedate-input" class="form-label">Due Date:</label>
+                        <input type="date" id="task-duedate-input" class="form-control" placeholder="Due date">
+                    </div>
+
+                    <div class="hstack gap-2 justify-content-end">
+                        <button type="button" class="btn btn-ghost-success" data-bs-dismiss="modal"><i
+                                class="ri-close-fill align-bottom"></i> Close</button>
+                        <button type="submit" class="btn btn-primary" id="addNewTodo">Add Task</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!--end create taks-->
+
+<!-- removeFileItemModal -->
+<div id="removeTaskItemModal" class="modal fade zoomIn" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+                    id="close-removetodomodal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mt-2 text-center">
+                    <lord-icon src="https://cdn.lordicon.com/gsqxdxog.json" trigger="loop"
+                        colors="primary:#f7b84b,secondary:#f06548" style="width:100px;height:100px"></lord-icon>
+                    <div class="mt-4 pt-2 fs-15 mx-4 mx-sm-5">
+                        <h4>Are you sure ?</h4>
+                        <p class="text-muted mx-4 mb-0">Are you sure you want to remove this task ?</p>
+                    </div>
+                </div>
+                <div class="d-flex gap-2 justify-content-center mt-4 mb-2">
+                    <button type="button" class="btn w-sm btn-light" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn w-sm btn-danger" id="remove-todoitem">Yes, Delete It!</button>
+                </div>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+<!--end delete modal -->
 
 <?php
 $pageContent = ob_get_clean();
+
+ob_start();
+?>
+<!-- dragula init js -->
+<script src="<?= App\Helpers\NetworkHelper::home_url("assets/libs/dragula/dragula.min.js") ?>"></script>
+<script
+    src="<?= App\Helpers\NetworkHelper::home_url("assets/libs/dom-autoscroller/dom-autoscroller.min.js") ?>"></script>
+<script src="<?= App\Helpers\NetworkHelper::home_url("assets/js/pages/todo.init.js") ?>"></script>
+<?php
+$additionJs = ob_get_clean();
 
 include_once LAYOUTS_PATH . 'dashboard.php';
