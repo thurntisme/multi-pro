@@ -5,13 +5,13 @@ namespace App\Controllers;
 use App\Core\Controller;
 use App\Core\Response;
 
-class WebsiteController extends Controller
+class CalendarController extends Controller
 {
     public function index(): Response
     {
         $data = [
-            'title' => 'Website'
+            'title' => 'Calendar'
         ];
-        return $this->view('website', $data);
+        return $this->view('calendar', $data);
     }
 }

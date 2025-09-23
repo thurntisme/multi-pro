@@ -2,7 +2,7 @@
 ob_start();
 ?>
 
-<h1><?= $title ?> Page</h1>
+<h1>Habit Page</h1>
 
 <?php
 $pageContent = ob_get_clean();

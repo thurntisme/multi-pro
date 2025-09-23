@@ -3,11 +3,11 @@
     <!-- LOGO -->
     <div class="navbar-brand-box">
         <!-- Light Logo-->
-        <a href="<?= App\Helpers\NetworkHelper::home_url('') ?>" class="logo logo-light">
+        <a href="<?= App\Helpers\NetworkHelper::home_url('app') ?>" class="logo logo-light">
             <span class="fw-bold text-white fs-22"><?= DEFAULT_SITE_NAME ?></span>
         </a>
         <!-- Dark Logo-->
-        <a href="<?= App\Helpers\NetworkHelper::home_url('') ?>" class="logo logo-dark">
+        <a href="<?= App\Helpers\NetworkHelper::home_url('app') ?>" class="logo logo-dark">
             <span class="fw-bold text-white fs-22"><?= DEFAULT_SITE_NAME ?></span>
         </a>
         <button type="button" class="btn btn-sm p-0 fs-20 header-item float-end btn-vertical-sm-hover"

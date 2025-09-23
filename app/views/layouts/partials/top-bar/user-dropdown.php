@@ -14,27 +14,13 @@
     <div class="dropdown-menu dropdown-menu-end">
         <!-- item-->
         <h6 class="dropdown-header">Welcome <b><?= $fullName ?></b>!</h6>
-        <a class="dropdown-item" href="<?= App\Helpers\NetworkHelper::home_url('app/my-profile') ?>"><i
+        <a class="dropdown-item" href="<?= App\Helpers\NetworkHelper::home_url('app/profile') ?>"><i
                 class="mdi mdi-account-circle text-muted fs-16 align-middle me-1"></i> <span
                 class="align-middle">Profile</span></a>
-        <a class="dropdown-item" href="apps-chat"><i
-                class="mdi mdi-message-text-outline text-muted fs-16 align-middle me-1"></i> <span
-                class="align-middle">Messages</span></a>
-        <a class="dropdown-item" href="apps-tasks-kanban"><i
-                class="mdi mdi-calendar-check-outline text-muted fs-16 align-middle me-1"></i> <span
-                class="align-middle">Taskboard</span></a>
-        <a class="dropdown-item" href="pages-faqs"><i class="mdi mdi-lifebuoy text-muted fs-16 align-middle me-1"></i>
-            <span class="align-middle">Help</span></a>
-        <div class="dropdown-divider"></div>
-        <a class="dropdown-item" href="<?= App\Helpers\NetworkHelper::home_url('app/wallet') ?>"><i
-                class="mdi mdi-wallet text-muted fs-16 align-middle me-1"></i> <span
-                class="align-middle"><b><?= $user_point ?></b></span></a>
-        <a class="dropdown-item" href="<?= App\Helpers\NetworkHelper::home_url('app/my-settings') ?>"><i
-                class="mdi mdi-cog-outline text-muted fs-16 align-middle me-1"></i> <span class="align-middle">My
+        <a class="dropdown-item" href="<?= App\Helpers\NetworkHelper::home_url('app/settings') ?>"><i
+                class="mdi mdi-cog-outline text-muted fs-16 align-middle me-1"></i> <span class="align-middle">
                 Settings</span></a>
-        <a class="dropdown-item" href="auth-lockscreen-basic"><i
-                class="mdi mdi-lock text-muted fs-16 align-middle me-1"></i> <span class="align-middle">Lock
-                screen</span></a>
+        <div class="dropdown-divider"></div>
         <a class="dropdown-item" href="<?= App\Helpers\NetworkHelper::home_url('app/logout') ?>"><i
                 class="mdi mdi-logout text-muted fs-16 align-middle me-1"></i> <span class="align-middle"
                 data-key="t-logout">Logout</span></a>

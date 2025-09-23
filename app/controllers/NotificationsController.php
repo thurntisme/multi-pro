@@ -5,13 +5,13 @@ namespace App\Controllers;
 use App\Core\Controller;
 use App\Core\Response;
 
-class WebsiteController extends Controller
+class NotificationsController extends Controller
 {
     public function index(): Response
     {
         $data = [
-            'title' => 'Website'
+            'title' => 'Notifications'
         ];
-        return $this->view('website', $data);
+        return $this->view('notification', $data);
     }
 }

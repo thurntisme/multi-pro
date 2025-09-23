@@ -1,46 +1,17 @@
 <?php
 
-require_once 'services/SettingService.php';
+namespace App\Controllers;
 
-class SettingController
+use App\Core\Controller;
+use App\Core\Response;
+
+class SettingController extends Controller
 {
-    private $settingService;
-
-    public function __construct()
+    public function index(): Response
     {
-        global $pdo;
-        $this->settingService = new SettingService($pdo);
-    }
-
-    // Handle creating or updating a setting
-    public function setSetting($postData)
-    {
-        if (isset($postData)) {
-            $this->settingService->setSetting($postData);
-            $_SESSION['message_type'] = 'success';
-            $_SESSION['message'] = "Setting saved successfully.";
-        } else {
-            $_SESSION['message_type'] = 'danger';
-            $_SESSION['message'] = "Both key and value are required.";
-        }
-
-        header("Location: " . $_SERVER['REQUEST_URI']);
-        exit;
-    }
-
-    // Handle listing all settings
-    public function listSettings()
-    {
-        return $this->settingService->getAllSettings();
-    }
-
-    // Handle viewing a single setting
-    public function viewSetting($key)
-    {
-        if ($key) {
-            return $this->settingService->getSetting($key);
-        }
-
-        return null;
+        $data = [
+            'title' => 'Setting'
+        ];
+        return $this->view('setting', $data);
     }
 }
