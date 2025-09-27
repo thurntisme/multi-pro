@@ -21,7 +21,7 @@ define('DIR_UPLOADS_PATH', APP_ROOT . '/storage/app/uploads/');
 define('APP_UPLOADS_PATH', BASE_PATH . '/storage/app/uploads/');
 
 // App info
-define('APP_NAME', 'PDF Reader');
+define('APP_NAME', 'MultiPro');
 define('APP_VERSION', '1.0.0');
 
 // Roles & permissions
