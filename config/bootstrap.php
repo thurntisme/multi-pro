@@ -6,7 +6,7 @@ $dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/..');
 $dotenv->load();
 
 // Include constants
-require_once __DIR__ . '/constants/index.php';
+require_once __DIR__ . '/constants.php';
 
 // // Set error reporting
 ini_set('display_errors', 0); // Turn off error display (optional for production)
