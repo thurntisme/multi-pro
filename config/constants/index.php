@@ -27,8 +27,6 @@ include "network.php";
 include "dashboard.php";
 include "football-manager.php";
 include "user.php";
-include "sidebar.php";
-
 
 $timezones = [];
 foreach (DateTimeZone::listIdentifiers() as $zone) {
