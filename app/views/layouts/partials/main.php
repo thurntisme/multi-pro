@@ -2,33 +2,27 @@
 
 $cur_lang = 'en';
 
-use ScssPhp\ScssPhp\Compiler;
-
 $isScssConverted = false;
 
 if ($isScssConverted) {
-    $compiler = new Compiler();
+    $main_css = DIR_ASSETS_PATH . "css/app.css";
+    $target_css = DIR_ASSETS_PATH . "css/app.min.css";
 
-    $main_css = "assets/css/app.min.css";
-    $source_scss = "assets/scss/config/default/app.scss";
-
-    if (!file_exists($source_scss)) {
-        die("Source SCSS file not found: $source_scss");
+    if (!file_exists($main_css)) {
+        die("Source CSS file not found: $main_css");
     }
 
-    $scssContents = file_get_contents($source_scss);
-    $import_path = "assets/scss/config/default";
+    $css = file_get_contents($main_css);
 
-    $compiler->addImportPath($import_path);
+    $css = preg_replace('!/\*.*?\*/!s', '', $css);
+    $css = preg_replace('/\s+/', ' ', $css);
+    $css = str_replace([' {', '{ '], '{', $css);
+    $css = str_replace([' }', '} '], '}', $css);
+    $css = str_replace([' ;', '; '], ';', $css);
+    $css = str_replace([' :', ': '], ':', $css);
+    $css = trim($css);
 
-    try {
-        // Use compileString() instead of compile()
-        $css = $compiler->compileString($scssContents)->getCss();
-        file_put_contents($main_css, $css);
-        echo "SCSS compiled successfully to $main_css";
-    } catch (\Exception $e) {
-        die("SCSS compilation error: " . $e->getMessage());
-    }
+    file_put_contents($target_css, $css);
 }
 
 ?>

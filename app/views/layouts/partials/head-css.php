@@ -1,8 +1,5 @@
 <?php
 $font = 'Helvetica';
-if (isset($systemController)) {
-  $font = $systemController->getFont();
-}
 $googleFontsUrl = "https://fonts.googleapis.com/css2?family=" . urlencode($font) . ":wght@100..900&display=swap";
 ?>
 <link href="<?= $googleFontsUrl ?>" rel="stylesheet">

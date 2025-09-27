@@ -14,6 +14,7 @@ define('UPLOAD_PATH', APP_ROOT . '/public/uploads/');
 define('VIEWS_PATH', APP_ROOT . '/app/views/');
 define('LAYOUTS_PATH', APP_ROOT . '/app/views/layouts/');
 define('COMPONENTS_PATH', APP_ROOT . '/app/views/components/');
+define('DIR_ASSETS_PATH', APP_ROOT . '/public/assets/');
 define('ASSETS_PATH', BASE_PATH . '/public/assets/');
 define('STORAGE_PATH', APP_ROOT . '/storage/');
 define('LOGS_PATH', APP_ROOT . '/storage/logs/');
