@@ -9,7 +9,7 @@ $dotenv->load();
 require_once __DIR__ . '/constants.php';
 
 // // Set error reporting
-ini_set('display_errors', 0); // Turn off error display (optional for production)
+ini_set('display_errors', 1); // Turn off error display (optional for production)
 ini_set('display_startup_errors', 1); // Display startup errors (optional)
 error_reporting(E_ALL); // Report all errors
 
