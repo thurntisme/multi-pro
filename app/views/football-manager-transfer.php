@@ -81,7 +81,7 @@ ob_start();
                 <?php includeFileWithVariables('components/football-market-topbar.php'); ?>
                 <div class="tab-content text-muted">
                     <form method="get" class="d-block mb-2"
-                        action="<?= App\Helpers\NetworkHelper::home_url('football-manager/transfer') ?>">
+                        action="<?= App\Helpers\Network::home_url('football-manager/transfer') ?>">
                         <div class="row g-2">
                             <div class="col-md-3">
                                 <div class="search-box">
@@ -99,7 +99,7 @@ ob_start();
                                     class="ri-refresh-line me-1 align-bottom"></i>Filter
                             </button>
                             <a class="btn btn-soft-success w-auto ms-2"
-                                href="<?= App\Helpers\NetworkHelper::home_url("football-manager/transfer") ?>"><i
+                                href="<?= App\Helpers\Network::home_url("football-manager/transfer") ?>"><i
                                     class="ri-refresh-line me-1 align-bottom"></i>Reset</a>
                         </div>
                         <div class="collapse" id="advancedFilter">
@@ -112,7 +112,8 @@ ob_start();
                                             <option value="">Select Season</option>
                                             <?php foreach ($seasons as $season => $threshold): ?>
                                                 <option value="<?= $season ?>" <?= !empty($_GET['player_season']) && $_GET['player_season'] === $season ? 'selected' : '' ?>>
-                                                    <?= ucfirst($season) ?></option>
+                                                    <?= ucfirst($season) ?>
+                                                </option>
                                             <?php endforeach; ?>
                                         </select>
                                     </div>
@@ -124,7 +125,8 @@ ob_start();
                                             <option value="">Select Nationality</option>
                                             <?php foreach (DEFAULT_NATIONALITY as $index => $nation): ?>
                                                 <option value="<?= $nation ?>" <?= !empty($_GET['player_nationality']) && $_GET['player_nationality'] === $nation ? 'selected' : '' ?>>
-                                                    <?= $nation ?></option>
+                                                    <?= $nation ?>
+                                                </option>
                                             <?php endforeach; ?>
                                         </select>
                                     </div>
@@ -165,7 +167,8 @@ ob_start();
                                             <option value="">Select Position</option>
                                             <?php foreach ($positions as $position): ?>
                                                 <option value="<?= $position ?>" <?= !empty($_GET['player_position']) && $_GET['player_position'] === $position ? 'selected' : '' ?>>
-                                                    <?= $position ?></option>
+                                                    <?= $position ?>
+                                                </option>
                                             <?php endforeach; ?>
                                         </select>
                                     </div>
@@ -219,7 +222,7 @@ ob_start();
                                                                     data-bs-toggle="modal"
                                                                     data-bs-target="#playerDetailBackdrop"><i
                                                                         class="ri-eye-fill align-bottom me-2 text-muted"></i></a>
-                                                                <a href="<?= App\Helpers\NetworkHelper::home_url('app/football-manager/player?uuid=' . $item['uuid']) ?>"
+                                                                <a href="<?= App\Helpers\Network::home_url('app/football-manager/player?uuid=' . $item['uuid']) ?>"
                                                                     class="edit-item-btn cursor-pointer"><i
                                                                         class="ri-user-settings-line align-bottom me-2 text-muted"></i></a>
                                                             </li>
@@ -238,7 +241,7 @@ ob_start();
                                                 <td class="text-center"><?= formatCurrency($item['market_value']) ?></td>
                                                 <td class="text-center hstack gap-1 justify-content-center">
                                                     <?php if ($myTeam['budget'] >= $item['market_value'] && !isPlayerInTeam($item['uuid'])) { ?>
-                                                        <a href="<?= App\Helpers\NetworkHelper::home_url("football-manager/transfer/buy?p_uuid=" . $item['uuid']) ?>"
+                                                        <a href="<?= App\Helpers\Network::home_url("football-manager/transfer/buy?p_uuid=" . $item['uuid']) ?>"
                                                             class="btn btn-soft-success">
                                                             <i class="ri ri-shopping-cart-line"></i>
                                                         </a>

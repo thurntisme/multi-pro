@@ -16,8 +16,8 @@
             <div class="row g-0 flex-wrap">
                 <?php foreach (App\Constants\Dashboard::QUICK_APPS as $slug => $title): ?>
                     <div class="col-4">
-                        <a class="dropdown-icon-item" href="<?= App\Helpers\NetworkHelper::home_url('app/' . $slug) ?>">
-                            <img src="<?= App\Helpers\NetworkHelper::home_url("assets/images/app/" . $slug . '.png') ?>"
+                        <a class="dropdown-icon-item" href="<?= App\Helpers\Network::home_url('app/' . $slug) ?>">
+                            <img src="<?= App\Helpers\Network::home_url("assets/images/app/" . $slug . '.png') ?>"
                                 alt="<?= $title ?> Icon">
                             <span><?= $title ?></span>
                         </a>

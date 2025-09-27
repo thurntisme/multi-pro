@@ -58,7 +58,7 @@ ob_start();
             <div class="card-header border-0">
                 <div class="row justify-content-center mb-4">
                     <div class="col-lg-6">
-                        <form method="get" action="<?= App\Helpers\NetworkHelper::home_url('app/search') ?>">
+                        <form method="get" action="<?= App\Helpers\Network::home_url('app/search') ?>">
                             <div class="row g-2">
                                 <div class="col">
                                     <div class="position-relative mb-3">
@@ -109,13 +109,13 @@ ob_start();
                 <ul class="nav nav-tabs nav-tabs-custom">
                     <li class="nav-item">
                         <a class="nav-link"
-                            href="<?= App\Helpers\NetworkHelper::home_url('app/search?s=' . trim($keyword) ?? '') ?>">
+                            href="<?= App\Helpers\Network::home_url('app/search?s=' . trim($keyword) ?? '') ?>">
                             <i class="ri-search-2-line text-muted align-bottom me-1"></i> All Results
                             <?= $result['count'] ? '(' . $result['count'] . ')' : '' ?>
                         </a>
                     </li>
                     <li class="nav-item ms-auto">
-                        <a class="nav-link" href="<?= App\Helpers\NetworkHelper::home_url('app/search') ?>">
+                        <a class="nav-link" href="<?= App\Helpers\Network::home_url('app/search') ?>">
                             <i class="ri-delete-bin-5-line text-muted align-bottom me-1"></i> Reset
                         </a>
                     </li>
@@ -127,10 +127,11 @@ ob_start();
                         <?php foreach ($result['list'] as $item): ?>
                             <div class="pb-3">
                                 <h5 class="mb-1"><a
-                                        href="<?= App\Helpers\NetworkHelper::home_url('app/' . $item['slug'] . '/detail?id=' . $item['id']) ?>"><?= $item['title'] ?></a>
+                                        href="<?= App\Helpers\Network::home_url('app/' . $item['slug'] . '/detail?id=' . $item['id']) ?>"><?= $item['title'] ?></a>
                                 </h5>
                                 <p class="text-success mb-2 fs-12">
-                                    <?= ucwords(str_replace('_', ' ', $item['table_name'])) ?></p>
+                                    <?= ucwords(str_replace('_', ' ', $item['table_name'])) ?>
+                                </p>
                                 <p class="text-muted mb-2">
                                     <?= generateShortDescription($item['content']) ?>
                                 </p>

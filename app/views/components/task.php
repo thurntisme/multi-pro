@@ -60,7 +60,7 @@ $commonController = new CommonController();
                 </div>
               </div>
               <div class="p-0 pr-1">
-                <form method="POST" action="<?= App\Helpers\NetworkHelper::home_url("/") ?>">
+                <form method="POST" action="<?= App\Helpers\Network::home_url("/") ?>">
                   <input type="hidden" name="task_id" value="<?= $task['id'] ?>">
                   <input type="hidden" name="action_name" value="complete_task">
                   <button type="submit" class="btn btn-sm btn-outline-success"><i class="fas fa-check"></i></button>
@@ -86,7 +86,7 @@ $commonController = new CommonController();
         </button>
       </div>
       <div class="modal-body">
-        <form method="POST" action="<?= App\Helpers\NetworkHelper::home_url("/") ?>">
+        <form method="POST" action="<?= App\Helpers\Network::home_url("/") ?>">
           <input type="hidden" name="action_name" value="add_new_task">
           <div class="form-group">
             <label for="title">Title:</label>

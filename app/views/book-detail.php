@@ -30,7 +30,7 @@ ob_start();
         ob_start();
         ?>
         <a class="btn btn-primary w-sm me-1"
-            href="<?= App\Helpers\NetworkHelper::home_url('app/book/view?id=' . $postData['id']) ?>"><i
+            href="<?= App\Helpers\Network::home_url('app/book/view?id=' . $postData['id']) ?>"><i
                 class="ri-book-read-fill align-bottom  me-1"></i> Read</a>
         <?php
         $additionBtn = ob_get_clean();

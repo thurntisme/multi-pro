@@ -40,7 +40,7 @@ include_once DIR . '/components/alert.php';
             <?php foreach (array_keys(DEFAULT_SYSTEM_SETTINGS) as $option) { ?>
                 <li class="nav-item">
                     <a class="nav-link <?= $tab === $option ? 'active' : '' ?>"
-                        href="<?= App\Helpers\NetworkHelper::home_url("app/settings?tab=" . $option) ?>">
+                        href="<?= App\Helpers\Network::home_url("app/settings?tab=" . $option) ?>">
                         <i class="fas fa-home"></i> <?= ucwords(str_replace('_', ' ', $option)) ?>
                     </a>
                 </li>

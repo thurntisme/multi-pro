@@ -2,7 +2,7 @@
 
 namespace App\Helpers;
 
-class NetworkHelper
+class Network
 {
     public static function extractPathFromCurrentUrl(): string
     {

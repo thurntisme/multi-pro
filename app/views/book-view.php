@@ -73,10 +73,10 @@ ob_start();
                         <h3 class="mb-2">This book isn't available</h3>
                         <p class="mb-4">We couldn't find the book you're looking for. Please try the options below:</p>
                         <div class="mb-3 hstack justify-content-center gap-2">
-                            <a class="btn btn-primary" href="<?= App\Helpers\NetworkHelper::home_url('app/book') ?>">Search
+                            <a class="btn btn-primary" href="<?= App\Helpers\Network::home_url('app/book') ?>">Search
                                 for Another Book</a>
                             <a class="btn btn-secondary"
-                                href="<?= App\Helpers\NetworkHelper::home_url('app/book/edit?id=' . $post_id) ?>">Contact
+                                href="<?= App\Helpers\Network::home_url('app/book/edit?id=' . $post_id) ?>">Contact
                                 Support</a>
                         </div>
                         <div class="mt-4">
@@ -98,7 +98,7 @@ $pageContent = ob_get_clean();
 ob_start(); ?>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.15.349/pdf.min.js"></script>
 <script type="text/javascript">
-    const url = '<?= App\Helpers\NetworkHelper::home_url("assets/pdf/example.pdf") ?>';
+    const url = '<?= App\Helpers\Network::home_url("assets/pdf/example.pdf") ?>';
     const pdfjsLib = window['pdfjs-dist/build/pdf'];
     let pdfDoc = null;
     let currentPage = <?= $postData['view_page'] ?? '1' ?>;

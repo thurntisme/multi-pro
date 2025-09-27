@@ -11,7 +11,7 @@ ob_start();
                     <p class="text-muted">Sign in to continue to <?= DEFAULT_SITE_NAME ?>.</p>
                 </div>
                 <div class="p-2 mt-4">
-                    <form action="<?= App\Helpers\NetworkHelper::home_url('login') ?>" method="POST">
+                    <form action="<?= App\Helpers\Network::home_url('login') ?>" method="POST">
                         <div class="mb-3">
                             <label for="email" class="form-label">Email</label>
                             <input type="text" class="form-control" name="email" id="email" placeholder="Enter email"
@@ -65,7 +65,7 @@ ob_start();
         <!-- end card -->
 
         <div class="mt-4 text-center">
-            <p class="mb-0">Do not have an account ? <a href="<?= App\Helpers\NetworkHelper::home_url('register') ?>"
+            <p class="mb-0">Do not have an account ? <a href="<?= App\Helpers\Network::home_url('register') ?>"
                     class="fw-semibold text-primary text-decoration-underline"> Register </a> </p>
         </div>
 

@@ -19,13 +19,13 @@ ob_start();
                         <div class="search-box">
                             <p class="text-muted">Search</p>
                             <div class="position-relative d-flex align-items-center justify-content-center gap-1">
-                                <form method="get" action="<?= App\Helpers\NetworkHelper::home_url('resources') ?>">
+                                <form method="get" action="<?= App\Helpers\Network::home_url('resources') ?>">
                                     <input type="text" class="form-control rounded bg-light border-light"
                                         placeholder="Search..." name="s" value="<?= $_GET['s'] ?? '' ?>">
                                     <i class="mdi mdi-magnify search-icon"></i>
                                 </form>
-                                <a href="<?= App\Helpers\NetworkHelper::home_url("resources") ?>"
-                                    class="btn btn-danger"><i class="ri-delete-bin-2-fill align-bottom"></i></a>
+                                <a href="<?= App\Helpers\Network::home_url("resources") ?>" class="btn btn-danger"><i
+                                        class="ri-delete-bin-2-fill align-bottom"></i></a>
                             </div>
                         </div>
 
@@ -153,15 +153,15 @@ ob_start();
                                     <div class="card-body">
                                         <div class="row g-4">
                                             <div class="col-xxl-3 col-lg-5">
-                                                <img src="<?= App\Helpers\NetworkHelper::home_url('assets/images/blog.jpg') ?>"
-                                                    alt="" class="img-fluid rounded w-100 object-fit-cover">
+                                                <img src="<?= App\Helpers\Network::home_url('assets/images/blog.jpg') ?>" alt=""
+                                                    class="img-fluid rounded w-100 object-fit-cover">
                                             </div><!--end col-->
                                             <div class="col-xxl-9 col-lg-7">
                                                 <p class="mb-2 text-primary text-uppercase"><a
-                                                        href="<?= App\Helpers\NetworkHelper::home_url('resources?cat=' . $resource['category']) ?>"><?= $resource['category'] ?? '' ?></a>
+                                                        href="<?= App\Helpers\Network::home_url('resources?cat=' . $resource['category']) ?>"><?= $resource['category'] ?? '' ?></a>
                                                 </p>
                                                 <a
-                                                    href="<?= App\Helpers\NetworkHelper::home_url('resources/' . $resource['slug']) ?>">
+                                                    href="<?= App\Helpers\Network::home_url('resources/' . $resource['slug']) ?>">
                                                     <h5 class="fs-15 fw-semibold"><?= $resource['title'] ?? '' ?></h5>
                                                 </a>
                                                 <div class="d-flex align-items-center gap-2 mb-3 flex-wrap">
@@ -173,7 +173,7 @@ ob_start();
                                                         Admin</a>
                                                 </div>
                                                 <p class="text-muted mb-2"><?= $resource['excerpt'] ?? '' ?></p>
-                                                <a href="<?= App\Helpers\NetworkHelper::home_url('resources/' . $resource['slug']) ?>"
+                                                <a href="<?= App\Helpers\Network::home_url('resources/' . $resource['slug']) ?>"
                                                     class="text-decoration-underline">Read
                                                     more <i class="ri-arrow-right-line"></i></a>
                                                 <div class="d-flex align-items-center gap-2 mt-3 flex-wrap">
@@ -181,7 +181,7 @@ ob_start();
                                                     $tags = !empty($resource['tags']) ? explode(',', $resource['tags']) : [];
                                                     if (count($tags) > 0) {
                                                         foreach ($tags as $tag) { ?>
-                                                            <a href="<?= App\Helpers\NetworkHelper::home_url('resources?tag=' . $tag) ?>"
+                                                            <a href="<?= App\Helpers\Network::home_url('resources?tag=' . $tag) ?>"
                                                                 class="badge text-success bg-success-subtle">#<?= $tag ?></a>
                                                         <?php }
                                                     } ?>

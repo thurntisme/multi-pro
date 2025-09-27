@@ -92,7 +92,7 @@ ob_start();
                                     <div class="col-3 text-center">
                                         <button class="btn btn-outline-light btn-player-action"
                                             data-confirm-text="<?= $item['msg'] ?>" data-item-uuid="<?= $item['uuid'] ?>">
-                                            <img src="<?= App\Helpers\NetworkHelper::home_url('assets/images/football-manager/' . $item['image']) ?>"
+                                            <img src="<?= App\Helpers\Network::home_url('assets/images/football-manager/' . $item['image']) ?>"
                                                 class="img-responsive avatar-xs" alt="" />
                                         </button>
                                         <div class="text-muted text-center mt-2 fw-500 fs-12">
@@ -185,7 +185,7 @@ ob_start();
                                                 <div class="text-muted">Find players and register them for your
                                                     team.
                                                 </div>
-                                                <a href="<?= App\Helpers\NetworkHelper::home_url('app/football-manager/transfer') ?>"
+                                                <a href="<?= App\Helpers\Network::home_url('app/football-manager/transfer') ?>"
                                                     class="btn btn-soft-primary mt-2">Go to Market <i
                                                         class="ri-arrow-right-line ms-1 align-middle"></i></a>
                                             </div>
@@ -264,7 +264,7 @@ ob_start();
                                         <?php } else { ?>
                                             <div class="text-muted">Find players and register them for your team.
                                             </div>
-                                            <a href="<?= App\Helpers\NetworkHelper::home_url('app/football-manager/transfer') ?>"
+                                            <a href="<?= App\Helpers\Network::home_url('app/football-manager/transfer') ?>"
                                                 class="btn btn-soft-primary mt-2">Go to Market <i
                                                     class="ri-arrow-right-line ms-1 align-middle"></i></a>
                                         <?php } ?>
@@ -460,7 +460,7 @@ ob_start();
             <div class="card">
                 <div class="card-body text-center py-5">
                     <h3>Please register a team</h3>
-                    <a href="<?= App\Helpers\NetworkHelper::home_url('football-manager') ?>" class="btn btn-link">Back to
+                    <a href="<?= App\Helpers\Network::home_url('football-manager') ?>" class="btn btn-link">Back to
                         home <i class="ri-arrow-right-line ms-1 align-middle"></i></a>
                 </div>
             </div>

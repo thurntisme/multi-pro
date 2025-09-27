@@ -21,7 +21,7 @@ include_once DIR . '/components/alert.php';
     <div class="col-xxl-3">
         <div class="card">
             <div class="card-body p-4">
-                <form method="get" action="<?= App\Helpers\NetworkHelper::home_url('app/blog') ?>">
+                <form method="get" action="<?= App\Helpers\Network::home_url('app/blog') ?>">
                     <div class="search-box">
                         <p class="text-muted">Search</p>
                         <div class="d-flex justify-content-between">
@@ -30,8 +30,8 @@ include_once DIR . '/components/alert.php';
                                     placeholder="Enter keyword..." value="<?= $_GET['s'] ?? '' ?>" name="s">
                                 <i class="mdi mdi-magnify search-icon"></i>
                             </div>
-                            <a href="<?= App\Helpers\NetworkHelper::home_url("app/blog") ?>"
-                                class="btn btn-danger ms-1"><i class="ri-delete-bin-2-fill align-bottom"></i></a>
+                            <a href="<?= App\Helpers\Network::home_url("app/blog") ?>" class="btn btn-danger ms-1"><i
+                                    class="ri-delete-bin-2-fill align-bottom"></i></a>
                         </div>
                     </div>
                 </form>
@@ -40,11 +40,11 @@ include_once DIR . '/components/alert.php';
                     <p class="text-muted">Categories</p>
 
                     <ul class="list-unstyled fw-medium">
-                        <li><a href="<?= App\Helpers\NetworkHelper::home_url('app/blog') ?>"
+                        <li><a href="<?= App\Helpers\Network::home_url('app/blog') ?>"
                                 class="text-<?= empty($_GET['cate']) ? 'link' : 'muted' ?> py-2 d-block"><i
                                     class="mdi mdi-chevron-right me-1"></i> All</a></li>
                         <?php foreach (DEFAULT_BLOG_CATEGORIES as $key => $value) { ?>
-                            <li><a href="<?= App\Helpers\NetworkHelper::home_url('app/blog?cate=' . $key) ?>"
+                            <li><a href="<?= App\Helpers\Network::home_url('app/blog?cate=' . $key) ?>"
                                     class="text-<?= !empty($_GET['cate']) && $_GET['cate'] == $key ? 'link' : 'muted' ?> py-2 d-block"><i
                                         class="mdi mdi-chevron-right me-1"></i> <?= $value ?></a></li>
                         <?php } ?>
@@ -104,12 +104,12 @@ include_once DIR . '/components/alert.php';
         </div>
     </div>
     <div class="col-xxl-9">
-        <form method="get" action="<?= App\Helpers\NetworkHelper::home_url('app/blog') ?>">
+        <form method="get" action="<?= App\Helpers\Network::home_url('app/blog') ?>">
             <div class="row g-4 mb-3">
                 <div class="col-sm-auto">
                     <div>
-                        <a href="<?= App\Helpers\NetworkHelper::home_url('app/blog' . '/new') ?>"
-                            class="btn btn-success"><i class="ri-add-line align-bottom me-1"></i> Add New</a>
+                        <a href="<?= App\Helpers\Network::home_url('app/blog' . '/new') ?>" class="btn btn-success"><i
+                                class="ri-add-line align-bottom me-1"></i> Add New</a>
                     </div>
                 </div>
             </div><!--end row-->
@@ -128,7 +128,7 @@ include_once DIR . '/components/alert.php';
                                     <div class="col-xxl-9 col-lg-7">
                                         <p class="mb-2 text-primary text-uppercase"><?= $item['category'] ?? '' ?></p>
                                         <a
-                                            href="<?= App\Helpers\NetworkHelper::home_url('app/blog' . '/detail?id=' . $item['id']) ?>">
+                                            href="<?= App\Helpers\Network::home_url('app/blog' . '/detail?id=' . $item['id']) ?>">
                                             <h5 class="fs-15 fw-semibold"><?= $item['title'] ?></h5>
                                         </a>
                                         <div class="d-flex align-items-center gap-2 mb-3 flex-wrap">
@@ -139,7 +139,7 @@ include_once DIR . '/components/alert.php';
                                                 Admin</a>
                                         </div>
                                         <p class="text-muted mb-2"><?= generateShortDescription($item['content']) ?></p>
-                                        <a href="<?= App\Helpers\NetworkHelper::home_url('app/blog' . '/detail?id=' . $item['id']) ?>"
+                                        <a href="<?= App\Helpers\Network::home_url('app/blog' . '/detail?id=' . $item['id']) ?>"
                                             class="text-decoration-underline">Read more <i class="ri-arrow-right-line"></i></a>
                                         <div class="d-flex align-items-center gap-2 mt-3 flex-wrap">
                                             <?php

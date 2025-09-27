@@ -1,5 +1,5 @@
 <!-- App Search-->
-<form class="app-search d-none d-md-block" method="get" action="<?= App\Helpers\NetworkHelper::home_url('search') ?>">
+<form class="app-search d-none d-md-block" method="get" action="<?= App\Helpers\Network::home_url('search') ?>">
     <div class="position-relative">
         <input type="text" class="form-control" placeholder="Search..." autocomplete="off" id="search-options" name="s"
             value="<?= !empty($_GET['s']) ? trim($_GET['s']) : '' ?>">
@@ -52,7 +52,7 @@
                 <!-- item -->
                 <a href="javascript:void(0);" class="dropdown-item notify-item py-2">
                     <div class="d-flex">
-                        <img src="<?= App\Helpers\NetworkHelper::home_url("assets/images/users/avatar-2.jpg") ?>"
+                        <img src="<?= App\Helpers\Network::home_url("assets/images/users/avatar-2.jpg") ?>"
                             class="me-3 rounded-circle avatar-xs" alt="user-pic">
                         <div class="flex-grow-1">
                             <h6 class="m-0">Angela Bernier</h6>
@@ -63,7 +63,7 @@
                 <!-- item -->
                 <a href="javascript:void(0);" class="dropdown-item notify-item py-2">
                     <div class="d-flex">
-                        <img src="<?= App\Helpers\NetworkHelper::home_url("assets/images/users/avatar-3.jpg") ?>"
+                        <img src="<?= App\Helpers\Network::home_url("assets/images/users/avatar-3.jpg") ?>"
                             class="me-3 rounded-circle avatar-xs" alt="user-pic">
                         <div class="flex-grow-1">
                             <h6 class="m-0">David Grasso</h6>
@@ -74,7 +74,7 @@
                 <!-- item -->
                 <a href="javascript:void(0);" class="dropdown-item notify-item py-2">
                     <div class="d-flex">
-                        <img src="<?= App\Helpers\NetworkHelper::home_url("assets/images/users/avatar-5.jpg") ?>"
+                        <img src="<?= App\Helpers\Network::home_url("assets/images/users/avatar-5.jpg") ?>"
                             class="me-3 rounded-circle avatar-xs" alt="user-pic">
                         <div class="flex-grow-1">
                             <h6 class="m-0">Mike Bunch</h6>

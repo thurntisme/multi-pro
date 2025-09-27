@@ -14,7 +14,7 @@ if ($count > 0) {
     if ($currentPage > 1) {
         $prevPage = $currentPage - 1;
         $prevLink = '<li class="page-item">
-                    <a href="' . App\Helpers\NetworkHelper::generatePageUrl(['page' => $prevPage]) . '" class="page-link">Previous</a>
+                    <a href="' . App\Helpers\Network::generatePageUrl(['page' => $prevPage]) . '" class="page-link">Previous</a>
                 </li>';
     } else {
         $prevLink = '<li class="page-item disabled">
@@ -27,7 +27,7 @@ if ($count > 0) {
     if ($currentPage < $totalPages) {
         $nextPage = $currentPage + 1;
         $nextLink = '<li class="page-item">
-                    <a href="' . App\Helpers\NetworkHelper::generatePageUrl(['page' => $nextPage]) . '" class="page-link">Next</a>
+                    <a href="' . App\Helpers\Network::generatePageUrl(['page' => $nextPage]) . '" class="page-link">Next</a>
                 </li>';
     } else {
         $nextLink = '<li class="page-item disabled">
@@ -44,7 +44,7 @@ if ($count > 0) {
         // Add the first page link if needed
         if ($displayFirstLast && $currentPage > ($adjacentPages + 1)) {
             $pageLinks .= '<li class="page-item">
-                <a href="' . App\Helpers\NetworkHelper::generatePageUrl(['page' => 1]) . '" class="page-link">1</a>
+                <a href="' . App\Helpers\Network::generatePageUrl(['page' => 1]) . '" class="page-link">1</a>
             </li>';
             $pageLinks .= '<li class="page-item disabled"><a href="#" class="page-link">...</a></li>';
         }
@@ -57,7 +57,7 @@ if ($count > 0) {
                 </li>';
             } else {
                 $pageLinks .= '<li class="page-item">
-                    <a href="' . App\Helpers\NetworkHelper::generatePageUrl(['page' => $i]) . '" class="page-link">' . $i . '</a>
+                    <a href="' . App\Helpers\Network::generatePageUrl(['page' => $i]) . '" class="page-link">' . $i . '</a>
                 </li>';
             }
         }
@@ -66,7 +66,7 @@ if ($count > 0) {
         if ($displayFirstLast && $currentPage < ($totalPages - $adjacentPages)) {
             $pageLinks .= '<li class="page-item disabled"><a href="#" class="page-link">...</a></li>';
             $pageLinks .= '<li class="page-item">
-                <a href="' . App\Helpers\NetworkHelper::generatePageUrl(['page' => $totalPages]) . '" class="page-link">' . $totalPages . '</a>
+                <a href="' . App\Helpers\Network::generatePageUrl(['page' => $totalPages]) . '" class="page-link">' . $totalPages . '</a>
             </li>';
         }
     }

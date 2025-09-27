@@ -10,7 +10,7 @@ ob_start();
 
             <div class="card-body p-4">
                 <div class="user-thumb text-center">
-                    <img src="<?= App\Helpers\NetworkHelper::home_url('assets/images/users/avatar-1.jpg') ?>"
+                    <img src="<?= App\Helpers\Network::home_url('assets/images/users/avatar-1.jpg') ?>"
                         class="rounded-circle img-thumbnail avatar-lg" alt="thumbnail">
                     <h5 class="font-size-15 mt-3"><?= $curr_data['full_name'] ?></h5>
                     <div class="text-center mt-4">
@@ -26,7 +26,7 @@ ob_start();
         <!-- end card -->
 
         <div class="mt-4 text-center">
-            <p class="mb-0">Back to <a href="<?= App\Helpers\NetworkHelper::home_url('') ?>"
+            <p class="mb-0">Back to <a href="<?= App\Helpers\Network::home_url('') ?>"
                     class="fw-semibold text-primary text-decoration-underline"> Mercufee </a> </p>
         </div>
 

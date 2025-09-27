@@ -35,7 +35,7 @@ foreach ($files as $file) {
 
 ob_start(); ?>
 <!-- dropzone css -->
-<link href="<?= App\Helpers\NetworkHelper::home_url("assets/libs/dropzone/dropzone.css") ?>" rel="stylesheet" />
+<link href="<?= App\Helpers\Network::home_url("assets/libs/dropzone/dropzone.css") ?>" rel="stylesheet" />
 <?php
 $additionCss = ob_get_clean();
 
@@ -262,7 +262,7 @@ $pageContent = ob_get_clean();
 
 ob_start(); ?>
 <!-- dropzone min -->
-<script src="<?= App\Helpers\NetworkHelper::home_url("assets/libs/dropzone/dropzone-min.js") ?>"></script>
+<script src="<?= App\Helpers\Network::home_url("assets/libs/dropzone/dropzone-min.js") ?>"></script>
 <script type="text/javascript">
     $(document).ready(function () {
         var previewTemplate, dropzone, dropzonePreviewNode;
@@ -347,7 +347,7 @@ ob_start(); ?>
                         contentType: 'application/json',
                         success: function (response) {
                             if (response.status === 'success') {
-                                location.href = '<?= App\Helpers\NetworkHelper::home_url('app/file-manager') ?>';
+                                location.href = '<?= App\Helpers\Network::home_url('app/file-manager') ?>';
                             } else {
                                 Swal.fire({
                                     icon: 'error',

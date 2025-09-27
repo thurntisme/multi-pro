@@ -196,8 +196,7 @@ ob_start();
 
             <!-- end card -->
             <div class="text-center mb-4">
-                <a href="<?= App\Helpers\NetworkHelper::home_url('report-working') ?>"
-                    class="btn btn-light w-sm">Back</a>
+                <a href="<?= App\Helpers\Network::home_url('report-working') ?>" class="btn btn-light w-sm">Back</a>
                 <button type="submit"
                     class="btn btn-success w-sm"><?= $modify_type === "new" ? "Create" : "Save" ?></button>
             </div>

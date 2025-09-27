@@ -51,7 +51,7 @@ ob_start();
                                 <div class="float-end">
                                     <div class="d-flex flex-column align-items-end">
                                         <span class="fs-12"><?= formatCurrency($player['market_value']) ?></span>
-                                        <a href="<?= App\Helpers\NetworkHelper::home_url('app/football-manager/transfer?s=' . urlencode($player['name'])) ?>"
+                                        <a href="<?= App\Helpers\Network::home_url('app/football-manager/transfer?s=' . urlencode($player['name'])) ?>"
                                             class="btn btn-sm btn-outline-success mt-1" style="width: 30px"><i
                                                 class="ri ri-search-2-line"></i>
                                         </a>
@@ -59,7 +59,7 @@ ob_start();
                                 </div>
                                 <div class="d-flex align-items-center">
                                     <div class="flex-shrink-0">
-                                        <img src="<?= App\Helpers\NetworkHelper::home_url("assets/images/users/avatar-1.jpg") ?>"
+                                        <img src="<?= App\Helpers\Network::home_url("assets/images/users/avatar-1.jpg") ?>"
                                             alt="<?= $player['name'] ?>" class="avatar-sm rounded-circle" />
                                     </div>
                                     <div class="flex-grow-1 ms-3">

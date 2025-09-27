@@ -22,19 +22,19 @@ $shopping_links = [
 <div class="d-flex align-items-center flex-wrap gap-2">
     <div class="flex-grow-1">
         <a class="btn btn-<?= $slug !== 'football-manager' ? 'soft-' : '' ?>info add-btn"
-            href="<?= App\Helpers\NetworkHelper::home_url("app/football-manager") ?>"><i
+            href="<?= App\Helpers\Network::home_url("app/football-manager") ?>"><i
                 class=" bx bx-home-circle me-1 align-baseline"></i> Home
         </a>
         <a class="btn btn-<?= $slug !== 'my-club' ? 'soft-' : '' ?>info add-btn"
-            href="<?= App\Helpers\NetworkHelper::home_url("app/football-manager/my-club") ?>"><i
+            href="<?= App\Helpers\Network::home_url("app/football-manager/my-club") ?>"><i
                 class="bx bx-clipboard me-1 align-baseline"></i> My Club
         </a>
         <a class="btn btn-<?= $slug !== 'locker-room' ? 'soft-' : '' ?>info add-btn"
-            href="<?= App\Helpers\NetworkHelper::home_url("app/football-manager/locker-room") ?>"><i
+            href="<?= App\Helpers\Network::home_url("app/football-manager/locker-room") ?>"><i
                 class=" bx bx-closet me-1 align-baseline"></i> Locker Room
         </a>
         <a class="btn btn-<?= $slug !== 'my-players' ? 'soft-' : '' ?>info add-btn"
-            href="<?= App\Helpers\NetworkHelper::home_url("app/football-manager/my-players") ?>"><i
+            href="<?= App\Helpers\Network::home_url("app/football-manager/my-players") ?>"><i
                 class="bx bx-run me-1 align-baseline"></i> My Players
         </a>
     </div>
@@ -48,7 +48,7 @@ $shopping_links = [
                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                     <?php foreach ($market_links as $link => $label): ?>
                         <a class="dropdown-item"
-                            href="<?= App\Helpers\NetworkHelper::home_url("app/football-manager/transfer" . (!$link ? $link : '/' . $link)) ?>"><?= $label ?></a>
+                            href="<?= App\Helpers\Network::home_url("app/football-manager/transfer" . (!$link ? $link : '/' . $link)) ?>"><?= $label ?></a>
                     <?php endforeach; ?>
                 </div>
             </div>
@@ -60,7 +60,7 @@ $shopping_links = [
                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                     <?php foreach ($shopping_links as $link => $label): ?>
                         <a class="dropdown-item"
-                            href="<?= App\Helpers\NetworkHelper::home_url("app/football-manager/store" . (!$link ? $link : '/' . $link)) ?>"><?= $label ?></a>
+                            href="<?= App\Helpers\Network::home_url("app/football-manager/store" . (!$link ? $link : '/' . $link)) ?>"><?= $label ?></a>
                     <?php endforeach; ?>
                 </div>
             </div>

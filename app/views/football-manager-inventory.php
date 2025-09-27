@@ -21,13 +21,13 @@ ob_start();
                 <!-- Nav tabs -->
                 <ul class="nav nav-tabs nav-border-top nav-border-top-primary" role="tablist">
                     <li class="nav-item">
-                        <a class="nav-link" href="<?= App\Helpers\NetworkHelper::home_url("football-manager/store") ?>">
+                        <a class="nav-link" href="<?= App\Helpers\Network::home_url("football-manager/store") ?>">
                             Items
                         </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link active"
-                            href="<?= App\Helpers\NetworkHelper::home_url('football-manager/store/inventory') ?>">
+                            href="<?= App\Helpers\Network::home_url('football-manager/store/inventory') ?>">
                             My Inventory
                         </a>
                     </li>
@@ -361,7 +361,7 @@ ob_start();
                                         <div class="col-sm-auto">
                                             <div class="d-flex align-items-center gap-2 text-muted">
                                                 <?php if ($item['type'] === 'item') { ?>
-                                                    <a href="<?= App\Helpers\NetworkHelper::home_url('/football-manager/store/item?uuid=' . uniqid()) ?>"
+                                                    <a href="<?= App\Helpers\Network::home_url('/football-manager/store/item?uuid=' . uniqid()) ?>"
                                                         class="btn btn-success btn-label right ms-auto"><i
                                                             class="ri-arrow-right-line label-icon align-bottom fs-16 ms-2"></i>
                                                         Take it</a>
@@ -406,7 +406,7 @@ ob_start();
                     <div class="row">
                         <div class="col-4 text-center">
                             <div class="profile-user position-relative d-inline-block mx-auto">
-                                <img src="<?= App\Helpers\NetworkHelper::home_url('assets/images/users/avatar-1.jpg') ?>"
+                                <img src="<?= App\Helpers\Network::home_url('assets/images/users/avatar-1.jpg') ?>"
                                     class="rounded-circle avatar-xl img-thumbnail user-profile-image"
                                     alt="user-profile-image">
                             </div>

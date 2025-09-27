@@ -8,15 +8,13 @@ $googleFontsUrl = "https://fonts.googleapis.com/css2?family=" . urlencode($font)
 <link href="<?= $googleFontsUrl ?>" rel="stylesheet">
 
 <!-- Layout config Js -->
-<script src="<?= App\Helpers\NetworkHelper::home_url("assets/js/layout.js") ?>"></script>
+<script src="<?= App\Helpers\Network::home_url("assets/js/layout.js") ?>"></script>
 <!-- Bootstrap Css -->
-<link href="<?= App\Helpers\NetworkHelper::home_url("assets/css/bootstrap.min.css") ?>" rel="stylesheet"
-  type="text/css" />
+<link href="<?= App\Helpers\Network::home_url("assets/css/bootstrap.min.css") ?>" rel="stylesheet" type="text/css" />
 <!-- Icons Css -->
-<link href="<?= App\Helpers\NetworkHelper::home_url("assets/css/icons.min.css") ?>" rel="stylesheet" type="text/css" />
+<link href="<?= App\Helpers\Network::home_url("assets/css/icons.min.css") ?>" rel="stylesheet" type="text/css" />
 
-<link href="<?= App\Helpers\NetworkHelper::home_url('assets/libs/sweetalert2/sweetalert2.min.css') ?>"
-  rel="stylesheet" />
+<link href="<?= App\Helpers\Network::home_url('assets/libs/sweetalert2/sweetalert2.min.css') ?>" rel="stylesheet" />
 
 <style>
   body {
@@ -33,10 +31,10 @@ $googleFontsUrl = "https://fonts.googleapis.com/css2?family=" . urlencode($font)
 </style>
 
 <!-- App Css-->
-<link href="<?= App\Helpers\NetworkHelper::home_url("assets/css/app.min.css") ?>" rel="stylesheet" type="text/css" />
+<link href="<?= App\Helpers\Network::home_url("assets/css/app.min.css") ?>" rel="stylesheet" type="text/css" />
 
 <!-- custom Css-->
-<link href="<?= App\Helpers\NetworkHelper::home_url("assets/css/custom.css") ?>" rel="stylesheet" type="text/css" />
+<link href="<?= App\Helpers\Network::home_url("assets/css/custom.css") ?>" rel="stylesheet" type="text/css" />
 
 <?php
 if (!empty($additionCss)) {

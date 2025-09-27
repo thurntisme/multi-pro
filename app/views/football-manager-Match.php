@@ -148,7 +148,7 @@ ob_start();
                                             <div class="col-5">
                                                 <div class="d-flex align-items-center justify-content-end">
                                                     <div class="avatar-md me-3">
-                                                        <img src="<?= App\Helpers\NetworkHelper::home_url("assets/images/users/avatar-1.jpg") ?>"
+                                                        <img src="<?= App\Helpers\Network::home_url("assets/images/users/avatar-1.jpg") ?>"
                                                             alt="" id="candidate-img"
                                                             class="img-thumbnail rounded-circle shadow-none">
                                                     </div>
@@ -166,7 +166,7 @@ ob_start();
                                                 <div class="d-flex align-items-center justify-content-start">
                                                     <h5 id="candidate-name" class="mb-0">Anna Adame</h5>
                                                     <div class="avatar-md me-3">
-                                                        <img src="<?= App\Helpers\NetworkHelper::home_url("assets/images/users/avatar-1.jpg") ?>"
+                                                        <img src="<?= App\Helpers\Network::home_url("assets/images/users/avatar-1.jpg") ?>"
                                                             alt="" id="candidate-img"
                                                             class="img-thumbnail rounded-circle shadow-none">
                                                     </div>
@@ -211,7 +211,7 @@ ob_start();
                             <div class="card-body">
                                 <h4 class="text-muted">Your team does not meet the requirements to join this match.
                                     Please make the necessary adjustments to your club.</h4>
-                                <a href="<?= App\Helpers\NetworkHelper::home_url('app/football-manager/my-club') ?>"
+                                <a href="<?= App\Helpers\Network::home_url('app/football-manager/my-club') ?>"
                                     class="btn btn-soft-primary mt-2">Go to My Club <i
                                         class="ri-arrow-right-line ms-1 align-middle"></i></a>
                             </div>

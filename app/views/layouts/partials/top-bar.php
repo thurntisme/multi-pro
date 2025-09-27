@@ -34,7 +34,7 @@ $systemNotiCount = 0;
             <div class="d-flex">
                 <!-- LOGO -->
                 <div class="navbar-brand-box horizontal-logo">
-                    <a href="<?= App\Helpers\NetworkHelper::home_url('') ?>" class="logo logo-dark">
+                    <a href="<?= App\Helpers\Network::home_url('') ?>" class="logo logo-dark">
                         <span class="fw-bold text-primary fs-22"><?= DEFAULT_SITE_NAME ?></span>
                     </a>
                 </div>

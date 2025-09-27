@@ -17,7 +17,7 @@ ob_start();
                         Bootstrap 5 Admin & Dashboard Template built in multiple frameworks.</p>
 
                     <div class="d-flex gap-2 justify-content-center mt-4">
-                        <a href="<?= App\Helpers\NetworkHelper::home_url('login') ?>" class="btn btn-primary">Get
+                        <a href="<?= App\Helpers\Network::home_url('login') ?>" class="btn btn-primary">Get
                             Started <i class="ri-arrow-right-line align-middle ms-1"></i></a>
                         <a href="#plans" class="btn btn-danger">View Plans <i
                                 class="ri-eye-line align-middle ms-1"></i></a>
@@ -510,7 +510,7 @@ ob_start();
                     </div>
 
                     <div class="mt-4">
-                        <a href="<?= App\Helpers\NetworkHelper::home_url('') ?>" class="btn btn-primary">Learn More <i
+                        <a href="<?= App\Helpers\Network::home_url('') ?>" class="btn btn-primary">Learn More <i
                                 class="ri-arrow-right-line align-middle ms-1"></i></a>
                     </div>
                 </div>

@@ -7,7 +7,7 @@
                 </script> © Mercufee.
             </div>
             <div class="col-sm-6">
-                <a href="<?= App\Helpers\NetworkHelper::home_url("version") ?>" class="text-sm-end d-none d-sm-block">
+                <a href="<?= App\Helpers\Network::home_url("version") ?>" class="text-sm-end d-none d-sm-block">
                     Version <?= APP_VERSION ?>
                 </a>
             </div>

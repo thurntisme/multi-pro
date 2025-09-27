@@ -21,14 +21,14 @@ include_once DIR . '/components/alert.php';
             <div class="flex-shrink-0">
                 <div class="d-flex flex-wrap gap-2">
                     <a class="btn btn-soft-success add-btn"
-                        href="<?= App\Helpers\NetworkHelper::home_url('app/book/new') ?>"><i
+                        href="<?= App\Helpers\Network::home_url('app/book/new') ?>"><i
                             class="ri-add-line align-bottom me-1"></i> Create Book</a>
                 </div>
             </div>
         </div>
     </div>
     <div class="card-body border border-dashed border-end-0 border-start-0">
-        <form method="get" action="<?= App\Helpers\NetworkHelper::home_url('app/book') ?>">
+        <form method="get" action="<?= App\Helpers\Network::home_url('app/book') ?>">
             <div class="row g-3">
                 <div class="col-xxl-5 col-sm-12">
                     <div class="search-box">
@@ -61,7 +61,7 @@ include_once DIR . '/components/alert.php';
                             class="ri-equalizer-fill me-1 align-bottom"></i>
                         Filters
                     </button>
-                    <a href="<?= App\Helpers\NetworkHelper::home_url("app/book") ?>" class="btn btn-danger ms-1"><i
+                    <a href="<?= App\Helpers\Network::home_url("app/book") ?>" class="btn btn-danger ms-1"><i
                             class="ri-delete-bin-2-fill me-1 align-bottom"></i>Reset</a>
                 </div>
                 <!--end col-->
@@ -90,18 +90,18 @@ include_once DIR . '/components/alert.php';
                                 <td>
                                     <div class="d-flex align-items-baseline">
                                         <a class="text-black"
-                                            href="<?= App\Helpers\NetworkHelper::home_url('app/book/detail?id=' . $item['id']) ?>"><?= truncateString($item['title'], 50) ?></a>
+                                            href="<?= App\Helpers\Network::home_url('app/book/detail?id=' . $item['id']) ?>"><?= truncateString($item['title'], 50) ?></a>
                                         <ul class="list-inline tasks-list-menu mb-0 ms-4">
                                             <li class="list-inline-item m-0"><a class="edit-item-btn btn btn-link btn-sm"
-                                                    href="<?= App\Helpers\NetworkHelper::home_url('app/book/view?id=' . $item['id']) ?>"><i
+                                                    href="<?= App\Helpers\Network::home_url('app/book/view?id=' . $item['id']) ?>"><i
                                                         class="ri-book-read-fill align-bottom text-muted"></i></a>
                                             </li>
                                             <li class="list-inline-item m-0"><a class="edit-item-btn btn btn-link btn-sm"
-                                                    href="<?= App\Helpers\NetworkHelper::home_url('app/book/detail?id=' . $item['id']) ?>"><i
+                                                    href="<?= App\Helpers\Network::home_url('app/book/detail?id=' . $item['id']) ?>"><i
                                                         class="ri-eye-fill align-bottom text-muted"></i></a>
                                             </li>
                                             <li class="list-inline-item m-0"><a class="edit-item-btn btn btn-link btn-sm"
-                                                    href="<?= App\Helpers\NetworkHelper::home_url('app/book/edit?id=' . $item['id']) ?>"><i
+                                                    href="<?= App\Helpers\Network::home_url('app/book/edit?id=' . $item['id']) ?>"><i
                                                         class="ri-pencil-fill align-bottom text-muted"></i></a>
                                             </li>
                                         </ul>

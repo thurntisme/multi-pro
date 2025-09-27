@@ -5,7 +5,7 @@ ob_start();
 <div class="row g-4 mb-3">
     <div class="col-sm-auto">
         <div>
-            <a href="<?= App\Helpers\NetworkHelper::home_url('project/new') ?>" class="btn btn-success
+            <a href="<?= App\Helpers\Network::home_url('project/new') ?>" class="btn btn-success
                    "><i class="ri-add-line align-bottom me-1"></i>
                 Add New</a>
         </div>

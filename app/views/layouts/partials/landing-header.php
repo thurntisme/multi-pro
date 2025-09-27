@@ -1,6 +1,6 @@
 <nav class="navbar navbar-expand-lg navbar-landing fixed-top" id="navbar">
     <div class="container">
-        <a class="navbar-brand" href="<?= App\Helpers\NetworkHelper::home_url('') ?>">
+        <a class="navbar-brand" href="<?= App\Helpers\Network::home_url('') ?>">
             <span class="fw-bold text-primary fs-22"><?= DEFAULT_SITE_NAME ?></span>
         </a>
         <button class="navbar-toggler py-0 fs-20 text-body" type="button" data-bs-toggle="collapse"
@@ -36,11 +36,11 @@
 
             <div class="">
                 <?php if (empty($token)) { ?>
-                    <a href="<?= App\Helpers\NetworkHelper::home_url('login') ?>"
+                    <a href="<?= App\Helpers\Network::home_url('login') ?>"
                         class="btn btn-link fw-medium text-decoration-none text-body">Sign in</a>
-                    <a href="<?= App\Helpers\NetworkHelper::home_url('register') ?>" class="btn btn-primary">Sign Up</a>
+                    <a href="<?= App\Helpers\Network::home_url('register') ?>" class="btn btn-primary">Sign Up</a>
                 <?php } else { ?>
-                    <a href="<?= App\Helpers\NetworkHelper::home_url('app') ?>" class="btn btn-primary">Dashboard</a>
+                    <a href="<?= App\Helpers\Network::home_url('app') ?>" class="btn btn-primary">Dashboard</a>
                 <?php } ?>
             </div>
         </div>

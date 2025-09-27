@@ -3,11 +3,11 @@
     <!-- LOGO -->
     <div class="navbar-brand-box">
         <!-- Light Logo-->
-        <a href="<?= App\Helpers\NetworkHelper::home_url('app') ?>" class="logo logo-light">
+        <a href="<?= App\Helpers\Network::home_url('app') ?>" class="logo logo-light">
             <span class="fw-bold text-white fs-22"><?= DEFAULT_SITE_NAME ?></span>
         </a>
         <!-- Dark Logo-->
-        <a href="<?= App\Helpers\NetworkHelper::home_url('app') ?>" class="logo logo-dark">
+        <a href="<?= App\Helpers\Network::home_url('app') ?>" class="logo logo-dark">
             <span class="fw-bold text-white fs-22"><?= DEFAULT_SITE_NAME ?></span>
         </a>
         <button type="button" class="btn btn-sm p-0 fs-20 header-item float-end btn-vertical-sm-hover"
@@ -30,10 +30,10 @@
                         // $pageData = getPageData($item['slug'], $user_role);
                         $isLock = false;
                         // Generate active class based on the slug
-                        $active_class = App\Helpers\NetworkHelper::activeClassName($item['slug']);
+                        $active_class = App\Helpers\Network::activeClassName($item['slug']);
 
                         // Generate the URL dynamically based on the slug
-                        $url = App\Helpers\NetworkHelper::home_url("app/{$item['slug']}");
+                        $url = App\Helpers\Network::home_url("app/{$item['slug']}");
 
                         echo '<li class="nav-item">
                                     <a class="nav-link menu-link ' . $active_class . '" href="' . $url . '">

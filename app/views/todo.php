@@ -2,7 +2,7 @@
 ob_start();
 ?>
 <!-- Dragula css -->
-<link rel="stylesheet" href="<?= App\Helpers\NetworkHelper::home_url("assets/libs/dragula/dragula.min.css") ?>" />
+<link rel="stylesheet" href="<?= App\Helpers\Network::home_url("assets/libs/dragula/dragula.min.css") ?>" />
 <?php
 $additionCss = ob_get_clean();
 ob_start();
@@ -278,10 +278,9 @@ $pageContent = ob_get_clean();
 ob_start();
 ?>
 <!-- dragula init js -->
-<script src="<?= App\Helpers\NetworkHelper::home_url("assets/libs/dragula/dragula.min.js") ?>"></script>
-<script
-    src="<?= App\Helpers\NetworkHelper::home_url("assets/libs/dom-autoscroller/dom-autoscroller.min.js") ?>"></script>
-<script src="<?= App\Helpers\NetworkHelper::home_url("assets/js/pages/todo.init.js") ?>"></script>
+<script src="<?= App\Helpers\Network::home_url("assets/libs/dragula/dragula.min.js") ?>"></script>
+<script src="<?= App\Helpers\Network::home_url("assets/libs/dom-autoscroller/dom-autoscroller.min.js") ?>"></script>
+<script src="<?= App\Helpers\Network::home_url("assets/js/pages/todo.init.js") ?>"></script>
 <?php
 $additionJs = ob_get_clean();
 
