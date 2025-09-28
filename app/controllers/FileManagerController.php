@@ -5,13 +5,13 @@ namespace App\Controllers;
 use App\Core\Controller;
 use App\Core\Response;
 
-class DatabaseController extends Controller
+class FileManagerController extends Controller
 {
     public function index(): Response
     {
         $data = [
-            'title' => 'Database'
+            'title' => 'File Manager'
         ];
-        return $this->view('database', $data);
+        return $this->view('file-manager', $data);
     }
 }

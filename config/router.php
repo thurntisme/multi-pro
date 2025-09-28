@@ -1,5 +1,7 @@
 <?php
 
+use App\Controllers\DatabaseController;
+use App\Controllers\FileManagerController;
 use App\Controllers\PdfReaderController;
 use App\Core\Router;
 use App\Controllers\LandingController;
@@ -67,5 +69,7 @@ $router->get('/app/notifications', [NotificationsController::class, 'index']);
 $router->get('/app/package', [PackageController::class, 'index']);
 $router->get('/app/profile', [ProfileController::class, 'index']);
 $router->get('/app/pdf-reader', [PdfReaderController::class, 'index']);
+$router->get('/app/file-manager', [FileManagerController::class, 'index']);
+$router->get('/app/database', [DatabaseController::class, 'index']);
 
 return $router;

@@ -151,6 +151,21 @@ class Sidebar
             ]
         ],
         [
+            'title' => 'System',
+            'sub_items' => [
+                [
+                    'name' => 'File Manage',
+                    'icon' => 'ri-file-upload-line',
+                    'slug' => 'file-manager'
+                ],
+                [
+                    'name' => 'Database',
+                    'icon' => 'ri-database-2-line',
+                    'slug' => 'database'
+                ],
+            ]
+        ],
+        [
             'title' => 'My Account',
             'sub_items' => [
                 [
