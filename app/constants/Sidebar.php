@@ -128,6 +128,11 @@ class Sidebar
                     'icon' => 'ri-clipboard-line',
                     'slug' => 'report'
                 ],
+                [
+                    'name' => 'Pdf Reader',
+                    'icon' => 'ri-pdf-line',
+                    'slug' => 'pdf-reader'
+                ],
             ]
         ],
         [

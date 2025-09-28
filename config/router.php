@@ -1,5 +1,6 @@
 <?php
 
+use App\Controllers\PdfReaderController;
 use App\Core\Router;
 use App\Controllers\LandingController;
 use App\Controllers\AuthController;
@@ -65,5 +66,6 @@ $router->get('/app/settings', [SettingController::class, 'index']);
 $router->get('/app/notifications', [NotificationsController::class, 'index']);
 $router->get('/app/package', [PackageController::class, 'index']);
 $router->get('/app/profile', [ProfileController::class, 'index']);
+$router->get('/app/pdf-reader', [PdfReaderController::class, 'index']);
 
 return $router;
