@@ -3,7 +3,7 @@
     data-sidebar-image="none" data-preloader="disable">
 
 <head>
-    <?php include_once LAYOUTS_PATH . 'partials/title-meta.php' ?>
+    <?php include_once LAYOUTS_DIR . 'partials/title-meta.php' ?>
     <!--Swiper slider css-->
     <link href="<?= App\Helpers\Network::home_url('assets/libs/swiper/swiper-bundle.min.css') ?>" rel="stylesheet"
         type="text/css" />
@@ -24,11 +24,11 @@
 
     <!-- Begin page -->
     <div class="layout-wrapper landing">
-        <?php include_once LAYOUTS_PATH . 'partials/landing-header.php' ?>
+        <?php include_once LAYOUTS_DIR . 'partials/landing-header.php' ?>
 
         <?php echo $pageContent ?? '<p>Welcome to the main content area.</p>'; ?>
 
-        <?php include_once LAYOUTS_PATH . 'partials/landing-footer.php' ?>
+        <?php include_once LAYOUTS_DIR . 'partials/landing-footer.php' ?>
 
         <!--start back-to-top-->
         <button onclick="topFunction()" class="btn btn-danger btn-icon landing-back-top" id="back-to-top">

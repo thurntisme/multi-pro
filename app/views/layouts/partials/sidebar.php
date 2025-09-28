@@ -4,11 +4,11 @@
     <div class="navbar-brand-box">
         <!-- Light Logo-->
         <a href="<?= App\Helpers\Network::home_url('app') ?>" class="logo logo-light">
-            <span class="fw-bold text-white fs-22"><?= DEFAULT_SITE_NAME ?></span>
+            <span class="fw-bold text-white fs-22"><?= APP_NAME ?></span>
         </a>
         <!-- Dark Logo-->
         <a href="<?= App\Helpers\Network::home_url('app') ?>" class="logo logo-dark">
-            <span class="fw-bold text-white fs-22"><?= DEFAULT_SITE_NAME ?></span>
+            <span class="fw-bold text-white fs-22"><?= APP_NAME ?></span>
         </a>
         <button type="button" class="btn btn-sm p-0 fs-20 header-item float-end btn-vertical-sm-hover"
             id="vertical-hover">

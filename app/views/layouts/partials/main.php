@@ -5,8 +5,8 @@ $cur_lang = 'en';
 $isScssConverted = false;
 
 if ($isScssConverted) {
-    $main_css = DIR_ASSETS_PATH . "css/app.css";
-    $target_css = DIR_ASSETS_PATH . "css/app.min.css";
+    $main_css = ASSETS_DIR . "css/app.css";
+    $target_css = ASSETS_DIR . "css/app.min.css";
 
     if (!file_exists($main_css)) {
         die("Source CSS file not found: $main_css");

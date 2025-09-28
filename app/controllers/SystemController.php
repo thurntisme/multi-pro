@@ -129,7 +129,7 @@ class SystemController
     public function getSiteName()
     {
         $siteName = $this->settingService->getSetting('site_name');
-        return $siteName['value'] ?? DEFAULT_SITE_NAME;
+        return $siteName['value'] ?? APP_NAME;
     }
 
     public function checkUserOnline($last_time_login)

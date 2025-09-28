@@ -284,4 +284,4 @@ ob_start();
 <?php
 $additionJs = ob_get_clean();
 
-include_once LAYOUTS_PATH . 'dashboard.php';
+include_once LAYOUTS_DIR . 'dashboard.php';

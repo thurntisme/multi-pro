@@ -15,7 +15,7 @@ class Common
 
     public static function homeUrl(string $path = ''): string
     {
-        return BASE_PATH . "/" . ($path ?? '');
+        return APP_URL . "/" . ($path ?? '');
     }
 
     public static function isCurrentPage(string $path): bool

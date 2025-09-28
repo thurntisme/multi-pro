@@ -4,7 +4,7 @@
             <div class="col-sm-6">
                 <script>
                     document.write(new Date().getFullYear())
-                </script> © Mercufee.
+                </script> © <?= APP_NAME ?>.
             </div>
             <div class="col-sm-6">
                 <a href="<?= App\Helpers\Network::home_url("version") ?>" class="text-sm-end d-none d-sm-block">

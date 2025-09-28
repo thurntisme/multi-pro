@@ -7,11 +7,11 @@ class MVCTemplateViewer implements TemplateViewerInterface
 {
     public function render(string $template, array $data = []): string
     {
-        $code = file_get_contents(VIEWS_PATH . $template . VIEW_EXTENSION);
+        $code = file_get_contents(VIEWS_DIR . $template . VIEW_EXTENSION);
 
         if (preg_match('#^{% extends "(?<template>.*)" %}#', $code, $matches) === 1) {
 
-            $base = file_get_contents(VIEWS_PATH . $matches["template"]);
+            $base = file_get_contents(VIEWS_DIR . $matches["template"]);
 
             $blocks = $this->getBlocks($code);
 
@@ -19,7 +19,7 @@ class MVCTemplateViewer implements TemplateViewerInterface
 
         }
 
-        $code = $this->loadIncludes(VIEWS_PATH, $code);
+        $code = $this->loadIncludes(VIEWS_DIR, $code);
 
         $code = $this->replaceVariables($code);
 

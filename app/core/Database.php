@@ -30,7 +30,7 @@ class Database
                     PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
                 ]);
             } elseif ($this->driver === 'sqlite') {
-                $dbFile = STORAGE_PATH . "db/{$dbName}.sqlite";
+                $dbFile = STORAGE_DIR . "db/{$dbName}.sqlite";
                 $dsn = "sqlite:" . $dbFile;
                 $this->pdo = new PDO($dsn, null, null, [
                     PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,

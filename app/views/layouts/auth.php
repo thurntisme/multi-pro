@@ -4,8 +4,8 @@
 
 <head>
 
-    <?php include_once LAYOUTS_PATH . 'partials/title-meta.php' ?>
-    <?php include_once LAYOUTS_PATH . 'partials/head-css.php'; ?>
+    <?php include_once LAYOUTS_DIR . 'partials/title-meta.php' ?>
+    <?php include_once LAYOUTS_DIR . 'partials/head-css.php'; ?>
 
 </head>
 
@@ -69,7 +69,7 @@
     </div>
     <!-- end auth-page-wrapper -->
 
-    <?php include_once LAYOUTS_PATH . 'partials/vendor-scripts.php'; ?>
+    <?php include_once LAYOUTS_DIR . 'partials/vendor-scripts.php'; ?>
 
     <!-- particles js -->
     <script src="<?= App\Helpers\Network::home_url("assets/libs/particles.js/particles.js") ?>"></script>

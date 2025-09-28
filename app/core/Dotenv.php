@@ -5,7 +5,7 @@ namespace App\Core;
 
 class Dotenv
 {
-    private const ENV_PATH = APP_ROOT . '/.env';
+    private const ENV_PATH = DIR_ROOT . '/.env';
 
     public function load(): void
     {

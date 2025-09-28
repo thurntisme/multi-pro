@@ -24,4 +24,4 @@ echo '<div class="auth-page-content overflow-hidden p-0">
 
 $pageContent = ob_get_clean();
 
-include_once LAYOUTS_PATH . 'auth-layout.php';
+include_once LAYOUTS_DIR . 'auth-layout.php';

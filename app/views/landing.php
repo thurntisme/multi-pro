@@ -1654,4 +1654,4 @@ ob_start();
 <?php
 $pageContent = ob_get_clean();
 
-require LAYOUTS_PATH . 'landing.php';
+require LAYOUTS_DIR . 'landing.php';

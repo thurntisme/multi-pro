@@ -8,7 +8,7 @@ use Throwable;
 
 class ErrorHandler
 {
-    private static $logFile = LOGS_PATH . '/app-error.log';
+    private static $logFile = LOGS_DIR . '/app-error.log';
 
     public function register(): void
     {
@@ -47,7 +47,7 @@ class ErrorHandler
             echo "<b>Exception:</b> {$message}<br>";
         } else {
             if ($exception instanceof \PDOException) {
-                $view = VIEWS_PATH . 'errors/db-error.php';
+                $view = VIEWS_DIR . 'errors/db-error.php';
                 if (file_exists($view)) {
                     include $view;
                     return;

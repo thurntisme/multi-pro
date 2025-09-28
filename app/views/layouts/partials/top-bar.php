@@ -35,7 +35,7 @@ $systemNotiCount = 0;
                 <!-- LOGO -->
                 <div class="navbar-brand-box horizontal-logo">
                     <a href="<?= App\Helpers\Network::home_url('') ?>" class="logo logo-dark">
-                        <span class="fw-bold text-primary fs-22"><?= DEFAULT_SITE_NAME ?></span>
+                        <span class="fw-bold text-primary fs-22"><?= APP_NAME ?></span>
                     </a>
                 </div>
 
@@ -48,19 +48,19 @@ $systemNotiCount = 0;
                     </span>
                 </button>
 
-                <?php include_once LAYOUTS_PATH . 'partials/top-bar/app-search.php'; ?>
+                <?php include_once LAYOUTS_DIR . 'partials/top-bar/app-search.php'; ?>
             </div>
 
             <div class="d-flex align-items-center">
 
-                <?php include_once LAYOUTS_PATH . 'partials/top-bar/app-search-mb.php'; ?>
-                <?php include_once LAYOUTS_PATH . 'partials/top-bar/language-switcher.php'; ?>
-                <?php include_once LAYOUTS_PATH . 'partials/top-bar/quick-apps.php'; ?>
-                <?php include_once LAYOUTS_PATH . 'partials/top-bar/action-buttons.php'; ?>
-                <?php include_once LAYOUTS_PATH . 'partials/top-bar/system-notification.php'; ?>
-                <?php include_once LAYOUTS_PATH . 'partials/top-bar/system-error.php'; ?>
-                <?php include_once LAYOUTS_PATH . 'partials/top-bar/user-notification.php'; ?>
-                <?php include_once LAYOUTS_PATH . 'partials/top-bar/user-dropdown.php'; ?>
+                <?php include_once LAYOUTS_DIR . 'partials/top-bar/app-search-mb.php'; ?>
+                <?php include_once LAYOUTS_DIR . 'partials/top-bar/language-switcher.php'; ?>
+                <?php include_once LAYOUTS_DIR . 'partials/top-bar/quick-apps.php'; ?>
+                <?php include_once LAYOUTS_DIR . 'partials/top-bar/action-buttons.php'; ?>
+                <?php include_once LAYOUTS_DIR . 'partials/top-bar/system-notification.php'; ?>
+                <?php include_once LAYOUTS_DIR . 'partials/top-bar/system-error.php'; ?>
+                <?php include_once LAYOUTS_DIR . 'partials/top-bar/user-notification.php'; ?>
+                <?php include_once LAYOUTS_DIR . 'partials/top-bar/user-dropdown.php'; ?>
 
             </div>
         </div>
