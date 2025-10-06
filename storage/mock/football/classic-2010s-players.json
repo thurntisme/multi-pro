@@ -1,0 +1,73 @@
+[
+  {
+    "uuid": "a1b2c3d4e5f6789a1b2c3d4e5f6789b1",
+    "avatarUrl": "/assets/players/andres_iniesta.jpg",
+    "name": "Andrés Iniesta",
+    "position": "CM",
+    "playablePositions": ["CM", "CAM", "CDM"],
+
+    "foot": "RIGHT",
+    "rating": 93,
+    "form": "EXCELLENT",
+    "fitness": 95,
+    "salary": 180000,
+    "contractLength": 100,
+    "birthday": "1984-05-11",
+    "nationality": "Spain",
+    "height": 171,
+    "weight": 68,
+
+    "edition": "CLASSIC_2010S",
+    "attributes": {
+      "pace": 82,
+      "acceleration": 85,
+      "agility": 95,
+      "stamina": 90,
+      "strength": 70,
+      "jumping": 68,
+
+      "dribbling": 97,
+      "ballControl": 98,
+      "crossing": 88,
+      "shooting": 85,
+      "longShots": 86,
+      "reactions": 95,
+      "heading": 60,
+      "tackling": 75,
+      "defending": 78,
+      "finishing": 85,
+      "shortPassing": 97,
+      "longPassing": 92,
+      "powerShots": 82,
+      "setPieces": 90,
+
+      "vision": 99,
+      "positioning": 95,
+      "anticipation": 96,
+      "decisionMaking": 97,
+      "composure": 97,
+      "concentration": 95,
+      "workRate": 92,
+      "leadership": 95,
+      "flair": 96,
+      "creativity": 98,
+
+      "reflexes": 5,
+      "diving": 5,
+      "handling": 5,
+      "kicking": 5,
+      "positioningGK": 5,
+      "oneOnOne": 5,
+      "commandOfArea": 5
+    },
+
+    "marketValue": 70000000,
+    "potential": 5,
+    "skillMoves": 4,
+
+    "preferredRole": "PLAYMAKER",
+    "personality": "CALM",
+    "injuryProne": 1,
+    "consistency": 95
+  }
+]

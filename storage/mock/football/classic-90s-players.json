@@ -1,0 +1,73 @@
+[
+  {
+    "uuid": "d4e5f6789a1b2c3dd4e5f6789a1b2c3d",
+    "avatarUrl": "/assets/players/zinedine_zidane.jpg",
+    "name": "Zinedine Zidane",
+    "position": "CAM",
+    "playablePositions": ["CAM", "CM", "RW"],
+
+    "foot": "RIGHT",
+    "rating": 95,
+    "form": "EXCELLENT",
+    "fitness": 95,
+    "salary": 170000,
+    "contractLength": 100,
+    "birthday": "1972-06-23",
+    "nationality": "France",
+    "height": 185,
+    "weight": 80,
+
+    "edition": "CLASSIC_90S",
+    "attributes": {
+      "pace": 85,
+      "acceleration": 86,
+      "agility": 92,
+      "stamina": 88,
+      "strength": 80,
+      "jumping": 78,
+
+      "dribbling": 97,
+      "ballControl": 98,
+      "crossing": 85,
+      "shooting": 90,
+      "longShots": 92,
+      "reactions": 95,
+      "heading": 75,
+      "tackling": 60,
+      "defending": 55,
+      "finishing": 90,
+      "shortPassing": 95,
+      "longPassing": 92,
+      "powerShots": 88,
+      "setPieces": 90,
+
+      "vision": 98,
+      "positioning": 94,
+      "anticipation": 95,
+      "decisionMaking": 97,
+      "composure": 96,
+      "concentration": 93,
+      "workRate": 90,
+      "leadership": 92,
+      "flair": 99,
+      "creativity": 98,
+
+      "reflexes": 5,
+      "diving": 5,
+      "handling": 5,
+      "kicking": 5,
+      "positioningGK": 5,
+      "oneOnOne": 5,
+      "commandOfArea": 5
+    },
+
+    "marketValue": 60000000,
+    "potential": 5,
+    "skillMoves": 5,
+
+    "preferredRole": "PLAYMAKER",
+    "personality": "FLAIR",
+    "injuryProne": 2,
+    "consistency": 93
+  }
+]

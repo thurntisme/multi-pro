@@ -1,0 +1,73 @@
+[
+  {
+    "uuid": "b2c3d4e5f6789a1b2c3d4e5f6789a2c3",
+    "avatarUrl": "/assets/players/kevin_de_bruyne.jpg",
+    "name": "Kevin De Bruyne",
+    "position": "CM",
+    "playablePositions": ["CM", "CAM", "RM"],
+
+    "foot": "RIGHT",
+    "rating": 94,
+    "form": "EXCELLENT",
+    "fitness": 95,
+    "salary": 210000,
+    "contractLength": 100,
+    "birthday": "1991-06-28",
+    "nationality": "Belgium",
+    "height": 181,
+    "weight": 70,
+
+    "edition": "MODERN",
+    "attributes": {
+      "pace": 86,
+      "acceleration": 88,
+      "agility": 90,
+      "stamina": 92,
+      "strength": 78,
+      "jumping": 78,
+
+      "dribbling": 92,
+      "ballControl": 95,
+      "crossing": 94,
+      "shooting": 89,
+      "longShots": 93,
+      "reactions": 96,
+      "heading": 75,
+      "tackling": 80,
+      "defending": 78,
+      "finishing": 88,
+      "shortPassing": 97,
+      "longPassing": 96,
+      "powerShots": 90,
+      "setPieces": 92,
+
+      "vision": 99,
+      "positioning": 95,
+      "anticipation": 96,
+      "decisionMaking": 97,
+      "composure": 96,
+      "concentration": 95,
+      "workRate": 94,
+      "leadership": 93,
+      "flair": 95,
+      "creativity": 98,
+
+      "reflexes": 5,
+      "diving": 5,
+      "handling": 5,
+      "kicking": 5,
+      "positioningGK": 5,
+      "oneOnOne": 5,
+      "commandOfArea": 5
+    },
+
+    "marketValue": 100000000,
+    "potential": 5,
+    "skillMoves": 4,
+
+    "preferredRole": "PLAYMAKER",
+    "personality": "CALM",
+    "injuryProne": 1,
+    "consistency": 95
+  }
+]

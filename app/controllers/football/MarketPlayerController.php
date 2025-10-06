@@ -7,7 +7,7 @@ use App\Core\Response;
 
 class MarketPlayerController extends Controller
 {
-  private static $files = ["legend-players"];
+  private static $files = ["legend", "classic-70s", "classic-80s", "classic-90s", "classic-2000s", "classic-2010s", "modern", "future_star", "world_cup", "euro"];
 
   public function index(): Response
   {
@@ -20,7 +20,7 @@ class MarketPlayerController extends Controller
     $players = [];
 
     foreach (self::$files as $file) {
-      $path = MOCK_DIR . "football/{$file}.json";
+      $path = MOCK_DIR . "football/{$file}-players.json";
       $players = array_merge($players, \App\Helpers\Common::getJsonFileData($path));
     }
     return $players;

@@ -1,0 +1,73 @@
+[
+  {
+    "uuid": "e5f6789a1b2c3d4e5f6789a1b2c3d4f5",
+    "avatarUrl": "/assets/players/ronaldinho.jpg",
+    "name": "Ronaldinho",
+    "position": "CAM",
+    "playablePositions": ["CAM", "LW", "RW"],
+
+    "foot": "RIGHT",
+    "rating": 94,
+    "form": "EXCELLENT",
+    "fitness": 95,
+    "salary": 180000,
+    "contractLength": 100,
+    "birthday": "1980-03-21",
+    "nationality": "Brazil",
+    "height": 181,
+    "weight": 80,
+
+    "edition": "CLASSIC_2000S",
+    "attributes": {
+      "pace": 91,
+      "acceleration": 93,
+      "agility": 96,
+      "stamina": 90,
+      "strength": 78,
+      "jumping": 80,
+
+      "dribbling": 99,
+      "ballControl": 98,
+      "crossing": 90,
+      "shooting": 91,
+      "longShots": 92,
+      "reactions": 95,
+      "heading": 75,
+      "tackling": 55,
+      "defending": 50,
+      "finishing": 91,
+      "shortPassing": 94,
+      "longPassing": 90,
+      "powerShots": 88,
+      "setPieces": 95,
+
+      "vision": 97,
+      "positioning": 93,
+      "anticipation": 94,
+      "decisionMaking": 96,
+      "composure": 95,
+      "concentration": 92,
+      "workRate": 88,
+      "leadership": 90,
+      "flair": 99,
+      "creativity": 98,
+
+      "reflexes": 5,
+      "diving": 5,
+      "handling": 5,
+      "kicking": 5,
+      "positioningGK": 5,
+      "oneOnOne": 5,
+      "commandOfArea": 5
+    },
+
+    "marketValue": 65000000,
+    "potential": 5,
+    "skillMoves": 5,
+
+    "preferredRole": "PLAYMAKER",
+    "personality": "FLAIR",
+    "injuryProne": 2,
+    "consistency": 92
+  }
+]

@@ -1,0 +1,73 @@
+[
+  {
+    "uuid": "c3d4e5f6789a1b2c3d4e5f6789a1b2c4",
+    "avatarUrl": "/assets/players/jude_bellingham.jpg",
+    "name": "Jude Bellingham",
+    "position": "CM",
+    "playablePositions": ["CM", "CDM", "CAM"],
+
+    "foot": "RIGHT",
+    "rating": 88,
+    "form": "EXCELLENT",
+    "fitness": 95,
+    "salary": 120000,
+    "contractLength": 100,
+    "birthday": "2003-06-29",
+    "nationality": "England",
+    "height": 183,
+    "weight": 76,
+
+    "edition": "FUTURE_STAR",
+    "attributes": {
+      "pace": 88,
+      "acceleration": 90,
+      "agility": 89,
+      "stamina": 94,
+      "strength": 85,
+      "jumping": 80,
+
+      "dribbling": 91,
+      "ballControl": 92,
+      "crossing": 80,
+      "shooting": 85,
+      "longShots": 86,
+      "reactions": 90,
+      "heading": 80,
+      "tackling": 85,
+      "defending": 84,
+      "finishing": 82,
+      "shortPassing": 92,
+      "longPassing": 88,
+      "powerShots": 85,
+      "setPieces": 80,
+
+      "vision": 94,
+      "positioning": 91,
+      "anticipation": 90,
+      "decisionMaking": 92,
+      "composure": 90,
+      "concentration": 88,
+      "workRate": 95,
+      "leadership": 88,
+      "flair": 90,
+      "creativity": 91,
+
+      "reflexes": 5,
+      "diving": 5,
+      "handling": 5,
+      "kicking": 5,
+      "positioningGK": 5,
+      "oneOnOne": 5,
+      "commandOfArea": 5
+    },
+
+    "marketValue": 80000000,
+    "potential": 5,
+    "skillMoves": 4,
+
+    "preferredRole": "BOX_TO_BOX",
+    "personality": "DETERMINED",
+    "injuryProne": 1,
+    "consistency": 90
+  }
+]
