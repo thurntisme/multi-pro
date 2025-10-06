@@ -7,11 +7,13 @@ use App\Core\Response;
 
 class MarketPlayerController extends Controller
 {
-  private static $files = ["legend", "classic-70s", "classic-80s", "classic-90s", "classic-2000s", "classic-2010s", "modern", "future_star", "world_cup", "euro"];
+  private static $files = ["legend", "classic-70s", "classic-80s", "classic-90s", "classic-2000s", "classic-2010s", "modern", "future-star", "world-cup", "euro"];
 
   public function index(): Response
   {
-    $players = $this->getAllPlayers();
+    $players = array_map(function ($player) {
+      return $this->getPlayerDataInClub($player);
+    }, $this->getAllPlayers());
     return $this->json($players);
   }
 
@@ -61,7 +63,7 @@ class MarketPlayerController extends Controller
   {
     // generate dummy data for player in club
     $playerInClub = [
-      'id' => "1234",
+      'id' => \App\Helpers\Football::generatePlayerUUID(),
       'clubId' => "a4c9e3f1b27d45d8a2f6e8c49b31c7a2",
       'shirtNumber' => 10,
       'playerIndex' => 1,
