@@ -75,5 +75,6 @@ $router->get('/app/database', [DatabaseController::class, 'index']);
 
 // API
 $router->get('/api/football/market/list', [MarketPlayerController::class, 'index']);
+$router->post('/api/football/item/player/new', [MarketPlayerController::class, 'generatePlayer']);
 
 return $router;

@@ -13,4 +13,14 @@ class MarketPlayerController extends Controller
     $players = \App\Helpers\Common::getJsonFileData($path);
     return $this->json(['data' => $players]);
   }
+
+  public function generatePlayer(): Response
+  {
+    $player = [
+      'uuid' => \App\Helpers\Football::generatePlayerUUID(),
+      'avatarUrl' => ''
+    ];
+
+    return $this->json([$player]);
+  }
 }
