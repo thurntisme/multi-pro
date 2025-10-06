@@ -106,7 +106,7 @@ ob_start();
 
             <!-- end card -->
             <div class="text-center mb-4">
-                <a href="<?= App\Helpers\NetworkHelper::home_url('tip') ?>" class="btn btn-light w-sm">Back</a>
+                <a href="<?= App\Helpers\Network::home_url('tip') ?>" class="btn btn-light w-sm">Back</a>
                 <button type="submit"
                     class="btn btn-success w-sm"><?= $modify_type === "new" ? "Create" : "Save" ?></button>
             </div>
@@ -118,8 +118,8 @@ ob_start();
                     <h5 class="card-title mb-0">Action</h5>
                 </div>
                 <div class="card-body">
-                    <a href="<?= App\Helpers\NetworkHelper::home_url('tip') ?>" class="btn btn-light w-sm">Back</a>
-                    <a href="<?= App\Helpers\NetworkHelper::home_url('tip/detail?id=' . $postData['id']) ?>"
+                    <a href="<?= App\Helpers\Network::home_url('tip') ?>" class="btn btn-light w-sm">Back</a>
+                    <a href="<?= App\Helpers\Network::home_url('tip/detail?id=' . $postData['id']) ?>"
                         class="btn btn-info w-sm mx-2">View</a>
                     <?php if (!empty($post_id)) { ?>
                         <button type="button" class="btn btn-danger w-sm" data-bs-toggle="modal"

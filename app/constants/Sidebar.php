@@ -25,17 +25,12 @@ class Sidebar
                 ],
                 [
                     'name' => 'Habit',
-                    'icon' => 'ri-sticky-note-line',
+                    'icon' => 'ri-calendar-check-line',
                     'slug' => 'habit'
                 ],
                 [
-                    'name' => 'Daily Checklist',
-                    'icon' => 'ri-calendar-check-line',
-                    'slug' => 'daily-checklist'
-                ],
-                [
                     'name' => 'Income',
-                    'icon' => 'ri-wallet-3-line',
+                    'icon' => 'ri-money-dollar-circle-line',
                     'slug' => 'income'
                 ],
                 [
@@ -45,12 +40,12 @@ class Sidebar
                 ],
                 [
                     'name' => 'Journal',
-                    'icon' => 'ri-wallet-3-line',
+                    'icon' => 'ri-book-2-line',
                     'slug' => 'journal'
                 ],
                 [
                     'name' => 'Subscription',
-                    'icon' => 'ri-calendar-check-line',
+                    'icon' => 'ri-secure-payment-line',
                     'slug' => 'subscription'
                 ],
                 [
@@ -65,64 +60,9 @@ class Sidebar
                 ],
                 [
                     'name' => 'Workout',
-                    'icon' => 'ri-calendar-event-fill',
+                    'icon' => 'ri-heart-pulse-fill',
                     'slug' => 'workout'
                 ],
-            ]
-        ],
-        [
-            'title' => 'Tech Stack',
-            'sub_items' => [
-                [
-                    'name' => 'Wordpress',
-                    'icon' => 'mdi mdi-wordpress',
-                    'slug' => 'wordpress'
-                ],
-                [
-                    'name' => 'ReactJS',
-                    'icon' => 'mdi mdi-react',
-                    'slug' => 'reactjs'
-                ],
-                [
-                    'name' => 'PHP',
-                    'icon' => 'mdi mdi-language-php',
-                    'slug' => 'php'
-                ],
-                [
-                    'name' => 'MySql',
-                    'icon' => 'mdi mdi-database-outline',
-                    'slug' => 'mysql'
-                ],
-                [
-                    'name' => 'English',
-                    'icon' => 'mdi mdi-google-translate',
-                    'slug' => 'english'
-                ],
-            ]
-        ],
-        [
-            'title' => 'App',
-            'sub_items' => [
-                [
-                    'name' => 'Short Link',
-                    'icon' => 'ri-link-m',
-                    'slug' => 'short-link'
-                ],
-                [
-                    'name' => 'Generate QR',
-                    'icon' => 'ri-qr-code-line',
-                    'slug' => 'generate-qr'
-                ],
-                [
-                    'name' => 'AI Chat',
-                    'icon' => 'ri-chat-3-line',
-                    'slug' => 'ai-chat'
-                ],
-                [
-                    'name' => 'File Manager',
-                    'icon' => 'ri-folder-5-line',
-                    'slug' => 'file-manager'
-                ]
             ]
         ],
         [
@@ -135,34 +75,19 @@ class Sidebar
                 ],
                 [
                     'name' => 'Task',
-                    'icon' => 'ri-folder-5-line',
+                    'icon' => 'ri-task-line',
                     'slug' => 'task'
                 ],
                 [
                     'name' => 'Client',
-                    'icon' => 'ri-folder-5-line',
+                    'icon' => 'ri-building-line',
                     'slug' => 'client'
                 ],
-                [
-                    'name' => 'Estimation',
-                    'icon' => 'ri-folder-5-line',
-                    'slug' => 'estimation'
-                ],
-                [
-                    'name' => 'Resume',
-                    'icon' => 'ri-folder-5-line',
-                    'slug' => 'resume'
-                ],
-                [
-                    'name' => 'Report Working',
-                    'icon' => 'ri-clipboard-line',
-                    'slug' => 'report-working'
-                ],
-                [
-                    'name' => 'Maintain Web',
-                    'icon' => 'ri-global-line',
-                    'slug' => 'maintain-web'
-                ],
+            ]
+        ],
+        [
+            'title' => 'Development',
+            'sub_items' => [
                 [
                     'name' => 'SEO Checklist',
                     'icon' => 'ri-search-line',
@@ -177,42 +102,37 @@ class Sidebar
                     'name' => 'Web Secure Checklist',
                     'icon' => 'ri-shield-line',
                     'slug' => 'web-secure-checklist'
-                ]
+                ],
+                [
+                    'name' => 'Maintain Web',
+                    'icon' => 'ri-shield-check-line',
+                    'slug' => 'maintain-web'
+                ],
             ]
         ],
         [
-            'title' => 'Development',
+            'title' => 'Tools',
             'sub_items' => [
                 [
-                    'name' => 'Code',
-                    'icon' => 'ri-code-line',
-                    'slug' => 'code'
+                    'name' => 'Estimation',
+                    'icon' => 'ri-ruler-line',
+                    'slug' => 'estimation'
                 ],
                 [
-                    'name' => 'Tip',
-                    'icon' => 'ri-lightbulb-line',
-                    'slug' => 'tip'
+                    'name' => 'Resume',
+                    'icon' => 'ri-folder-5-line',
+                    'slug' => 'resume'
                 ],
                 [
-                    'name' => 'Book',
-                    'icon' => 'ri-book-open-line',
-                    'slug' => 'book'
+                    'name' => 'Report Working',
+                    'icon' => 'ri-clipboard-line',
+                    'slug' => 'report'
                 ],
                 [
-                    'name' => 'Git',
-                    'icon' => 'ri-git-merge-line',
-                    'slug' => 'git'
+                    'name' => 'Pdf Reader',
+                    'icon' => 'ri-pdf-line',
+                    'slug' => 'pdf-reader'
                 ],
-                [
-                    'name' => 'Course',
-                    'icon' => 'ri-graduation-cap-line',
-                    'slug' => 'course'
-                ],
-                [
-                    'name' => 'Blog',
-                    'icon' => 'ri-article-line',
-                    'slug' => 'blog'
-                ]
             ]
         ],
         [
@@ -225,54 +145,24 @@ class Sidebar
                 ],
                 [
                     'name' => 'Website',
-                    'icon' => 'ri-links-line',
+                    'icon' => 'ri-window-line',
                     'slug' => 'website'
                 ]
             ]
         ],
         [
-            'title' => 'Tools',
+            'title' => 'System',
             'sub_items' => [
                 [
-                    'name' => 'Lucky Wheel',
-                    'icon' => 'ri-search-eye-line',
-                    'slug' => 'lucky-wheel'
-                ]
-            ]
-        ],
-        [
-            'title' => 'Game',
-            'sub_items' => [
-                [
-                    'name' => 'Football Manager',
-                    'icon' => 'ri-football-line',
-                    'slug' => 'football-manager'
+                    'name' => 'File Manage',
+                    'icon' => 'ri-file-upload-line',
+                    'slug' => 'file-manager'
                 ],
                 [
-                    'name' => 'Number Guessing',
-                    'icon' => 'ri-numbers-line',
-                    'slug' => 'number-guessing'
+                    'name' => 'Database',
+                    'icon' => 'ri-database-2-line',
+                    'slug' => 'database'
                 ],
-                [
-                    'name' => 'Slot Machine',
-                    'icon' => 'ri-numbers-line',
-                    'slug' => 'slot-machine'
-                ],
-                [
-                    'name' => 'Flip Memory',
-                    'icon' => 'ri-numbers-line',
-                    'slug' => 'flip-memory'
-                ],
-                [
-                    'name' => 'Lottery Simulator',
-                    'icon' => 'ri-numbers-line',
-                    'slug' => 'lottery-simulator'
-                ],
-                [
-                    'name' => 'Monopoly',
-                    'icon' => 'ri-numbers-line',
-                    'slug' => 'monopoly'
-                ]
             ]
         ],
         [
@@ -281,54 +171,24 @@ class Sidebar
                 [
                     'name' => 'Settings',
                     'icon' => 'ri-settings-3-line',
-                    'slug' => 'my-settings',
+                    'slug' => 'settings',
                 ],
                 [
                     'name' => 'Notifications',
                     'icon' => 'ri-notification-2-line',
-                    'slug' => 'my-notification',
+                    'slug' => 'notifications',
                 ],
                 [
                     'name' => 'Package',
                     'icon' => 'ri-star-s-line',
-                    'slug' => 'my-package',
+                    'slug' => 'package',
                 ],
                 [
                     'name' => 'Profile',
                     'icon' => 'ri-user-settings-line',
-                    'slug' => 'my-profile',
+                    'slug' => 'profile',
                 ],
             ]
         ],
-        [
-            'title' => 'System',
-            'sub_items' => [
-                [
-                    'name' => 'API Log',
-                    'icon' => 'ri-file-list-2-line',
-                    'slug' => 'api-log'
-                ],
-                [
-                    'name' => 'User Management',
-                    'icon' => 'ri-user-line',
-                    'slug' => 'user-management'
-                ],
-                [
-                    'name' => 'Settings',
-                    'icon' => 'ri-settings-2-line',
-                    'slug' => 'settings'
-                ],
-                [
-                    'name' => 'Mail Log',
-                    'icon' => 'ri-mail-line',
-                    'slug' => 'mail'
-                ],
-                [
-                    'name' => 'Database',
-                    'icon' => 'ri-database-2-line',
-                    'slug' => 'database'
-                ]
-            ]
-        ]
     ];
 }

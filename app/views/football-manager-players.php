@@ -157,7 +157,7 @@ ob_start();
                 <?php } else { ?>
                     <div class="p-3">
                         <div class="text-muted">Find players and register them for your team.</div>
-                        <a href="<?= App\Helpers\NetworkHelper::home_url('app/football-manager/transfer') ?>"
+                        <a href="<?= App\Helpers\Network::home_url('app/football-manager/transfer') ?>"
                             class="btn btn-soft-primary mt-2">Go to Market <i
                                 class="ri-arrow-right-line ms-1 align-middle"></i></a>
                     </div>

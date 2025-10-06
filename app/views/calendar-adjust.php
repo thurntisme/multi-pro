@@ -144,7 +144,7 @@ $pageContent = ob_get_clean();
 
 ob_start(); ?>
 <script type="text/javascript"
-    src="<?= App\Helpers\NetworkHelper::home_url('assets/libs/fullcalendar/index.global.min.js') ?>"></script>
+    src="<?= App\Helpers\Network::home_url('assets/libs/fullcalendar/index.global.min.js') ?>"></script>
 <script type="text/javascript">
     flatpickr($("#event-start-date"), {
         altInput: true,

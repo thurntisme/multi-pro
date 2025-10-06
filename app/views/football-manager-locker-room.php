@@ -57,39 +57,39 @@ ob_start();
                                             <th class="text-center px-1" style="width: 40px;">#</th>
                                             <th style="padding-left: 62px;">Name</th>
                                             <th class="text-center px-1" style="width: 52px;">
-                                                <img src="<?= App\Helpers\NetworkHelper::home_url('assets/images/football-manager/stamina.png') ?>"
+                                                <img src="<?= App\Helpers\Network::home_url('assets/images/football-manager/stamina.png') ?>"
                                                     class="img-responsive avatar-xxs" alt="stamina" />
                                             </th>
                                             <th class="text-center px-1" style="width: 52px;">
-                                                <img src="<?= App\Helpers\NetworkHelper::home_url('assets/images/football-manager/star.png') ?>"
+                                                <img src="<?= App\Helpers\Network::home_url('assets/images/football-manager/star.png') ?>"
                                                     class="img-responsive avatar-xxs" alt="average score">
                                             </th>
                                             <th class="text-center px-1" style="width: 52px;">
-                                                <img src="<?= App\Helpers\NetworkHelper::home_url('assets/images/football-manager/player-ability.png') ?>"
+                                                <img src="<?= App\Helpers\Network::home_url('assets/images/football-manager/player-ability.png') ?>"
                                                     class="img-responsive avatar-xxs" alt="player ability" />
                                             </th>
                                             <th class="text-center px-1" style="width: 52px;">
-                                                <img src="<?= App\Helpers\NetworkHelper::home_url('assets/images/football-manager/shirt.png') ?>"
+                                                <img src="<?= App\Helpers\Network::home_url('assets/images/football-manager/shirt.png') ?>"
                                                     class="img-responsive avatar-xxs" alt="shirt number" />
                                             </th>
                                             <th class="text-center px-1" style="width: 52px;">
-                                                <img src="<?= App\Helpers\NetworkHelper::home_url('assets/images/football-manager/assist.png') ?>"
+                                                <img src="<?= App\Helpers\Network::home_url('assets/images/football-manager/assist.png') ?>"
                                                     class="img-responsive avatar-xxs" alt="assist" />
                                             </th>
                                             <th class="text-center px-1" style="width: 52px;">
-                                                <img src="<?= App\Helpers\NetworkHelper::home_url('assets/images/football-manager/goal.png') ?>"
+                                                <img src="<?= App\Helpers\Network::home_url('assets/images/football-manager/goal.png') ?>"
                                                     class="img-responsive avatar-xxs" alt="goals" />
                                             </th>
                                             <th class="text-center px-1" style="width: 52px;">
-                                                <img src="<?= App\Helpers\NetworkHelper::home_url('assets/images/football-manager/yellow-card.png') ?>"
+                                                <img src="<?= App\Helpers\Network::home_url('assets/images/football-manager/yellow-card.png') ?>"
                                                     class="img-responsive avatar-xxs" alt="yellow card" />
                                             </th>
                                             <th class="text-center px-1" style="width: 52px;">
-                                                <img src="<?= App\Helpers\NetworkHelper::home_url('assets/images/football-manager/red-card.png') ?>"
+                                                <img src="<?= App\Helpers\Network::home_url('assets/images/football-manager/red-card.png') ?>"
                                                     class="img-responsive avatar-xxs" alt="red card" />
                                             </th>
                                             <th class="text-center px-1" style="width: 52px;">
-                                                <img src="<?= App\Helpers\NetworkHelper::home_url('assets/images/football-manager/contract-time.png') ?>"
+                                                <img src="<?= App\Helpers\Network::home_url('assets/images/football-manager/contract-time.png') ?>"
                                                     class="img-responsive avatar-xxs" alt="contract time" />
                                             </th>
                                             <th style="width: 80px;"></th>
@@ -131,7 +131,8 @@ ob_start();
                                                             </div>
                                                         </td>
                                                         <td class="text-center px-1" style="width: 52px;">
-                                                            <?= $item['match_played'] ?></td>
+                                                            <?= $item['match_played'] ?>
+                                                        </td>
                                                         <td class="text-center px-1" style="width: 52px;"><?= $item['avg_score'] ?>
                                                         </td>
                                                         <td class="text-center px-1" style="width: 52px;"><?= $item['ability'] ?>
@@ -142,9 +143,11 @@ ob_start();
                                                         <td class="text-center px-1" style="width: 52px;"><?= $item['assists'] ?>
                                                         </td>
                                                         <td class="text-center px-1" style="width: 52px;">
-                                                            <?= $item['goals_scored'] ?></td>
+                                                            <?= $item['goals_scored'] ?>
+                                                        </td>
                                                         <td class="text-center px-1" style="width: 52px;">
-                                                            <?= $item['yellow_cards'] ?></td>
+                                                            <?= $item['yellow_cards'] ?>
+                                                        </td>
                                                         <td class="text-center px-1" style="width: 52px;"><?= $item['red_cards'] ?>
                                                         </td>
                                                         <td class="text-center px-1" style="width: 52px;">
@@ -172,7 +175,7 @@ ob_start();
                                         <div class="text-muted">Find player and register they into your
                                             team
                                         </div>
-                                        <a href="<?= App\Helpers\NetworkHelper::home_url('football-manager/transfer') ?>"
+                                        <a href="<?= App\Helpers\Network::home_url('football-manager/transfer') ?>"
                                             class="btn btn-soft-primary mt-2">Go to Market <i
                                                 class="ri-arrow-right-line ms-1 align-middle"></i></a>
                                     </div>
@@ -210,7 +213,8 @@ ob_start();
                                     <div class="col-6 text-center">
                                         <h5 class="fs-14 mb-1" id="player-name"><?= $myTeam['players'][0]['name'] ?></h5>
                                         <p class="text-muted mb-0 fs-12 mb-1" id="player-nationality">
-                                            <?= $myTeam['players'][0]['nationality'] ?></p>
+                                            <?= $myTeam['players'][0]['nationality'] ?>
+                                        </p>
                                         <p class="text-muted mb-0 fs-12"><span
                                                 id="player-best_position"><?= $myTeam['players'][0]['best_position'] ?></span>
                                             (<span id="player-ability"><?= $myTeam['players'][0]['ability'] ?></span>)
@@ -308,7 +312,7 @@ ob_start();
             <div class="card">
                 <div class="card-body text-center py-5">
                     <h3>Please register a team</h3>
-                    <a href="<?= App\Helpers\NetworkHelper::home_url('football-manager') ?>" class="btn btn-link">Back to
+                    <a href="<?= App\Helpers\Network::home_url('football-manager') ?>" class="btn btn-link">Back to
                         home <i class="ri-arrow-right-line ms-1 align-middle"></i></a>
                 </div>
             </div>

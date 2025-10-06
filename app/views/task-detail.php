@@ -31,7 +31,7 @@ ob_start();
         include_once DIR . '/components/alert.php';
         ?>
         <div class="mb-3 d-flex gap-1 justify-content-between align-items-center">
-            <a href="<?= App\Helpers\NetworkHelper::home_url('app/project/detail?id=' . $postData['project_id']) ?>"
+            <a href="<?= App\Helpers\Network::home_url('app/project/detail?id=' . $postData['project_id']) ?>"
                 class="btn btn-soft-primary btn-label waves-effect waves-light me-auto"><i
                     class="ri-arrow-left-line label-icon align-middle fs-16 me-2"></i>Back to project</a>
             <form method="POST" action="<?= $_SERVER['REQUEST_URI'] ?>">
@@ -102,7 +102,7 @@ ob_start();
 ?>
 
 <script
-    src='<?= App\Helpers\NetworkHelper::home_url("/assets/libs/@ckeditor/ckeditor5-build-classic/build/ckeditor.js") ?>'></script>
+    src='<?= App\Helpers\Network::home_url("/assets/libs/@ckeditor/ckeditor5-build-classic/build/ckeditor.js") ?>'></script>
 <script>
     $("#choices-status-input").on("change", function (e) {
         const value = $(this).val();

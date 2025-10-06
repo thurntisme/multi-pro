@@ -26,6 +26,6 @@ ob_start();
 $pageContent = ob_get_clean();
 
 ob_start(); ?>
-<script src="<?= App\Helpers\NetworkHelper::home_url("assets/js/pages/flip-memory.js") ?>"></script>
+<script src="<?= App\Helpers\Network::home_url("assets/js/pages/flip-memory.js") ?>"></script>
 <?php
 $additionJs = ob_get_clean();

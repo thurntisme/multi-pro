@@ -64,7 +64,7 @@ ob_start();
                                         <div class="col-5">
                                             <div class="d-flex align-items-center justify-content-end">
                                                 <div class="avatar-md me-3">
-                                                    <img src="<?= App\Helpers\NetworkHelper::home_url("assets/images/users/avatar-1.jpg") ?>"
+                                                    <img src="<?= App\Helpers\Network::home_url("assets/images/users/avatar-1.jpg") ?>"
                                                         alt="" id="candidate-img"
                                                         class="img-thumbnail rounded-circle shadow-none">
                                                 </div>
@@ -83,7 +83,7 @@ ob_start();
                                             <div class="d-flex align-items-center justify-content-start">
                                                 <h5 class="mb-0 w-50"><?= $match['away_team'] ?></h5>
                                                 <div class="avatar-md me-3">
-                                                    <img src="<?= App\Helpers\NetworkHelper::home_url("assets/images/users/avatar-1.jpg") ?>"
+                                                    <img src="<?= App\Helpers\Network::home_url("assets/images/users/avatar-1.jpg") ?>"
                                                         alt="" id="candidate-img"
                                                         class="img-thumbnail rounded-circle shadow-none">
                                                 </div>
@@ -92,7 +92,8 @@ ob_start();
                                     </div>
                                     <div class="text-center mt-2">
                                         <h4 class="badge bg-warning-subtle text-warning fs-18 m-0">
-                                            <?= formatCurrency($match['draft_budget']) ?></h4>
+                                            <?= formatCurrency($match['draft_budget']) ?>
+                                        </h4>
                                     </div>
                                 </div>
                                 <div class="p-5">
@@ -128,7 +129,7 @@ ob_start();
                         </div>
                     </div>
                     <div class="text-center mb-4">
-                        <a href="<?= App\Helpers\NetworkHelper::home_url("app/football-manager") ?>"
+                        <a href="<?= App\Helpers\Network::home_url("app/football-manager") ?>"
                             class="btn btn-primary">Next</a>
                     </div>
                     <?php

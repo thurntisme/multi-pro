@@ -11,8 +11,8 @@ ob_start();
                     <p class="text-muted">Get your free Mercufee account now</p>
                 </div>
                 <div class="p-2 mt-4">
-                    <form class="needs-validation" novalidate
-                        action="<?= App\Helpers\NetworkHelper::home_url('register') ?>" method="POST">
+                    <form class="needs-validation" novalidate action="<?= App\Helpers\Network::home_url('register') ?>"
+                        method="POST">
 
                         <div class="mb-3">
                             <label for="email" class="form-label">Email <span class="text-danger">*</span></label>
@@ -79,7 +79,7 @@ ob_start();
 
                         <div class="mb-4">
                             <p class="mb-0 fs-12 text-muted fst-italic">By registering you agree to the
-                                <?= DEFAULT_SITE_NAME ?> <a href="#"
+                                <?= APP_NAME ?> <a href="#"
                                     class="text-primary text-decoration-underline fst-normal fw-medium">Terms
                                     of Use</a>
                             </p>
@@ -122,7 +122,7 @@ ob_start();
         <!-- end card -->
 
         <div class="mt-4 text-center">
-            <p class="mb-0">Already have an account ? <a href="<?= App\Helpers\NetworkHelper::home_url('login') ?>"
+            <p class="mb-0">Already have an account ? <a href="<?= App\Helpers\Network::home_url('login') ?>"
                     class="fw-semibold text-primary text-decoration-underline"> Login </a> </p>
         </div>
 
@@ -133,10 +133,10 @@ ob_start();
 $pageContent = ob_get_clean();
 
 ob_start(); ?>
-<script src="<?= App\Helpers\NetworkHelper::home_url('assets/js/pages/password-create.init.js') ?>">
+<script src="<?= App\Helpers\Network::home_url('assets/js/pages/password-create.init.js') ?>">
 </script>
 
 <?php
 $additionJs = ob_get_clean();
 
-include LAYOUTS_PATH . '/auth.php';
+include LAYOUTS_DIR . '/auth.php';

@@ -126,7 +126,7 @@ $pageContent = ob_get_clean();
 
 ob_start(); ?>
 <script
-    src='<?= App\Helpers\NetworkHelper::home_url("/assets/libs/@ckeditor/ckeditor5-build-classic/build/ckeditor.js") ?>'></script>
+    src='<?= App\Helpers\Network::home_url("/assets/libs/@ckeditor/ckeditor5-build-classic/build/ckeditor.js") ?>'></script>
 <script type="text/javascript">
     $("#payment_type").on("change", function () {
         const payment_type = $(this).val();

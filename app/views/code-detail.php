@@ -209,9 +209,9 @@ ob_start();
                                 <h5 class="card-title mb-0">Action</h5>
                             </div>
                             <div class="card-body">
-                                <a href="<?= App\Helpers\NetworkHelper::home_url('code') ?>"
+                                <a href="<?= App\Helpers\Network::home_url('code') ?>"
                                     class="btn btn-light w-sm">Back</a>
-                                <a href="<?= App\Helpers\NetworkHelper::home_url('code/edit?id=' . $postData['id']) ?>"
+                                <a href="<?= App\Helpers\Network::home_url('code/edit?id=' . $postData['id']) ?>"
                                     class="btn btn-info w-sm mx-2">Edit</a>
                             </div>
                         </div>

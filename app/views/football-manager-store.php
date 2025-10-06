@@ -40,7 +40,7 @@ include_once DIR . '/components/alert.php';
                     </li>
                     <li class="nav-item">
                         <a class="nav-link"
-                            href="<?= App\Helpers\NetworkHelper::home_url("football-manager/store/inventory") ?>">
+                            href="<?= App\Helpers\Network::home_url("football-manager/store/inventory") ?>">
                             My Inventory
                         </a>
                     </li>

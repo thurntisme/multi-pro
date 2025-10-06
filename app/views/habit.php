@@ -1,0 +1,10 @@
+<?php
+ob_start();
+?>
+
+<h1>Habit Page</h1>
+
+<?php
+$pageContent = ob_get_clean();
+
+include_once LAYOUTS_DIR . 'dashboard.php';

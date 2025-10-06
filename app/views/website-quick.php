@@ -35,10 +35,10 @@ ob_start();
     <div class="row mb-4">
         <div class="col-md-9 offset-md-3">
             <div class="d-flex justify-content-center gap-1">
-                <a href="<?= App\Helpers\NetworkHelper::home_url('app/website') ?>"
+                <a href="<?= App\Helpers\Network::home_url('app/website') ?>"
                     class="btn btn-soft-primary btn-label waves-effect waves-light w-auto"><i
                         class="ri-arrow-left-line label-icon align-middle fs-16 me-2"></i>Back to List</a>
-                <form method="GET" action="<?= App\Helpers\NetworkHelper::home_url('app/website/quick') ?>"
+                <form method="GET" action="<?= App\Helpers\Network::home_url('app/website/quick') ?>"
                     class="w-50 d-flex gap-1">
                     <input type="text" class="form-control" name="s" placeholder="Enter your keyword..."
                         value="<?= $keyword ?>">
@@ -46,7 +46,7 @@ ob_start();
                     </button>
                 </form>
                 <a class="btn btn-danger" id="btn-reset"
-                    href="<?= App\Helpers\NetworkHelper::home_url('app/website/quick') ?>"><i
+                    href="<?= App\Helpers\Network::home_url('app/website/quick') ?>"><i
                         class="ri-delete-bin-line"></i></a>
             </div>
         </div>

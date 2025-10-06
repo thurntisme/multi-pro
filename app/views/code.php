@@ -19,14 +19,14 @@ include_once DIR . '/components/alert.php';
             <h5 class="card-title mb-0 flex-grow-1">All Codes</h5>
             <div class="flex-shrink-0">
                 <div class="d-flex flex-wrap gap-2">
-                    <a class="btn btn-danger add-btn" href="<?= App\Helpers\NetworkHelper::home_url('code/new') ?>"><i
+                    <a class="btn btn-danger add-btn" href="<?= App\Helpers\Network::home_url('code/new') ?>"><i
                             class="ri-add-line align-bottom me-1"></i> Create Code</a>
                 </div>
             </div>
         </div>
     </div>
     <div class="card-body border border-dashed border-end-0 border-start-0">
-        <form method="get" action="<?= App\Helpers\NetworkHelper::home_url('code') ?>">
+        <form method="get" action="<?= App\Helpers\Network::home_url('code') ?>">
             <div class="row g-3">
                 <div class="col-xxl-5 col-sm-12">
                     <div class="search-box">
@@ -88,10 +88,10 @@ include_once DIR . '/components/alert.php';
                                         <div class="flex-shrink-0 ms-4">
                                             <ul class="list-inline tasks-list-menu mb-0">
                                                 <li class="list-inline-item"><a
-                                                        href="<?= App\Helpers\NetworkHelper::home_url('code/detail?id=' . $item['id']) ?>"><i
+                                                        href="<?= App\Helpers\Network::home_url('code/detail?id=' . $item['id']) ?>"><i
                                                             class="ri-eye-fill align-bottom me-2 text-muted"></i></a></li>
                                                 <li class="list-inline-item"><a class="edit-item-btn"
-                                                        href="<?= App\Helpers\NetworkHelper::home_url('code/edit?id=' . $item['id']) ?>"><i
+                                                        href="<?= App\Helpers\Network::home_url('code/edit?id=' . $item['id']) ?>"><i
                                                             class="ri-pencil-fill align-bottom me-2 text-muted"></i></a></li>
                                             </ul>
                                         </div>

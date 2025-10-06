@@ -115,7 +115,7 @@ ob_start();
                                                 <td class="text-center"><?= formatCurrency($item['market_value']) ?></td>
                                                 <td class="text-center hstack gap-1 justify-content-center">
                                                     <?php if ($myTeam['budget'] >= $item['market_value'] && !isPlayerInTeam($item['uuid'])) { ?>
-                                                        <a href="<?= App\Helpers\NetworkHelper::home_url("app/football-manager/transfer/buy?p_uuid=" . $item['uuid']) ?>"
+                                                        <a href="<?= App\Helpers\Network::home_url("app/football-manager/transfer/buy?p_uuid=" . $item['uuid']) ?>"
                                                             class="btn btn-soft-success">
                                                             <i class="ri ri-shopping-cart-line"></i>
                                                         </a>

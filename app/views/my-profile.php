@@ -74,7 +74,7 @@ ob_start();
     <div>
       <div class="d-flex profile-wrapper">
         <div class="flex-shrink-0 ms-auto">
-          <a href="<?= App\Helpers\NetworkHelper::home_url('settings') ?>" class="btn btn-success"><i
+          <a href="<?= App\Helpers\Network::home_url('settings') ?>" class="btn btn-success"><i
               class="ri-edit-box-line align-bottom"></i> Edit Profile</a>
         </div>
       </div>

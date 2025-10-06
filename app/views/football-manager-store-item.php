@@ -162,7 +162,7 @@ include_once DIR . '/components/alert.php';
                     </div>
                     <div class="card-footer">
                         <div class="hstack justify-content-center gap-2">
-                            <a href="<?= App\Helpers\NetworkHelper::home_url('football-manager/store') ?>"
+                            <a href="<?= App\Helpers\Network::home_url('football-manager/store') ?>"
                                 class="btn btn-ghost-dark"><i class="ri-close-line align-bottom"></i> Cancel</a>
                             <button type="submit" class="btn btn-primary">Submit</button>
                         </div>

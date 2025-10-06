@@ -1,11 +1,3 @@
-/*
-Template Name: Velzon - Admin & Dashboard Template
-Author: Themesbrand
-Website: https://Themesbrand.com/
-Contact: Themesbrand@gmail.com
-File: todo init js
-*/
-
 var todoList = [{
     'id': '1',
     "checkedElem": false,
@@ -294,14 +286,6 @@ Array.prototype.slice.call(createFolderForms).forEach(function (form) {
     form.classList.add('was-validated');
   }, false)
 });
-
-const projectModalEl = document.getElementById('createProjectModal')
-projectModalEl.addEventListener('show.bs.modal', event => {
-    document.getElementById("projectname-input").value = "";
-    document.querySelectorAll(".createProject-form").forEach(function(item){
-        item.classList.remove("was-validated");
-    })
-})
 
 var editList = false;
 flatpickr("#task-duedate-input", {
@@ -644,15 +628,6 @@ Array.from(document.querySelectorAll(".file-menu-btn")).forEach(function (item) 
             isShowMenu = true;
         });
     });
-});
-
-window.addEventListener('click', function (e) {
-    if (document.querySelector(".file-manager-sidebar").classList.contains('menubar-show')) {
-        if (!isShowMenu) {
-            document.querySelector(".file-manager-sidebar").classList.remove("menubar-show");
-        }
-        isShowMenu = false;
-    }
 });
 
 function tooltipElm(){

@@ -62,7 +62,7 @@
                         <script>
                             document.write(new Date().getFullYear())
                         </script>
-                        © <?= DEFAULT_SITE_NAME ?>
+                        © <?= APP_NAME ?>
                     </p>
                 </div>
             </div>

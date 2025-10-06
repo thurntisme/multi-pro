@@ -46,7 +46,7 @@ ob_start();
             </div>
             <div class="card-body text-center">
                 <div class="position-relative d-inline-block">
-                    <img src="<?= App\Helpers\NetworkHelper::home_url('assets/images/users/avatar-1.jpg') ?>" alt=""
+                    <img src="<?= App\Helpers\Network::home_url('assets/images/users/avatar-1.jpg') ?>" alt=""
                         class="avatar-lg rounded-circle img-thumbnail">
                     <span class="contact-active position-absolute rounded-circle bg-success"><span
                             class="visually-hidden"></span>

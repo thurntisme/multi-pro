@@ -4,8 +4,8 @@
 
 <head>
 
-    <?php include_once LAYOUTS_PATH . 'partials/title-meta.php' ?>
-    <?php include_once LAYOUTS_PATH . 'partials/head-css.php'; ?>
+    <?php include_once LAYOUTS_DIR . 'partials/title-meta.php' ?>
+    <?php include_once LAYOUTS_DIR . 'partials/head-css.php'; ?>
 
 </head>
 
@@ -31,9 +31,8 @@
                     <div class="col-lg-12">
                         <div class="text-center mt-sm-5 mb-4 text-white-50">
                             <div>
-                                <a href="<?= App\Helpers\NetworkHelper::home_url('') ?>"
-                                    class="d-inline-block auth-logo">
-                                    <img src="<?= App\Helpers\NetworkHelper::home_url('assets/images/logo-light.png') ?>"
+                                <a href="<?= App\Helpers\Network::home_url('') ?>" class="d-inline-block auth-logo">
+                                    <img src="<?= App\Helpers\Network::home_url('assets/images/logo-light.png') ?>"
                                         alt="" height="20">
                                 </a>
                             </div>
@@ -70,14 +69,14 @@
     </div>
     <!-- end auth-page-wrapper -->
 
-    <?php include_once LAYOUTS_PATH . 'partials/vendor-scripts.php'; ?>
+    <?php include_once LAYOUTS_DIR . 'partials/vendor-scripts.php'; ?>
 
     <!-- particles js -->
-    <script src="<?= App\Helpers\NetworkHelper::home_url("assets/libs/particles.js/particles.js") ?>"></script>
+    <script src="<?= App\Helpers\Network::home_url("assets/libs/particles.js/particles.js") ?>"></script>
     <!-- particles app js -->
-    <script src="<?= App\Helpers\NetworkHelper::home_url("assets/js/pages/particles.app.js") ?>"></script>
+    <script src="<?= App\Helpers\Network::home_url("assets/js/pages/particles.app.js") ?>"></script>
     <!-- validation init -->
-    <script src="<?= App\Helpers\NetworkHelper::home_url("assets/js/pages/form-validation.init.js") ?>"></script>
+    <script src="<?= App\Helpers\Network::home_url("assets/js/pages/form-validation.init.js") ?>"></script>
 
     <?php
     if (!empty($additionJs)) {

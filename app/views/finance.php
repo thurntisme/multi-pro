@@ -195,7 +195,8 @@ include_once DIR . '/components/alert.php';
                                 <p class="fw-medium text-muted mb-0">Daily Expense</p>
                                 <h2 class="mt-3 ff-secondary fw-semibold fs-22">
                                     <?= convertAmount($dailyExpenses['expense']); ?>
-                                    vnd</h2>
+                                    vnd
+                                </h2>
                                 <?php if (!empty($dailyExpenses['lastExpense']) && $dailyExpenses['lastExpense'] > 0) { ?>
                                     <span class="text-muted fs-12">/ <?= convertAmount($dailyExpenses['lastExpense']); ?>
                                         vnd</span>
@@ -216,7 +217,8 @@ include_once DIR . '/components/alert.php';
                                 <p class="fw-medium text-muted mb-0">My Balance</p>
                                 <h2 class="mt-3 ff-secondary fw-semibold fs-22">
                                     <?= convertAmount($balance['expense']); ?>
-                                    vnd</h2>
+                                    vnd
+                                </h2>
                                 <?php if (!empty($balance['lastExpense']) && $balance['lastExpense'] > 0) { ?>
                                     <span class="text-muted fs-12">/ <?= convertAmount($balance['lastExpense']); ?>
                                         vnd</span>
@@ -268,8 +270,7 @@ include_once DIR . '/components/alert.php';
                                     class="ri-equalizer-fill me-1 align-bottom"></i>
                                 Filters
                             </button>
-                            <a href="<?= App\Helpers\NetworkHelper::home_url("finance") ?>"
-                                class="btn btn-danger ms-1"><i
+                            <a href="<?= App\Helpers\Network::home_url("finance") ?>" class="btn btn-danger ms-1"><i
                                     class="ri-delete-bin-2-fill me-1 align-bottom"></i>Reset</a>
                         </div>
                         <!--end col-->
@@ -374,7 +375,7 @@ $pageContent = ob_get_clean();
 
 ob_start();
 ?>
-<script src="<?= App\Helpers\NetworkHelper::home_url('assets/libs/cleave.js/cleave.min.js') ?>"></script>
+<script src="<?= App\Helpers\Network::home_url('assets/libs/cleave.js/cleave.min.js') ?>"></script>
 <script type="text/javascript">
     new Cleave('#amount-Input', {
         numeral: true,

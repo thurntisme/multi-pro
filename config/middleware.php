@@ -1,5 +1,6 @@
 <?php
 
 return [
-    "csrf" => \App\Middleware\CsrfMiddleware::class
+    "auth" => \App\Middleware\AuthMiddleware::class,
+    "csrf" => \App\Middleware\CsrfMiddleware::class,
 ];

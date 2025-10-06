@@ -35,7 +35,7 @@ function createBreadcrumbs($url)
 }
 
 // Get the current URL
-$currentUrl = App\Helpers\NetworkHelper::getCurrentUrl();
+$currentUrl = App\Helpers\Network::getCurrentUrl();
 
 // Create breadcrumbs
 $breadcrumbs = createBreadcrumbs($currentUrl);

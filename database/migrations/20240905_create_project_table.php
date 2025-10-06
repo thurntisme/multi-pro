@@ -1,0 +1,5 @@
+<?php
+
+$table = "projects";
+$mysql_attributes = "id INT AUTO_INCREMENT PRIMARY KEY, title VARCHAR(255) NOT NULL, description TEXT, start_date DATE, end_date DATE, user_id INT, status ENUM('not_started', 'in_progress', 'completed') DEFAULT 'not_started', type ENUM('owner', 'contributor') DEFAULT 'owner', dev_url VARCHAR(255), staging_url VARCHAR(255), production_url VARCHAR(255), source_url VARCHAR(255), created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE";
+$sqlite_attributes = "id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT NOT NULL, description TEXT, start_date DATE, end_date DATE, user_id INTEGER, status TEXT DEFAULT 'not_started', type TEXT DEFAULT 'owner', dev_url TEXT, staging_url TEXT, production_url TEXT, source_url TEXT, created_at DATETIME DEFAULT CURRENT_TIMESTAMP, updated_at DATETIME DEFAULT CURRENT_TIMESTAMP, FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE";

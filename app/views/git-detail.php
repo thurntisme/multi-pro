@@ -211,9 +211,9 @@ ob_start();
                                 <h5 class="card-title mb-0">Action</h5>
                             </div>
                             <div class="card-body">
-                                <a href="<?= App\Helpers\NetworkHelper::home_url('git') ?>"
+                                <a href="<?= App\Helpers\Network::home_url('git') ?>"
                                     class="btn btn-light w-sm">Back</a>
-                                <a href="<?= App\Helpers\NetworkHelper::home_url('git/edit?id=' . $postData['id']) ?>"
+                                <a href="<?= App\Helpers\Network::home_url('git/edit?id=' . $postData['id']) ?>"
                                     class="btn btn-info w-sm mx-2">Edit</a>
                             </div>
                         </div>

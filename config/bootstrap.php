@@ -1,62 +1,38 @@
 <?php
+declare(strict_types=1);
 
-require_once __DIR__ . '/../vendor/autoload.php';
+// Ensure session is started before accessing $_SESSION
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 
-$dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/..');
+// Composer autoload
+require __DIR__ . '/../vendor/autoload.php';
+
+// Load constants
+require __DIR__ . '/constants.php';
+
+$dotenv = new App\Core\Dotenv();
 $dotenv->load();
 
-// Include constants
-require_once __DIR__ . '/constants/index.php';
-
-// // Set error reporting
-ini_set('display_errors', 0); // Turn off error display (optional for production)
-ini_set('display_startup_errors', 1); // Display startup errors (optional)
-error_reporting(E_ALL); // Report all errors
-
-// // Specify the error log file
-ini_set('log_errors', 1); // Enable error logging
-ini_set('error_log', LOGS_PATH . 'app-error.log'); // Path to the error log file
-
-// Database connection setup
-$isDbOk = require __DIR__ . '/db.php';
-
-if (!$isDbOk) {
-    die('Database connection failed');
-}
+$errorHandler = new App\core\ErrorHandler();
+$errorHandler->register();
 
 $router = require __DIR__ . '/router.php';
 $container = require __DIR__ . '/container.php';
 $middleware = require __DIR__ . '/middleware.php';
 $request = App\Core\Request::createFromGlobals();
 
+// Database connection setup
+$db = $container->get(App\Core\Database::class);
+$isDbOk = $db->checkConnection();
+
+if (!$isDbOk) {
+    throw new \PDOException('Database connection failed');
+}
+
 $dispatcher = new App\Core\Dispatcher($router, $container, $middleware);
 
 $response = $dispatcher->handle($request);
 
 $response->send();
-
-
-// Include the routing file to handle routing logic
-// (new App\Core\Route())->register();
-
-// // Include functions
-// require_once __DIR__ . '/utils.php';
-
-
-// const DIR = __DIR__;
-// define('HOME_PATH', $_ENV['HOME_PATH'] ?? DEFAULT_HOME_PATH);
-
-// require_once "controllers/CommonController.php";
-// $commonController = new CommonController();
-
-// require_once "controllers/AuthenticationController.php";
-// $authenticationController = new AuthenticationController();
-
-// // Set default timezone to UTC
-// date_default_timezone_set('UTC');
-
-// // Start session
-// session_start();
-// if (empty($_SESSION['csrf_token'])) {
-//     $_SESSION['csrf_token'] = bin2hex(random_bytes(32)); // Generate a CSRF token
-// }

@@ -13,7 +13,7 @@ $links = [
   <?php foreach ($links as $slug => $link) { ?>
     <li class="nav-item">
       <a class="nav-link <?= ($lastSlug === 'transfer' ? !$slug : $lastSlug === $slug) ? 'active' : '' ?>"
-        href="<?= App\Helpers\NetworkHelper::home_url("football-manager/transfer" . (!$slug ? $slug : '/' . $slug)) ?>">
+        href="<?= App\Helpers\Network::home_url("football-manager/transfer" . (!$slug ? $slug : '/' . $slug)) ?>">
         <?= $link ?>
       </a>
     </li>
