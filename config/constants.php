@@ -10,6 +10,7 @@ define('ASSETS_DIR', DIR_ROOT . '/public/assets/');
 define('STORAGE_DIR', DIR_ROOT . '/storage/');
 define('LOGS_DIR', DIR_ROOT . '/storage/logs/');
 define('UPLOADS_DIR', DIR_ROOT . '/storage/app/uploads/');
+define("MOCK_DIR", STORAGE_DIR . '/mock/');
 
 // App info
 define('APP_NAME', 'MultiPro');
