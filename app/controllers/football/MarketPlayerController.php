@@ -47,6 +47,42 @@ class MarketPlayerController extends Controller
     return $this->json($players);
   }
 
+  private function getTeamPlayers(): array
+  {
+    $playerUuids = [
+      "f6a4b3c1e9d84a72b5c7d9f1a2e3b8c4",
+      "b1c2d3e4f5g6h7i8j9k0l1m2n3o4p5q6",
+      "c7a4e1b9d3f6a8c2b5e1d4f7a9b3c6d8",
+      "d4b9f2c8a1e7b3c5d6f8a9e2b4c1d7f3",
+      "f3a7c9e1b2d4f6a8c0e9d1b3a5f7c2e4",
+      "c9f2a1b7d4e6f3c8a2b1e9d7f6a4c3b2",
+      "d1f7a9b3c5e2d4a6b8f9c3a1e7b2d5f4",
+      "d8f1c3e7a9b2f6d4c0a5e1b3f7c2d9a6",
+      "l1m2n3o4p5q6r7s8t9u0v1w2x3y4z5a6",
+      "a7c3f2d9b5e6a1c8d4f9b2e7c6a3d8f5",
+      "d4f7a2b9c3e6a1d8b5f9c2e7a6b3d8f4"
+    ];
+
+    return array_map([$this, 'getPlayerData'], $playerUuids);
+  }
+
+  public function getTeamInfo(): Response
+  {
+    $team = [
+      'id' => "a4c9e3f1b27d45d8a2f6e8c49b31c7a2",
+      'name' => 'FC Barcelona',
+      'city' => 'Barcelona',
+      'country' => 'Spain',
+      'founded' => 1902,
+      'stadium' => 'Camp Nou',
+      'capacity' => 99354,
+      'manager' => 'Pep Guardiola',
+      'formation' => '3-5-2',
+      'players' => $this->getTeamPlayers()
+    ];
+    return $this->json($team);
+  }
+
   private function getPlayerData($uuid): mixed
   {
     $players = $this->getAllPlayers();
@@ -102,5 +138,4 @@ class MarketPlayerController extends Controller
     ];
     return array_merge($player, $playerInClub);
   }
-
 }
