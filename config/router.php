@@ -2,6 +2,7 @@
 
 use App\Controllers\DatabaseController;
 use App\Controllers\FileManagerController;
+use App\Controllers\Football\FootballClubController;
 use App\Controllers\Football\FootballPlayerController;
 use App\Controllers\Football\FootballUserController;
 use App\Controllers\FootballController;
@@ -82,5 +83,6 @@ $router->get('/api/football/club/players', [FootballPlayerController::class, 'ge
 $router->get('/api/football/team', [FootballPlayerController::class, 'getTeamInfo']);
 $router->post('/api/football/item/player-new', [FootballPlayerController::class, 'generatePlayer']);
 $router->get('/api/football/user', [FootballUserController::class, 'index']);
+$router->get('/api/football/club', [FootballClubController::class, 'index']);
 
 return $router;
