@@ -16,7 +16,7 @@ ob_start();
     <div class="col-lg-12">
         <div class="card">
             <div class="card-header">
-                <h5 class="card-title mb-0">Ajax Datatables</h5>
+                <h5 class="card-title mb-0">Player List</h5>
             </div>
             <div class="card-body">
                 <table id="football-table" class="display table table-bordered dt-responsive" style="width:100%">

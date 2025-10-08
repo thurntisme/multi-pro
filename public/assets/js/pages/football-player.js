@@ -6,6 +6,11 @@ const footballDataTables = new DataTable(tableId, {
     url: "/api/football/market/list",
     dataSrc: "data",
   },
+  dom: '<"d-flex justify-content-between align-items-center mb-2"l<"d-flex gap-2"f<"custom-filter d-flex gap-2">>>t<"d-flex justify-content-between mt-2"ip>',
+  initComplete: function () {
+    const api = this.api();
+    renderCustomFilter(api);
+  },
   columns: [
     { data: "name" },
     {
@@ -46,6 +51,46 @@ $(modalId).on("hidden.bs.modal", function () {
   $("#playerModal .modal-body span").text("");
   $('#playerModal .modal-body div[id^="attr"]').empty();
 });
+
+function renderCustomFilter(api) {
+  const filters = [
+    { name: "position", label: "Positions", col: 1 },
+    { name: "Nationality", label: "Nationalities", col: 3 },
+    { name: "edition", label: "Editions", col: 4 },
+  ];
+
+  filters.forEach((filter) => {
+    const $filter = $(
+      `<select class="form-select form-select-sm w-auto" name="${filter.name}"><option value="">All ${filter.label}</option></select>`
+    );
+    $(".custom-filter").append($filter);
+
+    api
+      .column(filter.col)
+      .data()
+      .unique()
+      .sort()
+      .each(function (d) {
+        if (d) $filter.append(`<option value="${d}">${d}</option>`);
+      });
+
+    $filter.on("change", function () {
+      const val = $(this).val();
+      if (val) {
+        if (filter.col === 1) {
+          api.column(filter.col).search(val, true, false).draw();
+        } else {
+          api
+            .column(filter.col)
+            .search("^" + val + "$", true, false)
+            .draw();
+        }
+      } else {
+        api.column(filter.col).search("").draw();
+      }
+    });
+  });
+}
 
 function fillPlayerInfo(data) {
   $("#playerAvatar").attr("src", data.avatarUrl);
