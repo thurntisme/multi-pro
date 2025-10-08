@@ -2,7 +2,8 @@
 
 use App\Controllers\DatabaseController;
 use App\Controllers\FileManagerController;
-use App\Controllers\Football\MarketPlayerController;
+use App\Controllers\Football\FootballPlayerController;
+use App\Controllers\Football\FootballUserController;
 use App\Controllers\FootballController;
 use App\Controllers\PdfReaderController;
 use App\Core\Router;
@@ -76,9 +77,10 @@ $router->get('/app/database', [DatabaseController::class, 'index']);
 $router->get('/app/football-player', [FootballController::class, 'index']);
 
 // API
-$router->get('/api/football/market/list', [MarketPlayerController::class, 'index']);
-$router->get('/api/football/club/players', [MarketPlayerController::class, 'getClubPlayers']);
-$router->get('/api/football/team', [MarketPlayerController::class, 'getTeamInfo']);
-$router->post('/api/football/item/player-new', [MarketPlayerController::class, 'generatePlayer']);
+$router->get('/api/football/market/list', [FootballPlayerController::class, 'index']);
+$router->get('/api/football/club/players', [FootballPlayerController::class, 'getClubPlayers']);
+$router->get('/api/football/team', [FootballPlayerController::class, 'getTeamInfo']);
+$router->post('/api/football/item/player-new', [FootballPlayerController::class, 'generatePlayer']);
+$router->get('/api/football/user', [FootballUserController::class, 'index']);
 
 return $router;

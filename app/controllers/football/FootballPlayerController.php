@@ -5,7 +5,7 @@ namespace App\Controllers\Football;
 use App\Core\Controller;
 use App\Core\Response;
 
-class MarketPlayerController extends Controller
+class FootballPlayerController extends Controller
 {
   private static $files = ["legend", "classic-70s", "classic-80s", "classic-90s", "classic-2000s", "classic-2010s", "modern", "future-star", "world-cup", "euro"];
 
