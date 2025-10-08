@@ -136,6 +136,16 @@ class Sidebar
             ]
         ],
         [
+            'title' => 'Football Manager',
+            'sub_items' => [
+                [
+                    'name' => 'Player',
+                    'icon' => 'ri-user-line',
+                    'slug' => 'football-player'
+                ],
+            ]
+        ],
+        [
             'title' => 'Network',
             'sub_items' => [
                 [

@@ -3,6 +3,7 @@
 use App\Controllers\DatabaseController;
 use App\Controllers\FileManagerController;
 use App\Controllers\Football\MarketPlayerController;
+use App\Controllers\FootballController;
 use App\Controllers\PdfReaderController;
 use App\Core\Router;
 use App\Controllers\LandingController;
@@ -72,6 +73,7 @@ $router->get('/app/profile', [ProfileController::class, 'index']);
 $router->get('/app/pdf-reader', [PdfReaderController::class, 'index']);
 $router->get('/app/file-manager', [FileManagerController::class, 'index']);
 $router->get('/app/database', [DatabaseController::class, 'index']);
+$router->get('/app/football-player', [FootballController::class, 'index']);
 
 // API
 $router->get('/api/football/market/list', [MarketPlayerController::class, 'index']);
