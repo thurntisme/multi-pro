@@ -30,12 +30,18 @@ class MarketPlayerController extends Controller
 
   public function generatePlayer(): Response
   {
-    $player = [
-      'uuid' => \App\Helpers\Football::generatePlayerUUID(),
-      'avatarUrl' => ''
-    ];
+    $randPlayer = $this->randomPlayerByEdition();
+    $player = array_merge($randPlayer, $this->getPlayerDataInClub($randPlayer));
 
-    return $this->json([$player]);
+    return $this->json($player);
+  }
+
+  private function randomPlayerByEdition($edition = "modern"): mixed
+  {
+    $path = MOCK_DIR . "football/{$edition}-players.json";
+    $players = \App\Helpers\Common::getJsonFileData($path);
+
+    return $players[rand(0, count($players) - 1)];
   }
 
   public function getClubPlayers(): Response
@@ -97,44 +103,43 @@ class MarketPlayerController extends Controller
 
   private function getPlayerDataInClub($player): mixed
   {
-    // generate dummy data for player in club
     $playerInClub = [
       'id' => \App\Helpers\Football::generatePlayerUUID(),
-      'clubId' => "a4c9e3f1b27d45d8a2f6e8c49b31c7a2",
-      'shirtNumber' => 10,
+      'clubId' => \App\Helpers\Football::generatePlayerUUID(),
+      'shirtNumber' => 1,
       'playerIndex' => 1,
       'nationalTeam' => [
-        'name' => 'Brazil',
-        'callUp' => true,
-        'nextMatch' => '2023-12-12',
-        'paymentReceived' => 1000000,
-        'internationalCaps' => 10
+        'name' => $player['nationality'],
+        'callUp' => false,
+        'nextMatch' => '',
+        'paymentReceived' => 0,
+        'internationalCaps' => 0
       ],
-      'transferStatus' => 'transfer-listed',
+      'transferStatus' => 'not-listed',
       'loan' => [
-        'fee' => 1000000,
-        'duration' => '1 year',
-        'wage' => 1000000
+        'fee' => 0,
+        'duration' => '',
+        'wage' => 0
       ],
-      'level' => 5,
-      'role' => 'Striker',
-      'morale' => 'High',
+      'level' => 1,
+      'role' => '',
+      'morale' => 'normal',
       'status' => [
-        'type' => 'Injured',
-        'details' => 'Broken leg',
-        'until' => '2023-12-12'
+        'type' => 'fit',
+        'details' => '',
+        'until' => ''
       ],
       'stats' => [
-        'matches' => 10,
-        'goals' => 10,
-        'assists' => 10,
-        'yellowCards' => 10,
-        'redCards' => 10,
-        'cleanSheets' => 10,
-        'minutesPlayed' => 10,
-        'rating' => 10
+        'matches' => 0,
+        'goals' => 0,
+        'assists' => 0,
+        'yellowCards' => 0,
+        'redCards' => 0,
+        'cleanSheets' => 0,
+        'minutesPlayed' => 0,
+        'rating' => 0
       ],
-      'trainingPerformance' => 'Excellent'
+      'trainingPerformance' => ''
     ];
     return array_merge($player, $playerInClub);
   }

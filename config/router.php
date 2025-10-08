@@ -79,6 +79,6 @@ $router->get('/app/football-player', [FootballController::class, 'index']);
 $router->get('/api/football/market/list', [MarketPlayerController::class, 'index']);
 $router->get('/api/football/club/players', [MarketPlayerController::class, 'getClubPlayers']);
 $router->get('/api/football/team', [MarketPlayerController::class, 'getTeamInfo']);
-$router->post('/api/football/item/player/new', [MarketPlayerController::class, 'generatePlayer']);
+$router->post('/api/football/item/player-new', [MarketPlayerController::class, 'generatePlayer']);
 
 return $router;
