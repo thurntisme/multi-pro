@@ -115,6 +115,9 @@ class FootballPlayerController extends Controller
 
   private function getPlayerDataInClub($player): mixed
   {
+    $status = ["injured", "unhappy", "transfer", "suspended", "fit"];
+    $randStatus = $status[array_rand($status)];
+
     $playerInClub = [
       'id' => \App\Helpers\Football::generatePlayerUUID(),
       'clubId' => \App\Helpers\Football::generatePlayerUUID(),
@@ -136,11 +139,11 @@ class FootballPlayerController extends Controller
       'level' => 1,
       'role' => '',
       'morale' => 'normal',
-      'status' => [
-        'type' => 'fit',
+      'status' => [[
+        'type' => $randStatus,
         'details' => '',
         'until' => ''
-      ],
+      ]],
       'stats' => [
         'matches' => 0,
         'goals' => 0,
@@ -151,7 +154,10 @@ class FootballPlayerController extends Controller
         'minutesPlayed' => 0,
         'rating' => 0
       ],
-      'trainingPerformance' => ''
+      'trainingPerformance' => '',
+      'exp' => rand(541, 10132025),
+      'level' => rand(1, 99),
+      'attributeBonus' => rand(0, 4),
     ];
     return array_merge($player, $playerInClub);
   }
