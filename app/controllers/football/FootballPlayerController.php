@@ -118,6 +118,9 @@ class FootballPlayerController extends Controller
     $status = ["injured", "unhappy", "transfer", "suspended", "fit"];
     $randStatus = $status[array_rand($status)];
 
+    // TODO: convert player's attributes to string and save on db
+    $attributes = json_encode($player['attributes']);
+
     $playerInClub = [
       'id' => \App\Helpers\Football::generatePlayerUUID(),
       'clubId' => \App\Helpers\Football::generatePlayerUUID(),
@@ -157,6 +160,7 @@ class FootballPlayerController extends Controller
       'trainingPerformance' => '',
       'exp' => rand(541, 10132025),
       'level' => rand(1, 99),
+      'attributes' => json_decode($attributes, true),
       'attributeBonus' => rand(0, 4),
     ];
     return array_merge($player, $playerInClub);
