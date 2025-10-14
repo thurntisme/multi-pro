@@ -117,6 +117,7 @@ class FootballPlayerController extends Controller
   {
     $status = ["injured", "unhappy", "transfer", "suspended", "fit"];
     $randStatus = $status[array_rand($status)];
+    $morale = ["high", "normal", "low"];
 
     // TODO: convert player's attributes to string and save on db
     $attributes = json_encode($player['attributes']);
@@ -141,7 +142,7 @@ class FootballPlayerController extends Controller
       ],
       'level' => 1,
       'role' => '',
-      'morale' => 'normal',
+      'morale' => $morale[array_rand($morale)],
       'status' => [[
         'type' => $randStatus,
         'details' => '',
@@ -162,6 +163,7 @@ class FootballPlayerController extends Controller
       'level' => rand(1, 99),
       'attributes' => json_decode($attributes, true),
       'attributeBonus' => rand(0, 4),
+      'remainingMatches' => rand(0, 10),
     ];
     return array_merge($player, $playerInClub);
   }
