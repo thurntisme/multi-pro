@@ -1,0 +1,379 @@
+[
+  {
+    "id": "main-stand",
+    "name": "Main Stand",
+    "description": "The primary seating area for fans",
+    "iconUrl": "Building2",
+    "enabled": true,
+    "currentLevel": 3,
+    "maxLevel": 5,
+    "defaultLevel": 1,
+    "levels": [
+      {
+        "level": 1,
+        "cost": 500000,
+        "maintenanceCost": 5000,
+        "capacity": 5000,
+        "income": 50000,
+        "benefits": ["Basic seating", "Standard amenities"]
+      },
+      {
+        "level": 2,
+        "cost": 1500000,
+        "maintenanceCost": 10000,
+        "capacity": 10000,
+        "income": 120000,
+        "benefits": [
+          "Improved seating",
+          "Better visibility",
+          "More concession stands"
+        ]
+      },
+      {
+        "level": 3,
+        "cost": 3000000,
+        "maintenanceCost": 20000,
+        "capacity": 20000,
+        "income": 250000,
+        "benefits": [
+          "Premium seating options",
+          "Executive boxes",
+          "Enhanced fan experience"
+        ]
+      },
+      {
+        "level": 4,
+        "cost": 6000000,
+        "maintenanceCost": 35000,
+        "capacity": 35000,
+        "income": 450000,
+        "benefits": [
+          "State-of-the-art seating",
+          "Expanded executive areas",
+          "Advanced amenities"
+        ]
+      },
+      {
+        "level": 5,
+        "cost": 12000000,
+        "maintenanceCost": 60000,
+        "capacity": 60000,
+        "income": 800000,
+        "benefits": [
+          "World-class stadium experience",
+          "Maximum capacity",
+          "Elite facilities"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "hospitality",
+    "name": "Hospitality Suites",
+    "description": "Premium areas for VIP guests and corporate clients",
+    "iconUrl": "Sofa",
+    "enabled": true,
+    "currentLevel": 2,
+    "maxLevel": 5,
+    "defaultLevel": 1,
+    "levels": [
+      {
+        "level": 1,
+        "cost": 300000,
+        "maintenanceCost": 8000,
+        "income": 30000,
+        "benefits": ["Basic hospitality boxes", "Simple catering"]
+      },
+      {
+        "level": 2,
+        "cost": 800000,
+        "maintenanceCost": 15000,
+        "income": 80000,
+        "benefits": [
+          "Improved suites",
+          "Better catering options",
+          "Enhanced service"
+        ]
+      },
+      {
+        "level": 3,
+        "cost": 2000000,
+        "maintenanceCost": 25000,
+        "income": 200000,
+        "benefits": [
+          "Premium suites",
+          "High-end catering",
+          "Exclusive experiences"
+        ]
+      },
+      {
+        "level": 4,
+        "cost": 4000000,
+        "maintenanceCost": 40000,
+        "income": 400000,
+        "benefits": ["Luxury suites", "Gourmet dining", "Concierge service"]
+      },
+      {
+        "level": 5,
+        "cost": 8000000,
+        "maintenanceCost": 70000,
+        "income": 800000,
+        "benefits": [
+          "World-class luxury",
+          "Celebrity chef catering",
+          "Ultimate VIP experience"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "concessions",
+    "name": "Concession Stands",
+    "description": "Food and beverage outlets throughout the stadium",
+    "iconUrl": "Utensils",
+    "enabled": true,
+    "currentLevel": 2,
+    "maxLevel": 4,
+    "defaultLevel": 1,
+    "levels": [
+      {
+        "level": 1,
+        "cost": 100000,
+        "maintenanceCost": 3000,
+        "income": 15000,
+        "benefits": ["Basic food options", "Limited beverage selection"]
+      },
+      {
+        "level": 2,
+        "cost": 300000,
+        "maintenanceCost": 6000,
+        "income": 40000,
+        "benefits": [
+          "More food variety",
+          "Expanded beverage options",
+          "Faster service"
+        ]
+      },
+      {
+        "level": 3,
+        "cost": 700000,
+        "maintenanceCost": 12000,
+        "income": 90000,
+        "benefits": [
+          "Premium food options",
+          "Craft beverages",
+          "Multiple service points"
+        ]
+      },
+      {
+        "level": 4,
+        "cost": 1500000,
+        "maintenanceCost": 20000,
+        "income": 200000,
+        "benefits": [
+          "Gourmet food options",
+          "Full bar service",
+          "Mobile ordering"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "merchandise",
+    "name": "Club Store",
+    "description": "Official team merchandise shop",
+    "iconUrl": "ShoppingBag",
+    "enabled": true,
+    "currentLevel": 2,
+    "maxLevel": 4,
+    "defaultLevel": 1,
+    "levels": [
+      {
+        "level": 1,
+        "cost": 150000,
+        "maintenanceCost": 4000,
+        "income": 20000,
+        "benefits": ["Basic merchandise", "Limited selection"]
+      },
+      {
+        "level": 2,
+        "cost": 400000,
+        "maintenanceCost": 8000,
+        "income": 50000,
+        "benefits": [
+          "Expanded merchandise",
+          "Better store layout",
+          "More exclusive items"
+        ]
+      },
+      {
+        "level": 3,
+        "cost": 900000,
+        "maintenanceCost": 15000,
+        "income": 120000,
+        "benefits": [
+          "Premium merchandise",
+          "Custom items",
+          "Interactive experiences"
+        ]
+      },
+      {
+        "level": 4,
+        "cost": 2000000,
+        "maintenanceCost": 25000,
+        "income": 250000,
+        "benefits": [
+          "Flagship store experience",
+          "Limited edition items",
+          "Personalization services"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "parking",
+    "name": "Parking Facilities",
+    "description": "Parking areas for fans and staff",
+    "iconUrl": "ParkingSquare",
+    "enabled": true,
+    "currentLevel": 1,
+    "maxLevel": 3,
+    "defaultLevel": 1,
+    "levels": [
+      {
+        "level": 1,
+        "cost": 200000,
+        "maintenanceCost": 5000,
+        "income": 10000,
+        "benefits": ["Basic parking", "Limited spaces"]
+      },
+      {
+        "level": 2,
+        "cost": 600000,
+        "maintenanceCost": 10000,
+        "income": 30000,
+        "benefits": ["Expanded parking", "Better access", "Reserved sections"]
+      },
+      {
+        "level": 3,
+        "cost": 1500000,
+        "maintenanceCost": 20000,
+        "income": 70000,
+        "benefits": ["Multi-level parking", "VIP parking", "Shuttle service"]
+      }
+    ]
+  },
+  {
+    "id": "technology",
+    "name": "Stadium Technology",
+    "description": "Screens, WiFi, and other tech amenities",
+    "iconUrl": "Wifi",
+    "enabled": false,
+    "currentLevel": 0,
+    "maxLevel": 4,
+    "defaultLevel": 1,
+    "levels": [
+      {
+        "level": 1,
+        "cost": 250000,
+        "maintenanceCost": 8000,
+        "benefits": ["Basic screens", "Limited WiFi"]
+      },
+      {
+        "level": 2,
+        "cost": 700000,
+        "maintenanceCost": 15000,
+        "benefits": ["HD screens", "Stadium-wide WiFi", "Basic mobile app"]
+      },
+      {
+        "level": 3,
+        "cost": 1800000,
+        "maintenanceCost": 30000,
+        "benefits": ["4K screens", "High-speed WiFi", "Enhanced mobile app"]
+      },
+      {
+        "level": 4,
+        "cost": 4000000,
+        "maintenanceCost": 50000,
+        "benefits": [
+          "State-of-the-art displays",
+          "5G connectivity",
+          "AR/VR experiences"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "media",
+    "name": "Media Facilities",
+    "description": "Press boxes and broadcast infrastructure",
+    "iconUrl": "Tv",
+    "enabled": false,
+    "currentLevel": 0,
+    "maxLevel": 3,
+    "defaultLevel": 1,
+    "levels": [
+      {
+        "level": 1,
+        "cost": 200000,
+        "maintenanceCost": 5000,
+        "benefits": ["Basic press area", "Limited broadcast capabilities"]
+      },
+      {
+        "level": 2,
+        "cost": 600000,
+        "maintenanceCost": 12000,
+        "benefits": [
+          "Improved press facilities",
+          "Better broadcast infrastructure",
+          "Interview rooms"
+        ]
+      },
+      {
+        "level": 3,
+        "cost": 1500000,
+        "maintenanceCost": 25000,
+        "benefits": [
+          "State-of-the-art press center",
+          "Advanced broadcast capabilities",
+          "Media lounge"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "ticketing",
+    "name": "Ticketing System",
+    "description": "Ticket sales and entry management",
+    "iconUrl": "Ticket",
+    "enabled": true,
+    "currentLevel": 1,
+    "maxLevel": 3,
+    "defaultLevel": 1,
+    "levels": [
+      {
+        "level": 1,
+        "cost": 100000,
+        "maintenanceCost": 3000,
+        "benefits": ["Basic ticketing", "Manual entry checks"]
+      },
+      {
+        "level": 2,
+        "cost": 300000,
+        "maintenanceCost": 8000,
+        "benefits": ["Digital ticketing", "Automated entry", "Basic analytics"]
+      },
+      {
+        "level": 3,
+        "cost": 800000,
+        "maintenanceCost": 15000,
+        "benefits": [
+          "Fully integrated digital system",
+          "Contactless entry",
+          "Advanced analytics",
+          "Dynamic pricing"
+        ]
+      }
+    ]
+  }
+]

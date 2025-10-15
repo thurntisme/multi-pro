@@ -25,6 +25,7 @@ use App\Controllers\ProjectController;
 use App\Controllers\TaskController;
 use App\Controllers\ClientController;
 use App\Controllers\EstimationController;
+use App\Controllers\Football\FootballStadiumController;
 use App\Controllers\ResumeController;
 use App\Controllers\ReportController;
 use App\Controllers\MaintainWebController;
@@ -84,5 +85,6 @@ $router->get('/api/football/team', [FootballPlayerController::class, 'getTeamInf
 $router->post('/api/football/item/player-new', [FootballPlayerController::class, 'generatePlayer']);
 $router->get('/api/football/user', [FootballUserController::class, 'index']);
 $router->get('/api/football/club', [FootballClubController::class, 'index']);
+$router->get('/api/football/stadium', [FootballStadiumController::class, 'index']);
 
 return $router;
