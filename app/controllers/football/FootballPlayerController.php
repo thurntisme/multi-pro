@@ -22,7 +22,7 @@ class FootballPlayerController extends Controller
     $players = [];
 
     foreach (self::$files as $file) {
-      $path = MOCK_DIR . "football/{$file}-players.json";
+      $path = MOCK_DIR . "football/player/{$file}-players.json";
       $players = array_merge($players, \App\Helpers\Common::getJsonFileData($path));
     }
     return $players;
@@ -38,7 +38,7 @@ class FootballPlayerController extends Controller
 
   private function randomPlayerByEdition($edition = "modern"): mixed
   {
-    $path = MOCK_DIR . "football/{$edition}-players.json";
+    $path = MOCK_DIR . "football/player/{$edition}-players.json";
     $players = \App\Helpers\Common::getJsonFileData($path);
 
     return $players[rand(0, count($players) - 1)];
