@@ -26,6 +26,7 @@ use App\Controllers\TaskController;
 use App\Controllers\ClientController;
 use App\Controllers\EstimationController;
 use App\Controllers\Football\FootballLeagueController;
+use App\Controllers\Football\FootballNewsController;
 use App\Controllers\Football\FootballStadiumController;
 use App\Controllers\ResumeController;
 use App\Controllers\ReportController;
@@ -89,5 +90,6 @@ $router->get('/api/football/club', [FootballClubController::class, 'index']);
 $router->get('/api/football/stadium', [FootballStadiumController::class, 'index']);
 $router->get('/api/football/league/standing', [FootballLeagueController::class, 'standing']);
 $router->get('/api/football/league/schedule', [FootballLeagueController::class, 'schedule']);
+$router->get('/api/football/news', [FootballNewsController::class, 'index']);
 
 return $router;
