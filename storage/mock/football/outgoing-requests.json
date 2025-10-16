@@ -1,0 +1,32 @@
+[
+  {
+    "id": 101,
+    "teamName": "Bayern Munich",
+    "teamLogo": "/placeholder.svg?height=40&width=40",
+    "playerName": "Thomas Müller",
+    "playerPosition": "CAM",
+    "offerAmount": 40000000,
+    "status": "pending",
+    "expiresIn": "3 days"
+  },
+  {
+    "id": 102,
+    "teamName": "Real Madrid",
+    "teamLogo": "/placeholder.svg?height=40&width=40",
+    "playerName": "Carlos Vega",
+    "playerPosition": "RW",
+    "offerAmount": 32000000,
+    "status": "negotiating",
+    "expiresIn": "2 days"
+  },
+  {
+    "id": 103,
+    "teamName": "Manchester United",
+    "teamLogo": "/placeholder.svg?height=40&width=40",
+    "playerName": "David Smith",
+    "playerPosition": "CB",
+    "offerAmount": 25000000,
+    "status": "accepted",
+    "expiresIn": "Expired"
+  }
+]
