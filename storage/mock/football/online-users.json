@@ -1,0 +1,202 @@
+[
+  {
+    "id": "1",
+    "name": "John Manager",
+    "team": "Arsenal FC",
+    "rating": 1850,
+    "status": "online",
+    "avatar": "/placeholder.svg?height=40&width=40",
+    "teamInfo": {
+      "formation": "4-3-3",
+      "avgRating": 82,
+      "topPlayers": [
+        "Henry Wilson (ST, 86)",
+        "James Parker (CM, 84)",
+        "Robert Davis (CB, 83)"
+      ],
+      "recentForm": ["W", "W", "D", "L", "W"],
+      "style": "Attacking, High Press",
+      "strengths": ["Counter attacks", "Set pieces"],
+      "weaknesses": ["Defensive organization"]
+    },
+    "wins": 42,
+    "draws": 10,
+    "losses": 8,
+    "rank": 1
+  },
+  {
+    "id": "2",
+    "name": "Sarah Coach",
+    "team": "Chelsea FC",
+    "rating": 1920,
+    "status": "online",
+    "avatar": "/placeholder.svg?height=40&width=40",
+    "teamInfo": {
+      "formation": "4-2-3-1",
+      "avgRating": 84,
+      "topPlayers": [
+        "Mason Wright (CAM, 87)",
+        "Olivia Johnson (GK, 85)",
+        "Daniel Smith (CDM, 84)"
+      ],
+      "recentForm": ["W", "W", "W", "D", "W"],
+      "style": "Possession, Tiki-taka",
+      "strengths": ["Ball retention", "Pressing"],
+      "weaknesses": ["Aerial duels"]
+    },
+    "wins": 38,
+    "draws": 12,
+    "losses": 10,
+    "rank": 2
+  },
+  {
+    "id": "3",
+    "name": "Mike Tactician",
+    "team": "Liverpool FC",
+    "rating": 1780,
+    "status": "in_match",
+    "avatar": "/placeholder.svg?height=40&width=40",
+    "teamInfo": {
+      "formation": "4-3-3",
+      "avgRating": 83,
+      "topPlayers": [
+        "Mohamed Ali (RW, 88)",
+        "Jordan Henderson (CM, 83)",
+        "Virgil Stone (CB, 86)"
+      ],
+      "recentForm": ["L", "W", "W", "W", "D"],
+      "style": "Gegenpressing, Direct",
+      "strengths": ["Counter pressing", "Fast transitions"],
+      "weaknesses": ["Defensive depth"]
+    },
+    "wins": 32,
+    "draws": 14,
+    "losses": 16,
+    "rank": 3
+  },
+  {
+    "id": "4",
+    "name": "Emma Director",
+    "team": "Man City",
+    "rating": 2050,
+    "status": "online",
+    "avatar": "/placeholder.svg?height=40&width=40",
+    "teamInfo": {
+      "formation": "4-3-3",
+      "avgRating": 86,
+      "topPlayers": [
+        "Kevin Brown (CAM, 90)",
+        "Phil Taylor (LW, 87)",
+        "Ruben Garcia (CDM, 85)"
+      ],
+      "recentForm": ["W", "W", "W", "W", "D"],
+      "style": "Possession, Positional play",
+      "strengths": ["Build-up play", "Chance creation"],
+      "weaknesses": ["Defensive transitions"]
+    },
+    "wins": 40,
+    "draws": 8,
+    "losses": 6,
+    "rank": 4
+  },
+  {
+    "id": "5",
+    "name": "David Trainer",
+    "team": "Tottenham",
+    "rating": 1690,
+    "status": "online",
+    "avatar": "/placeholder.svg?height=40&width=40",
+    "teamInfo": {
+      "formation": "3-4-3",
+      "avgRating": 80,
+      "topPlayers": [
+        "Harry Kane (ST, 88)",
+        "Son Min (LW, 86)",
+        "Pierre Højbjerg (CM, 82)"
+      ],
+      "recentForm": ["L", "D", "W", "L", "W"],
+      "style": "Counter-attacking, Compact",
+      "strengths": ["Fast breaks", "Wing play"],
+      "weaknesses": ["Consistency", "Game management"]
+    },
+    "wins": 36,
+    "draws": 16,
+    "losses": 8,
+    "rank": 5
+  },
+  {
+    "id": "6",
+    "name": "Lisa Strategist",
+    "team": "Everton",
+    "rating": 1830,
+    "status": "online",
+    "avatar": "/placeholder.svg?height=40&width=40",
+    "teamInfo": {
+      "formation": "4-4-2",
+      "avgRating": 79,
+      "topPlayers": [
+        "Dominic Lewis (ST, 83)",
+        "Richie Morris (LM, 82)",
+        "Jordan Pickford (GK, 84)"
+      ],
+      "recentForm": ["W", "D", "D", "W", "L"],
+      "style": "Balanced, Disciplined",
+      "strengths": ["Set pieces", "Defensive organization"],
+      "weaknesses": ["Creativity", "Squad depth"]
+    },
+    "wins": 34,
+    "draws": 18,
+    "losses": 8,
+    "rank": 6
+  },
+  {
+    "id": "7",
+    "name": "Robert Analyst",
+    "team": "Newcastle",
+    "rating": 1760,
+    "status": "in_match",
+    "avatar": "/placeholder.svg?height=40&width=40",
+    "teamInfo": {
+      "formation": "4-2-3-1",
+      "avgRating": 78,
+      "topPlayers": [
+        "Allan Saint-Maximin (LW, 83)",
+        "Bruno Guimarães (CM, 84)",
+        "Kieran Trippier (RB, 82)"
+      ],
+      "recentForm": ["W", "L", "W", "D", "W"],
+      "style": "Direct, Physical",
+      "strengths": ["Crossing", "Aerial duels"],
+      "weaknesses": ["Technical ability", "Possession retention"]
+    },
+    "wins": 32,
+    "draws": 20,
+    "losses": 8,
+    "rank": 7
+  },
+  {
+    "id": "8",
+    "name": "Jessica Scout",
+    "team": "Aston Villa",
+    "rating": 1890,
+    "status": "online",
+    "avatar": "/placeholder.svg?height=40&width=40",
+    "teamInfo": {
+      "formation": "4-3-2-1",
+      "avgRating": 81,
+      "topPlayers": [
+        "Ollie Watkins (ST, 83)",
+        "Emiliano Martinez (GK, 85)",
+        "John McGinn (CM, 82)"
+      ],
+      "recentForm": ["W", "W", "D", "W", "L"],
+      "style": "Counter-attacking, Organized",
+      "strengths": ["Defensive solidity", "Transition play"],
+      "weaknesses": ["Breaking down low blocks"]
+    },
+    "wins": 30,
+    "draws": 22,
+    "losses": 8,
+    "rank": 8
+  }
+]
