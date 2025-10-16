@@ -29,6 +29,7 @@ use App\Controllers\Football\FootballLeagueController;
 use App\Controllers\Football\FootballNewsController;
 use App\Controllers\Football\FootballOnlineUserController;
 use App\Controllers\Football\FootballStadiumController;
+use App\Controllers\Football\FootballStaffController;
 use App\Controllers\ResumeController;
 use App\Controllers\ReportController;
 use App\Controllers\MaintainWebController;
@@ -95,5 +96,8 @@ $router->get('/api/football/news', [FootballNewsController::class, 'index']);
 $router->get('/api/football/online/users', [FootballOnlineUserController::class, 'index']);
 $router->get('/api/football/online/leaderboards', [FootballOnlineUserController::class, 'leaderboard']);
 $router->get('/api/football/online/history', [FootballOnlineUserController::class, 'history']);
+$router->get('/api/football/staff/available', [FootballStaffController::class, 'available']);
+$router->get('/api/football/staff/own', [FootballStaffController::class, 'own']);
+$router->get('/api/football/scouting/assignments', [FootballStaffController::class, 'scoutingAssignments']);
 
 return $router;
