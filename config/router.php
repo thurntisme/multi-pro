@@ -28,7 +28,7 @@ use App\Controllers\EstimationController;
 use App\Controllers\Football\FootballLeagueController;
 use App\Controllers\Football\FootballNewsController;
 use App\Controllers\Football\FootballOnlineUserController;
-use App\Controllers\Football\FootballScountingController;
+use App\Controllers\Football\FootballScoutingController;
 use App\Controllers\Football\FootballStadiumController;
 use App\Controllers\Football\FootballStaffController;
 use App\Controllers\ResumeController;
@@ -99,8 +99,8 @@ $router->get('/api/football/online/leaderboards', [FootballOnlineUserController:
 $router->get('/api/football/online/history', [FootballOnlineUserController::class, 'history']);
 $router->get('/api/football/staff/available', [FootballStaffController::class, 'available']);
 $router->get('/api/football/staff/own', [FootballStaffController::class, 'own']);
-$router->get('/api/football/scouting/assignments', [FootballScountingController::class, 'assignments']);
-$router->get('/api/football/scouting/incoming', [FootballScountingController::class, 'incoming']);
-$router->get('/api/football/scouting/outgoing', [FootballScountingController::class, 'outgoing']);
+$router->get('/api/football/scouting/assignments', [FootballScoutingController::class, 'assignments']);
+$router->get('/api/football/scouting/incoming', [FootballScoutingController::class, 'incoming']);
+$router->get('/api/football/scouting/outgoing', [FootballScoutingController::class, 'outgoing']);
 
 return $router;

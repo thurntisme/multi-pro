@@ -5,7 +5,7 @@ namespace App\Controllers\Football;
 use App\Core\Controller;
 use App\Core\Response;
 
-class FootballScountingController extends Controller
+class FootballScoutingController extends Controller
 {
 
     public function assignments(): Response
@@ -38,7 +38,7 @@ class FootballScountingController extends Controller
             'available' => array_values($available),
         ]);
     }
-    
+
     public function incoming(): Response
     {
         $path = MOCK_DIR . "football/incoming-requests.json";
