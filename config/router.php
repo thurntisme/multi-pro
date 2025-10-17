@@ -31,6 +31,7 @@ use App\Controllers\Football\FootballOnlineUserController;
 use App\Controllers\Football\FootballScoutingController;
 use App\Controllers\Football\FootballStadiumController;
 use App\Controllers\Football\FootballStaffController;
+use App\Controllers\Football\FootballTrainingController;
 use App\Controllers\Football\FootballYouthAcademyController;
 use App\Controllers\ResumeController;
 use App\Controllers\ReportController;
@@ -106,5 +107,9 @@ $router->get('/api/football/scouting/outgoing', [FootballScoutingController::cla
 $router->get('/api/football/youth-academy/own', [FootballYouthAcademyController::class, 'own']);
 $router->get('/api/football/youth-academy/assignments', [FootballYouthAcademyController::class, 'assignments']);
 $router->get('/api/football/youth-academy/facilities', [FootballYouthAcademyController::class, 'facilities']);
+$router->get('/api/football/training/team', [FootballTrainingController::class, 'team']);
+$router->get('/api/football/training/player', [FootballTrainingController::class, 'player']);
+
+
 
 return $router;

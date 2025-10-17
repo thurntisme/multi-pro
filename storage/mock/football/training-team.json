@@ -1,0 +1,32 @@
+[
+  {
+    "id": "possession",
+    "name": "Possession Play",
+    "description": "Focus on ball retention and circulation",
+    "currentLevel": 65
+  },
+  {
+    "id": "pressing",
+    "name": "High Pressing",
+    "description": "Focus on winning the ball high up the pitch",
+    "currentLevel": 72
+  },
+  {
+    "id": "counter_attack",
+    "name": "Counter Attacking",
+    "description": "Focus on quick transitions after winning possession",
+    "currentLevel": 78
+  },
+  {
+    "id": "set_pieces",
+    "name": "Set Pieces",
+    "description": "Focus on corners, free kicks and throw-ins",
+    "currentLevel": 60
+  },
+  {
+    "id": "team_cohesion",
+    "name": "Team Cohesion",
+    "description": "Focus on team spirit and communication",
+    "currentLevel": 68
+  }
+]
