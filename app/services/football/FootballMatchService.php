@@ -18,19 +18,15 @@ class FootballMatchService extends Service
     public function getUpcomingMatch()
     {
         $result = [];
-        $match = $this->findUpcomingMatch($this->footballTeamService->getCurrentTeamId());
+        $match = $this->findMatchById($this->footballTeamService->getCurrentTeamId());
         $league = $this->footballLeagueService->getLeagueData($match['leagueId']);
         $stadium = $this->footballTeamService->getTeamStadium($match['homeTeamId']);
-        $homeTeam = $this->footballTeamService->getTeamData($match['homeTeamId']);
-        $awayTeam = $this->footballTeamService->getTeamData($match['awayTeamId']);
         $odds = $this->guessOdds();
 
         $result = [
             'id' => $match['id'],
             'season' => $league['season'],
             'competition' => $league['name'],
-            'homeTeam' => $this->getTeamData($homeTeam),
-            'awayTeam' => $this->getTeamData($awayTeam),
             'date' => $match['date'],
             'time' => $match['time'],
             'stadium' => $stadium['name'],
@@ -40,7 +36,19 @@ class FootballMatchService extends Service
         return $result;
     }
 
-    public function findUpcomingMatch($teamId)
+    public function getTeam($matchId)
+    {
+        $match = $this->findMatchById($matchId);
+        $homeTeam = $this->footballTeamService->getTeamData($match['homeTeamId']);
+        $awayTeam = $this->footballTeamService->getTeamData($match['awayTeamId']);
+        
+        return [
+            'home' => $homeTeam,
+            'away' => $awayTeam,
+        ];
+    }
+
+    public function findMatchById($matchId)
     {
         // In real app, we should query database to get next match of team
         $nextMatch = [

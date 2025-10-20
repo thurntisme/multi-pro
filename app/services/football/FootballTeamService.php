@@ -6,7 +6,7 @@ use App\Core\Service;
 
 class FootballTeamService extends Service
 {
-    private static $playerUuids = [
+    private static $player1Uuids = [
         "e6b2a7d3c4f1a9b5d8e3c6f1a7b4d2c9",
         "d8f3a7b6c2e9a1f4b5d7c3e8a9f2b6d4",
         "c7e9a3b5d8f2a1c4b6f9d3e7a2b5c8f1",
@@ -31,6 +31,25 @@ class FootballTeamService extends Service
         "e7c2a9d3b6f1a4c5d8e3b2f7a1c6d4e9",
         "f4c2a7d1e6b3c5a9d8f2b1e7a6c3d4f5"
     ];
+    private static $player2Uuids = [
+        "f6a4b3c1e9d84a72b5c7d9f1a2e3b8c4",
+        "q1r2s3t4u5v6w7x8y9z0a1b2c3d4e5f6",
+        "b4e9d2f7a1c3e8b5d9a6f2c4e1b7a3d8",
+        "e2b6c8d9a3f7b1e4c9a8d5f6b2e7a4c3",
+        "h1i2j3k4l5m6n7o8p9q0r1s2t3u4v5w6",
+        "a7d3f9b2c1e8a4d6b9f2c5a3d7e1f4c8",
+        "a3f9c8b5d2e6a1b7c4f8d9e2a6b3f7c5",
+        "f1c8d2a7b3e9a4c6d8f2b7a5c9e3d4f6",
+        "t1u2v3w4x5y6z7a8b9c0d1e2f3g4h5i6",
+        "j1k2l3m4n5o6p7q8r9s0t1u2v3w4x5y6",
+        "c7a4e1b9f2d6438a9c1d7e3f6b5a2c8d",
+        "c1d2e3f4g5h6i7j8k9l0m1n2o3p4q5r6",
+        "b3a7c9e2d4f6a1b8c2e5f9d7a4b6c3e8",
+        "e7a4b2c9d1f8a6b3c5e9d2a1f7b4c8e6",
+        "c7f4a9b1d2e8f3a6b5c1d9a7f2b4e6c3",
+        "b7e3c9a5d2f6a1c8b4f9e7d3a6b2c8f4",
+        "d8c4b1e7a3f9c2d5e6b7a9f4c1e2d3b8"
+    ];
 
     public function __construct() {}
 
@@ -39,9 +58,9 @@ class FootballTeamService extends Service
         return 1;
     }
 
-    public static function getTeamFormation()
+    public static function getTeamFormation($teamId)
     {
-        return '3-5-2';
+        return $teamId === 4 ? '3-5-2' : '4-4-2';
     }
 
     public function getTeamData($teamId)
@@ -53,6 +72,8 @@ class FootballTeamService extends Service
             'shortName' => 'Man Utd',
             'logo' => 'https://example.com/manchester-united-logo.png',
             'position' => 2,
+            'formation' => self::getTeamFormation($teamId),
+            'players' => self::getPlayersInMatch($teamId),
         ];
         $team2 = [
             'id' => $teamId,
@@ -60,23 +81,26 @@ class FootballTeamService extends Service
             'shortName' => 'Man City',
             'logo' => 'https://example.com/manchester-city-logo.png',
             'position' => 1,
+            'formation' => self::getTeamFormation($teamId),
+            'players' => self::getPlayersInMatch($teamId),
         ];
         return $teamId === 4 ? $team1 : $team2;
     }
 
-    public static function getAllPlayers()
+    public static function getAllPlayers(int $teamId)
     {
-        $players = array_map(['\App\Services\Football\FootballPlayerService', 'getPlayerData'], self::$playerUuids);
+        $playerUuids = $teamId === 4 ? self::$player1Uuids : self::$player2Uuids;
+        $players = array_map(['\App\Services\Football\FootballPlayerService', 'getPlayerData'], $playerUuids);
         return $players;
     }
 
-    public static function getPlayersInMatch()
+    public static function getPlayersInMatch(int $teamId)
     {
-        $allPlayers = self::getAllPlayers();
+        $allPlayers = self::getAllPlayers($teamId);
         return array_slice($allPlayers, 0, 16);
     }
 
-    public function getTeamStadium($teamId)
+    public function getTeamStadium(int $teamId)
     {
         // In real app, we should query database to get stadium of team
         $stadium = [

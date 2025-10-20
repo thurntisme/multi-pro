@@ -21,11 +21,10 @@ class FootballMatchController extends Controller
     public function upcoming(): Response
     {
         $result = [];
-        $result['match'] = $this->matchService->getUpcomingMatch();
-        $result['team'] = [
-            'formation' => $this->teamService->getTeamFormation(),
-            'players' => $this->teamService->getPlayersInMatch(),
-        ];
+        $match = $this->matchService->getUpcomingMatch();
+        $team = $this->matchService->getTeam($match["id"]);
+        $result['match'] = $match;
+        $result['team'] = $team;
 
         return $this->json($result);
     }
