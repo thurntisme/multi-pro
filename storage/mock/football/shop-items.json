@@ -1,0 +1,108 @@
+[
+  {
+    "slug": "player_stamina_booster",
+    "name": "Stamina Booster",
+    "description": "Instantly restores stamina for a player",
+    "price": 1000,
+    "category": "player",
+    "effect": "+30% Stamina Recovery",
+    "duration": {
+      "quantity": 1,
+      "unit": "matches"
+    },
+    "image": "/placeholder.svg?height=80&width=80"
+  },
+  {
+    "slug": "player_form_enhancer",
+    "name": "Form Enhancer",
+    "description": "Improves a player's form",
+    "price": 2500,
+    "category": "player",
+    "effect": "Improves form by one level",
+    "duration": {
+      "quantity": 3,
+      "unit": "matches"
+    },
+    "image": "/placeholder.svg?height=80&width=80"
+  },
+  {
+    "slug": "player_fitness_enhancer",
+    "name": "Fitness Enhancer",
+    "description": "Improves a player's fitness",
+    "price": 2500,
+    "category": "player",
+    "effect": "Improves fitness by one level",
+    "duration": {
+      "quantity": 1,
+      "unit": "lifetime"
+    },
+    "image": "/placeholder.svg?height=80&width=80"
+  },
+  {
+    "slug": "player_morale_enhancer",
+    "name": "Morale Enhancer",
+    "description": "Improves a player's morale",
+    "price": 2500,
+    "category": "player",
+    "effect": "Improves morale by one level",
+    "duration": {
+      "quantity": 1,
+      "unit": "lifetime"
+    },
+    "image": "/placeholder.svg?height=80&width=80"
+  },
+  {
+    "slug": "team_morale_enhancer",
+    "name": "Morale Enhancer",
+    "description": "Improves a player's morale",
+    "price": 2500,
+    "category": "team",
+    "effect": "Improves morale by one level",
+    "duration": {
+      "quantity": 1,
+      "unit": "lifetime"
+    },
+    "image": "/placeholder.svg?height=80&width=80"
+  },
+  {
+    "slug": "club_name_change",
+    "name": "Club Name Change",
+    "description": "Change your club's name",
+    "price": 10000,
+    "discount": 13,
+    "limited": true,
+    "category": "club",
+    "effect": "Rename your club",
+    "duration": {
+      "quantity": 1,
+      "unit": "lifetime"
+    },
+    "image": "/placeholder.svg?height=80&width=80"
+  },
+  {
+    "slug": "stadium_upgrade",
+    "name": "Stadium Upgrade",
+    "description": "Temporary stadium capacity increase",
+    "price": 5000,
+    "category": "club",
+    "effect": "+10% Stadium Capacity",
+    "duration": {
+      "quantity": 1,
+      "unit": "lifetime"
+    },
+    "image": "/placeholder.svg?height=80&width=80"
+  },
+  {
+    "slug": "legend",
+    "name": "Legend",
+    "description": "Legend",
+    "price": 10000,
+    "category": "player_card",
+    "effect": "Legend",
+    "duration": {
+      "quantity": 1,
+      "unit": "lifetime"
+    },
+    "image": "/placeholder.svg?height=80&width=80"
+  }
+]
