@@ -27,6 +27,7 @@ use App\Controllers\ClientController;
 use App\Controllers\EstimationController;
 use App\Controllers\Football\FootballItemController;
 use App\Controllers\Football\FootballLeagueController;
+use App\Controllers\Football\FootballMatchController;
 use App\Controllers\Football\FootballNewsController;
 use App\Controllers\Football\FootballOnlineUserController;
 use App\Controllers\Football\FootballScoutingController;
@@ -112,6 +113,7 @@ $router->get('/api/football/training/team', [FootballTrainingController::class, 
 $router->get('/api/football/training/player', [FootballTrainingController::class, 'player']);
 $router->get('/api/football/item/shop', [FootballItemController::class, 'shop']);
 $router->get('/api/football/item/inventory', [FootballItemController::class, 'inventory']);
+$router->get('/api/football/match/upcoming', [FootballMatchController::class, 'upcoming']);
 
 
 
