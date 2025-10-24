@@ -87,7 +87,8 @@ if (canvas.length) {
         $("#totalPages").text(totalPages);
         $("#fileNotFound").remove();
         $("#pdfViewerContainer").removeClass("d-none");
-        $("#pageControls").removeClass("opacity-0");
+        $("#zoomControls").removeClass("d-none");
+        $("#pageControls").removeClass("d-none");
         renderPage(pageNum);
       })
       .catch((e) => {

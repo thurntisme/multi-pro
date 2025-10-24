@@ -25,7 +25,7 @@ ob_start();
     <div class="card" id="pdfReaderContainer">
       <div class="card-header d-flex align-items-center justify-content-between">
         <h4 class="card-title mb-0" id="pdfTitle"><?= $postData['title'] ?? 'PDF Reader' ?></h4>
-        <div class="d-flex align-items-center gap-2">
+        <div class="d-flex align-items-center gap-2 d-none" id="zoomControls">
           <button type="button" class="btn btn-light" id="zoomOut"><i class="ri-zoom-out-line align-bottom me-1"></i> Zoom Out</button>
           <button type="button" class="btn btn-light" id="zoomIn"><i class="ri-zoom-in-line align-bottom me-1"></i> Zoom In</button>
         </div>
@@ -34,7 +34,7 @@ ob_start();
         <div class="w-100 h-100 overflow-auto d-flex justify-content-center <?= empty($postData['view_url']) ? 'd-none' : '' ?>" id="pdfViewerContainer">
           <canvas id="pdfViewer"></canvas>
         </div>
-        <div class="mt-3 d-flex align-items-center gap-2 opacity-0" id="pageControls">
+        <div class="mt-3 d-flex align-items-center gap-2 d-none" id="pageControls">
           <span class="me-auto">Page: <span id="currentPage"><?= $postData['view_page'] ?? '1' ?></span> / <span
               id="totalPages"></span></span>
           <button type="button" class="btn btn-light" id="prevPage" disabled><i
