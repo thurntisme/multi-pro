@@ -14,6 +14,7 @@ define("MOCK_DIR", STORAGE_DIR . '/mock/');
 
 // App info
 define('APP_NAME', 'MultiPro');
+define('APP_DESCRIPTION', 'Capture, organize, and connect your ideas into lasting knowledge.');
 define('APP_VERSION', '1.0.0');
 
 // Roles & permissions

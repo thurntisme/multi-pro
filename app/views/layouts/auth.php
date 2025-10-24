@@ -36,7 +36,7 @@
                                         alt="" height="20">
                                 </a>
                             </div>
-                            <p class="mt-3 fs-15 fw-medium">Premium Admin & Dashboard Template</p>
+                            <p class="mt-3 fs-15 fw-medium"><?= APP_DESCRIPTION ?></p>
                         </div>
                     </div>
                 </div>
@@ -58,7 +58,7 @@
                             <p class="mb-0 text-muted">&copy;
                                 <script>
                                     document.write(new Date().getFullYear())
-                                </script> Mercufee
+                                </script> <?= APP_NAME ?>
                             </p>
                         </div>
                     </div>
@@ -68,8 +68,6 @@
         <!-- end Footer -->
     </div>
     <!-- end auth-page-wrapper -->
-
-    <?php include_once LAYOUTS_DIR . 'partials/vendor-scripts.php'; ?>
 
     <!-- particles js -->
     <script src="<?= App\Helpers\Network::home_url("assets/libs/particles.js/particles.js") ?>"></script>

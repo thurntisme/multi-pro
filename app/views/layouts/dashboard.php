@@ -24,6 +24,7 @@
                 <div class="container-fluid">
 
                     <?php include_once LAYOUTS_DIR . 'partials/breadcrumb.php'; ?>
+                    <?php include_once LAYOUTS_DIR . 'partials/flash.php' ?>
                     <?php echo $pageContent ?? ''; ?>
 
                 </div>
