@@ -130,7 +130,7 @@ class Sidebar
                 ],
                 [
                     'name' => 'Pdf Reader',
-                    'icon' => 'ri-pdf-line',
+                    'icon' => 'ri-file-pdf-line',
                     'slug' => 'pdf-reader'
                 ],
             ]

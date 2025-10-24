@@ -277,3 +277,7 @@ tr.my-club-player-row.selected :is(.btn-search, .btn-change) {
 #monopoly .container .left .tile:nth-child(2) { order: 3; }
 #monopoly .container .left .tile:nth-child(3) { order: 2; }
 #monopoly .container .left .tile:nth-child(4) { order: 1; }
+
+#pdfReaderContainer {
+  min-height: 400px;
+}
