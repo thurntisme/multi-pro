@@ -52,10 +52,12 @@ $router = new Router();
 
 $router->get('/', [LandingController::class, 'index']);
 $router->get('/login', [AuthController::class, 'renderLogin']);
+$router->post('/login', [AuthController::class, 'login']);
 $router->get('/register', [AuthController::class, 'renderRegister']);
+$router->get('/logout', [AuthController::class, 'logout'], 'auth');
 
 // Dashboard routes
-$router->get('/app', [DashboardController::class, 'index']);
+$router->get('/app', [DashboardController::class, 'index', 'auth']);
 $router->get('/app/todo', [TodoController::class, 'index']);
 $router->get('/app/note', [NoteController::class, 'index']);
 $router->get('/app/habit', [HabitController::class, 'index']);

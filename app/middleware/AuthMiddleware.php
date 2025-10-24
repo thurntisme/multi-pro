@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Middleware;
@@ -8,6 +9,7 @@ use App\Core\Request;
 use App\Core\RequestHandlerInterface;
 use App\Core\Response;
 use App\Core\Session;
+use App\Services\TokenService;
 
 /**
  * Class AuthMiddleware
@@ -30,6 +32,15 @@ class AuthMiddleware implements MiddlewareInterface
     private function isAuthenticated(): bool
     {
         return $this->user !== null;
+    }
+
+    private function isTokenValid(): bool
+    {
+        if (!isset($this->user['token'])) {
+            return false;
+        }
+        $tokenService = new TokenService();
+        return $tokenService->validateToken($this->user['token']);
     }
 
     /**
@@ -57,11 +68,10 @@ class AuthMiddleware implements MiddlewareInterface
         $this->response = $next->handle($request);
 
         // Redirect to login if not authenticated
-        if (!$this->isAuthenticated()) {
-            $this->response->redirect('/login');
+        if (!$this->isAuthenticated() || !$this->isTokenValid()) {
+            $this->response->redirect('login');
         }
 
         return $this->response;
     }
-
 }
