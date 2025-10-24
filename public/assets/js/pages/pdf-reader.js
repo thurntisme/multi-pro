@@ -4,7 +4,8 @@ let pdfDoc = null,
   ctx = null,
   scale = 1,
   canvas = $("#pdfViewer"),
-  pageNum = 1;
+  pageNum = 1,
+  totalPages = 1;
 
 if (canvas.length) {
   ctx = canvas[0].getContext("2d");
@@ -65,22 +66,37 @@ if (canvas.length) {
   }
 
   // Load PDF
-  pdfjsLib
-    .getDocument(pdfUrl)
-    .promise.then((pdfDoc_) => {
-      pdfDoc = pdfDoc_;
-      totalPages = pdfDoc_.numPages;
-      $("#totalPages").text(totalPages);
-      $("#pageControls").removeClass("opacity-0");
-      renderPage(pageNum);
-    })
-    .catch((e) => {
-      $("#pdfReaderContainer #pdfViewerContainer").html(
-        '<div class="alert alert-danger">Network error. Please try again.</div>'
-      );
+  function loadPdf(pdfUrl) {
+    if (!pdfUrl) {
+      return;
+    }
+    pdfjsLib
+      .getDocument(pdfUrl)
+      .promise.then((pdfDoc_) => {
+        pdfDoc = pdfDoc_;
 
-      $("#pdfReaderContainer #pageControls").remove();
-    });
+        pdfDoc.getMetadata().then(({ info, metadata }) => {
+          const title =
+            info.Title ||
+            (metadata ? metadata.get("dc:title") : null) ||
+            "Untitled PDF";
+          $("#pdfTitle").text(title);
+        });
+
+        totalPages = pdfDoc_.numPages;
+        $("#totalPages").text(totalPages);
+        $("#fileNotFound").remove();
+        $("#pdfViewerContainer").removeClass("d-none");
+        $("#pageControls").removeClass("opacity-0");
+        renderPage(pageNum);
+      })
+      .catch((e) => {
+        $("#pdfReaderContainer #pdfViewerContainer").html(
+          '<div class="alert alert-danger">Network error. Please try again.</div>'
+        );
+      });
+  }
+  loadPdf(pdfUrl);
 
   // Next page
   $("#nextPage").on("click", () => {
@@ -97,13 +113,13 @@ if (canvas.length) {
   });
 
   // Zoom In
-  $("#zoomIn").click(() => {
+  $("#zoomIn").on("click", () => {
     scale += 0.2;
     renderPage(pageNum);
   });
 
   // Zoom Out
-  $("#zoomOut").click(() => {
+  $("#zoomOut").on("click", () => {
     if (scale <= 0.6) return;
     scale -= 0.2;
     renderPage(pageNum);
@@ -124,6 +140,16 @@ if (canvas.length) {
     }
     return num;
   }
+
+  $("#fileNotFound form").on("submit", function (e) {
+    e.preventDefault();
+    const searchFile = $(this).find("[name=search_file]").val();
+    if (!searchFile) {
+      alert("Please input the file url");
+      return;
+    }
+    loadPdf(searchFile);
+  });
 }
 
 // if ($("#ebookNoteModal")) {
