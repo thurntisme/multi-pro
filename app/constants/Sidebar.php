@@ -161,6 +161,21 @@ class Sidebar
             ]
         ],
         [
+            'title' => 'AI',
+            'sub_items' => [
+                [
+                    'name' => 'Tools',
+                    'icon' => 'ri-tools-line',
+                    'slug' => 'ai-tools'
+                ],
+                [
+                    'name' => 'Prompt',
+                    'icon' => 'ri-robot-line',
+                    'slug' => 'ai-prompt'
+                ]
+            ]
+        ],
+        [
             'title' => 'System',
             'sub_items' => [
                 [

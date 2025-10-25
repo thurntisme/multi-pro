@@ -1,5 +1,6 @@
 <?php
 
+use App\Controllers\AIController;
 use App\Controllers\DatabaseController;
 use App\Controllers\FileManagerController;
 use App\Controllers\Football\FootballClubController;
@@ -80,6 +81,8 @@ $router->get('/app/web-dev-checklist', [WebDevChecklistController::class, 'index
 $router->get('/app/web-secure-checklist', [WebSecureChecklistController::class, 'index']);
 $router->get('/app/lead', [LeadController::class, 'index']);
 $router->get('/app/website', [WebsiteController::class, 'index']);
+$router->get('/app/ai-tools', [AIController::class, 'tools']);
+$router->get('/app/ai-prompt', [AIController::class, 'prompt']);
 $router->get('/app/settings', [SettingController::class, 'index']);
 $router->get('/app/notifications', [NotificationsController::class, 'index']);
 $router->get('/app/package', [PackageController::class, 'index']);
