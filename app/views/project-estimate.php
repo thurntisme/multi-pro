@@ -6,6 +6,29 @@ $teamMembers = [
   ["id" => 3, "name" => "David Nguyen", "role" => "PM", "unitPrice" => 30],
   ["id" => 4, "name" => "Tom Le", "role" => "Tester", "unitPrice" => 18]
 ];
+ob_start();
+?>
+<style>
+  @media print {
+    body * {
+      visibility: hidden;
+    }
+
+    #estimatePreviewModal .modal-content,
+    #estimatePreviewModal .modal-content * {
+      visibility: visible;
+    }
+
+    #estimatePreviewModal {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 100%;
+    }
+  }
+</style>
+<?php
+$additionCss = ob_get_clean();
 
 ob_start();
 ?>
@@ -15,6 +38,9 @@ ob_start();
   <h1><?= $title ?></h1>
   <div>
     <a href="/app/project/detail" class="btn btn-outline-secondary me-2"><i class="ri-arrow-go-back-line me-1"></i>Back</a>
+    <button class="btn btn-outline-primary me-2" data-bs-toggle="modal" data-bs-target="#estimatePreviewModal">
+      <i class="ri-eye-line me-1"></i>Preview
+    </button>
     <button class="btn btn-primary"><i class="ri-save-3-line me-1"></i>Save Estimate</button>
   </div>
 </div>
@@ -172,6 +198,80 @@ ob_start();
         <button type="button" id="saveTaskBtn" class="btn btn-primary">
           <i class="ri-save-line me-1"></i>Save Task
         </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 🔍 Preview Modal -->
+<div class="modal fade" id="estimatePreviewModal" tabindex="-1" aria-labelledby="estimatePreviewModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-xl">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title fw-bold"><i class="ri-eye-line me-1"></i>Estimate Preview</h5>
+        <div>
+          <button class="btn btn-outline-secondary btn-sm me-2" onclick="window.print()">
+            <i class="ri-printer-line me-1"></i>Print
+          </button>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+      </div>
+      <div class="modal-body">
+        <div id="estimatePreviewContent">
+          <h4 class="fw-bold mb-3">Project: NextJS + WordPress Headless Website</h4>
+          <p class="text-muted mb-4">Generated on: <?= date('F d, Y') ?></p>
+
+          <table class="table table-bordered align-middle">
+            <thead class="table-light">
+              <tr>
+                <th>Role</th>
+                <th>Task</th>
+                <th>Time (hrs)</th>
+                <th>Unit Price</th>
+                <th>Total</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Developer</td>
+                <td>Frontend Implementation</td>
+                <td>24</td>
+                <td>$25</td>
+                <td>$600</td>
+              </tr>
+              <tr>
+                <td>Designer</td>
+                <td>UI/UX Mockup</td>
+                <td>10</td>
+                <td>$22</td>
+                <td>$220</td>
+              </tr>
+              <tr>
+                <td>PM</td>
+                <td>Project Planning & Review</td>
+                <td>8</td>
+                <td>$30</td>
+                <td>$240</td>
+              </tr>
+              <tr>
+                <td>Tester</td>
+                <td>Quality Assurance</td>
+                <td>6</td>
+                <td>$18</td>
+                <td>$108</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <div class="text-end mt-3">
+            <h5 class="fw-bold">Total Estimate: <span class="text-success">$1,168</span></h5>
+          </div>
+
+          <hr class="my-4">
+          <p class="small text-muted">
+            * This is a rough estimate. Actual effort and cost may vary depending on project scope adjustments.
+          </p>
+        </div>
       </div>
     </div>
   </div>
