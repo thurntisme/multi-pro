@@ -108,6 +108,11 @@ class Sidebar
                     'icon' => 'ri-shield-check-line',
                     'slug' => 'maintain-web'
                 ],
+                [
+                    'name' => 'Web Template',
+                    'icon' => 'ri-layout-6-line',
+                    'slug' => 'web-template'
+                ]
             ]
         ],
         [

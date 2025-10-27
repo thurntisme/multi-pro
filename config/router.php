@@ -48,6 +48,7 @@ use App\Controllers\SettingController;
 use App\Controllers\NotificationsController;
 use App\Controllers\PackageController;
 use App\Controllers\ProfileController;
+use App\Controllers\WebTemplateController;
 
 $router = new Router();
 
@@ -91,6 +92,8 @@ $router->get('/app/pdf-reader', [PdfReaderController::class, 'index']);
 $router->get('/app/file-manager', [FileManagerController::class, 'index']);
 $router->get('/app/database', [DatabaseController::class, 'index']);
 $router->get('/app/football-player', [FootballController::class, 'index']);
+$router->get('/app/web-template', [WebTemplateController::class, 'index']);
+$router->get('/app/web-template/detail', [WebTemplateController::class, 'detail']);
 
 // API
 $router->get('/api/football/market/list', [FootballPlayerController::class, 'index']);
