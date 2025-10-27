@@ -46,4 +46,12 @@ class ProjectController extends Controller
     ];
     return $this->view('project-estimate', $data);
   }
+
+  public function question(): Response
+  {
+    $data = [
+      'title' => 'Project Question'
+    ];
+    return $this->view('project-question', $data);
+  }
 }
