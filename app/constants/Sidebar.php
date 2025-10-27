@@ -83,6 +83,11 @@ class Sidebar
                     'icon' => 'ri-building-line',
                     'slug' => 'client'
                 ],
+                [
+                    'name' => 'Member',
+                    'icon' => 'ri-group-line',
+                    'slug' => 'member'
+                ],
             ]
         ],
         [

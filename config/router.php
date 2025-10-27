@@ -43,6 +43,7 @@ use App\Controllers\SeoChecklistController;
 use App\Controllers\WebDevChecklistController;
 use App\Controllers\WebSecureChecklistController;
 use App\Controllers\LeadController;
+use App\Controllers\MemberController;
 use App\Controllers\WebsiteController;
 use App\Controllers\SettingController;
 use App\Controllers\NotificationsController;
@@ -75,7 +76,7 @@ $router->get('/app/project/detail', [ProjectController::class, 'detail']);
 $router->get('/app/project/new', [ProjectController::class, 'new']);
 $router->get('/app/project/edit', [ProjectController::class, 'edit']);
 $router->get('/app/project/estimate', [ProjectController::class, 'estimate']);
-
+$router->get('/app/member', [MemberController::class, 'index']);
 $router->get('/app/task', [TaskController::class, 'index']);
 $router->get('/app/client', [ClientController::class, 'index']);
 $router->get('/app/estimation', [EstimationController::class, 'index']);
