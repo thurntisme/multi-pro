@@ -1,4 +1,12 @@
 <?php
+
+$teamMembers = [
+  ["id" => 1, "name" => "John Doe", "role" => "Developer", "unitPrice" => 25],
+  ["id" => 2, "name" => "Lisa Tran", "role" => "Designer", "unitPrice" => 22],
+  ["id" => 3, "name" => "David Nguyen", "role" => "PM", "unitPrice" => 30],
+  ["id" => 4, "name" => "Tom Le", "role" => "Tester", "unitPrice" => 18]
+];
+
 ob_start();
 ?>
 
@@ -126,42 +134,44 @@ ob_start();
 
 <!-- Add Task Modal -->
 <div class="modal fade" id="addTaskModal" tabindex="-1" aria-labelledby="addTaskModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-lg">
+  <div class="modal-dialog modal-md">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="addTaskModalLabel"><i class="ri-add-line me-1"></i>Add New Task</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <form>
+        <form id="taskForm">
           <div class="row g-3">
-            <div class="col-md-4">
-              <label class="form-label">Role</label>
-              <select class="form-select">
-                <option>Developer</option>
-                <option>Designer</option>
-                <option>PM</option>
-                <option>Tester</option>
+            <div class="col-12">
+              <label class="form-label">Task Title</label>
+              <input type="text" id="taskTitle" class="form-control" placeholder="Enter task title">
+            </div>
+            <div class="col-6">
+              <label class="form-label">Assign To (Member)</label>
+              <select id="memberSelect" class="form-select">
+                <?php foreach ($teamMembers as $member): ?>
+                  <option value="<?= $member['id'] ?>"><?= $member['name'] ?> (<?= $member['role'] ?>)</option>
+                <?php endforeach; ?>
               </select>
             </div>
-            <div class="col-md-8">
-              <label class="form-label">Task Title</label>
-              <input type="text" class="form-control" placeholder="Enter task title">
-            </div>
-            <div class="col-md-3">
+            <div class="col-6">
               <label class="form-label">Time (hrs)</label>
-              <input type="number" class="form-control" placeholder="e.g. 10">
+              <input type="number" id="taskTime" class="form-control" placeholder="e.g. 10">
             </div>
-            <div class="col-md-9">
+            <div class="col-12">
               <label class="form-label">Description</label>
-              <textarea class="form-control" rows="2" placeholder="Brief description..."></textarea>
+              <textarea id="taskDesc" class="form-control" rows="2" placeholder="Brief description..."></textarea>
             </div>
           </div>
         </form>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-        <button type="button" class="btn btn-primary"><i class="ri-save-line me-1"></i>Save Task</button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+          <i class="ri-close-line me-1"></i>Cancel</button>
+        <button type="button" id="saveTaskBtn" class="btn btn-primary">
+          <i class="ri-save-line me-1"></i>Save Task
+        </button>
       </div>
     </div>
   </div>
