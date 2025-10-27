@@ -48,8 +48,8 @@ ob_start();
                             <i class="ri-more-line"></i>
                         </button>
                         <ul class="dropdown-menu dropdown-menu-end">
-                            <li><a class="dropdown-item" href="#">View</a></li>
-                            <li><a class="dropdown-item" href="#">Edit</a></li>
+                            <li><a class="dropdown-item" href="/app/project/detail">View</a></li>
+                            <li><a class="dropdown-item" href="/app/project/edit">Edit</a></li>
                             <li><a class="dropdown-item text-danger" href="#">Delete</a></li>
                         </ul>
                     </div>

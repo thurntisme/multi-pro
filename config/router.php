@@ -71,6 +71,11 @@ $router->get('/app/plan', [PlanController::class, 'index']);
 $router->get('/app/calendar', [CalendarController::class, 'index']);
 $router->get('/app/workout', [WorkoutController::class, 'index']);
 $router->get('/app/project', [ProjectController::class, 'index']);
+$router->get('/app/project/detail', [ProjectController::class, 'detail']);
+$router->get('/app/project/new', [ProjectController::class, 'new']);
+$router->get('/app/project/edit', [ProjectController::class, 'edit']);
+$router->get('/app/project/estimate', [ProjectController::class, 'estimate']);
+
 $router->get('/app/task', [TaskController::class, 'index']);
 $router->get('/app/client', [ClientController::class, 'index']);
 $router->get('/app/estimation', [EstimationController::class, 'index']);
