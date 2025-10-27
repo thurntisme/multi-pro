@@ -54,4 +54,12 @@ class ProjectController extends Controller
     ];
     return $this->view('project-question', $data);
   }
+
+  public function task(): Response
+  {
+    $data = [
+      'title' => 'Project Task'
+    ];
+    return $this->view('project-task', $data);
+  }
 }

@@ -77,6 +77,7 @@ $router->get('/app/project/new', [ProjectController::class, 'new']);
 $router->get('/app/project/edit', [ProjectController::class, 'edit']);
 $router->get('/app/project/estimate', [ProjectController::class, 'estimate']);
 $router->get('/app/project/question', [ProjectController::class, 'question']);
+$router->get('/app/project/task', [ProjectController::class, 'task']);
 $router->get('/app/member', [MemberController::class, 'index']);
 $router->get('/app/task', [TaskController::class, 'index']);
 $router->get('/app/client', [ClientController::class, 'index']);

@@ -8,6 +8,7 @@ ob_start();
   <div>
     <a href="/app/project/estimate" class="btn btn-info me-2"><i class="ri-timer-line me-1"></i>Estimate</a>
     <a href="/app/project/question" class="btn btn-warning me-2"><i class="ri-question-line me-1"></i>Question</a>
+    <a href="/app/project/task" class="btn btn-success me-2"><i class="ri-task-line me-1"></i>Task</a>
     <a href="/app/project/edit" class="btn btn-primary me-2"><i class="ri-pencil-line me-1"></i>Edit</a>
     <button class="btn btn-danger"><i class="ri-delete-bin-line me-1"></i>Delete</button>
   </div>
