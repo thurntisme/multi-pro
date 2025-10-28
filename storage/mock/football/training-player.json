@@ -1,0 +1,82 @@
+[
+  {
+    "id": "1",
+    "name": "Alex Johnson",
+    "position": "ST",
+    "age": 24,
+    "image": "/placeholder.svg?height=40&width=40",
+    "attributes": {
+      "technical": 78,
+      "tactical": 72,
+      "physical": 85,
+      "mental": 76
+    },
+    "focus": "technical",
+    "development": 68,
+    "trainingIntensity": 75
+  },
+  {
+    "id": "2",
+    "name": "Marcus Silva",
+    "position": "CM",
+    "age": 26,
+    "image": "/placeholder.svg?height=40&width=40",
+    "attributes": {
+      "technical": 82,
+      "tactical": 84,
+      "physical": 76,
+      "mental": 80
+    },
+    "focus": "tactical",
+    "development": 75,
+    "trainingIntensity": 80
+  },
+  {
+    "id": "3",
+    "name": "James Wilson",
+    "position": "CB",
+    "age": 29,
+    "image": "/placeholder.svg?height=40&width=40",
+    "attributes": {
+      "technical": 70,
+      "tactical": 83,
+      "physical": 88,
+      "mental": 79
+    },
+    "focus": "physical",
+    "development": 62,
+    "trainingIntensity": 70
+  },
+  {
+    "id": "4",
+    "name": "Kai Zhang",
+    "position": "LW",
+    "age": 22,
+    "image": "/placeholder.svg?height=40&width=40",
+    "attributes": {
+      "technical": 85,
+      "tactical": 75,
+      "physical": 82,
+      "mental": 73
+    },
+    "focus": "mental",
+    "development": 80,
+    "trainingIntensity": 85
+  },
+  {
+    "id": "5",
+    "name": "Leo Martins",
+    "position": "GK",
+    "age": 31,
+    "image": "/placeholder.svg?height=40&width=40",
+    "attributes": {
+      "technical": 79,
+      "tactical": 80,
+      "physical": 77,
+      "mental": 85
+    },
+    "focus": "technical",
+    "development": 55,
+    "trainingIntensity": 65
+  }
+]

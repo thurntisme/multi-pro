@@ -1,0 +1,47 @@
+[
+  {
+    "date": "Saturday, 22 Mar",
+    "time": "15:00",
+    "competition": "Premier League",
+    "opponent": "City FC",
+    "venue": "Home",
+    "location": "United Arena",
+    "badge": "league"
+  },
+  {
+    "date": "Tuesday, 25 Mar",
+    "time": "19:45",
+    "competition": "Champions League",
+    "opponent": "Bayern FC",
+    "venue": "Away",
+    "location": "Bayern Stadium",
+    "badge": "champions"
+  },
+  {
+    "date": "Saturday, 29 Mar",
+    "time": "15:00",
+    "competition": "Premier League",
+    "opponent": "Rovers SC",
+    "venue": "Away",
+    "location": "Rovers Stadium",
+    "badge": "league"
+  },
+  {
+    "date": "Wednesday, 2 Apr",
+    "time": "19:45",
+    "competition": "FA Cup",
+    "opponent": "Athletic FC",
+    "venue": "Home",
+    "location": "United Arena",
+    "badge": "cup"
+  },
+  {
+    "date": "Saturday, 5 Apr",
+    "time": "15:00",
+    "competition": "Premier League",
+    "opponent": "United FC",
+    "venue": "Home",
+    "location": "United Arena",
+    "badge": "league"
+  }
+]

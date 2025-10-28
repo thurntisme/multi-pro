@@ -83,6 +83,11 @@ class Sidebar
                     'icon' => 'ri-building-line',
                     'slug' => 'client'
                 ],
+                [
+                    'name' => 'Member',
+                    'icon' => 'ri-group-line',
+                    'slug' => 'member'
+                ],
             ]
         ],
         [
@@ -108,6 +113,11 @@ class Sidebar
                     'icon' => 'ri-shield-check-line',
                     'slug' => 'maintain-web'
                 ],
+                [
+                    'name' => 'Web Template',
+                    'icon' => 'ri-layout-6-line',
+                    'slug' => 'web-template'
+                ]
             ]
         ],
         [
@@ -130,8 +140,18 @@ class Sidebar
                 ],
                 [
                     'name' => 'Pdf Reader',
-                    'icon' => 'ri-pdf-line',
+                    'icon' => 'ri-file-pdf-line',
                     'slug' => 'pdf-reader'
+                ],
+            ]
+        ],
+        [
+            'title' => 'Football Manager',
+            'sub_items' => [
+                [
+                    'name' => 'Player',
+                    'icon' => 'ri-user-line',
+                    'slug' => 'football-player'
                 ],
             ]
         ],
@@ -147,6 +167,21 @@ class Sidebar
                     'name' => 'Website',
                     'icon' => 'ri-window-line',
                     'slug' => 'website'
+                ]
+            ]
+        ],
+        [
+            'title' => 'AI',
+            'sub_items' => [
+                [
+                    'name' => 'Tools',
+                    'icon' => 'ri-tools-line',
+                    'slug' => 'ai-tools'
+                ],
+                [
+                    'name' => 'Prompt',
+                    'icon' => 'ri-robot-line',
+                    'slug' => 'ai-prompt'
                 ]
             ]
         ],

@@ -1,0 +1,73 @@
+[
+  {
+    "uuid": "e5f6789a1b2c3d4e5f6789a1b2c3d4e6",
+    "avatarUrl": "/assets/players/michel_platini.jpg",
+    "name": "Michel Platini",
+    "position": "CAM",
+    "playablePositions": ["CAM", "CM", "AM"],
+
+    "foot": "RIGHT",
+    "rating": 94,
+    "form": "EXCELLENT",
+    "fitness": 95,
+    "salary": 150000,
+    "contractLength": 10,
+    "birthday": "1955-06-21",
+    "nationality": "France",
+    "height": 177,
+    "weight": 70,
+
+    "edition": "EURO",
+    "attributes": {
+      "pace": 80,
+      "acceleration": 82,
+      "agility": 88,
+      "stamina": 85,
+      "strength": 75,
+      "jumping": 78,
+
+      "dribbling": 92,
+      "ballControl": 95,
+      "crossing": 88,
+      "shooting": 91,
+      "longShots": 93,
+      "reactions": 94,
+      "heading": 78,
+      "tackling": 65,
+      "defending": 60,
+      "finishing": 92,
+      "shortPassing": 95,
+      "longPassing": 92,
+      "powerShots": 88,
+      "setPieces": 95,
+
+      "vision": 98,
+      "positioning": 95,
+      "anticipation": 96,
+      "decisionMaking": 97,
+      "composure": 96,
+      "concentration": 93,
+      "workRate": 90,
+      "leadership": 95,
+      "flair": 95,
+      "creativity": 98,
+
+      "reflexes": 5,
+      "diving": 5,
+      "handling": 5,
+      "kicking": 5,
+      "positioningGK": 5,
+      "oneOnOne": 5,
+      "commandOfArea": 5
+    },
+
+    "marketValue": 60000000,
+    "potential": 5,
+    "skillMoves": 4,
+
+    "preferredRole": "PLAYMAKER",
+    "personality": "DETERMINED",
+    "injuryProne": 1,
+    "consistency": 95
+  }
+]

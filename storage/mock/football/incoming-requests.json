@@ -1,0 +1,32 @@
+[
+  {
+    "id": 1,
+    "teamName": "Manchester City",
+    "teamLogo": "/placeholder.svg?height=40&width=40",
+    "playerName": "Chris Johnson",
+    "playerPosition": "LW",
+    "offerAmount": 28000000,
+    "status": "pending",
+    "expiresIn": "2 days"
+  },
+  {
+    "id": 2,
+    "teamName": "Liverpool FC",
+    "teamLogo": "/placeholder.svg?height=40&width=40",
+    "playerName": "Mark Williams",
+    "playerPosition": "ST",
+    "offerAmount": 35000000,
+    "status": "negotiating",
+    "expiresIn": "1 day"
+  },
+  {
+    "id": 3,
+    "teamName": "Arsenal",
+    "teamLogo": "/placeholder.svg?height=40&width=40",
+    "playerName": "Daniel Martinez",
+    "playerPosition": "CM",
+    "offerAmount": 22000000,
+    "status": "rejected",
+    "expiresIn": "Expired"
+  }
+]

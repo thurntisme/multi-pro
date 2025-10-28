@@ -1,7 +1,10 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Core;
+
+use App\Helpers\Flash;
 
 abstract class Controller
 {
@@ -26,8 +29,11 @@ abstract class Controller
         $this->viewer = $viewer;
     }
 
-    protected function view(string $template, array $data = []): Response
+    protected function view(string $template, array $data = [], array $flash = ['type' => '', 'msg' => '']): Response
     {
+        if ($flash['type'] !== '' && $flash['msg'] !== '') {
+            Flash::add($flash['type'], $flash['msg']);
+        }
         $this->response->setBody($this->viewer->render($template, $data));
 
         return $this->response;
@@ -78,6 +84,13 @@ abstract class Controller
     protected function redirect(string $url): Response
     {
         $this->response->redirect($url);
+
+        return $this->response;
+    }
+
+    protected function reload(): Response
+    {
+        $this->response->reload();
 
         return $this->response;
     }

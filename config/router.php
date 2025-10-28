@@ -1,7 +1,12 @@
 <?php
 
+use App\Controllers\AIController;
 use App\Controllers\DatabaseController;
 use App\Controllers\FileManagerController;
+use App\Controllers\Football\FootballClubController;
+use App\Controllers\Football\FootballPlayerController;
+use App\Controllers\Football\FootballUserController;
+use App\Controllers\FootballController;
 use App\Controllers\PdfReaderController;
 use App\Core\Router;
 use App\Controllers\LandingController;
@@ -21,6 +26,16 @@ use App\Controllers\ProjectController;
 use App\Controllers\TaskController;
 use App\Controllers\ClientController;
 use App\Controllers\EstimationController;
+use App\Controllers\Football\FootballItemController;
+use App\Controllers\Football\FootballLeagueController;
+use App\Controllers\Football\FootballMatchController;
+use App\Controllers\Football\FootballNewsController;
+use App\Controllers\Football\FootballOnlineUserController;
+use App\Controllers\Football\FootballScoutingController;
+use App\Controllers\Football\FootballStadiumController;
+use App\Controllers\Football\FootballStaffController;
+use App\Controllers\Football\FootballTrainingController;
+use App\Controllers\Football\FootballYouthAcademyController;
 use App\Controllers\ResumeController;
 use App\Controllers\ReportController;
 use App\Controllers\MaintainWebController;
@@ -28,20 +43,24 @@ use App\Controllers\SeoChecklistController;
 use App\Controllers\WebDevChecklistController;
 use App\Controllers\WebSecureChecklistController;
 use App\Controllers\LeadController;
+use App\Controllers\MemberController;
 use App\Controllers\WebsiteController;
 use App\Controllers\SettingController;
 use App\Controllers\NotificationsController;
 use App\Controllers\PackageController;
 use App\Controllers\ProfileController;
+use App\Controllers\WebTemplateController;
 
 $router = new Router();
 
 $router->get('/', [LandingController::class, 'index']);
 $router->get('/login', [AuthController::class, 'renderLogin']);
+$router->post('/login', [AuthController::class, 'login']);
 $router->get('/register', [AuthController::class, 'renderRegister']);
+$router->get('/logout', [AuthController::class, 'logout'], 'auth');
 
 // Dashboard routes
-$router->get('/app', [DashboardController::class, 'index']);
+$router->get('/app', [DashboardController::class, 'index', 'auth']);
 $router->get('/app/todo', [TodoController::class, 'index']);
 $router->get('/app/note', [NoteController::class, 'index']);
 $router->get('/app/habit', [HabitController::class, 'index']);
@@ -53,6 +72,13 @@ $router->get('/app/plan', [PlanController::class, 'index']);
 $router->get('/app/calendar', [CalendarController::class, 'index']);
 $router->get('/app/workout', [WorkoutController::class, 'index']);
 $router->get('/app/project', [ProjectController::class, 'index']);
+$router->get('/app/project/detail', [ProjectController::class, 'detail']);
+$router->get('/app/project/new', [ProjectController::class, 'new']);
+$router->get('/app/project/edit', [ProjectController::class, 'edit']);
+$router->get('/app/project/estimate', [ProjectController::class, 'estimate']);
+$router->get('/app/project/question', [ProjectController::class, 'question']);
+$router->get('/app/project/task', [ProjectController::class, 'task']);
+$router->get('/app/member', [MemberController::class, 'index']);
 $router->get('/app/task', [TaskController::class, 'index']);
 $router->get('/app/client', [ClientController::class, 'index']);
 $router->get('/app/estimation', [EstimationController::class, 'index']);
@@ -64,6 +90,8 @@ $router->get('/app/web-dev-checklist', [WebDevChecklistController::class, 'index
 $router->get('/app/web-secure-checklist', [WebSecureChecklistController::class, 'index']);
 $router->get('/app/lead', [LeadController::class, 'index']);
 $router->get('/app/website', [WebsiteController::class, 'index']);
+$router->get('/app/ai-tools', [AIController::class, 'tools']);
+$router->get('/app/ai-prompt', [AIController::class, 'prompt']);
 $router->get('/app/settings', [SettingController::class, 'index']);
 $router->get('/app/notifications', [NotificationsController::class, 'index']);
 $router->get('/app/package', [PackageController::class, 'index']);
@@ -71,5 +99,38 @@ $router->get('/app/profile', [ProfileController::class, 'index']);
 $router->get('/app/pdf-reader', [PdfReaderController::class, 'index']);
 $router->get('/app/file-manager', [FileManagerController::class, 'index']);
 $router->get('/app/database', [DatabaseController::class, 'index']);
+$router->get('/app/football-player', [FootballController::class, 'index']);
+$router->get('/app/web-template', [WebTemplateController::class, 'index']);
+$router->get('/app/web-template/detail', [WebTemplateController::class, 'detail']);
+
+// API
+$router->get('/api/football/market/list', [FootballPlayerController::class, 'index']);
+$router->get('/api/football/club/players', [FootballPlayerController::class, 'getClubPlayers']);
+$router->get('/api/football/team', [FootballPlayerController::class, 'getTeamInfo']);
+$router->post('/api/football/item/player-new', [FootballPlayerController::class, 'generatePlayer']);
+$router->get('/api/football/user', [FootballUserController::class, 'index']);
+$router->get('/api/football/club', [FootballClubController::class, 'index']);
+$router->get('/api/football/stadium', [FootballStadiumController::class, 'index']);
+$router->get('/api/football/league/standing', [FootballLeagueController::class, 'standing']);
+$router->get('/api/football/league/schedule', [FootballLeagueController::class, 'schedule']);
+$router->get('/api/football/news', [FootballNewsController::class, 'index']);
+$router->get('/api/football/online/users', [FootballOnlineUserController::class, 'index']);
+$router->get('/api/football/online/leaderboards', [FootballOnlineUserController::class, 'leaderboard']);
+$router->get('/api/football/online/history', [FootballOnlineUserController::class, 'history']);
+$router->get('/api/football/staff/available', [FootballStaffController::class, 'available']);
+$router->get('/api/football/staff/own', [FootballStaffController::class, 'own']);
+$router->get('/api/football/scouting/assignments', [FootballScoutingController::class, 'assignments']);
+$router->get('/api/football/scouting/incoming', [FootballScoutingController::class, 'incoming']);
+$router->get('/api/football/scouting/outgoing', [FootballScoutingController::class, 'outgoing']);
+$router->get('/api/football/youth-academy/own', [FootballYouthAcademyController::class, 'own']);
+$router->get('/api/football/youth-academy/assignments', [FootballYouthAcademyController::class, 'assignments']);
+$router->get('/api/football/youth-academy/facilities', [FootballYouthAcademyController::class, 'facilities']);
+$router->get('/api/football/training/team', [FootballTrainingController::class, 'team']);
+$router->get('/api/football/training/player', [FootballTrainingController::class, 'player']);
+$router->get('/api/football/item/shop', [FootballItemController::class, 'shop']);
+$router->get('/api/football/item/inventory', [FootballItemController::class, 'inventory']);
+$router->get('/api/football/match/upcoming', [FootballMatchController::class, 'upcoming']);
+
+
 
 return $router;

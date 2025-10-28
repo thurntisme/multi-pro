@@ -21,9 +21,10 @@
         <div class="main-content">
 
             <div class="page-content">
-                <div class="container-fluid">
+                <div class="container-fluid pb-4">
 
                     <?php include_once LAYOUTS_DIR . 'partials/breadcrumb.php'; ?>
+                    <?php include_once LAYOUTS_DIR . 'partials/flash.php' ?>
                     <?php echo $pageContent ?? ''; ?>
 
                 </div>

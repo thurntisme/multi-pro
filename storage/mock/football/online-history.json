@@ -1,0 +1,65 @@
+[
+  {
+    "id": "1",
+    "opponent": "John Manager",
+    "opponentTeam": "Arsenal FC",
+    "result": "W",
+    "score": "3-1",
+    "date": "2023-03-20",
+    "details": {
+      "possession": { "home": 48, "away": 52 },
+      "shots": { "home": 12, "away": 9 },
+      "shotsOnTarget": { "home": 7, "away": 4 },
+      "corners": { "home": 5, "away": 6 },
+      "fouls": { "home": 8, "away": 10 },
+      "scorers": {
+        "home": ["Wilson (23')", "Garcia (45')", "Taylor (67')"],
+        "away": ["Henry (56')"]
+      },
+      "cards": {
+        "home": ["Brown (34')"],
+        "away": ["Parker (41')", "Davis (78')"]
+      },
+      "rating": { "home": 7.8, "away": 6.9 }
+    }
+  },
+  {
+    "id": "2",
+    "opponent": "Emma Director",
+    "opponentTeam": "Man City",
+    "result": "L",
+    "score": "0-2",
+    "date": "2023-03-18",
+    "details": {
+      "possession": { "home": 35, "away": 65 },
+      "shots": { "home": 6, "away": 18 },
+      "shotsOnTarget": { "home": 2, "away": 8 },
+      "corners": { "home": 3, "away": 9 },
+      "fouls": { "home": 12, "away": 7 },
+      "scorers": { "home": [], "away": ["Brown (34')", "Taylor (72')"] },
+      "cards": {
+        "home": ["Johnson (56')", "Williams (67')"],
+        "away": ["Garcia (23')"]
+      },
+      "rating": { "home": 6.2, "away": 8.1 }
+    }
+  },
+  {
+    "id": "3",
+    "opponent": "David Trainer",
+    "opponentTeam": "Tottenham",
+    "result": "D",
+    "score": "1-1",
+    "date": "2023-03-15",
+    "details": {
+      "possession": { "home": 52, "away": 48 },
+      "shots": { "home": 11, "away": 10 },
+      "shotsOnTarget": { "home": 4, "away": 5 },
+      "corners": { "home": 7, "away": 4 },
+      "fouls": { "home": 9, "away": 11 },
+      "scorers": { "home": ["Martinez (67')"], "away": ["Kane (23')"] },
+      "cards": { "home": ["Wilson (45')"], "away": ["Højbjerg (78')"] },
+      "rating": { "home": 7.2, "away": 7.3 }
+    }
+  }
+]

@@ -1,0 +1,60 @@
+[
+  {
+    "slug": "player_fitness_enhancer",
+    "remaining_quantity": 1,
+    "name": "Fitness Enhancer",
+    "description": "Improves a player's fitness",
+    "price": 2500,
+    "category": "player",
+    "effect": "Improves fitness by one level",
+    "duration": {
+      "quantity": 1,
+      "unit": "lifetime"
+    },
+    "image": "/placeholder.svg?height=80&width=80"
+  },
+  {
+    "slug": "team_morale_enhancer",
+    "remaining_quantity": 1,
+    "name": "Morale Enhancer",
+    "description": "Improves a player's morale",
+    "price": 2500,
+    "category": "team",
+    "effect": "Improves morale by one level",
+    "duration": {
+      "quantity": 1,
+      "unit": "lifetime"
+    },
+    "image": "/placeholder.svg?height=80&width=80"
+  },
+  {
+    "slug": "club_name_change",
+    "remaining_quantity": 1,
+    "name": "Club Name Change",
+    "description": "Change your club's name",
+    "price": 10000,
+    "discount": 13,
+    "limited": true,
+    "category": "club",
+    "effect": "Rename your club",
+    "duration": {
+      "quantity": 1,
+      "unit": "lifetime"
+    },
+    "image": "/placeholder.svg?height=80&width=80"
+  },
+  {
+    "slug": "legend",
+    "remaining_quantity": 2,
+    "name": "Legend",
+    "description": "Legend",
+    "price": 10000,
+    "category": "player_card",
+    "effect": "Legend",
+    "duration": {
+      "quantity": 1,
+      "unit": "lifetime"
+    },
+    "image": "/placeholder.svg?height=80&width=80"
+  }
+]

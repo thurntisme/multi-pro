@@ -1,169 +1,148 @@
 <?php
-$pageTitle = "Project";
-$modify_type = getLastSegmentFromUrl();
-
-require_once 'controllers/ProjectController.php';
-$projectController = new ProjectController();
-
-if (!empty($modify_type)) {
-    $pageTitle .= " " . $modify_type;
-    if ($modify_type === 'edit') {
-        if (isset($_GET['id'])) {
-            $post_id = $_GET['id'];
-            $postData = $projectController->viewProject($post_id);
-        }
-    }
-    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        if (isset($_POST['action_name'])) {
-            if ($_POST['action_name'] === 'delete_record') {
-                $projectController->deleteProject();
-            }
-        } else {
-            if ($modify_type === "new") {
-                $projectController->createProject();
-            }
-            if ($modify_type === "edit") {
-                $projectController->updateProject();
-            }
-        }
-    }
-}
-
-ob_start();
-
-echo '<link href="' . home_url('assets/libs/dropzone/dropzone.css') . '" rel="stylesheet" type="text/css" />';
-$additionCss = ob_get_clean();
-
 ob_start();
 ?>
-<div class="row">
-    <div class="col-10 offset-md-1">
-        <?php
-        includeFileWithVariables('components/single-button-group.php', array("slug" => "project", "post_id" => $postData['id'] ?? '', 'modify_type' => $modify_type));
-        ?>
-        <form method="post" action="<?= $_SERVER['REQUEST_URI'] ?>">
-            <?php if (!empty($post_id)) { ?>
-                <input type="hidden" name="project_id" value="<?= $post_id ?>">
-            <?php } ?>
-            <div class="card mb-3">
-                <div class="card-body">
-                    <div class="mb-3">
-                        <label class="form-label" for="project-title-input">Project Title</label>
-                        <input type="text" class="form-control" name="title" id="project-title-input"
-                            placeholder="Enter project title" value="<?= $postData['title'] ?? "" ?>">
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label" for="project-thumbnail-img">Thumbnail Image</label>
-                        <input class="form-control" id="project-thumbnail-img" type="file"
-                            accept="image/png, image/gif, image/jpeg">
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Project Description</label>
-                        <div id="ckeditor-classic" name="description">
-                            <?= $postData['description'] ?? "" ?>
-                        </div>
-                    </div>
 
-                    <div class="row">
-                        <div class="col-lg-4">
-                            <div class="mb-3 mb-lg-0">
-                                <label for="choices-type-input" class="form-label">Type</label>
-                                <select class="form-select" data-choices data-choices-search-false
-                                    data-choices-sorting-false id="choices-type-input" name="type">
-                                    <?php
-                                    $types = ['freelancer' => 'Freelancer', 'owner' => 'Owner'];
-                                    foreach ($types as $value => $label) {
-                                        $selected = (!empty($postData['type']) ? $value === $postData['type'] : $value === 'owner') ? 'selected' : '';
-                                        echo "<option value=\"$value\" $selected>$label</option>";
-                                    }
-                                    ?>
-                                </select>
-                            </div>
-                        </div>
-                        <!-- <div class="col-lg-3">
-                            <div class="mb-3 mb-lg-0">
-                                <label for="choices-status-input" class="form-label">Status</label>
-                                <select class="form-select" data-choices data-choices-search-false
-                                    data-choices-sorting-false
-                                    id="choices-status-input" name="status">
-                                    <?php
-                                    // foreach ($status as $value => $label) {
-                                    //     $selected = (!empty($postData['status']) ? $value === $postData['status'] : $value === 'not_started') ? 'selected' : '';
-                                    //     echo "<option value=\"$value\" $selected>$label</option>";
-                                    // }
-                                    ?>
-                                </select>
-                            </div>
-                        </div> -->
-                        <div class="col-lg-4">
-                            <div>
-                                <label for="datepicker-start-date-input" class="form-label">Start Date</label>
-                                <input type="text" name="start_date" class="form-control"
-                                    id="datepicker-start-date-input" placeholder="Enter Start Date"
-                                    data-provider="flatpickr"
-                                    value="<?= !empty($postData['start_date']) && ($postData['start_date'] !== '0000-00-00') ? $postData['start_date'] : "" ?>">
-                            </div>
-                        </div>
-                        <div class="col-lg-4">
-                            <div>
-                                <label for="datepicker-end-date-input" class="form-label">End Date</label>
-                                <input type="text" name="end_date" class="form-control" id="datepicker-end-date-input"
-                                    placeholder="Enter End Date" data-provider="flatpickr"
-                                    value="<?= !empty($postData['end_date']) && ($postData['end_date'] !== '0000-00-00') ? $postData['end_date'] : "" ?>">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="card mb-3">
-                <div class="card-header">
-                    <h5 class="card-title mb-0">Links</h5>
-                </div>
-                <div class="card-body">
-                    <div class="mb-3">
-                        <label class="form-label">Dev Url</label>
-                        <input type="text" class="form-control" name="dev_url" placeholder="Enter development url"
-                            value="<?= $postData['dev_url'] ?? "" ?>">
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Staging Url</label>
-                        <input type="text" class="form-control" name="staging_url" placeholder="Enter staging url"
-                            value="<?= $postData['staging_url'] ?? "" ?>">
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Production Url</label>
-                        <input type="text" class="form-control" name="production_url" placeholder="Enter production url"
-                            value="<?= $postData['production_url'] ?? "" ?>">
-                    </div>
-                    <hr />
-                    <div class="mb-3">
-                        <label class="form-label">Source (Git) Url</label>
-                        <input type="text" class="form-control" name="source_url" placeholder="Enter source url"
-                            value="<?= $postData['source_url'] ?? "" ?>">
-                    </div>
-                </div>
-            </div>
-
-            <div class="text-center mb-4">
-                <a href="<?= App\Helpers\Network::home_url("app/projects/list") ?>" class="btn btn-light w-sm">Back</a>
-                <button type="submit"
-                    class="btn btn-success w-sm"><?= $modify_type === "create" ? "Create" : "Save" ?></button>
-            </div>
-        </form>
+<!-- Page Header -->
+<div class="d-flex align-items-center justify-content-between mb-4">
+    <h1><?= $title ?></h1>
+    <div>
+        <a class="btn btn-outline-secondary me-2" href="/app/project/detail">
+            <i class="ri-arrow-go-back-line me-1"></i>Back
+        </a>
+        <button class="btn btn-primary">
+            <i class="ri-save-3-line me-1"></i>Save Changes
+        </button>
     </div>
 </div>
 
-<?php
+<!-- Main Layout -->
+<form>
+    <div class="row g-4">
 
+        <!-- LEFT COLUMN -->
+        <div class="col-lg-8">
+
+            <!-- Project Information -->
+            <div class="card shadow-sm mb-4">
+                <div class="card-header bg-white fw-semibold">
+                    <i class="ri-information-line me-1"></i> Project Information
+                </div>
+                <div class="card-body">
+
+                    <!-- Title -->
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Project Title</label>
+                        <input type="text" class="form-control" placeholder="Enter project title" value="E-Commerce Website Redesign">
+                    </div>
+
+                    <!-- Client -->
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Client</label>
+                        <input type="text" class="form-control" placeholder="Enter client name" value="Acme Corporation">
+                    </div>
+
+                    <!-- Summary -->
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Summary</label>
+                        <textarea class="form-control" rows="2" placeholder="Short project summary">Redesign and rebuild the client's e-commerce platform using Next.js and Headless WordPress.</textarea>
+                    </div>
+
+                    <!-- Description -->
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Description</label>
+                        <textarea class="form-control" rows="5" placeholder="Detailed description of the project...">The project focuses on improving UX, SEO, and speed by implementing Next.js with a headless WordPress backend.</textarea>
+                    </div>
+
+                    <!-- Tags -->
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Tags / Technologies</label>
+                        <input type="text" class="form-control" placeholder="e.g. React, Next.js, WooCommerce, WPGraphQL" value="Next.js, WordPress, WooCommerce, TailwindCSS">
+                        <div class="form-text">Separate tags by commas.</div>
+                    </div>
+
+                    <!-- Category -->
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Category</label>
+                        <select class="form-select">
+                            <option selected>E-commerce</option>
+                            <option>Corporate Website</option>
+                            <option>Portfolio</option>
+                            <option>Landing Page</option>
+                            <option>Internal Tool</option>
+                        </select>
+                    </div>
+
+                    <!-- Status -->
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Status</label>
+                        <select class="form-select">
+                            <option>Planning</option>
+                            <option selected>In Progress</option>
+                            <option>Review</option>
+                            <option>Completed</option>
+                            <option>Archived</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- RIGHT COLUMN -->
+        <div class="col-lg-4">
+
+            <!-- Project Reference -->
+            <div class="card shadow-sm mb-4">
+                <div class="card-header bg-white fw-semibold">
+                    <i class="ri-links-line me-1"></i> Project Reference Links
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Design (Figma, XD, ...)</label>
+                        <input type="url" class="form-control" placeholder="https://figma.com/...">
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Documentation</label>
+                        <input type="url" class="form-control" placeholder="https://docs.google.com/...">
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Development Link</label>
+                        <input type="url" class="form-control" placeholder="https://dev.project.com">
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Staging Link</label>
+                        <input type="url" class="form-control" placeholder="https://staging.project.com">
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Production Link</label>
+                        <input type="url" class="form-control" placeholder="https://www.project.com">
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Reference / Inspiration Website</label>
+                        <input type="url" class="form-control" placeholder="https://example.com">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Notes -->
+            <div class="card shadow-sm">
+                <div class="card-header bg-white fw-semibold">
+                    <i class="ri-sticky-note-line me-1"></i> Quick Notes
+                </div>
+                <div class="card-body">
+                    <textarea class="form-control" rows="4" placeholder="Add any quick notes or comments..."></textarea>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</form>
+
+<?php
 $pageContent = ob_get_clean();
 
-ob_start();
-echo '<!-- ckeditor -->
-    <script src="' . home_url('assets/libs/@ckeditor/ckeditor5-build-classic/build/ckeditor.js') . ' "></script>
-
-    <!-- dropzone js -->
-    <script src="' . home_url('assets/libs/dropzone/dropzone-min.js') . ' "></script>
-    <!-- project-create init -->
-    <script src="' . home_url('assets/js/pages/project-create.init.js') . ' "></script>';
-
-$additionJs = ob_get_clean();
+include_once LAYOUTS_DIR . 'dashboard.php';

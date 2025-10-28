@@ -4,6 +4,7 @@ ob_start();
 
 <div class="row justify-content-center">
     <div class="col-md-8 col-lg-6 col-xl-5">
+        <?php include_once LAYOUTS_DIR . 'partials/flash.php' ?>
         <div class="card mt-4">
             <div class="card-body p-4">
                 <div class="text-center mt-2">
@@ -11,7 +12,7 @@ ob_start();
                     <p class="text-muted">Sign in to continue to <?= APP_NAME ?>.</p>
                 </div>
                 <div class="p-2 mt-4">
-                    <form action="<?= App\Helpers\Network::home_url('login') ?>" method="POST">
+                    <form action="<?= App\Helpers\Network::home_url('login') ?>" method="POST" id="login-form">
                         <div class="mb-3">
                             <label for="email" class="form-label">Email</label>
                             <input type="text" class="form-control" name="email" id="email" placeholder="Enter email"
@@ -26,7 +27,7 @@ ob_start();
                             <label class="form-label" for="password-input">Password</label>
                             <div class="position-relative auth-pass-inputgroup mb-3">
                                 <input type="password" class="form-control pe-5 password-input"
-                                    placeholder="Enter password" id="password-input" name="password" required>
+                                    placeholder="Enter password" id="password" name="password" required>
                                 <button
                                     class="btn btn-link position-absolute end-0 top-0 text-decoration-none text-muted password-addon"
                                     type="button" id="password-addon"><i class="ri-eye-fill align-middle"></i></button>
@@ -74,5 +75,10 @@ ob_start();
 
 <?php
 $pageContent = ob_get_clean();
+
+ob_start(); ?>
+<script src="<?= App\Helpers\Network::home_url('assets/js/pages/login.js') ?>"></script>
+<?php
+$additionJs = ob_get_clean();
 
 require LAYOUTS_DIR . 'auth.php';

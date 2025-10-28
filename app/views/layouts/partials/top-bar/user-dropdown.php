@@ -21,7 +21,7 @@
                 class="mdi mdi-cog-outline text-muted fs-16 align-middle me-1"></i> <span class="align-middle">
                 Settings</span></a>
         <div class="dropdown-divider"></div>
-        <a class="dropdown-item" href="<?= App\Helpers\Network::home_url('app/logout') ?>"><i
+        <a class="dropdown-item" href="<?= App\Helpers\Network::home_url('logout') ?>"><i
                 class="mdi mdi-logout text-muted fs-16 align-middle me-1"></i> <span class="align-middle"
                 data-key="t-logout">Logout</span></a>
     </div>
